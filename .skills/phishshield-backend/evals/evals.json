@@ -1,0 +1,90 @@
+{
+  "skill_name": "phishshield-backend",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Crea un endpoint FastAPI para subir un archivo .eml y lanzar el análisis forense completo en PhishShield.",
+      "expected_output": "La respuesta debe proponer un router FastAPI fino que valide la entrada, delegue en un caso de uso de Application y mantenga parsing, sandbox, IA y análisis forense detrás de puertos/adaptadores. Debe mencionar tests Pytest.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-backend/SKILL.md"
+      ],
+      "assertions": [
+        "Propone un router FastAPI o entrypoint fino.",
+        "Delega el análisis en un caso de uso de Application.",
+        "No implementa parsing, sandbox, IA o cálculo de riesgo directamente en el endpoint.",
+        "Menciona contratos, comandos, DTOs o schemas para entrada/salida.",
+        "Propone tests Pytest para endpoint/caso de uso o mocks de puertos."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Implementa un puerto y un adaptador para resolver URLs acortadas sin romper la arquitectura hexagonal.",
+      "expected_output": "La respuesta debe ubicar el contrato en Application, el adaptador HTTP en Infrastructure, evitar red desde Domain, aplicar timeouts/límites y proponer tests con mocks sin red real.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-backend/SKILL.md"
+      ],
+      "assertions": [
+        "Ubica el puerto de resolución de URLs en Application.",
+        "Ubica el adaptador HTTP en Infrastructure.",
+        "Evita red, httpx o requests desde Domain.",
+        "Menciona timeouts, límites de redirección o manejo de errores.",
+        "Propone tests con mocks sin depender de red real."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Añade tests Pytest para la detección de dominios homóglifos y conversión a Punycode.",
+      "expected_output": "La respuesta debe tratar la detección como lógica pura testeable, proponer fixtures/casos Unicode e IDN, evitar dependencias externas innecesarias y mantener el módulo dentro de Domain o Application según corresponda.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-backend/SKILL.md"
+      ],
+      "assertions": [
+        "Propone tests unitarios con Pytest.",
+        "Incluye casos Unicode, IDN o Punycode.",
+        "Trata la detección pura como lógica testeable sin IO.",
+        "Evita red real o servicios externos.",
+        "Ubica la lógica en Domain o justifica Application si hay orquestación."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Integra Ollama como análisis IA opcional controlado por USE_AI_ANALYSIS.",
+      "expected_output": "La respuesta debe definir un puerto de IA en Application, un adaptador Ollama en Infrastructure, no acoplar Domain a Ollama, permitir omitir IA limpiamente si está desactivada y proponer tests con mocks.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-backend/SKILL.md"
+      ],
+      "assertions": [
+        "Define o propone un puerto de IA en Application.",
+        "Ubica Ollama en Infrastructure como adaptador.",
+        "Indica que Domain no debe importar ni conocer Ollama.",
+        "Respeta USE_AI_ANALYSIS o la opcionalidad de la IA.",
+        "Propone tests con mocks para IA activada/desactivada."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Tenemos un caso de uso que instancia directamente PlaywrightSandboxAdapter porque es más cómodo. Revísalo y propón la corrección.",
+      "expected_output": "La respuesta debe detectar que el caso de uso no debe instanciar adaptadores concretos, proponer inyección de un SandboxBrowserPort y dejar PlaywrightSandboxAdapter en Infrastructure.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-backend/SKILL.md"
+      ],
+      "assertions": [
+        "Detecta que instanciar un adaptador concreto desde el caso de uso rompe la inversión de dependencias.",
+        "Propone depender de SandboxBrowserPort o puerto equivalente.",
+        "Ubica PlaywrightSandboxAdapter en Infrastructure.",
+        "Menciona inyección de dependencias o composición en el borde de la aplicación.",
+        "Propone tests del caso de uso con un mock/fake del puerto."
+      ]
+    }
+  ]
+}
