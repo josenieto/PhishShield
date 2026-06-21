@@ -153,6 +153,24 @@ npx skills add anthropics/skills --skill skill-creator --yes
 
 Se usará para crear, mejorar y evaluar las skills propias de PhishShield.
 
+### Regla obligatoria para crear nuevas skills
+
+Toda nueva skill del proyecto debe crearse siguiendo como modelo la skill oficial:
+
+- `.agents/skills/skill-creator/`
+
+El agente debe aplicar ese flujo antes de redactar una skill:
+
+1. capturar la intención de la skill,
+2. definir cuándo debe activarse,
+3. redactar `SKILL.md` con frontmatter `name` y `description`,
+4. mantener la skill accionable, específica y alineada con PhishShield,
+5. crear evals iniciales cuando la skill sea verificable,
+6. revisar alineación con `AGENT.md` y `doc/ADR.md`,
+7. actualizar `.skills/README.md`.
+
+No se deben crear skills manualmente sin seguir este proceso.
+
 ### Skills previstas
 
 Las carpetas iniciales están preparadas, pero las skills se definirán más adelante con `skill-creator`.
