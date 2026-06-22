@@ -156,6 +156,74 @@ Prefer clear, modular solutions aligned with the existing ADR.
 
 ---
 
+## Engineering journey documentation
+
+The project maintains an engineering journey document at:
+
+- `doc/ENGINEERING_JOURNEY.md`
+
+Agents must update this document whenever a relevant engineering step occurs.
+
+Relevant steps include:
+
+- completing a TDD cycle;
+- making an architectural decision;
+- deciding not to move up a layer;
+- creating a new domain function group;
+- adding a new port;
+- adding a new adapter;
+- introducing a new use case;
+- changing folder architecture;
+- adding a new project skill;
+- creating or changing a testing strategy;
+- making an important rejection decision.
+
+Use this entry format:
+
+```md
+## YYYY-MM-DD - [Short title]
+
+Type: TDD | Architecture | Testing | Skill | Documentation | Refactor
+Layer: Domain | Application | Infrastructure | Entrypoint | Cross-cutting
+Status: Proposed | Done | Rejected | Deferred
+
+### Context
+
+Why this step happened.
+
+### Decision
+
+What was decided or completed.
+
+### Files changed
+
+- ...
+
+### Tests
+
+Command:
+
+```bash
+...
+```
+
+Result:
+
+```text
+...
+```
+
+### Next step
+
+...
+```
+
+When a step changes architecture flow or layer progression, update the Mermaid diagrams in `doc/ENGINEERING_JOURNEY.md`.
+
+Do not over-document every small code edit. Document meaningful engineering steps that explain how the project evolves.
+
+---
+
 ## What an agent must do before editing
 
 Minimum checklist:
