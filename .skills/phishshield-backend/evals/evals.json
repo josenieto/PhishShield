@@ -3,87 +3,87 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Crea un endpoint FastAPI para subir un archivo .eml y lanzar el análisis forense completo en PhishShield.",
-      "expected_output": "La respuesta debe proponer un router FastAPI fino que valide la entrada, delegue en un caso de uso de Application y mantenga parsing, sandbox, IA y análisis forense detrás de puertos/adaptadores. Debe mencionar tests Pytest.",
+      "prompt": "Create a FastAPI endpoint to upload an .eml file and start the full forensic analysis in PhishShield.",
+      "expected_output": "The answer should propose a thin FastAPI router that validates input, delegates to an Application use case, and keeps parsing, sandboxing, AI, and forensic analysis behind ports/adapters. It should mention Pytest tests.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
-        "Propone un router FastAPI o entrypoint fino.",
-        "Delega el análisis en un caso de uso de Application.",
-        "No implementa parsing, sandbox, IA o cálculo de riesgo directamente en el endpoint.",
-        "Menciona contratos, comandos, DTOs o schemas para entrada/salida.",
-        "Propone tests Pytest para endpoint/caso de uso o mocks de puertos."
+        "Proposes a thin FastAPI router or entrypoint.",
+        "Delegates analysis to an Application use case.",
+        "Does not implement parsing, sandboxing, AI, or risk calculation directly in the endpoint.",
+        "Mentions contracts, commands, DTOs, or schemas for input/output.",
+        "Proposes Pytest tests for the endpoint/use case or port mocks."
       ]
     },
     {
       "id": 2,
-      "prompt": "Implementa un puerto y un adaptador para resolver URLs acortadas sin romper la arquitectura hexagonal.",
-      "expected_output": "La respuesta debe ubicar el contrato en Application, el adaptador HTTP en Infrastructure, evitar red desde Domain, aplicar timeouts/límites y proponer tests con mocks sin red real.",
+      "prompt": "Implement a port and adapter to resolve shortened URLs without breaking hexagonal architecture.",
+      "expected_output": "The answer should place the contract in Application, the HTTP adapter in Infrastructure, avoid network access from Domain, apply timeouts/limits, and propose tests with mocks without real network.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
-        "Ubica el puerto de resolución de URLs en Application.",
-        "Ubica el adaptador HTTP en Infrastructure.",
-        "Evita red, httpx o requests desde Domain.",
-        "Menciona timeouts, límites de redirección o manejo de errores.",
-        "Propone tests con mocks sin depender de red real."
+        "Places the shortened URL resolution port in Application.",
+        "Places the HTTP adapter in Infrastructure.",
+        "Avoids network, httpx, or requests from Domain.",
+        "Mentions timeouts, redirect limits, or error handling.",
+        "Proposes tests with mocks without relying on real network."
       ]
     },
     {
       "id": 3,
-      "prompt": "Añade tests Pytest para la detección de dominios homóglifos y conversión a Punycode.",
-      "expected_output": "La respuesta debe tratar la detección como lógica pura testeable, proponer fixtures/casos Unicode e IDN, evitar dependencias externas innecesarias y mantener el módulo dentro de Domain o Application según corresponda.",
+      "prompt": "Add Pytest tests for homoglyph domain detection and Punycode conversion.",
+      "expected_output": "The answer should treat detection as testable pure logic, propose Unicode and IDN cases, avoid unnecessary external dependencies, and keep the module in Domain or Application as appropriate.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
-        "Propone tests unitarios con Pytest.",
-        "Incluye casos Unicode, IDN o Punycode.",
-        "Trata la detección pura como lógica testeable sin IO.",
-        "Evita red real o servicios externos.",
-        "Ubica la lógica en Domain o justifica Application si hay orquestación."
+        "Proposes unit tests with Pytest.",
+        "Includes Unicode, IDN, or Punycode cases.",
+        "Treats pure detection as testable logic without IO.",
+        "Avoids real network or external services.",
+        "Places the logic in Domain or justifies Application when orchestration is involved."
       ]
     },
     {
       "id": 4,
-      "prompt": "Integra Ollama como análisis IA opcional controlado por USE_AI_ANALYSIS.",
-      "expected_output": "La respuesta debe definir un puerto de IA en Application, un adaptador Ollama en Infrastructure, no acoplar Domain a Ollama, permitir omitir IA limpiamente si está desactivada y proponer tests con mocks.",
+      "prompt": "Integrate Ollama as optional AI analysis controlled by USE_AI_ANALYSIS.",
+      "expected_output": "The answer should define an AI port in Application, an Ollama adapter in Infrastructure, avoid coupling Domain to Ollama, allow AI to be skipped cleanly when disabled, and propose tests with mocks.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
-        "Define o propone un puerto de IA en Application.",
-        "Ubica Ollama en Infrastructure como adaptador.",
-        "Indica que Domain no debe importar ni conocer Ollama.",
-        "Respeta USE_AI_ANALYSIS o la opcionalidad de la IA.",
-        "Propone tests con mocks para IA activada/desactivada."
+        "Defines or proposes an AI port in Application.",
+        "Places Ollama in Infrastructure as an adapter.",
+        "States that Domain must not import or know Ollama.",
+        "Respects USE_AI_ANALYSIS or the optional nature of AI.",
+        "Proposes tests with mocks for enabled/disabled AI."
       ]
     },
     {
       "id": 5,
-      "prompt": "Tenemos un caso de uso que instancia directamente PlaywrightSandboxAdapter porque es más cómodo. Revísalo y propón la corrección.",
-      "expected_output": "La respuesta debe detectar que el caso de uso no debe instanciar adaptadores concretos, proponer inyección de un SandboxBrowserPort y dejar PlaywrightSandboxAdapter en Infrastructure.",
+      "prompt": "A use case directly instantiates PlaywrightSandboxAdapter because it is convenient. Review it and propose the correction.",
+      "expected_output": "The answer should detect that the use case must not instantiate concrete adapters, propose injecting a SandboxBrowserPort, and keep PlaywrightSandboxAdapter in Infrastructure.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
-        "Detecta que instanciar un adaptador concreto desde el caso de uso rompe la inversión de dependencias.",
-        "Propone depender de SandboxBrowserPort o puerto equivalente.",
-        "Ubica PlaywrightSandboxAdapter en Infrastructure.",
-        "Menciona inyección de dependencias o composición en el borde de la aplicación.",
-        "Propone tests del caso de uso con un mock/fake del puerto."
+        "Detects that instantiating a concrete adapter from the use case breaks dependency inversion.",
+        "Proposes depending on SandboxBrowserPort or an equivalent port.",
+        "Places PlaywrightSandboxAdapter in Infrastructure.",
+        "Mentions dependency injection or composition at the application boundary.",
+        "Proposes use case tests with a mock/fake port."
       ]
     }
   ]
