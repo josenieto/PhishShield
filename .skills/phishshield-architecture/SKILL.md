@@ -1,102 +1,102 @@
 ---
 name: phishshield-architecture
-description: Guía especializada para decisiones arquitectónicas en PhishShield. Usa esta skill siempre que el usuario pida definir, modificar o revisar estructura del repositorio, arquitectura hexagonal, Clean Architecture, capas Domain/Application/Infrastructure, puertos, adaptadores, entrypoints, límites entre módulos, dependencias, integración de tecnologías externas, Docker Compose desde perspectiva arquitectónica, ADRs o cualquier decisión que pueda afectar la mantenibilidad del diseño. Úsala también en tareas aparentemente de backend, frontend, seguridad, IA o DevOps cuando haya que decidir dónde vive el código, cómo evitar acoplamiento, si hace falta un puerto/adaptador, o si una propuesta contradice doc/ADR.md.
+description: Specialized guidance for architectural decisions in PhishShield. Use this skill whenever the user asks to define, modify, or review repository structure, hexagonal architecture, Clean Architecture, Domain/Application/Infrastructure layers, ports, adapters, entrypoints, module boundaries, dependencies, external technology integration, Docker Compose from an architectural perspective, ADRs, or any decision that may affect maintainability. Also use it for backend, frontend, security, AI, or DevOps tasks when the main question is where code belongs, how to avoid coupling, whether a port/adapter is required, or whether a proposal contradicts doc/ADR.md.
 ---
 
 # phishshield-architecture
 
-## Propósito
+## Purpose
 
-Ayudar a agentes IA a tomar decisiones arquitectónicas coherentes para **PhishShield**, respetando el ADR principal del proyecto y evitando desviaciones que acoplen el dominio a frameworks, librerías o servicios externos.
+Help AI agents make coherent architectural decisions for **PhishShield**, respecting the main ADR and preventing design drift that couples the domain to frameworks, libraries, or external services.
 
-PhishShield es una herramienta defensiva, local y self-hosted para análisis forense de correos `.eml`. Su arquitectura debe permitir sustituir parsers, sandbox, IA local, frontend, API o herramientas de análisis sin alterar el núcleo del sistema.
+PhishShield is a defensive, local, self-hosted tool for forensic analysis of `.eml` email files. Its architecture must allow parsers, sandboxing, local AI, frontend, API, and analysis tools to be replaced without changing the core system.
 
-Esta skill opera por encima de una tarea backend, frontend o DevOps concreta. Su función es decidir **límites, capas, responsabilidades y dirección de dependencias**.
+This skill operates above a concrete backend, frontend, or DevOps task. Its role is to decide **boundaries, layers, responsibilities, and dependency direction**.
 
-## Referencias que debes consultar
+## References to consult
 
-Antes de tomar o revisar decisiones arquitectónicas, lee:
+Before making or reviewing architectural decisions, read:
 
 - `AGENT.md`
 - `doc/ADR.md`
 - `.skills/README.md`
 
-Si hay conflicto entre esta skill y `doc/ADR.md`, prevalece `doc/ADR.md`.
+If this skill conflicts with `doc/ADR.md`, the ADR takes precedence.
 
-## Proceso de trabajo
+## Working process
 
-Cuando esta skill se active:
+When this skill triggers:
 
-1. Identifica la decisión arquitectónica real detrás de la petición.
-2. Consulta `doc/ADR.md` si la tarea afecta capas, módulos, despliegue o integraciones.
-3. Clasifica los elementos implicados en `Domain`, `Application`, `Infrastructure` o `Entrypoints`.
-4. Detecta dependencias peligrosas o acoplamientos a frameworks/librerías.
-5. Propón la frontera correcta mediante puertos y adaptadores cuando haya IO, herramientas externas o sustitución futura.
-6. Indica qué skill técnica debe continuar el trabajo si la arquitectura ya queda decidida.
-7. Cierra con una comprobación breve contra el checklist arquitectónico.
+1. Identify the real architectural decision behind the request.
+2. Consult `doc/ADR.md` if the task affects layers, modules, deployment, or integrations.
+3. Classify the affected elements as `Domain`, `Application`, `Infrastructure`, or `Entrypoints`.
+4. Detect dangerous dependencies or coupling to frameworks/libraries.
+5. Propose the correct boundary using ports and adapters when IO, external tools, or future replacement are involved.
+6. State which technical skill should continue the work if the architecture is already decided.
+7. Close with a short check against the architecture checklist.
 
-El objetivo no es producir más documentación, sino evitar decisiones que hagan rígido el sistema.
+The goal is not to produce more documentation. The goal is to prevent decisions that make the system rigid.
 
-## Cuándo usar esta skill
+## When to use this skill
 
-Usa esta skill cuando la tarea implique:
+Use this skill when the task involves:
 
-- definir estructura inicial del repositorio;
-- crear o reorganizar carpetas;
-- decidir si algo pertenece a `Domain`, `Application`, `Infrastructure` o `Entrypoints`;
-- crear puertos;
-- crear adaptadores;
-- revisar dependencias entre capas;
-- añadir un nuevo módulo forense;
-- integrar FastAPI, Playwright, Ollama, YARA, Tesseract, oletools, pdfminer, PyPDF2, idna u otras librerías;
-- revisar propuestas técnicas;
-- crear o actualizar ADRs;
-- diseñar Docker Compose desde la arquitectura del sistema;
-- separar backend, frontend y servicios auxiliares;
-- evaluar si una implementación rompe la arquitectura hexagonal.
+- defining the initial repository structure;
+- creating or reorganizing folders;
+- deciding whether code belongs in `Domain`, `Application`, `Infrastructure`, or `Entrypoints`;
+- creating ports;
+- creating adapters;
+- reviewing dependencies between layers;
+- adding a new forensic module;
+- integrating FastAPI, Playwright, Ollama, YARA, Tesseract, oletools, pdfminer, PyPDF2, idna, or other libraries;
+- reviewing technical proposals;
+- creating or updating ADRs;
+- designing Docker Compose from the system architecture perspective;
+- separating backend, frontend, and auxiliary services;
+- evaluating whether an implementation breaks hexagonal architecture.
 
-No uses esta skill para detalles puramente internos de un componente si la arquitectura ya está decidida. En ese caso usa la skill específica correspondiente, por ejemplo `phishshield-backend`.
+Do not use this skill for purely internal implementation details when the architecture is already decided. In that case, use the relevant technical skill, for example `phishshield-backend`.
 
-## Resultado esperado de una respuesta
+## Expected response shape
 
-Cuando respondas usando esta skill, estructura la respuesta de forma breve y decisiva:
+When using this skill, structure the answer briefly and decisively:
 
 ```text
-1. Decisión arquitectónica
-2. Capa o capas afectadas
-3. Diseño recomendado
-4. Puertos/adaptadores necesarios
-5. Riesgos de acoplamiento evitados
-6. Tests o validaciones recomendadas
-7. Siguiente skill técnica a usar, si aplica
+1. Architectural decision
+2. Affected layer or layers
+3. Recommended design
+4. Required ports/adapters
+5. Coupling risks avoided
+6. Recommended tests or validations
+7. Next technical skill to use, if applicable
 ```
 
-Si la propuesta del usuario rompe el ADR, indícalo explícitamente y ofrece una alternativa compatible.
+If the user's proposal breaks the ADR, say so explicitly and provide a compatible alternative.
 
-## Modelo arquitectónico base
+## Baseline architecture model
 
-El ADR define un **monolito modular hexagonal** combinado con Clean Architecture.
+The ADR defines a **hexagonal modular monolith** combined with Clean Architecture.
 
-Modelo de dependencias:
+Dependency model:
 
 ```text
 Domain  <-  Application  <-  Infrastructure / Entrypoints
 ```
 
-Interpretación:
+Interpretation:
 
-- **Domain** contiene conceptos puros y reglas de negocio forense.
-- **Application** contiene casos de uso y puertos.
-- **Infrastructure** contiene adaptadores técnicos e integraciones.
-- **Entrypoints** exponen el sistema al exterior, por ejemplo FastAPI.
+- **Domain** contains pure forensic business concepts and rules.
+- **Application** contains use cases and ports.
+- **Infrastructure** contains technical adapters and integrations.
+- **Entrypoints** expose the system to the outside world, for example through FastAPI.
 
-La flecha indica la dirección permitida de dependencia. Las capas externas pueden depender de las internas. Las internas no deben depender de las externas.
+The arrow indicates the allowed dependency direction. Outer layers may depend on inner layers. Inner layers must not depend on outer layers.
 
-## Reglas de arquitectura
+## Architecture rules
 
-### 1. El dominio debe permanecer puro
+### 1. Keep the domain pure
 
-El dominio no debe importar:
+The domain must not import:
 
 - FastAPI;
 - Playwright;
@@ -107,47 +107,47 @@ El dominio no debe importar:
 - oletools;
 - yara-python;
 - pdfminer/PyPDF2;
-- frameworks de persistencia;
-- variables de entorno;
-- SDKs externos.
+- persistence frameworks;
+- environment variables;
+- external SDKs.
 
-El dominio puede contener:
+The domain may contain:
 
-- entidades;
+- entities;
 - value objects;
-- reglas puras;
-- algoritmos deterministas;
-- clasificación de hallazgos;
-- normalización sin IO;
-- tipos de resultado.
+- pure rules;
+- deterministic algorithms;
+- finding classification;
+- normalization without IO;
+- result types.
 
-Ejemplo correcto:
-
-```text
-Domain contiene la regla de detección de homóglifos.
-Infrastructure usa idna o librerías externas si hace falta adaptación técnica.
-```
-
-### 2. Application orquesta mediante puertos
-
-Application debe contener:
-
-- casos de uso;
-- contratos;
-- puertos;
-- coordinación de análisis;
-- políticas de aplicación;
-- errores de aplicación.
-
-Application no debe conocer implementaciones concretas.
-
-Ejemplo:
+Correct example:
 
 ```text
-AnalyzeEmailUseCase depende de LinkAnalyzerPort, AttachmentScannerPort y SandboxBrowserPort.
+Domain contains the pure homoglyph detection rule.
+Infrastructure uses idna or external libraries if technical adaptation is required.
 ```
 
-No debe depender de:
+### 2. Application orchestrates through ports
+
+Application should contain:
+
+- use cases;
+- contracts;
+- ports;
+- analysis orchestration;
+- application policies;
+- application errors.
+
+Application must not know concrete implementations.
+
+Example:
+
+```text
+AnalyzeEmailUseCase depends on LinkAnalyzerPort, AttachmentScannerPort, and SandboxBrowserPort.
+```
+
+It must not depend on:
 
 ```text
 PlaywrightSandboxAdapter
@@ -156,80 +156,80 @@ PdfMinerParser
 FastAPI UploadFile
 ```
 
-### 3. Infrastructure implementa detalles técnicos
+### 3. Infrastructure implements technical details
 
-Infrastructure contiene adaptadores concretos:
+Infrastructure contains concrete adapters:
 
-- API FastAPI;
-- parser `.eml`;
-- parser PDF;
-- scanner Office;
-- scanner YARA;
+- FastAPI API;
+- `.eml` parser;
+- PDF parser;
+- Office scanner;
+- YARA scanner;
 - OCR;
 - Playwright;
 - Ollama;
-- resolución HTTP;
+- HTTP resolution;
 - filesystem;
-- Docker/runtime config.
+- Docker/runtime configuration.
 
-Infrastructure traduce entre el mundo externo y los contratos de Application.
+Infrastructure translates between the external world and Application contracts.
 
-### 4. Entrypoints no contienen negocio
+### 4. Entrypoints do not contain business rules
 
-Un entrypoint debe:
+An entrypoint should:
 
-- validar entrada;
-- construir comandos o DTOs;
-- llamar un caso de uso;
-- convertir resultado a respuesta;
-- mapear errores.
+- validate input;
+- build commands or DTOs;
+- call a use case;
+- convert results to responses;
+- map errors.
 
-No debe implementar reglas forenses directamente.
+It must not implement forensic rules directly.
 
-## Criterios para ubicar código
+## Criteria for placing code
 
-Cuando no esté claro dónde ubicar una pieza, usa estas preguntas:
+When placement is unclear, ask:
 
-1. ¿Representa una regla de negocio o concepto estable del análisis?
-   - Sí: `Domain`.
+1. Does it represent a stable business rule or analysis concept?
+   - Yes: `Domain`.
 
-2. ¿Orquesta una acción del sistema usando abstracciones?
-   - Sí: `Application`.
+2. Does it orchestrate a system action through abstractions?
+   - Yes: `Application`.
 
-3. ¿Depende de una librería, protocolo, framework, red, filesystem o proceso externo?
-   - Sí: `Infrastructure`.
+3. Does it depend on a library, protocol, framework, network, filesystem, or external process?
+   - Yes: `Infrastructure`.
 
-4. ¿Expone una API o interfaz al usuario/sistema exterior?
-   - Sí: `Entrypoints` dentro de Infrastructure.
+4. Does it expose an API or interface to an external user/system?
+   - Yes: `Entrypoints` inside Infrastructure.
 
-5. ¿Podría cambiarse la librería sin afectar el núcleo?
-   - Si la respuesta debe ser sí, crea un puerto y un adaptador.
+5. Should the library/tool be replaceable without changing the core?
+   - If yes, create a port and an adapter.
 
-## Diseño de puertos
+## Port design
 
-Crea un puerto cuando una capacidad:
+Create a port when a capability:
 
-- requiera IO;
-- dependa de una librería externa;
-- pueda sustituirse;
-- deba mockearse en tests;
-- represente una frontera con infraestructura;
-- sea opcional por configuración.
+- requires IO;
+- depends on an external library;
+- may be replaced;
+- must be mocked in tests;
+- represents a boundary with infrastructure;
+- is optional through configuration.
 
-Buenos candidatos a puerto:
+Good port candidates:
 
-- análisis de enlaces;
-- sandbox de navegador;
-- análisis IA;
-- extracción OCR;
-- escaneo YARA;
-- parsing de adjuntos;
-- resolución de redirecciones;
-- consulta opcional a servicios externos.
+- link analysis;
+- browser sandboxing;
+- AI analysis;
+- OCR extraction;
+- YARA scanning;
+- attachment parsing;
+- redirect resolution;
+- optional external service lookup.
 
-Los puertos deben expresar capacidades del sistema, no nombres de herramientas concretas.
+Ports should express system capabilities, not concrete tool names.
 
-Correcto:
+Correct:
 
 ```python
 class SandboxBrowserPort(Protocol):
@@ -237,25 +237,25 @@ class SandboxBrowserPort(Protocol):
         ...
 ```
 
-Menos adecuado:
+Less appropriate:
 
 ```python
 class PlaywrightPort(Protocol):
     ...
 ```
 
-## Diseño de adaptadores
+## Adapter design
 
-Un adaptador debe:
+An adapter should:
 
-- implementar un puerto;
-- encapsular una herramienta concreta;
-- gestionar errores técnicos;
-- aplicar timeouts y límites;
-- traducir datos externos a modelos internos;
-- ser sustituible.
+- implement a port;
+- encapsulate a concrete tool;
+- handle technical errors;
+- apply timeouts and limits;
+- translate external data into internal models;
+- be replaceable.
 
-Ejemplos:
+Examples:
 
 ```text
 PlaywrightSandboxAdapter implements SandboxBrowserPort
@@ -264,172 +264,170 @@ TesseractOcrAdapter implements OcrPort
 YaraScannerAdapter implements MalwareSignatureScannerPort
 ```
 
-## Evaluación de nuevos módulos
+## Evaluating new modules
 
-Al añadir un módulo nuevo, decide:
+When adding a module, decide:
 
-1. qué concepto pertenece a Domain;
-2. qué caso de uso o puerto pertenece a Application;
-3. qué adaptador pertenece a Infrastructure;
-4. qué entrypoint o endpoint lo invoca;
-5. qué tests garantizan la frontera.
+1. which concept belongs to Domain;
+2. which use case or port belongs to Application;
+3. which adapter belongs to Infrastructure;
+4. which entrypoint invokes it;
+5. which tests guarantee the boundary.
 
-Ejemplo: módulo OCR.
+Example: OCR module.
 
 ```text
-Domain: hallazgos de texto extraído e indicadores.
-Application: OcrPort y caso de uso que solicita extracción.
+Domain: extracted text findings and indicators.
+Application: OcrPort and use case requesting extraction.
 Infrastructure: TesseractOcrAdapter.
-Entrypoint: endpoint o flujo de análisis que invoca el caso de uso.
-Tests: dominio puro + caso de uso con mock + adaptador con fixture controlada.
+Entrypoint: endpoint or analysis flow invoking the use case.
+Tests: pure domain tests + use case with mock + adapter with controlled fixture.
 ```
 
-## Reglas para IA local
+## Local AI rules
 
-El ADR define IA local opcional con Ollama.
+The ADR defines optional local AI with Ollama.
 
-Arquitectónicamente:
+Architecturally:
 
-- Ollama pertenece a Infrastructure.
-- Application define un puerto de IA.
-- Domain no conoce prompts, modelos ni SDKs.
-- Si la IA está desactivada, el flujo debe continuar limpiamente.
-- La IA complementa análisis deterministas, no los sustituye.
+- Ollama belongs to Infrastructure.
+- Application defines an AI port.
+- Domain does not know prompts, models, or SDKs.
+- If AI is disabled, the flow must continue cleanly.
+- AI complements deterministic analysis; it does not replace it.
 
-## Reglas para sandbox
+## Sandbox rules
 
-Playwright/Chromium debe mantenerse como infraestructura aislada.
+Playwright/Chromium must remain isolated infrastructure.
 
-Arquitectónicamente:
+Architecturally:
 
-- el dominio no abre navegadores;
-- Application define el contrato;
-- Infrastructure implementa Playwright;
-- Docker Compose aísla el navegador;
-- el caso de uso recibe resultados, no detalles de navegador.
+- Domain does not open browsers;
+- Application defines the contract;
+- Infrastructure implements Playwright;
+- Docker Compose isolates the browser;
+- the use case receives results, not browser details.
 
-## Reglas para Docker y servicios
+## Docker and service rules
 
-Docker Compose debe reflejar límites arquitectónicos:
+Docker Compose must reflect architectural boundaries:
 
-- `frontend`: UI React;
-- `backend`: API y casos de uso;
-- `playwright/browser`: sandbox aislado;
-- `ollama`: IA local opcional si aplica.
+- `frontend`: React UI;
+- `backend`: API and use cases;
+- `playwright/browser`: isolated sandbox;
+- `ollama`: optional local AI when applicable.
 
-No mezcles responsabilidades entre servicios. El backend orquesta, pero no debe convertir el contenedor de sandbox en parte del dominio.
+Do not mix responsibilities between services. The backend orchestrates, but the sandbox container must not become part of the domain.
 
-## Señales de mala arquitectura
+## Bad architecture signals
 
-Revisa y corrige si detectas:
+Review and correct if you detect:
 
-- imports de FastAPI en Domain;
-- imports de Playwright/Ollama/YARA/OCR en Domain;
-- endpoints con lógica forense extensa;
-- casos de uso instanciando adaptadores concretos;
-- tests que requieren red real para reglas de negocio;
-- lógica de riesgo dispersa entre frontend y backend;
-- DTOs externos usados como entidades de dominio sin criterio;
-- ausencia de puertos para integraciones sustituibles;
-- reglas de negocio dentro de Docker, scripts o entrypoints.
+- FastAPI imports in Domain;
+- Playwright/Ollama/YARA/OCR imports in Domain;
+- endpoints with extensive forensic logic;
+- use cases instantiating concrete adapters;
+- tests requiring real network for business rules;
+- risk logic scattered between frontend and backend;
+- external DTOs used as domain entities without a deliberate decision;
+- missing ports for replaceable integrations;
+- business rules embedded in Docker, scripts, or entrypoints.
 
-## Relación con otras skills
+## Relationship with other skills
 
-- Usa `phishshield-backend` para implementar detalles backend una vez decidida la arquitectura.
-- Usa `phishshield-security-analysis` cuando el foco sea la lógica forense concreta.
-- Usa `phishshield-testing` cuando el foco sea diseñar o corregir estrategia de pruebas.
-- Usa `phishshield-devops` cuando exista y el foco sea CI/CD o despliegue.
+- Use `phishshield-backend` for backend implementation details once the architecture is decided.
+- Use `phishshield-security-analysis` when the focus is concrete forensic analysis logic.
+- Use `phishshield-testing` when the focus is testing strategy or test implementation.
+- Use `phishshield-devops` when it exists and the focus is CI/CD or deployment.
 
-Si una tarea mezcla arquitectura e implementación, empieza con esta skill y después aplica la skill técnica correspondiente.
+If a task mixes architecture and implementation, start with this skill and then apply the relevant technical skill.
 
-## Criterios de rechazo
+## Rejection criteria
 
-Rechaza o rediseña una propuesta si:
+Reject or redesign a proposal if it:
 
-- requiere importar infraestructura desde `Domain`;
-- hace que FastAPI, Playwright, Ollama, YARA, OCR o parsers sean dependencias del núcleo;
-- impide sustituir una herramienta externa sin tocar casos de uso o dominio;
-- mezcla análisis forense, transporte HTTP y presentación en el mismo componente;
-- convierte Docker Compose o scripts en lugar de reglas de negocio;
-- introduce red real en tests de reglas puras;
-- contradice explícitamente `doc/ADR.md`.
+- requires importing infrastructure from `Domain`;
+- makes FastAPI, Playwright, Ollama, YARA, OCR, or parsers dependencies of the core;
+- prevents replacing an external tool without touching use cases or domain;
+- mixes forensic analysis, HTTP transport, and presentation in the same component;
+- turns Docker Compose or scripts into the place for business rules;
+- introduces real network access in tests for pure rules;
+- explicitly contradicts `doc/ADR.md`.
 
-## Checklist antes de aprobar una decisión arquitectónica
+## Checklist before approving an architectural decision
 
-- [ ] La decisión respeta `doc/ADR.md`.
-- [ ] Las dependencias apuntan hacia el dominio, no al revés.
-- [ ] Domain no depende de frameworks ni SDKs.
-- [ ] Application define puertos cuando cruza fronteras técnicas.
-- [ ] Infrastructure implementa adaptadores sustituibles.
-- [ ] Entrypoints no contienen negocio.
-- [ ] Los módulos forenses son extensibles.
-- [ ] El enfoque local/self-hosted y de privacidad se mantiene.
-- [ ] Hay una estrategia de testing acorde al cambio.
-- [ ] La solución evita complejidad accidental.
+- [ ] The decision respects `doc/ADR.md`.
+- [ ] Dependencies point toward the domain, not away from it.
+- [ ] Domain does not depend on frameworks or SDKs.
+- [ ] Application defines ports when crossing technical boundaries.
+- [ ] Infrastructure implements replaceable adapters.
+- [ ] Entrypoints do not contain business rules.
+- [ ] Forensic modules remain extensible.
+- [ ] The local/self-hosted privacy approach is preserved.
+- [ ] There is a testing strategy aligned with the change.
+- [ ] The solution avoids accidental complexity.
 
-## Ejemplos de aplicación
+## Examples
 
-### Propuesta de estructura inicial
+### Initial structure proposal
 
-Correcto:
+Correct:
 
 ```text
-backend/
-  src/
-    phishshield/
-      domain/
-      application/
-      infrastructure/
-        entrypoints/
+src/
+  domain/
+  application/
+  infrastructure/
+    entrypoints/
 ```
 
-Incorrecto:
+Incorrect:
 
 ```text
-backend/
+src/
   app.py
   services.py
   utils.py
 ```
 
-si ahí se mezclan endpoints, parsers, reglas de riesgo y llamadas externas.
+if endpoints, parsers, risk rules, and external calls are mixed there.
 
-### Endpoint que llama directamente a Playwright
+### Endpoint directly calling Playwright
 
-Diagnóstico:
+Diagnosis:
 
 ```text
-Rompe la separación de capas si el endpoint contiene lógica de sandbox.
+This breaks layer separation if the endpoint contains sandbox logic.
 ```
 
-Corrección:
+Correction:
 
 ```text
 FastAPI -> UseCase -> SandboxBrowserPort -> PlaywrightSandboxAdapter
 ```
 
-### Detección de homóglifos
+### Homoglyph detection
 
-Si es algoritmo puro:
+If it is a pure algorithm:
 
 ```text
 Domain
 ```
 
-Si depende de librerías externas o IO:
+If it depends on external libraries or IO:
 
 ```text
-Infrastructure detrás de un puerto, manteniendo tipos y reglas estables en Domain/Application.
+Infrastructure behind a port, while keeping stable types and rules in Domain/Application.
 ```
 
-## Prompts de evaluación sugeridos
+## Suggested eval prompts
 
-Usa estos prompts para probar si la skill guía bien al agente:
+Use these prompts to check whether the skill guides the agent correctly:
 
-1. `Propón la estructura inicial de carpetas para PhishShield siguiendo el ADR.`
-2. `Añade un nuevo módulo OCR con Tesseract sin romper la arquitectura hexagonal.`
-3. `Revisa esta propuesta: el endpoint FastAPI abre Playwright directamente para capturar screenshots.`
-4. `Diseña cómo integrar Ollama opcionalmente respetando puertos y adaptadores.`
-5. `Decide dónde ubicar la detección de homóglifos y justifica la capa.`
+1. `Propose the initial folder structure for PhishShield according to the ADR.`
+2. `Add a new OCR module with Tesseract without breaking hexagonal architecture.`
+3. `Review this proposal: the FastAPI endpoint opens Playwright directly to capture screenshots.`
+4. `Design how to integrate Ollama optionally while respecting ports and adapters.`
+5. `Decide where homoglyph detection should live and justify the layer.`
 
-Una buena respuesta debe consultar el ADR, justificar capas, definir puertos/adaptadores cuando corresponda y detectar acoplamientos indebidos.
+A good answer should consult the ADR, justify layers, define ports/adapters when needed, and detect improper coupling.

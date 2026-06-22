@@ -1,23 +1,23 @@
 ---
 name: phishshield-testing
-description: Guía especializada para testing y TDD en PhishShield. Usa esta skill siempre que el usuario pida crear, modificar o revisar tests, aplicar TDD, diseñar casos Pytest, probar funciones puras de dominio, validar casos de uso, mockear puertos, probar adaptadores, revisar cobertura o implementar una nueva función con enfoque Red-Green-Refactor. Úsala también cuando el usuario pida implementar lógica nueva, aunque no mencione tests, porque en PhishShield el desarrollo debe empezar por pruebas cuando el comportamiento sea verificable.
+description: Specialized guidance for testing and TDD in PhishShield. Use this skill whenever the user asks to create, modify, or review tests, apply TDD, design Pytest cases, test pure domain functions, validate use cases, mock ports, test adapters, review coverage, or implement a new function with a Red-Green-Refactor workflow. Also use it when the user asks to implement new logic, even if tests are not explicitly mentioned, because PhishShield development should start with tests whenever behavior is verifiable.
 ---
 
 # phishshield-testing
 
-## Propósito
+## Purpose
 
-Guiar a agentes IA para desarrollar PhishShield con una disciplina de testing clara, incremental y compatible con arquitectura hexagonal.
+Guide AI agents to develop PhishShield with a clear, incremental testing discipline compatible with hexagonal architecture.
 
-Esta skill existe para evitar implementar lógica primero y probar después de forma superficial. En especial, debe usarse antes de empezar las primeras funciones puras de `domain`.
+This skill exists to avoid implementing logic first and adding superficial tests later. It is especially important before implementing the first pure `domain` functions.
 
-El objetivo es trabajar en ciclos pequeños:
+The default cycle is:
 
 ```text
 Red -> Green -> Refactor
 ```
 
-Y aplicar patrones clásicos de TDD cuando correspondan:
+Use classic TDD patterns when appropriate:
 
 - Fake it till you make it
 - Triangulation
@@ -26,66 +26,66 @@ Y aplicar patrones clásicos de TDD cuando correspondan:
 - Given / When / Then
 - Make it work, make it right, make it fast
 
-## Referencias que debes consultar
+## References to consult
 
-Antes de diseñar tests relevantes, lee:
+Before designing relevant tests, read:
 
 - `AGENT.md`
 - `doc/ADR.md`
 - `doc/DOMAIN_PURE_FUNCTIONS_PLAN.md`
 - `.skills/README.md`
 
-Si la tarea afecta arquitectura o límites entre capas, usa primero `phishshield-architecture`.
+If the task affects architecture or layer boundaries, use `phishshield-architecture` first.
 
-Si la tarea afecta implementación backend, combina esta skill con `phishshield-backend`.
+If the task affects backend implementation, combine this skill with `phishshield-backend`.
 
-## Cuándo usar esta skill
+## When to use this skill
 
-Usa esta skill cuando la tarea implique:
+Use this skill when the task involves:
 
-- crear tests;
-- aplicar TDD;
-- implementar una función nueva;
-- modificar comportamiento existente;
-- probar funciones puras de dominio;
-- diseñar tests Pytest;
-- crear fixtures;
-- revisar tests frágiles;
-- probar casos de uso de Application;
-- mockear puertos;
-- probar adaptadores de Infrastructure;
-- validar errores, límites o entradas hostiles;
-- refactorizar con seguridad;
-- añadir cobertura a módulos forenses.
+- creating tests;
+- applying TDD;
+- implementing a new function;
+- modifying existing behavior;
+- testing pure domain functions;
+- designing Pytest tests;
+- creating fixtures;
+- reviewing fragile tests;
+- testing Application use cases;
+- mocking ports;
+- testing Infrastructure adapters;
+- validating errors, limits, or hostile inputs;
+- refactoring safely;
+- adding coverage to forensic modules.
 
-También debe activarse cuando el usuario diga algo como:
+Also use it when the user says something like:
 
 ```text
-vamos a implementar esta función
+let's implement this function
 ```
 
-porque el flujo esperado del proyecto es empezar por el comportamiento esperado y los tests.
+because the expected workflow in this project is to start with expected behavior and tests.
 
-## Proceso TDD obligatorio
+## Mandatory TDD process
 
-Cuando el comportamiento sea verificable, trabaja así:
+When behavior is verifiable, work as follows:
 
-1. Define el comportamiento esperado en lenguaje claro.
-2. Escribe el test más pequeño que falle.
-3. Ejecuta el test o indica claramente que debe ejecutarse.
-4. Confirma el estado **Red**.
-5. Implementa lo mínimo para pasar.
-6. Ejecuta el test afectado.
-7. Confirma el estado **Green**.
-8. Refactoriza solo si mejora claridad sin cambiar comportamiento.
-9. Ejecuta de nuevo los tests afectados.
-10. Repite con el siguiente caso.
+1. Define the expected behavior clearly.
+2. Write the smallest failing test.
+3. Run the test or state the exact command that should be run.
+4. Confirm the **Red** state.
+5. Implement the minimum code required to pass.
+6. Run the affected test.
+7. Confirm the **Green** state.
+8. Refactor only if it improves clarity without changing behavior.
+9. Run the affected tests again.
+10. Repeat with the next case.
 
-No agrupes demasiados casos en una sola iteración. Mantén cambios pequeños.
+Do not group too many cases into one iteration. Keep changes small.
 
-## Resultado esperado de una respuesta
+## Expected response shape
 
-Cuando respondas usando esta skill, estructura la respuesta así cuando sea aplicable:
+When using this skill, structure the answer as follows when applicable:
 
 ```text
 1. Behaviour under test
@@ -97,51 +97,51 @@ Cuando respondas usando esta skill, estructura la respuesta así cuando sea apli
 7. Next test case
 ```
 
-Si todavía no se debe implementar código, entrega solo el plan de tests.
+If code should not be implemented yet, provide only the test plan.
 
-## Patrones de TDD
+## TDD patterns
 
 ### Red-Green-Refactor
 
-Usa este ciclo por defecto.
+Use this cycle by default.
 
 ```text
-Red: test falla porque el comportamiento no existe.
-Green: implementación mínima para pasar.
-Refactor: limpieza sin cambiar comportamiento.
+Red: the test fails because the behavior does not exist.
+Green: the minimum implementation passes the test.
+Refactor: cleanup without changing behavior.
 ```
 
 ### Fake it till you make it
 
-Útil para la primera prueba de una función.
+Useful for the first test of a function.
 
-Ejemplo:
+Example:
 
 ```python
 def contains_invisible_chars(text: str) -> bool:
     return True
 ```
 
-Solo es aceptable como paso temporal para pasar un primer test muy estrecho. Debe evolucionar con más tests.
+This is only acceptable as a temporary step for a very narrow first test. It must evolve as more tests are added.
 
 ### Triangulation
 
-Añade nuevos casos para obligar a generalizar.
+Add new cases to force generalization.
 
-Ejemplo:
+Example:
 
-1. detecta `\u200b`;
-2. detecta `\u200c`;
-3. no detecta texto limpio;
-4. maneja string vacío.
+1. detects `\u200b`;
+2. detects `\u200c`;
+3. does not detect clean text;
+4. handles empty string.
 
 ### Obvious implementation
 
-Si la solución es trivial y el riesgo es bajo, implementa directamente la versión clara después de escribir tests.
+If the solution is trivial and the risk is low, implement the clear version directly after writing tests.
 
 ### Arrange / Act / Assert
 
-Estructura recomendada para Pytest:
+Recommended Pytest structure:
 
 ```python
 def test_should_detect_zero_width_space():
@@ -157,7 +157,7 @@ def test_should_detect_zero_width_space():
 
 ### Given / When / Then
 
-Útil cuando el comportamiento expresa una regla de negocio:
+Useful when behavior expresses a business rule:
 
 ```python
 def test_given_clean_text_when_checking_invisible_chars_then_returns_false():
@@ -168,78 +168,78 @@ def test_given_clean_text_when_checking_invisible_chars_then_returns_false():
     assert result is False
 ```
 
-## Reglas para tests de Domain
+## Domain test rules
 
-Los tests de `domain` deben ser:
+`domain` tests must be:
 
-- unitarios;
-- rápidos;
-- deterministas;
-- sin red;
-- sin filesystem;
-- sin FastAPI;
-- sin Playwright;
-- sin Ollama;
-- sin YARA;
-- sin OCR;
-- sin parsers externos;
-- sin mocks complejos.
+- unit-level;
+- fast;
+- deterministic;
+- free from network access;
+- free from filesystem access;
+- free from FastAPI;
+- free from Playwright;
+- free from Ollama;
+- free from YARA;
+- free from OCR;
+- free from external parsers;
+- free from complex mocks.
 
-Si necesitas mocks complejos para probar una función de dominio, probablemente esa lógica no pertenece al dominio.
+If complex mocks are needed to test a domain function, that logic probably does not belong in the domain.
 
-## Reglas para tests de Application
+## Application test rules
 
-Los tests de `application` deben:
+`application` tests should:
 
-- probar casos de uso;
-- usar fakes o mocks de puertos;
-- verificar orquestación;
-- no depender de adaptadores reales;
-- cubrir errores de aplicación;
-- cubrir flujos opcionales como IA desactivada.
+- test use cases;
+- use fakes or mocks for ports;
+- verify orchestration;
+- avoid real adapters;
+- cover application errors;
+- cover optional flows such as disabled AI.
 
-Ejemplo:
+Example:
 
 ```text
 AnalyzeEmailUseCase -> mocked EmailParserPort + mocked LinkAnalyzerPort
 ```
 
-## Reglas para tests de Infrastructure
+## Infrastructure test rules
 
-Los tests de `infrastructure` pueden usar fixtures y dobles de prueba, pero deben controlar efectos externos.
+`infrastructure` tests may use fixtures and test doubles, but external effects must be controlled.
 
-Para adaptadores:
+For adapters:
 
-- mockear red;
-- usar fixtures locales controladas;
-- aplicar timeouts;
-- evitar servicios reales en unit tests;
-- mover pruebas reales a integración si son imprescindibles.
+- mock network access;
+- use controlled local fixtures;
+- apply timeouts;
+- avoid real services in unit tests;
+- move real-service checks to explicit integration tests when necessary.
 
-Ejemplos:
+Examples:
 
-- no resolver URLs reales en unit tests;
-- no abrir Chromium real en unit tests de dominio;
-- no llamar Ollama real en tests unitarios;
-- no depender de Tesseract real salvo test de integración explícito.
+- do not resolve real URLs in unit tests;
+- do not open real Chromium in domain unit tests;
+- do not call real Ollama in unit tests;
+- do not depend on real Tesseract except in explicit integration tests.
 
-## Reglas para tests de Entrypoints / FastAPI
+## Entrypoint / FastAPI test rules
 
-Los tests de API deben:
+API tests should:
 
-- verificar validación de request;
-- verificar códigos HTTP;
-- verificar serialización de respuesta;
-- mockear casos de uso;
-- no ejecutar análisis forense completo desde el endpoint.
+- verify request validation;
+- verify HTTP status codes;
+- verify response serialization;
+- mock use cases;
+- avoid running full forensic analysis from the endpoint.
 
-FastAPI debe probarse como borde del sistema, no como lugar de reglas de negocio.
+FastAPI should be tested as a system boundary, not as a place for business rules.
 
-## Naming recomendado
+## Recommended naming
 
-Usa nombres de test orientados a comportamiento.
+Use behavior-oriented test names.
 
-Correcto:
+Correct:
 
 ```python
 def test_should_strip_zero_width_space_from_text():
@@ -251,7 +251,7 @@ def test_should_return_false_when_text_has_no_invisible_chars():
     ...
 ```
 
-Incorrecto:
+Incorrect:
 
 ```python
 def test_regex_works():
@@ -263,9 +263,9 @@ def test_internal_loop():
     ...
 ```
 
-## Organización sugerida de tests
+## Suggested test organization
 
-Cuando se cree la estructura de tests, usar:
+When the test structure is created, use:
 
 ```text
 tests/
@@ -279,76 +279,76 @@ tests/
   fixtures/
 ```
 
-Para la primera función pura de dominio:
+For the first pure domain function:
 
 ```text
 tests/unit/domain/services/text_normalization/test_invisible_characters.py
 ```
 
-## Primer caso recomendado para PhishShield
+## Recommended first PhishShield case
 
-Primera iteración sugerida:
+Suggested first iteration:
 
 ```text
 Text normalization - invisible characters
 ```
 
-Funciones:
+Functions:
 
 ```python
 contains_invisible_chars(text: str) -> bool
 strip_invisible_chars(text: str) -> str
 ```
 
-Tests iniciales:
+Initial tests:
 
 - detects zero-width space;
 - detects zero-width non-joiner;
 - detects zero-width joiner;
 - returns false for clean text;
-- strips invisible chars without changing visible text;
+- strips invisible characters without changing visible text;
 - handles empty string.
 
-## Criterios de rechazo
+## Rejection criteria
 
-Rechaza o rediseña un enfoque de testing si:
+Reject or redesign a testing approach if it:
 
-- implementa código antes de definir comportamiento;
-- añade tests que dependen de red real sin ser integración explícita;
-- prueba detalles internos en vez de comportamiento;
-- usa Playwright/Ollama/YARA/OCR en tests unitarios de dominio;
-- mezcla tests de dominio con FastAPI;
-- necesita mocks complejos para una función pura;
-- no cubre casos límite básicos;
-- no verifica errores o entradas hostiles cuando aplican.
+- implements code before defining behavior;
+- adds tests that depend on real network access without being explicit integration tests;
+- tests internal details instead of behavior;
+- uses Playwright/Ollama/YARA/OCR in domain unit tests;
+- mixes domain tests with FastAPI;
+- needs complex mocks for a pure function;
+- misses basic edge cases;
+- fails to verify errors or hostile input where relevant.
 
-## Checklist antes de finalizar una tarea de testing
+## Checklist before finishing a testing task
 
-- [ ] El comportamiento esperado está claro.
-- [ ] Hay al menos un test que falla antes de implementar cuando se aplica TDD.
-- [ ] Los tests son deterministas.
-- [ ] Los tests están en la capa correcta.
-- [ ] Los tests no dependen de infraestructura real salvo integración explícita.
-- [ ] Los nombres de tests describen comportamiento.
-- [ ] Se cubren casos normales y límites.
-- [ ] Se ejecutaron los tests afectados o se indicó el comando exacto.
-- [ ] La implementación mínima no rompe arquitectura hexagonal.
+- [ ] The expected behavior is clear.
+- [ ] At least one test fails before implementation when TDD applies.
+- [ ] Tests are deterministic.
+- [ ] Tests are in the correct layer.
+- [ ] Tests do not depend on real infrastructure unless explicitly integration-level.
+- [ ] Test names describe behavior.
+- [ ] Normal and edge cases are covered.
+- [ ] Affected tests were run or the exact command was provided.
+- [ ] The minimum implementation does not break hexagonal architecture.
 
-## Relación con otras skills
+## Relationship with other skills
 
-- Usa `phishshield-architecture` antes si hay dudas de capa, dependencia o frontera.
-- Usa `phishshield-backend` junto con esta skill para endpoints, casos de uso, puertos o adaptadores backend.
-- Usa `phishshield-security-analysis` cuando exista y el foco sea una regla forense concreta.
-- Usa esta skill siempre que haya comportamiento verificable.
+- Use `phishshield-architecture` first when there are doubts about layer, dependency, or boundary decisions.
+- Use `phishshield-backend` together with this skill for endpoints, use cases, ports, or backend adapters.
+- Use `phishshield-security-analysis` when it exists and the focus is a concrete forensic rule.
+- Use this skill whenever behavior is verifiable.
 
-## Prompts de evaluación sugeridos
+## Suggested eval prompts
 
-Usa estos prompts para comprobar si la skill guía bien al agente:
+Use these prompts to check whether the skill guides the agent well:
 
-1. `Crea tests TDD para contains_invisible_chars antes de implementar la función.`
-2. `Diseña los tests unitarios para strip_invisible_chars siguiendo Red-Green-Refactor.`
-3. `Queremos probar un adaptador que resuelve URLs acortadas sin usar red real.`
-4. `Revisa estos tests porque dependen de Playwright en una función de dominio.`
-5. `Añade una nueva regla de riesgo y diseña primero los tests Pytest.`
+1. `Create TDD tests for contains_invisible_chars before implementing the function.`
+2. `Design unit tests for strip_invisible_chars following Red-Green-Refactor.`
+3. `We want to test an adapter that resolves shortened URLs without using real network access.`
+4. `Review these tests because they depend on Playwright in a domain function.`
+5. `Add a new risk rule and design the Pytest tests first.`
 
-Una buena respuesta debe empezar por comportamiento, proponer tests pequeños, respetar la capa correspondiente y evitar dependencias externas en unit tests de dominio.
+A good answer should start from behavior, propose small tests, respect the correct layer, and avoid external dependencies in domain unit tests.

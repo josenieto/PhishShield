@@ -1,117 +1,117 @@
 ---
 name: phishshield-backend
-description: Guía especializada para trabajar en el backend de PhishShield. Usa esta skill siempre que el usuario pida crear, modificar o revisar código Python/FastAPI, casos de uso, puertos, adaptadores, modelos Pydantic, endpoints API, parsers, módulos forenses backend, integración con Playwright/Ollama/YARA/OCR, Docker del backend o tests Pytest. También úsala cuando una tarea mencione arquitectura hexagonal, Domain/Application/Infrastructure, contratos, DTOs, validación o análisis de correos .eml desde backend, aunque el usuario no diga explícitamente "backend". Si la tarea implica decidir límites de capas o arquitectura general, aplica primero phishshield-architecture y después vuelve a esta skill para la implementación backend.
+description: Specialized guidance for backend work in PhishShield. Use this skill whenever the user asks to create, modify, or review Python/FastAPI code, use cases, ports, adapters, Pydantic models, API endpoints, parsers, backend forensic modules, Playwright/Ollama/YARA/OCR integration, backend Docker setup, or Pytest tests. Also use it when a task mentions hexagonal architecture, Domain/Application/Infrastructure, contracts, DTOs, validation, or .eml analysis from the backend, even if the user does not explicitly say "backend". If the task requires deciding layer boundaries or general architecture, apply phishshield-architecture first and then return to this skill for backend implementation.
 ---
 
 # phishshield-backend
 
-## Propósito
+## Purpose
 
-Ayudar a agentes IA a desarrollar el backend de **PhishShield** respetando el ADR del proyecto y evitando una implementación plana acoplada a FastAPI.
+Help AI agents develop the **PhishShield** backend while respecting the project ADR and avoiding a flat FastAPI-coupled implementation.
 
-PhishShield es una herramienta defensiva local/self-hosted para análisis forense de correos `.eml`. El backend concentra reglas de análisis, orquestación de casos de uso, adaptadores técnicos y entrypoints API. Por eso la separación entre dominio, aplicación e infraestructura es crítica: permite cambiar parsers, sandbox, IA local o frameworks sin romper el núcleo del sistema.
+PhishShield is a defensive local/self-hosted tool for forensic analysis of `.eml` email files. The backend concentrates analysis rules, use case orchestration, technical adapters, and API entrypoints. Therefore, separation between domain, application, and infrastructure is critical: it allows parsers, sandboxing, local AI, or frameworks to change without breaking the system core.
 
-## Referencias que debes consultar
+## References to consult
 
-Antes de realizar cambios backend relevantes, lee:
+Before making relevant backend changes, read:
 
 - `AGENT.md`
 - `doc/ADR.md`
 - `.skills/README.md`
 
-Si hay conflicto entre esta skill y `doc/ADR.md`, prevalece `doc/ADR.md`.
+If this skill conflicts with `doc/ADR.md`, the ADR takes precedence.
 
-## Proceso de trabajo
+## Working process
 
-Cuando esta skill se active:
+When this skill triggers:
 
-1. Identifica si la tarea es implementación backend o decisión arquitectónica.
-2. Si hay dudas de capas, límites o dependencias, aplica primero `phishshield-architecture`.
-3. Localiza la capa afectada: `Domain`, `Application`, `Infrastructure` o `Entrypoints`.
-4. Diseña contratos antes que adaptadores cuando haya IO, red, sandbox, IA, OCR, YARA o parsers externos.
-5. Mantén FastAPI como entrypoint fino.
-6. Añade o ajusta tests si cambia comportamiento.
-7. Cierra con una comprobación breve del checklist backend.
+1. Identify whether the task is backend implementation or an architectural decision.
+2. If there are doubts about layers, boundaries, or dependencies, apply `phishshield-architecture` first.
+3. Locate the affected layer: `Domain`, `Application`, `Infrastructure`, or `Entrypoints`.
+4. Design contracts before adapters when IO, network, sandboxing, AI, OCR, YARA, or external parsers are involved.
+5. Keep FastAPI as a thin entrypoint.
+6. Add or update tests if behavior changes.
+7. Close with a short check against the backend checklist.
 
-El objetivo es producir backend implementable sin degradar la arquitectura hexagonal.
+The goal is to produce implementable backend code without degrading hexagonal architecture.
 
-## Cuándo usar esta skill
+## When to use this skill
 
-Usa esta skill para tareas relacionadas con:
+Use this skill for tasks related to:
 
-- Python y FastAPI.
-- Diseño de endpoints.
-- Casos de uso de aplicación.
-- Puertos y adaptadores.
-- Modelos de dominio.
-- DTOs y validación con Pydantic.
-- Parsing de `.eml`, PDF, Office, imágenes o URLs.
-- Módulos SPF/DKIM/DMARC.
-- Detección de homóglifos, Punycode o enlaces acortados.
-- Integración backend con Playwright, Ollama, Tesseract, YARA u oletools.
-- Manejo de errores backend.
-- Tests unitarios o de integración con Pytest.
-- Dockerización del servicio backend.
+- Python and FastAPI;
+- endpoint design;
+- application use cases;
+- ports and adapters;
+- domain models;
+- DTOs and Pydantic validation;
+- `.eml`, PDF, Office, image, or URL parsing;
+- SPF/DKIM/DMARC modules;
+- homoglyph, Punycode, or short URL analysis;
+- backend integration with Playwright, Ollama, Tesseract, YARA, or oletools;
+- backend error handling;
+- unit or integration tests with Pytest;
+- backend service Docker setup.
 
-No uses esta skill para tareas puramente frontend salvo que impliquen contratos de API o modelos compartidos.
+Do not use this skill for purely frontend tasks unless they involve API contracts or shared models.
 
-## Resultado esperado de una respuesta
+## Expected response shape
 
-Cuando respondas usando esta skill, estructura la solución así cuando sea aplicable:
+When using this skill, structure the solution as follows when applicable:
 
 ```text
-1. Capa afectada
-2. Diseño propuesto
-3. Contratos o modelos necesarios
-4. Adaptadores o endpoints implicados
-5. Manejo de errores, límites y seguridad
-6. Tests Pytest recomendados
-7. Riesgos arquitectónicos evitados
+1. Affected layer
+2. Proposed design
+3. Required contracts or models
+4. Involved adapters or endpoints
+5. Error handling, limits, and security
+6. Recommended Pytest tests
+7. Architectural risks avoided
 ```
 
-Si la tarea requiere una decisión arquitectónica previa, indícalo y deriva primero a `phishshield-architecture`.
+If the task requires a prior architectural decision, state that and route first to `phishshield-architecture`.
 
-## Modelo mental obligatorio
+## Required mental model
 
-Trabaja con esta dirección de dependencias:
+Work with this dependency direction:
 
 ```text
 Domain  <-  Application  <-  Infrastructure / Entrypoints
 ```
 
-Interpreta las capas así:
+Interpret the layers as:
 
-- **Domain**: modelos puros y lógica forense libre de frameworks.
-- **Application**: casos de uso y puertos que orquestan el análisis.
-- **Infrastructure**: adaptadores concretos, FastAPI, parsers, Playwright, Ollama, YARA, OCR, red, filesystem y Docker.
+- **Domain**: pure models and forensic logic free from frameworks.
+- **Application**: use cases and ports orchestrating the analysis.
+- **Infrastructure**: concrete adapters, FastAPI, parsers, Playwright, Ollama, YARA, OCR, network, filesystem, and Docker.
 
-La razón es mantener estable el núcleo del análisis aunque cambien librerías, frameworks o servicios externos.
+The reason is to keep the analysis core stable even when libraries, frameworks, or external services change.
 
-## Reglas para Domain
+## Domain rules
 
-En `Domain`:
+In `Domain`:
 
-- Define modelos puros como `Email`, `ResultadoAnalisis`, artefactos, indicadores, adjuntos o hallazgos.
-- Implementa lógica determinista pura cuando sea posible, por ejemplo normalización, clasificación de indicadores o detección de homóglifos.
-- No importes FastAPI.
-- No importes SDKs externos.
-- No hagas IO de filesystem, red, base de datos ni procesos.
-- No llames a Playwright, Ollama, Tesseract, oletools, YARA ni librerías de infraestructura directamente.
-- No dependas de variables de entorno.
+- Define pure models such as `Email`, `AnalysisResult`, artifacts, indicators, attachments, or findings.
+- Implement deterministic pure logic when possible, for example normalization, indicator classification, or homoglyph detection.
+- Do not import FastAPI.
+- Do not import external SDKs.
+- Do not perform filesystem, network, database, or process IO.
+- Do not call Playwright, Ollama, Tesseract, oletools, YARA, or infrastructure libraries directly.
+- Do not depend on environment variables.
 
-Si una función necesita red, navegador, OCR, IA o parsing con librería externa, probablemente pertenece a un adaptador de infraestructura detrás de un puerto.
+If a function needs network, browser, OCR, AI, or parsing through an external library, it probably belongs in an infrastructure adapter behind a port.
 
-## Reglas para Application
+## Application rules
 
-En `Application`:
+In `Application`:
 
-- Define casos de uso que representen acciones del sistema, por ejemplo analizar un `.eml`, extraer artefactos, evaluar enlaces o generar un reporte.
-- Define puertos como interfaces abstractas para capacidades externas.
-- Coordina módulos, pero no implementes detalles técnicos concretos.
-- Depende del dominio y de abstracciones, no de adaptadores.
-- Mantén las políticas de orquestación visibles y testeables.
+- Define use cases representing system actions, for example analyzing an `.eml`, extracting artifacts, evaluating links, or generating a report.
+- Define ports as abstract interfaces for external capabilities.
+- Coordinate modules, but do not implement concrete technical details.
+- Depend on the domain and abstractions, not adapters.
+- Keep orchestration policies visible and testable.
 
-Ejemplos de puertos razonables:
+Reasonable port examples:
 
 ```python
 class LinkAnalyzerPort(Protocol):
@@ -131,18 +131,18 @@ class AiAnalysisPort(Protocol):
         ...
 ```
 
-## Reglas para Infrastructure
+## Infrastructure rules
 
-En `Infrastructure`:
+In `Infrastructure`:
 
-- Implementa adaptadores concretos de los puertos.
-- Encapsula FastAPI, Playwright, Ollama, OCR, YARA, oletools, pdfminer, PyPDF2, idna, peticiones HTTP y filesystem.
-- Traduce errores técnicos a errores controlados de aplicación.
-- Aplica timeouts y límites de recursos.
-- Trata toda entrada como hostil: `.eml`, adjuntos, URLs, PDFs, Office e imágenes.
-- Evita efectos secundarios no explícitos.
+- Implement concrete adapters for ports.
+- Encapsulate FastAPI, Playwright, Ollama, OCR, YARA, oletools, pdfminer, PyPDF2, idna, HTTP requests, and filesystem.
+- Translate technical errors into controlled application errors.
+- Apply timeouts and resource limits.
+- Treat all input as hostile: `.eml`, attachments, URLs, PDFs, Office documents, and images.
+- Avoid implicit side effects.
 
-Ejemplos de adaptadores:
+Adapter examples:
 
 - `FastApiEntrypoint`
 - `OllamaAiAnalysisAdapter`
@@ -153,190 +153,188 @@ Ejemplos de adaptadores:
 - `TesseractOcrAdapter`
 - `HttpRedirectResolverAdapter`
 
-## Reglas para FastAPI
+## FastAPI rules
 
-FastAPI debe actuar como entrypoint, no como núcleo de negocio.
+FastAPI must act as an entrypoint, not as the business core.
 
-En endpoints:
+In endpoints:
 
-- Valida entrada.
-- Convierte requests a comandos o DTOs de aplicación.
-- Llama a casos de uso.
-- Convierte resultados a responses.
-- Maneja errores HTTP.
-- No implementes análisis forense directamente en el endpoint.
-- No mezcles lógica de dominio con dependencias de FastAPI.
+- validate input;
+- convert requests into application commands or DTOs;
+- call use cases;
+- convert results into responses;
+- handle HTTP errors;
+- do not implement forensic analysis directly in the endpoint;
+- do not mix domain logic with FastAPI dependencies.
 
-Patrón recomendado:
+Recommended pattern:
 
 ```text
 router -> request schema -> use case -> domain/application result -> response schema
 ```
 
-## Reglas para Pydantic
+## Pydantic rules
 
-Usa Pydantic para contratos de entrada/salida y validación de bordes.
+Use Pydantic for boundary input/output contracts and validation.
 
-Distingue:
+Distinguish:
 
-- modelos de dominio: expresan conceptos de negocio;
-- DTOs o schemas Pydantic: expresan contratos externos;
-- comandos de aplicación: expresan intención de un caso de uso.
+- domain models: express business concepts;
+- DTOs or Pydantic schemas: express external contracts;
+- application commands: express use case intent.
 
-Evita que los modelos Pydantic de API sustituyan automáticamente al dominio si eso acopla la lógica al framework.
+Avoid using API Pydantic models as domain entities by default if that couples logic to the framework.
 
-## Reglas para módulos forenses backend
+## Backend forensic module rules
 
-PhishShield analiza artefactos potencialmente maliciosos. Actúa con enfoque defensivo.
+PhishShield analyzes potentially malicious artifacts. Work defensively.
 
-### Correos `.eml`
+### `.eml` emails
 
-- Parsear de forma robusta.
-- No confiar en cabeceras declaradas.
-- Extraer remitente, asunto, cuerpo, adjuntos y enlaces sin ejecutar contenido.
+- Parse robustly.
+- Do not trust declared headers.
+- Extract sender, subject, body, attachments, and links without executing content.
 
-### Cabeceras
+### Headers
 
-- Mantener SPF, DKIM y DMARC como resultados verificables.
-- Separar parsing de cabeceras de interpretación del riesgo.
+- Keep SPF, DKIM, and DMARC as verifiable results.
+- Separate header parsing from risk interpretation.
 
-### Enlaces
+### Links
 
-- Normalizar dominios.
-- Detectar IDN/homóglifos.
-- Convertir a Punycode cuando aplique.
-- Resolver acortadores con peticiones pasivas y timeouts.
-- Evitar seguir redirecciones sin límites.
+- Normalize domains.
+- Detect IDN/homoglyphs.
+- Convert to Punycode when applicable.
+- Resolve shorteners with passive requests and timeouts.
+- Avoid following redirects without limits.
 
 ### Sandbox
 
-- Usar Playwright solo desde infraestructura.
-- Ejecutar navegador aislado.
-- Bloquear descargas y persistencia.
-- Aplicar timeouts.
-- Capturar screenshot y título sin exponer el host.
+- Use Playwright only from infrastructure.
+- Run the browser isolated.
+- Block downloads and persistence.
+- Apply timeouts.
+- Capture screenshot and title without exposing the host.
 
-### Adjuntos
+### Attachments
 
-- Tratar PDFs, Office e imágenes como entrada hostil.
-- Calcular hash SHA-256 cuando aplique.
-- Extraer enlaces de PDFs sin ejecutar contenido.
-- Detectar macros con herramientas especializadas.
-- Ejecutar YARA de forma controlada.
+- Treat PDFs, Office files, and images as hostile input.
+- Calculate SHA-256 when applicable.
+- Extract PDF links without executing content.
+- Detect macros with specialized tooling.
+- Run YARA in a controlled way.
 
-### IA local
+### Local AI
 
-- La IA es opcional mediante configuración.
-- Ollama pertenece a infraestructura.
-- La IA complementa resultados deterministas; no debe ser la única fuente de verdad.
-- Si `USE_AI_ANALYSIS=false`, el caso de uso debe continuar limpiamente sin IA.
+- AI is optional through configuration.
+- Ollama belongs to infrastructure.
+- AI complements deterministic results; it must not be the only source of truth.
+- If `USE_AI_ANALYSIS=false`, the use case must continue cleanly without AI.
 
-## Testing esperado
+## Expected testing
 
-Cuando cambies comportamiento backend, añade o actualiza tests.
+When backend behavior changes, add or update tests.
 
-Usa Pytest con esta estrategia:
+Use Pytest with this strategy:
 
-- Tests unitarios para dominio y algoritmos puros.
-- Tests de aplicación usando mocks de puertos.
-- Tests de adaptadores con fixtures controladas.
-- Tests de integración solo cuando sea necesario.
-- No dependas de red real en tests unitarios.
-- No dependas de servicios externos reales para validar reglas de negocio.
-- Usa fixtures de `.eml`, URLs, cabeceras y adjuntos sintéticos.
+- Unit tests for domain and pure algorithms.
+- Application tests using mocked ports.
+- Adapter tests with controlled fixtures.
+- Integration tests only when necessary.
+- Do not depend on real network in unit tests.
+- Do not depend on real external services to validate business rules.
+- Use synthetic `.eml`, URL, header, and attachment fixtures.
 
-Casos que merecen tests:
+Cases that deserve tests:
 
-- homóglifos y Punycode;
-- SPF/DKIM/DMARC parseados;
-- extracción de enlaces;
-- PDFs con enlaces embebidos;
-- Office con macros simuladas;
-- fallos de adaptadores;
-- IA desactivada;
-- timeouts de sandbox o red.
+- homoglyphs and Punycode;
+- parsed SPF/DKIM/DMARC results;
+- link extraction;
+- PDFs with embedded links;
+- simulated Office macros;
+- adapter failures;
+- disabled AI;
+- sandbox or network timeouts.
 
-## Criterios de rechazo
+## Rejection criteria
 
-Rechaza o rediseña una solución backend si:
+Reject or redesign a backend solution if it:
 
-- implementa análisis forense directamente en un endpoint FastAPI;
-- importa FastAPI, Playwright, Ollama, OCR, YARA, HTTP o filesystem desde `Domain`;
-- instancia adaptadores concretos dentro de casos de uso sin inyección;
-- añade red real a tests unitarios;
-- usa IA local como única fuente de verdad del análisis;
-- mezcla DTOs de API con entidades de dominio sin justificación;
-- ignora timeouts, límites o entrada hostil en adaptadores.
+- implements forensic analysis directly in a FastAPI endpoint;
+- imports FastAPI, Playwright, Ollama, OCR, YARA, HTTP, or filesystem from `Domain`;
+- instantiates concrete adapters inside use cases without injection;
+- adds real network access to unit tests;
+- uses local AI as the only source of truth for analysis;
+- mixes API DTOs with domain entities without justification;
+- ignores timeouts, limits, or hostile input in adapters.
 
-## Checklist antes de finalizar una tarea backend
+## Checklist before finishing a backend task
 
-Antes de entregar cambios:
+- [ ] I read `doc/ADR.md` if the task affects architecture or main modules.
+- [ ] Domain does not import infrastructure.
+- [ ] Use cases depend on ports, not concrete adapters.
+- [ ] FastAPI acts only as an entrypoint.
+- [ ] External integrations are encapsulated in Infrastructure.
+- [ ] Hostile input is validated and limited.
+- [ ] Errors and timeouts are handled where appropriate.
+- [ ] Tests were added or updated if behavior changed.
+- [ ] The solution preserves the ADR local/self-hosted privacy approach.
 
-- [ ] He leído `doc/ADR.md` si la tarea afecta arquitectura o módulos principales.
-- [ ] La capa Domain no importa infraestructura.
-- [ ] Los casos de uso dependen de puertos, no de adaptadores concretos.
-- [ ] FastAPI solo actúa como entrypoint.
-- [ ] Las integraciones externas están encapsuladas en Infrastructure.
-- [ ] La entrada hostil se valida y limita.
-- [ ] Hay manejo de errores y timeouts donde corresponde.
-- [ ] Se añadieron o actualizaron tests si cambió comportamiento.
-- [ ] La solución mantiene el enfoque local/self-hosted y de privacidad del ADR.
+## Examples
 
-## Ejemplos de aplicación
+### Endpoint for `.eml` upload
 
-### Endpoint para subir `.eml`
-
-Correcto:
+Correct:
 
 ```text
-FastAPI router recibe archivo -> construye comando -> llama a AnalyzeEmailUseCase -> devuelve response.
+FastAPI router receives file -> builds command -> calls AnalyzeEmailUseCase -> returns response.
 ```
 
-Incorrecto:
+Incorrect:
 
 ```text
-FastAPI router parsea cabeceras, resuelve enlaces, llama Playwright y calcula riesgo directamente.
+FastAPI router parses headers, resolves links, calls Playwright, and calculates risk directly.
 ```
 
-### Nuevo analizador de enlaces
+### New link analyzer
 
-Correcto:
+Correct:
 
 ```text
-Application define LinkAnalyzerPort.
-Infrastructure implementa IdnaLinkAnalyzerAdapter o HttpRedirectResolverAdapter.
-Domain contiene tipos y reglas puras.
+Application defines LinkAnalyzerPort.
+Infrastructure implements IdnaLinkAnalyzerAdapter or HttpRedirectResolverAdapter.
+Domain contains pure types and rules.
 ```
 
-Incorrecto:
+Incorrect:
 
 ```text
-Domain importa requests/httpx para resolver redirecciones.
+Domain imports requests/httpx to resolve redirects.
 ```
 
-### Integración con Ollama
+### Ollama integration
 
-Correcto:
+Correct:
 
 ```text
-Application define AiAnalysisPort.
-Infrastructure implementa OllamaAiAnalysisAdapter.
-El caso de uso omite IA limpiamente si está desactivada.
+Application defines AiAnalysisPort.
+Infrastructure implements OllamaAiAnalysisAdapter.
+The use case skips AI cleanly when disabled.
 ```
 
-Incorrecto:
+Incorrect:
 
 ```text
-El dominio llama directamente a la librería ollama.
+The domain calls the ollama library directly.
 ```
 
-## Prompts de evaluación sugeridos
+## Suggested eval prompts
 
-Usa estos prompts para probar si la skill guía bien al agente:
+Use these prompts to test whether the skill guides the agent well:
 
-1. `Crea un endpoint FastAPI para subir un archivo .eml y lanzar el análisis forense completo.`
-2. `Implementa un puerto y un adaptador para resolver URLs acortadas sin romper la arquitectura hexagonal.`
-3. `Añade tests Pytest para la detección de dominios homóglifos y conversión a Punycode.`
-4. `Integra Ollama como análisis IA opcional controlado por USE_AI_ANALYSIS.`
+1. `Create a FastAPI endpoint to upload an .eml file and start the full forensic analysis.`
+2. `Implement a port and adapter to resolve shortened URLs without breaking hexagonal architecture.`
+3. `Add Pytest tests for homoglyph domain detection and Punycode conversion.`
+4. `Integrate Ollama as optional AI analysis controlled by USE_AI_ANALYSIS.`
 
-Una buena respuesta debe mantener la separación de capas, proponer puertos/adaptadores y añadir pruebas cuando cambie comportamiento.
+A good answer should preserve layer separation, propose ports/adapters, and add tests when behavior changes.

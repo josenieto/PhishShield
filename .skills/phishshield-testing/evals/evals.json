@@ -3,8 +3,8 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Crea tests TDD para contains_invisible_chars antes de implementar la función.",
-      "expected_output": "La respuesta debe definir el comportamiento, proponer tests Pytest pequeños antes de la implementación, cubrir al menos zero-width space, texto limpio y string vacío, y mantener el test en la capa unit/domain sin infraestructura.",
+      "prompt": "Create TDD tests for contains_invisible_chars before implementing the function.",
+      "expected_output": "The answer should define the behavior, propose small Pytest tests before implementation, cover at least zero-width space, clean text, and empty string, and keep the test in the unit/domain layer without infrastructure.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
@@ -12,17 +12,17 @@
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
-        "Empieza por el comportamiento esperado antes de la implementación.",
-        "Propone tests Pytest para contains_invisible_chars.",
-        "Incluye caso con zero-width space o carácter invisible equivalente.",
-        "Incluye caso con texto limpio que debe devolver False.",
-        "Evita red, filesystem, FastAPI, Playwright, Ollama, YARA u OCR."
+        "Starts with expected behavior before implementation.",
+        "Proposes Pytest tests for contains_invisible_chars.",
+        "Includes a zero-width space or equivalent invisible character case.",
+        "Includes a clean text case that should return False.",
+        "Avoids network, filesystem, FastAPI, Playwright, Ollama, YARA, or OCR."
       ]
     },
     {
       "id": 2,
-      "prompt": "Diseña los tests unitarios para strip_invisible_chars siguiendo Red-Green-Refactor.",
-      "expected_output": "La respuesta debe describir ciclo Red-Green-Refactor, proponer tests de eliminación de caracteres invisibles sin cambiar texto visible y ubicar los tests en tests/unit/domain/services/text_normalization.",
+      "prompt": "Design unit tests for strip_invisible_chars following Red-Green-Refactor.",
+      "expected_output": "The answer should describe the Red-Green-Refactor cycle, propose tests for removing invisible characters without changing visible text, and place tests under tests/unit/domain/services/text_normalization.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
@@ -30,17 +30,17 @@
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
-        "Menciona o aplica Red-Green-Refactor.",
-        "Propone tests unitarios para strip_invisible_chars.",
-        "Verifica que el texto visible se conserva.",
-        "Incluye caso de string vacío o texto sin caracteres invisibles.",
-        "Ubica los tests bajo tests/unit/domain o equivalente."
+        "Mentions or applies Red-Green-Refactor.",
+        "Proposes unit tests for strip_invisible_chars.",
+        "Verifies that visible text is preserved.",
+        "Includes an empty string case or text without invisible characters.",
+        "Places tests under tests/unit/domain or an equivalent path."
       ]
     },
     {
       "id": 3,
-      "prompt": "Queremos probar un adaptador que resuelve URLs acortadas sin usar red real.",
-      "expected_output": "La respuesta debe indicar que es test de Infrastructure o Application con puerto mockeado, evitar red real, usar mocks/fakes/fixtures y cubrir timeouts o errores.",
+      "prompt": "We want to test an adapter that resolves shortened URLs without using real network access.",
+      "expected_output": "The answer should state that this is an Infrastructure test or an Application test with a mocked port, avoid real network access, use mocks/fakes/fixtures, and cover timeouts or errors.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
@@ -48,17 +48,17 @@
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
-        "Indica que no debe usarse red real en unit tests.",
-        "Propone mocks, fakes o fixtures controladas.",
-        "Distingue puerto de Application y adaptador de Infrastructure.",
-        "Incluye pruebas de timeout, error o redirección límite.",
-        "No ubica esta prueba como test unitario puro de Domain."
+        "States that real network access must not be used in unit tests.",
+        "Proposes mocks, fakes, or controlled fixtures.",
+        "Distinguishes the Application port from the Infrastructure adapter.",
+        "Includes timeout, error, or redirect limit tests.",
+        "Does not place this as a pure Domain unit test."
       ]
     },
     {
       "id": 4,
-      "prompt": "Revisa estos tests porque dependen de Playwright en una función de dominio.",
-      "expected_output": "La respuesta debe rechazar el enfoque, explicar que Domain no debe depender de Playwright, proponer mover Playwright a Infrastructure y mantener tests de Domain puros.",
+      "prompt": "Review these tests because they depend on Playwright in a domain function.",
+      "expected_output": "The answer should reject the approach, explain that Domain must not depend on Playwright, propose moving Playwright to Infrastructure, and keep Domain tests pure.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
@@ -66,17 +66,17 @@
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
-        "Rechaza usar Playwright en tests unitarios de Domain.",
-        "Explica que Playwright pertenece a Infrastructure.",
-        "Propone tests puros para Domain.",
-        "Sugiere mocks o puertos para capas superiores si aplica.",
-        "Respeta la arquitectura hexagonal del ADR."
+        "Rejects using Playwright in Domain unit tests.",
+        "Explains that Playwright belongs to Infrastructure.",
+        "Proposes pure Domain tests.",
+        "Suggests mocks or ports for upper layers if applicable.",
+        "Respects the ADR hexagonal architecture."
       ]
     },
     {
       "id": 5,
-      "prompt": "Añade una nueva regla de riesgo y diseña primero los tests Pytest.",
-      "expected_output": "La respuesta debe empezar por los casos de comportamiento, proponer tests para límites y clasificación de riesgo, y no implementar antes de definir tests.",
+      "prompt": "Add a new risk rule and design the Pytest tests first.",
+      "expected_output": "The answer should start with behavior cases, propose tests for risk thresholds and classification, and avoid implementation before defining tests.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
@@ -84,11 +84,11 @@
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
-        "Define primero los casos de comportamiento.",
-        "Propone tests Pytest antes de la implementación.",
-        "Incluye casos de límites o umbrales.",
-        "Evita depender de IA o reputación externa para una regla pura.",
-        "Mantiene la regla en la capa adecuada según arquitectura."
+        "Defines behavior cases first.",
+        "Proposes Pytest tests before implementation.",
+        "Includes boundary or threshold cases.",
+        "Avoids depending on AI or external reputation for a pure rule.",
+        "Keeps the rule in the appropriate layer according to architecture."
       ]
     }
   ]
