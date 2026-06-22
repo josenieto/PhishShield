@@ -296,3 +296,80 @@ Result:
 ### Next step
 
 Continue the domain roadmap with the `Homoglyphs / suspicious Unicode` group, starting with a small TDD cycle for script detection or mixed-script detection.
+
+---
+
+## 2026-06-23 - Unicode script detection TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project moved from the `Text normalization` domain group to the `Homoglyphs / suspicious Unicode` group.
+
+The goal was to start detecting phishing-relevant Unicode script usage before implementing mixed-script or confusable-character rules.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+detect_unicode_scripts(text: str) -> set[str]
+```
+
+The function detects Latin, Cyrillic, and Greek script ranges using internal Unicode codepoint checks. Numbers, punctuation, hyphens, dots, and other neutral characters do not add scripts.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the suspicious Unicode domain group is still being built from pure functions.
+
+### Files changed
+
+- `tests/unit/domain/services/homoglyphs/test_script_detection.py`
+- `src/domain/services/homoglyphs/scripts.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.homoglyphs'
+GREEN    -> 7 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/homoglyphs/test_script_detection.py
+```
+
+Result:
+
+```text
+7 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+34 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+contains_mixed_scripts(text: str) -> bool
+```
+
+Start with RED tests and reuse `detect_unicode_scripts` internally if the contract remains suitable.
