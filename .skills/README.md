@@ -84,7 +84,8 @@ Cada `SKILL.md` se creará más adelante usando `skill-creator`.
   Para guiar módulos de análisis de phishing: cabeceras, enlaces, homóglifos, adjuntos, OCR, EXIF, YARA y sandbox.
 
 - `phishshield-testing`  
-  Para guiar pruebas unitarias, integración, mocks, Pytest y validación de módulos forenses.
+  Para guiar pruebas unitarias, integración, mocks, Pytest, TDD Red-Green-Refactor y validación de módulos forenses.  
+  Estado: definida en `.skills/phishshield-testing/SKILL.md` con evals iniciales en `.skills/phishshield-testing/evals/evals.json`.
 
 ## Nota
 
@@ -94,3 +95,4 @@ Skills creadas con este flujo:
 
 - `phishshield-backend`
 - `phishshield-architecture`
+- `phishshield-testing`

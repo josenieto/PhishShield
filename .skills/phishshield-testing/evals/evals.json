@@ -1,0 +1,95 @@
+{
+  "skill_name": "phishshield-testing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Crea tests TDD para contains_invisible_chars antes de implementar la función.",
+      "expected_output": "La respuesta debe definir el comportamiento, proponer tests Pytest pequeños antes de la implementación, cubrir al menos zero-width space, texto limpio y string vacío, y mantener el test en la capa unit/domain sin infraestructura.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-testing/SKILL.md"
+      ],
+      "assertions": [
+        "Empieza por el comportamiento esperado antes de la implementación.",
+        "Propone tests Pytest para contains_invisible_chars.",
+        "Incluye caso con zero-width space o carácter invisible equivalente.",
+        "Incluye caso con texto limpio que debe devolver False.",
+        "Evita red, filesystem, FastAPI, Playwright, Ollama, YARA u OCR."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Diseña los tests unitarios para strip_invisible_chars siguiendo Red-Green-Refactor.",
+      "expected_output": "La respuesta debe describir ciclo Red-Green-Refactor, proponer tests de eliminación de caracteres invisibles sin cambiar texto visible y ubicar los tests en tests/unit/domain/services/text_normalization.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-testing/SKILL.md"
+      ],
+      "assertions": [
+        "Menciona o aplica Red-Green-Refactor.",
+        "Propone tests unitarios para strip_invisible_chars.",
+        "Verifica que el texto visible se conserva.",
+        "Incluye caso de string vacío o texto sin caracteres invisibles.",
+        "Ubica los tests bajo tests/unit/domain o equivalente."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Queremos probar un adaptador que resuelve URLs acortadas sin usar red real.",
+      "expected_output": "La respuesta debe indicar que es test de Infrastructure o Application con puerto mockeado, evitar red real, usar mocks/fakes/fixtures y cubrir timeouts o errores.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-testing/SKILL.md",
+        ".skills/phishshield-backend/SKILL.md"
+      ],
+      "assertions": [
+        "Indica que no debe usarse red real en unit tests.",
+        "Propone mocks, fakes o fixtures controladas.",
+        "Distingue puerto de Application y adaptador de Infrastructure.",
+        "Incluye pruebas de timeout, error o redirección límite.",
+        "No ubica esta prueba como test unitario puro de Domain."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Revisa estos tests porque dependen de Playwright en una función de dominio.",
+      "expected_output": "La respuesta debe rechazar el enfoque, explicar que Domain no debe depender de Playwright, proponer mover Playwright a Infrastructure y mantener tests de Domain puros.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-testing/SKILL.md",
+        ".skills/phishshield-architecture/SKILL.md"
+      ],
+      "assertions": [
+        "Rechaza usar Playwright en tests unitarios de Domain.",
+        "Explica que Playwright pertenece a Infrastructure.",
+        "Propone tests puros para Domain.",
+        "Sugiere mocks o puertos para capas superiores si aplica.",
+        "Respeta la arquitectura hexagonal del ADR."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Añade una nueva regla de riesgo y diseña primero los tests Pytest.",
+      "expected_output": "La respuesta debe empezar por los casos de comportamiento, proponer tests para límites y clasificación de riesgo, y no implementar antes de definir tests.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-testing/SKILL.md"
+      ],
+      "assertions": [
+        "Define primero los casos de comportamiento.",
+        "Propone tests Pytest antes de la implementación.",
+        "Incluye casos de límites o umbrales.",
+        "Evita depender de IA o reputación externa para una regla pura.",
+        "Mantiene la regla en la capa adecuada según arquitectura."
+      ]
+    }
+  ]
+}
