@@ -3,104 +3,104 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Propón la estructura inicial de carpetas para PhishShield siguiendo el ADR.",
-      "expected_output": "La respuesta debe proponer una estructura de monolito modular hexagonal con Domain, Application, Infrastructure y Entrypoints; debe justificar la dirección de dependencias y evitar una organización plana tipo app.py/services.py.",
+      "prompt": "Propose the initial folder structure for PhishShield according to the ADR.",
+      "expected_output": "The answer should propose a hexagonal modular monolith structure with Domain, Application, Infrastructure, and Entrypoints; it should justify dependency direction and avoid a flat app.py/services.py organization.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
-        "Menciona explícitamente Domain, Application, Infrastructure y Entrypoints o entrypoints.",
-        "Explica que las dependencias deben apuntar hacia el dominio y no al revés.",
-        "Propone una estructura modular, no una estructura plana centrada en app.py/services.py.",
-        "Referencia o respeta el ADR como fuente arquitectónica.",
-        "Indica que FastAPI pertenece a Infrastructure/Entrypoints, no a Domain."
+        "Explicitly mentions Domain, Application, Infrastructure, and Entrypoints or entrypoints.",
+        "Explains that dependencies must point toward the domain and not away from it.",
+        "Proposes a modular structure, not a flat app.py/services.py structure.",
+        "References or respects the ADR as the architectural source of truth.",
+        "States that FastAPI belongs to Infrastructure/Entrypoints, not Domain."
       ]
     },
     {
       "id": 2,
-      "prompt": "Añade un nuevo módulo OCR con Tesseract sin romper la arquitectura hexagonal.",
-      "expected_output": "La respuesta debe ubicar conceptos estables en Domain, un puerto de OCR en Application y un adaptador Tesseract en Infrastructure; debe mencionar tests con mocks/fixtures y mantener Tesseract fuera del dominio.",
+      "prompt": "Add a new OCR module with Tesseract without breaking hexagonal architecture.",
+      "expected_output": "The answer should place stable concepts in Domain, an OCR port in Application, and a Tesseract adapter in Infrastructure; it should mention tests with mocks/fixtures and keep Tesseract out of the domain.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
-        "Ubica Tesseract/pytesseract en Infrastructure.",
-        "Propone un puerto de OCR en Application.",
-        "Mantiene Domain libre de imports de Tesseract, filesystem o procesos externos.",
-        "Describe al menos un adaptador sustituible para OCR.",
-        "Propone tests con mocks o fixtures controladas."
+        "Places Tesseract/pytesseract in Infrastructure.",
+        "Proposes an OCR port in Application.",
+        "Keeps Domain free from Tesseract, filesystem, or external process imports.",
+        "Describes at least one replaceable OCR adapter.",
+        "Proposes tests with mocks or controlled fixtures."
       ]
     },
     {
       "id": 3,
-      "prompt": "Revisa esta propuesta: el endpoint FastAPI abre Playwright directamente para capturar screenshots de enlaces.",
-      "expected_output": "La respuesta debe detectar acoplamiento indebido, explicar que FastAPI debe ser entrypoint, proponer UseCase -> SandboxBrowserPort -> PlaywrightSandboxAdapter y mencionar aislamiento/timeouts.",
+      "prompt": "Review this proposal: the FastAPI endpoint opens Playwright directly to capture link screenshots.",
+      "expected_output": "The answer should identify improper coupling, explain that FastAPI should be a thin entrypoint, propose UseCase -> SandboxBrowserPort -> PlaywrightSandboxAdapter, and mention isolation/timeouts.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
-        "Identifica la propuesta como acoplamiento indebido o mala arquitectura.",
-        "Explica que FastAPI debe actuar como entrypoint fino.",
-        "Propone un caso de uso entre FastAPI y Playwright.",
-        "Propone un puerto de sandbox/navegador en Application.",
-        "Ubica Playwright en Infrastructure y menciona aislamiento, límites o timeouts."
+        "Identifies the proposal as improper coupling or bad architecture.",
+        "Explains that FastAPI should act as a thin entrypoint.",
+        "Proposes a use case between FastAPI and Playwright.",
+        "Proposes a sandbox/browser port in Application.",
+        "Places Playwright in Infrastructure and mentions isolation, limits, or timeouts."
       ]
     },
     {
       "id": 4,
-      "prompt": "Diseña cómo integrar Ollama opcionalmente respetando puertos y adaptadores.",
-      "expected_output": "La respuesta debe definir IA como puerto en Application, Ollama como adaptador en Infrastructure, respetar USE_AI_ANALYSIS, permitir omitir IA limpiamente y dejar claro que Domain no conoce modelos ni prompts.",
+      "prompt": "Design how to integrate Ollama optionally while respecting ports and adapters.",
+      "expected_output": "The answer should define AI as a port in Application, Ollama as an adapter in Infrastructure, respect USE_AI_ANALYSIS, allow AI to be skipped cleanly, and state that Domain does not know models or prompts.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
-        "Define un puerto de IA en Application.",
-        "Ubica Ollama en Infrastructure como adaptador.",
-        "Indica que Domain no conoce prompts, modelos ni SDKs.",
-        "Respeta la configuración USE_AI_ANALYSIS o la opcionalidad de la IA.",
-        "Aclara que la IA complementa análisis deterministas y no los sustituye."
+        "Defines an AI port in Application.",
+        "Places Ollama in Infrastructure as an adapter.",
+        "States that Domain does not know prompts, models, or SDKs.",
+        "Respects USE_AI_ANALYSIS or the optional nature of AI.",
+        "Clarifies that AI complements deterministic analysis and does not replace it."
       ]
     },
     {
       "id": 5,
-      "prompt": "Decide dónde ubicar la detección de homóglifos y justifica la capa.",
-      "expected_output": "La respuesta debe distinguir lógica pura de dependencias técnicas: reglas deterministas y modelos en Domain, posibles librerías externas o IO en Infrastructure detrás de puertos, y orquestación en Application si forma parte de un caso de uso.",
+      "prompt": "Decide where homoglyph detection should live and justify the layer.",
+      "expected_output": "The answer should distinguish pure logic from technical dependencies: deterministic rules and models in Domain, possible external libraries or IO in Infrastructure behind ports, and orchestration in Application if part of a use case.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
-        "Ubica la lógica pura de detección de homóglifos en Domain.",
-        "Distingue reglas deterministas de dependencias técnicas externas.",
-        "Propone Infrastructure o adaptador si hay librerías externas o IO.",
-        "Menciona Application si la detección se orquesta dentro de un caso de uso.",
-        "Justifica la decisión usando separación de capas."
+        "Places pure homoglyph detection logic in Domain.",
+        "Distinguishes deterministic rules from external technical dependencies.",
+        "Proposes Infrastructure or an adapter if external libraries or IO are involved.",
+        "Mentions Application if the detection is orchestrated inside a use case.",
+        "Justifies the decision using layer separation."
       ]
     },
     {
       "id": 6,
-      "prompt": "Estamos pensando en meter toda la lógica de riesgo en el frontend para que el usuario vea resultados más rápido. ¿Te parece correcto arquitectónicamente?",
-      "expected_output": "La respuesta debe rechazar o rediseñar la propuesta porque dispersa reglas de negocio fuera del backend/domain; debe mantener la lógica de riesgo en Domain/Application del backend y dejar el frontend como presentación.",
+      "prompt": "We are considering putting all risk logic in the frontend so users see results faster. Is that architecturally correct?",
+      "expected_output": "The answer should reject or redesign the proposal because it scatters business rules outside the backend/domain; it should keep risk logic in backend Domain/Application and leave the frontend as presentation.",
       "files": [
         "AGENT.md",
         "doc/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
-        "Rechaza o rediseña la idea de poner toda la lógica de riesgo en el frontend.",
-        "Explica que el frontend debe centrarse en presentación/UX.",
-        "Ubica reglas de riesgo en Domain/Application del backend.",
-        "Mantiene un contrato API claro entre backend y frontend.",
-        "Menciona mantenibilidad, consistencia o seguridad como motivo."
+        "Rejects or redesigns the idea of putting all risk logic in the frontend.",
+        "Explains that the frontend should focus on presentation/UX.",
+        "Places risk rules in backend Domain/Application.",
+        "Maintains a clear API contract between backend and frontend.",
+        "Mentions maintainability, consistency, or security as a reason."
       ]
     }
   ]

@@ -1,114 +1,114 @@
 # Domain Pure Functions Plan
 
-## Propósito
+## Purpose
 
-Este documento define un backlog técnico e incremental de funciones puras candidatas para la capa `domain` de PhishShield.
+This document defines an incremental technical backlog of candidate pure functions for the PhishShield `domain` layer.
 
-No es un plan para implementar todo de golpe.  
-Su objetivo es mantener contexto, agrupar funciones relacionadas y permitir avanzar de forma controlada:
+It is not a plan to implement everything at once.  
+Its purpose is to preserve context, group related functions, and support controlled progress:
 
 ```text
-función pura de dominio
+pure domain function
         ↓
 unit test
         ↓
-posible value object / entity
+possible value object / entity
         ↓
-caso de uso de Application, si aplica
+Application use case, if applicable
         ↓
-puerto / adaptador de Infrastructure, si aplica
+Infrastructure port / adapter, if applicable
         ↓
-entrypoint/API, si aplica
+entrypoint/API, if applicable
 ```
 
-Cada grupo funcional debe trabajarse de forma aislada, con commits pequeños y verificables.
+Each functional group must be developed independently, with small and verifiable commits.
 
 ---
 
-## Principios de pureza del dominio
+## Domain purity principles
 
-Una función puede vivir en `src/domain/` si cumple estas condiciones:
+A function can live in `src/domain/` if it satisfies these conditions:
 
-- recibe valores simples o modelos de dominio;
-- devuelve valores simples o modelos de dominio;
-- no hace IO;
-- no lee ni escribe archivos;
-- no llama a red;
-- no consulta DNS;
-- no usa FastAPI;
-- no usa Playwright;
-- no usa Ollama;
-- no usa YARA;
-- no usa Tesseract/OCR;
-- no usa parsers externos de PDF, Office o `.eml`;
-- no depende de variables de entorno;
-- no depende de configuración global mutable;
-- produce siempre la misma salida para la misma entrada;
-- puede testearse con Pytest sin mocks complejos.
+- it receives primitive values or domain models;
+- it returns primitive values or domain models;
+- it performs no IO;
+- it does not read or write files;
+- it does not call the network;
+- it does not query DNS;
+- it does not use FastAPI;
+- it does not use Playwright;
+- it does not use Ollama;
+- it does not use YARA;
+- it does not use Tesseract/OCR;
+- it does not use external PDF, Office, or `.eml` parsers;
+- it does not depend on environment variables;
+- it does not depend on mutable global configuration;
+- it always returns the same output for the same input;
+- it can be tested with Pytest without complex mocks.
 
-Si una función necesita red, filesystem, procesos externos, SDKs, navegador, IA, OCR, YARA o librerías de parsing, no pertenece directamente a `domain`. En ese caso debe moverse a `infrastructure` detrás de un puerto definido en `application`.
+If a function needs network access, filesystem access, external processes, SDKs, a browser, AI, OCR, YARA, or parsing libraries, it does not belong directly in `domain`. It belongs in `infrastructure` behind a port defined in `application`.
 
 ---
 
-## Flujo de trabajo por grupo
+## Workflow per group
 
-Para cada grupo funcional se seguirá este flujo:
+For each functional group:
 
-1. Seleccionar una función o un subgrupo pequeño.
-2. Definir contrato:
-   - nombre,
-   - firma,
-   - entradas,
-   - salida esperada,
-   - errores o casos límite.
-3. Crear unit tests.
-4. Implementar la función pura.
-5. Ejecutar tests.
-6. Revisar si aparece necesidad real de:
+1. Select one function or a very small subgroup.
+2. Define the contract:
+   - name,
+   - signature,
+   - inputs,
+   - expected output,
+   - edge cases.
+3. Create unit tests.
+4. Implement the pure function.
+5. Run tests.
+6. Check whether a real need appears for:
    - value object,
    - entity,
    - enum,
    - domain error.
-7. Solo después, decidir si se sube una capa:
+7. Only then decide whether to move upward:
    - `application/use_cases`,
    - `application/ports`,
    - `infrastructure/adapters`,
    - `infrastructure/entrypoints/api`.
-8. Hacer commit pequeño.
+8. Make a small commit.
 
 ---
 
-## Estado general
+## General status
 
-| Grupo | Estado | Prioridad |
+| Group | Status | Priority |
 |---|---:|---:|
-| Text normalization | Pending | Alta |
-| Homoglyphs / suspicious Unicode | Pending | Alta |
-| Domain analysis | Pending | Alta |
-| URL analysis | Pending | Alta |
-| Attachment analysis | Pending | Alta |
-| Authentication result analysis | Pending | Media |
-| Risk scoring | Pending | Alta |
-| Social engineering heuristics | Pending | Media |
-| Finding analysis | Pending | Media |
-| Hash analysis | Pending | Media |
+| Text normalization | Pending | High |
+| Homoglyphs / suspicious Unicode | Pending | High |
+| Domain analysis | Pending | High |
+| URL analysis | Pending | High |
+| Attachment analysis | Pending | High |
+| Authentication result analysis | Pending | Medium |
+| Risk scoring | Pending | High |
+| Social engineering heuristics | Pending | Medium |
+| Finding analysis | Pending | Medium |
+| Hash analysis | Pending | Medium |
 
 ---
 
 # 1. Text normalization
 
-## Propósito
+## Purpose
 
-Funciones puras para normalizar texto antes de aplicar reglas de análisis.  
-Son útiles para asuntos, remitentes, dominios visuales, texto de cuerpo, texto extraído por OCR y nombres de archivo.
+Pure functions for normalizing text before applying analysis rules.  
+They are useful for subjects, visible sender names, visual domains, body text, OCR-extracted text, and filenames.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/text_normalization/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `normalize_whitespace`
 
@@ -116,21 +116,21 @@ src/domain/services/text_normalization/
 normalize_whitespace(text: str) -> str
 ```
 
-Normaliza espacios, tabuladores y saltos de línea repetidos.
+Normalizes repeated spaces, tabs, and line breaks.
 
-Comportamiento esperado:
+Expected behavior:
 
-- colapsa espacios consecutivos;
-- elimina espacios iniciales/finales;
-- mantiene el contenido textual significativo.
+- collapses consecutive spaces;
+- trims leading/trailing spaces;
+- preserves meaningful textual content.
 
-Tests sugeridos:
+Suggested tests:
 
-- texto con espacios múltiples;
-- texto con tabs;
-- texto con saltos de línea repetidos;
-- string vacío;
-- string ya normalizado.
+- text with multiple spaces;
+- text with tabs;
+- text with repeated line breaks;
+- empty string;
+- already normalized string.
 
 ---
 
@@ -140,21 +140,21 @@ Tests sugeridos:
 normalize_unicode_text(text: str) -> str
 ```
 
-Aplica normalización Unicode estándar usando librería estándar de Python, por ejemplo `unicodedata`.
+Applies standard Unicode normalization using the Python standard library, for example `unicodedata`.
 
-Comportamiento esperado:
+Expected behavior:
 
-- normaliza formas Unicode equivalentes;
-- mantiene texto legible;
-- no elimina caracteres por sí misma.
+- normalizes equivalent Unicode forms;
+- keeps readable text;
+- does not remove characters by itself.
 
-Tests sugeridos:
+Suggested tests:
 
-- caracteres compuestos;
-- caracteres descompuestos;
-- texto ASCII;
-- texto con acentos;
-- string vacío.
+- composed characters;
+- decomposed characters;
+- ASCII text;
+- text with accents;
+- empty string.
 
 ---
 
@@ -164,21 +164,21 @@ Tests sugeridos:
 strip_invisible_chars(text: str) -> str
 ```
 
-Elimina caracteres invisibles o de control que puedan ocultar contenido malicioso.
+Removes invisible or control characters that may hide malicious content.
 
-Comportamiento esperado:
+Expected behavior:
 
-- elimina zero-width spaces;
-- elimina caracteres de control no imprimibles;
-- conserva texto visible.
+- removes zero-width spaces;
+- removes non-printable control characters;
+- preserves visible text.
 
-Tests sugeridos:
+Suggested tests:
 
-- texto con `\u200b`;
-- texto con `\u200c`;
-- texto con caracteres de control;
-- texto sin caracteres invisibles;
-- string vacío.
+- text with `\u200b`;
+- text with `\u200c`;
+- text with control characters;
+- text without invisible characters;
+- empty string.
 
 ---
 
@@ -188,54 +188,54 @@ Tests sugeridos:
 contains_invisible_chars(text: str) -> bool
 ```
 
-Detecta si un texto contiene caracteres invisibles sospechosos.
+Detects whether text contains suspicious invisible characters.
 
-Comportamiento esperado:
+Expected behavior:
 
-- devuelve `True` si encuentra caracteres invisibles;
-- devuelve `False` en texto normal.
+- returns `True` when invisible characters are present;
+- returns `False` for normal text.
 
-Tests sugeridos:
+Suggested tests:
 
-- texto con zero-width space;
-- texto con caracteres de control;
-- texto limpio;
-- string vacío.
+- text with zero-width space;
+- text with control characters;
+- clean text;
+- empty string.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- leer archivos;
-- parsear `.eml`;
-- ejecutar OCR;
-- llamar librerías externas;
-- modificar encoding de archivos en disco.
+- read files;
+- parse `.eml`;
+- run OCR;
+- call external libraries;
+- modify file encodings on disk.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede usar estas funciones dentro de un caso de uso de análisis textual;
-- `infrastructure` puede aportar texto extraído desde `.eml`, OCR, PDF u Office.
+- `application` may use these functions inside a text analysis use case;
+- `infrastructure` may provide extracted text from `.eml`, OCR, PDF, or Office sources.
 
 ---
 
 # 2. Homoglyphs / suspicious Unicode
 
-## Propósito
+## Purpose
 
-Detectar señales puras de Unicode sospechoso, mezcla de alfabetos y caracteres visualmente confundibles.
+Detect pure signals of suspicious Unicode, mixed scripts, and visually confusable characters.
 
-Este grupo es crítico para detectar ataques homóglifos en dominios, remitentes, asuntos y texto visible.
+This group is critical for detecting homoglyph attacks in domains, sender names, subjects, and visible text.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/homoglyphs/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `detect_unicode_scripts`
 
@@ -243,9 +243,9 @@ src/domain/services/homoglyphs/
 detect_unicode_scripts(text: str) -> set[str]
 ```
 
-Detecta scripts Unicode presentes en el texto.
+Detects Unicode scripts present in text.
 
-Ejemplos de salida:
+Example outputs:
 
 ```text
 {"LATIN"}
@@ -253,14 +253,14 @@ Ejemplos de salida:
 {"GREEK"}
 ```
 
-Tests sugeridos:
+Suggested tests:
 
-- texto latino;
-- texto cirílico;
-- texto griego;
-- texto mixto latino/cirílico;
-- números y símbolos;
-- string vacío.
+- Latin text;
+- Cyrillic text;
+- Greek text;
+- mixed Latin/Cyrillic text;
+- numbers and symbols;
+- empty string.
 
 ---
 
@@ -270,21 +270,21 @@ Tests sugeridos:
 contains_mixed_scripts(text: str) -> bool
 ```
 
-Detecta mezcla sospechosa de alfabetos.
+Detects suspicious alphabet mixing.
 
-Comportamiento esperado:
+Expected behavior:
 
-- `False` para texto latino normal;
-- `True` para mezclas tipo latino + cirílico;
-- debe tratar números y puntuación como neutrales.
+- `False` for normal Latin text;
+- `True` for Latin + Cyrillic mixtures;
+- numbers and punctuation should be treated as neutral.
 
-Tests sugeridos:
+Suggested tests:
 
-- `microsoft.com` normal;
-- dominio con una `о` cirílica;
-- texto con números;
-- texto con guiones;
-- string vacío.
+- normal `microsoft.com`;
+- domain with a Cyrillic `о`;
+- text with numbers;
+- text with hyphens;
+- empty string.
 
 ---
 
@@ -294,20 +294,20 @@ Tests sugeridos:
 contains_confusable_characters(text: str) -> bool
 ```
 
-Detecta caracteres potencialmente confundibles usando una tabla interna mínima.
+Detects potentially confusable characters using a minimal internal table.
 
-Comportamiento esperado:
+Expected behavior:
 
-- detecta caracteres visualmente similares;
-- no depende de librerías externas;
-- no hace conversión IDNA completa.
+- detects visually similar characters;
+- does not depend on external libraries;
+- does not perform full IDNA conversion.
 
-Tests sugeridos:
+Suggested tests:
 
-- letras cirílicas similares a latinas;
-- letras griegas similares a latinas;
-- texto sin caracteres confundibles;
-- string vacío.
+- Cyrillic letters similar to Latin letters;
+- Greek letters similar to Latin letters;
+- clean text;
+- empty string.
 
 ---
 
@@ -317,53 +317,53 @@ Tests sugeridos:
 find_confusable_characters(text: str) -> list[str]
 ```
 
-Devuelve los caracteres sospechosos encontrados.
+Returns suspicious characters found in text.
 
-Comportamiento esperado:
+Expected behavior:
 
-- conserva el orden de aparición;
-- puede devolver duplicados o valores únicos, según se decida en el contrato;
-- devuelve lista vacía si no hay hallazgos.
+- preserves discovery order;
+- may return duplicates or unique values depending on the final contract;
+- returns an empty list when there are no findings.
 
-Tests sugeridos:
+Suggested tests:
 
-- un carácter confundible;
-- varios caracteres confundibles;
-- caracteres repetidos;
-- texto limpio.
+- one confusable character;
+- multiple confusable characters;
+- repeated characters;
+- clean text.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- resolver dominios;
-- consultar listas externas;
-- llamar servicios de reputación;
-- hacer HTTP;
-- usar librerías externas de threat intelligence.
+- resolve domains;
+- query external lists;
+- call reputation services;
+- perform HTTP requests;
+- use external threat intelligence libraries.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede crear un caso de uso para analizar dominios extraídos;
-- `infrastructure` puede aportar dominios desde parsers `.eml`, PDFs o HTML.
+- `application` may create a use case for analyzing extracted domains;
+- `infrastructure` may provide domains from `.eml`, PDF, or HTML parsers.
 
 ---
 
 # 3. Domain analysis
 
-## Propósito
+## Purpose
 
-Funciones puras para analizar propiedades estructurales de dominios y hosts.
+Pure functions for analyzing structural properties of domains and hosts.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/domain_analysis/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `split_domain_labels`
 
@@ -371,21 +371,21 @@ src/domain/services/domain_analysis/
 split_domain_labels(domain: str) -> list[str]
 ```
 
-Divide un dominio en labels.
+Splits a domain into labels.
 
-Ejemplo:
+Example:
 
 ```text
 login.example.com -> ["login", "example", "com"]
 ```
 
-Tests sugeridos:
+Suggested tests:
 
-- dominio simple;
-- subdominio;
-- dominio con punto final;
-- dominio vacío;
-- dominio con espacios.
+- simple domain;
+- subdomain;
+- domain with trailing dot;
+- empty domain;
+- domain with spaces.
 
 ---
 
@@ -395,14 +395,14 @@ Tests sugeridos:
 is_punycode_label(label: str) -> bool
 ```
 
-Detecta si un label empieza por `xn--`.
+Detects whether a label starts with `xn--`.
 
-Tests sugeridos:
+Suggested tests:
 
 - `xn--example`;
 - `example`;
-- mayúsculas/minúsculas;
-- string vacío.
+- upper/lowercase;
+- empty string.
 
 ---
 
@@ -412,14 +412,14 @@ Tests sugeridos:
 contains_punycode(domain: str) -> bool
 ```
 
-Detecta si un dominio contiene algún label Punycode.
+Detects whether a domain contains any Punycode label.
 
-Tests sugeridos:
+Suggested tests:
 
-- dominio con `xn--`;
-- dominio sin Punycode;
-- subdominio con Punycode;
-- string vacío.
+- domain with `xn--`;
+- domain without Punycode;
+- subdomain with Punycode;
+- empty string.
 
 ---
 
@@ -429,14 +429,14 @@ Tests sugeridos:
 has_suspicious_subdomain_depth(domain: str, max_depth: int = 4) -> bool
 ```
 
-Detecta dominios con profundidad de subdominios sospechosa.
+Detects suspiciously deep subdomain structures.
 
-Tests sugeridos:
+Suggested tests:
 
-- dominio con pocos labels;
-- dominio con muchos subdominios;
-- valor límite;
-- `max_depth` personalizado.
+- domain with few labels;
+- domain with many subdomains;
+- boundary value;
+- custom `max_depth`.
 
 ---
 
@@ -446,14 +446,14 @@ Tests sugeridos:
 looks_like_ip_address_host(host: str) -> bool
 ```
 
-Detecta si el host parece una IP en vez de un dominio.
+Detects whether a host looks like an IP address instead of a domain.
 
-Tests sugeridos:
+Suggested tests:
 
-- IPv4 válida;
-- texto parecido a IPv4 pero inválido;
-- dominio normal;
-- host vacío.
+- valid IPv4;
+- IPv4-like invalid text;
+- normal domain;
+- empty host.
 
 ---
 
@@ -463,52 +463,52 @@ Tests sugeridos:
 has_suspicious_tld(domain: str, suspicious_tlds: set[str]) -> bool
 ```
 
-Evalúa TLDs de riesgo a partir de una lista recibida como argumento.
+Evaluates risky TLDs using a set passed as an argument.
 
-Comportamiento esperado:
+Expected behavior:
 
-- no lee configuración global;
-- no consulta listas externas;
-- trabaja con datos recibidos.
+- does not read global configuration;
+- does not query external lists;
+- works only with provided data.
 
-Tests sugeridos:
+Suggested tests:
 
-- dominio con TLD sospechoso;
-- dominio con TLD normal;
-- lista vacía;
-- mayúsculas/minúsculas.
+- domain with suspicious TLD;
+- domain with normal TLD;
+- empty list;
+- upper/lowercase.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- resolver DNS;
-- consultar WHOIS;
-- llamar APIs de reputación;
-- descargar listas de TLDs.
+- resolve DNS;
+- query WHOIS;
+- call reputation APIs;
+- download TLD lists.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede orquestar análisis de dominios;
-- `infrastructure` puede resolver redirecciones o enriquecer reputación.
+- `application` may orchestrate domain analysis;
+- `infrastructure` may resolve redirects or enrich reputation.
 
 ---
 
 # 4. URL analysis
 
-## Propósito
+## Purpose
 
-Funciones puras para clasificar URLs o componentes de URLs ya parseados.
+Pure functions for classifying URLs or already parsed URL components.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/url_analysis/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `is_url_scheme_allowed`
 
@@ -516,15 +516,15 @@ src/domain/services/url_analysis/
 is_url_scheme_allowed(scheme: str, allowed_schemes: set[str]) -> bool
 ```
 
-Comprueba si el esquema está permitido.
+Checks whether the scheme is allowed.
 
-Tests sugeridos:
+Suggested tests:
 
 - `http`;
 - `https`;
 - `mailto`;
-- mayúsculas;
-- esquema vacío.
+- uppercase;
+- empty scheme.
 
 ---
 
@@ -534,7 +534,7 @@ Tests sugeridos:
 is_suspicious_url_scheme(scheme: str) -> bool
 ```
 
-Detecta esquemas sospechosos como:
+Detects suspicious schemes such as:
 
 ```text
 javascript
@@ -543,13 +543,13 @@ file
 vbscript
 ```
 
-Tests sugeridos:
+Suggested tests:
 
 - `javascript`;
 - `data`;
 - `file`;
 - `https`;
-- mayúsculas/minúsculas.
+- upper/lowercase.
 
 ---
 
@@ -559,20 +559,20 @@ Tests sugeridos:
 has_embedded_credentials(url: str) -> bool
 ```
 
-Detecta URLs con credenciales embebidas.
+Detects URLs with embedded credentials.
 
-Ejemplo:
+Example:
 
 ```text
 https://user:pass@example.com
 ```
 
-Tests sugeridos:
+Suggested tests:
 
-- URL con usuario;
-- URL con usuario y password;
-- URL normal;
-- URL malformada.
+- URL with user;
+- URL with user and password;
+- normal URL;
+- malformed URL.
 
 ---
 
@@ -582,14 +582,14 @@ Tests sugeridos:
 has_suspicious_query_density(url: str, threshold: int) -> bool
 ```
 
-Detecta query strings demasiado densas o con demasiados parámetros.
+Detects dense query strings or too many query parameters.
 
-Tests sugeridos:
+Suggested tests:
 
-- URL sin query;
-- URL con pocos parámetros;
-- URL con muchos parámetros;
-- threshold personalizado.
+- URL without query;
+- URL with few parameters;
+- URL with many parameters;
+- custom threshold.
 
 ---
 
@@ -599,47 +599,47 @@ Tests sugeridos:
 has_url_shortener_domain(domain: str, known_shorteners: set[str]) -> bool
 ```
 
-Detecta acortadores conocidos usando una lista pasada como argumento.
+Detects known shorteners using a set passed as an argument.
 
-Tests sugeridos:
+Suggested tests:
 
-- dominio acortador;
-- dominio no acortador;
-- lista vacía;
-- mayúsculas/minúsculas.
+- shortener domain;
+- non-shortener domain;
+- empty set;
+- upper/lowercase.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- hacer HEAD;
-- hacer GET;
-- seguir redirecciones;
-- abrir navegador;
-- consultar reputación.
+- perform HEAD requests;
+- perform GET requests;
+- follow redirects;
+- open a browser;
+- query reputation services.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede definir un `LinkAnalyzerPort`;
-- `infrastructure` puede implementar resolución HTTP pasiva.
+- `application` may define a `LinkAnalyzerPort`;
+- `infrastructure` may implement passive HTTP resolution.
 
 ---
 
 # 5. Attachment analysis
 
-## Propósito
+## Purpose
 
-Funciones puras para clasificar adjuntos a partir de metadatos disponibles, especialmente nombre de archivo y extensión.
+Pure functions for classifying attachments from available metadata, especially filename and extension.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/attachment_analysis/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `is_executable_extension`
 
@@ -647,7 +647,7 @@ src/domain/services/attachment_analysis/
 is_executable_extension(filename: str) -> bool
 ```
 
-Detecta extensiones ejecutables como:
+Detects executable extensions such as:
 
 ```text
 .exe
@@ -660,13 +660,13 @@ Detecta extensiones ejecutables como:
 .jar
 ```
 
-Tests sugeridos:
+Suggested tests:
 
 - `.exe`;
 - `.pdf`;
-- mayúsculas;
-- archivo sin extensión;
-- doble extensión.
+- uppercase;
+- file without extension;
+- double extension.
 
 ---
 
@@ -676,9 +676,9 @@ Tests sugeridos:
 is_office_document_extension(filename: str) -> bool
 ```
 
-Detecta documentos Office, especialmente formatos con macros.
+Detects Office documents, especially macro-enabled formats.
 
-Ejemplos:
+Examples:
 
 ```text
 .doc
@@ -692,13 +692,13 @@ Ejemplos:
 .pptm
 ```
 
-Tests sugeridos:
+Suggested tests:
 
 - `.docx`;
 - `.docm`;
 - `.xlsm`;
 - `.pdf`;
-- mayúsculas.
+- uppercase.
 
 ---
 
@@ -708,14 +708,14 @@ Tests sugeridos:
 is_pdf_extension(filename: str) -> bool
 ```
 
-Detecta PDF por extensión.
+Detects PDF files by extension.
 
-Tests sugeridos:
+Suggested tests:
 
 - `.pdf`;
 - `.PDF`;
 - `invoice.pdf.exe`;
-- sin extensión.
+- no extension.
 
 ---
 
@@ -725,19 +725,19 @@ Tests sugeridos:
 has_double_extension(filename: str) -> bool
 ```
 
-Detecta patrones como:
+Detects patterns such as:
 
 ```text
 invoice.pdf.exe
 document.docx.scr
 ```
 
-Tests sugeridos:
+Suggested tests:
 
-- doble extensión peligrosa;
-- doble extensión no peligrosa;
-- extensión simple;
-- nombre sin extensión.
+- dangerous double extension;
+- non-dangerous double extension;
+- single extension;
+- filename without extension.
 
 ---
 
@@ -747,14 +747,14 @@ Tests sugeridos:
 has_suspicious_filename_chars(filename: str) -> bool
 ```
 
-Detecta caracteres invisibles, separadores raros o Unicode sospechoso.
+Detects invisible characters, unusual separators, or suspicious Unicode.
 
-Tests sugeridos:
+Suggested tests:
 
-- nombre con zero-width space;
-- nombre con caracteres de control;
-- nombre normal;
-- nombre con Unicode mezclado.
+- filename with zero-width space;
+- filename with control characters;
+- normal filename;
+- filename with mixed Unicode.
 
 ---
 
@@ -764,9 +764,9 @@ Tests sugeridos:
 classify_attachment_extension(filename: str) -> str
 ```
 
-Clasifica adjuntos en categorías.
+Classifies attachments into categories.
 
-Categorías candidatas:
+Candidate categories:
 
 ```text
 PDF
@@ -778,51 +778,51 @@ TEXT
 UNKNOWN
 ```
 
-Tests sugeridos:
+Suggested tests:
 
 - PDF;
-- Office con macros;
-- ejecutable;
-- imagen;
-- archivo comprimido;
-- desconocido.
+- macro-enabled Office document;
+- executable;
+- image;
+- archive;
+- unknown.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- abrir archivos;
-- leer bytes;
-- calcular hashes leyendo disco;
-- extraer macros;
-- analizar PDF real;
-- ejecutar YARA.
+- open files;
+- read bytes;
+- calculate hashes from disk;
+- extract macros;
+- analyze real PDFs;
+- run YARA.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede orquestar escaneo de adjuntos;
-- `infrastructure` puede implementar parsers PDF, Office, YARA y hash real.
+- `application` may orchestrate attachment scanning;
+- `infrastructure` may implement PDF, Office, YARA, and real hash adapters.
 
 ---
 
 # 6. Authentication result analysis
 
-## Propósito
+## Purpose
 
-Interpretar resultados ya obtenidos de SPF, DKIM y DMARC.
+Interpret already computed SPF, DKIM, and DMARC results.
 
-El dominio no debe hacer DNS ni validar firmas criptográficas.  
-Solo puede clasificar resultados ya calculados por infraestructura.
+The domain must not query DNS or validate cryptographic signatures.  
+It may only classify results already calculated by infrastructure.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/authentication_analysis/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `is_authentication_aligned`
 
@@ -834,14 +834,14 @@ is_authentication_aligned(
 ) -> bool
 ```
 
-Evalúa si los resultados de autenticación están alineados.
+Evaluates whether authentication results are aligned.
 
-Tests sugeridos:
+Suggested tests:
 
-- todos `pass`;
+- all `pass`;
 - SPF fail, DKIM pass, DMARC pass;
 - DMARC fail;
-- valores desconocidos.
+- unknown values.
 
 ---
 
@@ -855,9 +855,9 @@ classify_authentication_risk(
 ) -> str
 ```
 
-Clasifica riesgo de autenticación.
+Classifies authentication risk.
 
-Categorías candidatas:
+Candidate categories:
 
 ```text
 LOW
@@ -867,14 +867,14 @@ CRITICAL
 UNKNOWN
 ```
 
-Tests sugeridos:
+Suggested tests:
 
-- todos pass;
+- all pass;
 - SPF fail;
 - DKIM fail;
 - DMARC fail;
-- combinación múltiple;
-- valores ausentes.
+- multiple failures;
+- missing values.
 
 ---
 
@@ -888,13 +888,13 @@ has_authentication_failure(
 ) -> bool
 ```
 
-Detecta si existe algún fallo relevante.
+Detects whether a relevant authentication failure exists.
 
-Tests sugeridos:
+Suggested tests:
 
-- todos pass;
-- uno fail;
-- varios fail;
+- all pass;
+- one failure;
+- several failures;
 - neutral/none;
 - unknown.
 
@@ -910,47 +910,47 @@ summarize_authentication_findings(
 ) -> list[str]
 ```
 
-Devuelve hallazgos textuales o códigos de hallazgo.
+Returns textual findings or finding codes.
 
-Tests sugeridos:
+Suggested tests:
 
 - SPF fail;
 - DKIM fail;
 - DMARC fail;
-- todos pass;
-- resultados desconocidos.
+- all pass;
+- unknown results.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- consultar DNS;
-- validar criptográficamente DKIM;
-- parsear cabeceras raw;
-- llamar librerías externas de autenticación.
+- query DNS;
+- cryptographically validate DKIM;
+- parse raw headers;
+- call external authentication libraries.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede orquestar análisis de identidad;
-- `infrastructure` puede parsear cabeceras y calcular resultados SPF/DKIM/DMARC.
+- `application` may orchestrate identity analysis;
+- `infrastructure` may parse headers and calculate SPF/DKIM/DMARC results.
 
 ---
 
 # 7. Risk scoring
 
-## Propósito
+## Purpose
 
-Funciones puras para convertir indicadores en puntuaciones y niveles de riesgo.
+Pure functions for converting indicators into scores and risk levels.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/risk_scoring/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `calculate_indicator_score`
 
@@ -961,15 +961,15 @@ calculate_indicator_score(
 ) -> int
 ```
 
-Suma pesos asociados a indicadores.
+Sums weights associated with indicators.
 
-Tests sugeridos:
+Suggested tests:
 
-- indicadores conocidos;
-- indicadores desconocidos;
-- lista vacía;
-- pesos negativos si se permiten o se rechazan;
-- duplicados.
+- known indicators;
+- unknown indicators;
+- empty list;
+- negative weights if allowed or rejected;
+- duplicates.
 
 ---
 
@@ -979,9 +979,9 @@ Tests sugeridos:
 classify_risk_level(score: int) -> str
 ```
 
-Convierte puntuación en nivel de riesgo.
+Converts a score into a risk level.
 
-Categorías candidatas:
+Candidate categories:
 
 ```text
 LOW
@@ -990,14 +990,14 @@ HIGH
 CRITICAL
 ```
 
-Tests sugeridos:
+Suggested tests:
 
-- límites exactos;
-- bajo;
-- medio;
-- alto;
-- crítico;
-- score negativo.
+- exact thresholds;
+- low;
+- medium;
+- high;
+- critical;
+- negative score.
 
 ---
 
@@ -1007,14 +1007,14 @@ Tests sugeridos:
 combine_risk_scores(scores: list[int]) -> int
 ```
 
-Combina varias puntuaciones parciales.
+Combines partial scores.
 
-Tests sugeridos:
+Suggested tests:
 
-- lista vacía;
-- múltiples valores;
-- valores negativos;
-- valores extremos.
+- empty list;
+- multiple values;
+- negative values;
+- extreme values.
 
 ---
 
@@ -1028,14 +1028,14 @@ cap_risk_score(
 ) -> int
 ```
 
-Limita la puntuación a un rango.
+Caps a score to a range.
 
-Tests sugeridos:
+Suggested tests:
 
-- score menor que mínimo;
-- score mayor que máximo;
-- score dentro de rango;
-- límites personalizados.
+- score below minimum;
+- score above maximum;
+- score inside range;
+- custom limits.
 
 ---
 
@@ -1048,48 +1048,48 @@ has_critical_indicators(
 ) -> bool
 ```
 
-Detecta si aparece algún indicador crítico.
+Detects whether any critical indicator is present.
 
-Tests sugeridos:
+Suggested tests:
 
-- indicador crítico presente;
-- ninguno crítico;
-- lista vacía;
-- conjunto crítico vacío.
+- critical indicator present;
+- no critical indicator;
+- empty list;
+- empty critical set.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- llamar IA;
-- consultar reputación externa;
-- depender de pesos en configuración global;
-- generar reportes API.
+- call AI;
+- query external reputation;
+- depend on global configuration weights;
+- generate API reports.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede componer resultados de módulos;
-- `infrastructure` puede aportar hallazgos desde parsers y adaptadores.
+- `application` may compose module results;
+- `infrastructure` may provide findings from parsers and adapters.
 
 ---
 
 # 8. Social engineering heuristics
 
-## Propósito
+## Purpose
 
-Heurísticas deterministas simples sobre texto para detectar señales de ingeniería social.
+Simple deterministic text heuristics for detecting social engineering signals.
 
-La IA local puede complementar este análisis, pero no sustituye estas reglas puras.
+Local AI may complement this analysis, but it must not replace these pure rules.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/social_engineering/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `contains_urgency_terms`
 
@@ -1097,14 +1097,14 @@ src/domain/services/social_engineering/
 contains_urgency_terms(text: str, terms: set[str]) -> bool
 ```
 
-Detecta términos de urgencia.
+Detects urgency terms.
 
-Tests sugeridos:
+Suggested tests:
 
-- texto con término urgente;
-- texto sin término;
-- mayúsculas/minúsculas;
-- lista de términos vacía.
+- text with urgency term;
+- text without term;
+- upper/lowercase;
+- empty terms set.
 
 ---
 
@@ -1114,14 +1114,14 @@ Tests sugeridos:
 contains_financial_pressure_terms(text: str, terms: set[str]) -> bool
 ```
 
-Detecta presión financiera.
+Detects financial pressure.
 
-Tests sugeridos:
+Suggested tests:
 
-- factura urgente;
-- bloqueo de cuenta;
-- texto neutro;
-- términos vacíos.
+- urgent invoice;
+- account lock;
+- neutral text;
+- empty terms.
 
 ---
 
@@ -1131,14 +1131,14 @@ Tests sugeridos:
 contains_credential_request_terms(text: str, terms: set[str]) -> bool
 ```
 
-Detecta solicitud de credenciales.
+Detects credential request wording.
 
-Tests sugeridos:
+Suggested tests:
 
 - `password`;
 - `verify your account`;
-- texto neutro;
-- mayúsculas/minúsculas.
+- neutral text;
+- upper/lowercase.
 
 ---
 
@@ -1151,14 +1151,14 @@ count_social_engineering_signals(
 ) -> dict[str, int]
 ```
 
-Cuenta señales por categoría.
+Counts signals by category.
 
-Tests sugeridos:
+Suggested tests:
 
-- una categoría;
-- varias categorías;
-- sin señales;
-- texto vacío.
+- one category;
+- multiple categories;
+- no signals;
+- empty text.
 
 ---
 
@@ -1170,9 +1170,9 @@ classify_social_engineering_risk(
 ) -> str
 ```
 
-Clasifica riesgo a partir de conteos de señales.
+Classifies risk from signal counts.
 
-Categorías candidatas:
+Candidate categories:
 
 ```text
 LOW
@@ -1181,47 +1181,47 @@ HIGH
 CRITICAL
 ```
 
-Tests sugeridos:
+Suggested tests:
 
-- sin señales;
-- pocas señales;
-- múltiples señales;
-- señales críticas.
+- no signals;
+- few signals;
+- multiple signals;
+- critical signals.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- llamar Ollama;
-- hacer NLP externo;
-- usar modelos ML;
-- leer prompts;
-- depender de configuración global.
+- call Ollama;
+- perform external NLP;
+- use ML models;
+- read prompts;
+- depend on global configuration.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede combinar heurísticas con hallazgos técnicos;
-- `infrastructure` puede usar Ollama como análisis complementario.
+- `application` may combine heuristics with technical findings;
+- `infrastructure` may use Ollama as complementary analysis.
 
 ---
 
 # 9. Finding analysis
 
-## Propósito
+## Purpose
 
-Funciones puras para componer, filtrar y ordenar hallazgos.
+Pure functions for composing, filtering, and ordering findings.
 
-Más adelante estas funciones deberían operar sobre value objects o entities como `Finding`, `RiskIndicator` o `AnalysisResult`.
+Later, these functions should operate on value objects or entities such as `Finding`, `RiskIndicator`, or `AnalysisResult`.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/finding_analysis/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `deduplicate_findings`
 
@@ -1229,14 +1229,14 @@ src/domain/services/finding_analysis/
 deduplicate_findings(findings: list[str]) -> list[str]
 ```
 
-Elimina hallazgos duplicados.
+Removes duplicate findings.
 
-Tests sugeridos:
+Suggested tests:
 
-- lista con duplicados;
-- lista sin duplicados;
-- lista vacía;
-- preservación de orden.
+- list with duplicates;
+- list without duplicates;
+- empty list;
+- order preservation.
 
 ---
 
@@ -1246,14 +1246,14 @@ Tests sugeridos:
 sort_findings_by_severity(findings: list[dict]) -> list[dict]
 ```
 
-Ordena hallazgos por severidad.
+Sorts findings by severity.
 
-Tests sugeridos:
+Suggested tests:
 
-- severidades mezcladas;
-- severidad desconocida;
-- lista vacía;
-- estabilidad de orden.
+- mixed severities;
+- unknown severity;
+- empty list;
+- stable ordering.
 
 ---
 
@@ -1266,14 +1266,14 @@ filter_findings_by_category(
 ) -> list[dict]
 ```
 
-Filtra hallazgos por categoría.
+Filters findings by category.
 
-Tests sugeridos:
+Suggested tests:
 
-- categoría existente;
-- categoría no existente;
-- lista vacía;
-- categoría con mayúsculas/minúsculas.
+- existing category;
+- missing category;
+- empty list;
+- category casing.
 
 ---
 
@@ -1283,50 +1283,50 @@ Tests sugeridos:
 count_findings_by_category(findings: list[dict]) -> dict[str, int]
 ```
 
-Cuenta hallazgos por categoría.
+Counts findings by category.
 
-Tests sugeridos:
+Suggested tests:
 
-- varias categorías;
-- una categoría;
-- lista vacía;
-- hallazgos sin categoría.
+- multiple categories;
+- one category;
+- empty list;
+- findings without category.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- renderizar reportes;
-- generar JSON de API;
-- acceder a base de datos;
-- mezclar traducciones para UI.
+- render reports;
+- generate API JSON;
+- access a database;
+- mix UI translations.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- definir value objects/entities de hallazgos;
-- crear un caso de uso de composición de reporte;
-- exponer resultado mediante API.
+- define finding value objects/entities;
+- create a report composition use case;
+- expose results through the API.
 
 ---
 
 # 10. Hash analysis
 
-## Propósito
+## Purpose
 
-Funciones puras para validar y normalizar hashes ya calculados.
+Pure functions for validating and normalizing already calculated hashes.
 
-Calcular el hash leyendo un archivo no pertenece al dominio.  
-Validar un hash recibido como string sí puede pertenecer al dominio.
+Calculating a hash by reading a file does not belong in the domain.  
+Validating a hash received as a string may belong in the domain.
 
-## Ubicación sugerida
+## Suggested location
 
 ```text
 src/domain/services/hash_analysis/
 ```
 
-## Funciones candidatas
+## Candidate functions
 
 ### `is_valid_sha256`
 
@@ -1334,15 +1334,15 @@ src/domain/services/hash_analysis/
 is_valid_sha256(value: str) -> bool
 ```
 
-Valida si un string tiene formato SHA-256.
+Validates whether a string has SHA-256 format.
 
-Tests sugeridos:
+Suggested tests:
 
-- hash válido lowercase;
-- hash válido uppercase;
-- longitud incorrecta;
-- caracteres no hexadecimales;
-- string vacío.
+- valid lowercase hash;
+- valid uppercase hash;
+- invalid length;
+- non-hexadecimal characters;
+- empty string.
 
 ---
 
@@ -1352,20 +1352,20 @@ Tests sugeridos:
 normalize_hash(value: str) -> str
 ```
 
-Normaliza un hash textual.
+Normalizes a textual hash.
 
-Comportamiento esperado:
+Expected behavior:
 
-- elimina espacios;
-- convierte a minúsculas;
-- no calcula hash.
+- trims spaces;
+- converts to lowercase;
+- does not calculate a hash.
 
-Tests sugeridos:
+Suggested tests:
 
-- hash con espacios;
+- hash with spaces;
 - uppercase;
 - lowercase;
-- string vacío.
+- empty string.
 
 ---
 
@@ -1375,38 +1375,38 @@ Tests sugeridos:
 is_empty_hash(value: str) -> bool
 ```
 
-Detecta si un hash está vacío o no informado.
+Detects whether a hash is empty or missing.
 
-Tests sugeridos:
+Suggested tests:
 
-- string vacío;
-- espacios;
-- `None` si se decide aceptarlo;
-- hash válido.
+- empty string;
+- spaces;
+- `None` if the contract decides to accept it;
+- valid hash.
 
-## Fuera del dominio
+## Outside the domain
 
-No debe:
+This group must not:
 
-- abrir archivos;
-- leer bytes;
-- calcular SHA-256 real desde contenido;
-- consultar VirusTotal u otras APIs.
+- open files;
+- read bytes;
+- calculate SHA-256 from content;
+- query VirusTotal or other APIs.
 
-## Posible siguiente capa
+## Possible next layer
 
-Después de cerrar este grupo:
+After this group is complete:
 
-- `application` puede solicitar cálculo de hash a un puerto;
-- `infrastructure` puede implementar cálculo sobre filesystem o bytes.
+- `application` may request hash calculation through a port;
+- `infrastructure` may implement calculation over filesystem or bytes.
 
 ---
 
-# Orden recomendado de implementación
+# Recommended implementation order
 
-No ejecutar todo de golpe.
+Do not implement everything at once.
 
-Orden sugerido para iterar:
+Suggested iteration order:
 
 ```text
 1. text_normalization
@@ -1421,18 +1421,18 @@ Orden sugerido para iterar:
 10. finding_analysis
 ```
 
-Motivo:
+Reason:
 
-- los primeros grupos son simples, puros y muy testeables;
-- aportan valor forense temprano;
-- no requieren todavía entities complejas;
-- permiten crear disciplina de tests unitarios antes de subir capas.
+- the first groups are simple, pure, and highly testable;
+- they provide early forensic value;
+- they do not require complex entities yet;
+- they help establish unit testing discipline before moving up layers.
 
 ---
 
-# Plantilla de iteración
+# Iteration template
 
-Usar esta plantilla para cada grupo o subgrupo.
+Use this template for each group or subgroup.
 
 ```md
 ## Iteration N - [group/function]
@@ -1441,17 +1441,17 @@ Status: pending | in-progress | done
 
 ### Scope
 
-Funciones incluidas:
+Included functions:
 
 - ...
 
-Funciones excluidas:
+Excluded functions:
 
 - ...
 
 ### Domain contract
 
-Firma propuesta:
+Proposed signature:
 
 ```python
 ...
@@ -1459,9 +1459,8 @@ Firma propuesta:
 
 ### Unit tests
 
-Casos mínimos:
+Minimum cases:
 
-- ...
 - ...
 - ...
 
@@ -1472,26 +1471,26 @@ Casos mínimos:
 
 ### Acceptance criteria
 
-- [ ] La función es pura.
-- [ ] No hay IO.
-- [ ] No hay imports de infraestructura.
-- [ ] Tiene unit tests.
-- [ ] Los tests pasan.
-- [ ] El comportamiento está documentado.
+- [ ] The function is pure.
+- [ ] There is no IO.
+- [ ] There are no infrastructure imports.
+- [ ] Unit tests exist.
+- [ ] Tests pass.
+- [ ] Behavior is documented.
 
 ### Next layer
 
-¿Sube a Application?
+Move to Application?
 
-- Sí / No / Pendiente
+- Yes / No / Pending
 
-¿Requiere puerto?
+Requires a port?
 
-- Sí / No / Pendiente
+- Yes / No / Pending
 
-¿Requiere adaptador de Infrastructure?
+Requires an Infrastructure adapter?
 
-- Sí / No / Pendiente
+- Yes / No / Pending
 
 ### Commit
 
@@ -1502,9 +1501,9 @@ Casos mínimos:
 
 ---
 
-# Funciones explícitamente fuera de Domain
+# Functions explicitly outside Domain
 
-Estas funciones o responsabilidades no deben implementarse directamente en `domain`:
+These functions or responsibilities must not be implemented directly in `domain`:
 
 ```python
 parse_eml(...)
@@ -1521,53 +1520,53 @@ query_virustotal(...)
 download_url(...)
 ```
 
-Motivo:
+Reason:
 
-- requieren IO;
-- dependen de librerías externas;
-- usan red;
-- usan filesystem;
-- ejecutan procesos;
-- pertenecen a `infrastructure`;
-- deben exponerse al dominio mediante puertos definidos en `application`.
+- they require IO;
+- they depend on external libraries;
+- they use network access;
+- they use filesystem access;
+- they execute processes;
+- they belong in `infrastructure`;
+- they must be exposed to the domain through ports defined in `application`.
 
 ---
 
-# Criterio de avance por capas
+# Criteria for moving up layers
 
-Solo se sube una función o grupo a capas superiores cuando:
+A function or group only moves to upper layers when:
 
-- los unit tests del dominio están cerrados;
-- el contrato es estable;
-- se entiende qué caso de uso lo necesita;
-- se sabe si requiere puerto;
-- se puede crear un adaptador sin contaminar el dominio.
+- domain unit tests are complete;
+- the contract is stable;
+- the use case that needs it is understood;
+- it is clear whether a port is required;
+- an adapter can be created without contaminating the domain.
 
-Ejemplo de recorrido:
+Example flow:
 
 ```text
 contains_punycode(domain)
         ↓
-unit tests de domain
+domain unit tests
         ↓
-AnalyzeLinksUseCase en application
+AnalyzeLinksUseCase in application
         ↓
-LinkAnalyzerPort si hay resolución externa
+LinkAnalyzerPort if external resolution is required
         ↓
-HttpRedirectResolverAdapter en infrastructure
+HttpRedirectResolverAdapter in infrastructure
         ↓
-FastAPI endpoint si se expone al usuario
+FastAPI endpoint if exposed to the user
 ```
 
 ---
 
-# Regla final
+# Final rule
 
-El dominio debe crecer despacio.
+The domain must grow slowly.
 
-Cada función pura debe justificar su existencia con:
+Every pure function must justify its existence through:
 
-- valor forense real;
-- tests unitarios;
-- ausencia de dependencias externas;
-- posibilidad de integrarse después mediante capas limpias.
+- real forensic value;
+- unit tests;
+- no external dependencies;
+- a clean path to later integration through upper layers.
