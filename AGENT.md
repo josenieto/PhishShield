@@ -1,203 +1,236 @@
 # AGENT.md
 
-## Propósito
+## Purpose
 
-Este archivo orienta a cualquier agente IA que trabaje sobre este repositorio.  
-Su función es servir como guía operativa breve: qué proyecto es, cómo está estructurado y qué reglas básicas debe respetar cualquier cambio.
+This file guides any AI agent working on this repository.  
+Its role is to provide a concise operational guide: what this software project is, how it is structured, and which rules every change must follow.
 
-Este documento **no sustituye** al diseño arquitectónico oficial. La referencia principal es:
-
-- `doc/ADR.md`
-
-Si existe conflicto entre este archivo y el ADR, **prevalece el ADR**.
-
----
-
-## Proyecto
-
-**PhishShield** es una herramienta defensiva, local (*self-hosted*) y de código abierto para el análisis forense de correos electrónicos `.eml`.
-
-Su objetivo es detectar indicadores de phishing modernos sin depender de servicios cloud de terceros para el análisis principal, preservando privacidad, trazabilidad y extensibilidad técnica.
-
-El sistema analiza, entre otros aspectos:
-
-- cabeceras e identidad del correo,
-- enlaces y ataques homóglifos,
-- sandbox de navegación segura,
-- archivos adjuntos PDF y Office,
-- OCR y metadatos de imágenes,
-- explicaciones asistidas por IA local cuando esté habilitado.
-
----
-
-## Referencia arquitectónica obligatoria
-
-Antes de modificar código, leer:
+This document does **not** replace the official architectural design. The main source of truth is:
 
 - `doc/ADR.md`
 
-El proyecto sigue una **Arquitectura Hexagonal** dentro de un **monolito modular**.  
-Las decisiones de diseño y los límites entre capas deben respetarse.
+If this file conflicts with the ADR, **the ADR takes precedence**.
 
-### Capas esperadas
+---
+
+## Repository language policy
+
+Everything committed to this repository must be written in English.
+
+This includes:
+
+- documentation,
+- Markdown files,
+- skills,
+- eval prompts,
+- commit messages,
+- GitHub issues,
+- GitHub Project items,
+- branch names,
+- code identifiers,
+- comments,
+- test names,
+- fixtures,
+- configuration examples.
+
+Do not add Spanish text to repository files.
+
+The only acceptable exceptions are explicit test samples or fixtures where multilingual content is the subject under test. Those exceptions must be clear from the test or fixture context.
+
+---
+
+## Project
+
+**PhishShield** is a defensive, local, self-hosted, open-source tool for forensic analysis of `.eml` email files.
+
+Its goal is to detect modern phishing indicators without depending on third-party cloud services for the main analysis workflow, preserving privacy, traceability, and technical extensibility.
+
+The system analyzes, among other aspects:
+
+- email headers and sender identity,
+- links and homoglyph attacks,
+- safe browsing sandbox results,
+- PDF and Office attachments,
+- OCR and image metadata,
+- optional local AI-assisted explanations when enabled.
+
+---
+
+## Mandatory architectural reference
+
+Before modifying code, read:
+
+- `doc/ADR.md`
+
+The project follows a **Hexagonal Architecture** inside a **modular monolith**.  
+Design decisions and boundaries between layers must respect that architecture.
+
+### Expected layers
 
 - **Domain**  
-  Modelos puros y lógica de negocio sin dependencias de infraestructura.
+  Pure models and business rules with no infrastructure dependencies.
 
 - **Application**  
-  Casos de uso y puertos que definen contratos.
+  Use cases and ports defining contracts.
 
 - **Infrastructure**  
-  Adaptadores técnicos, frameworks, parsers, integraciones y entrypoints.
+  Technical adapters, frameworks, parsers, integrations, and entrypoints.
 
-### Regla principal
+### Main rule
 
-Un agente IA **no debe introducir dependencias de infraestructura dentro del dominio**.  
-Toda integración externa debe quedar encapsulada detrás de puertos y adaptadores.
+An AI agent **must not introduce infrastructure dependencies into the domain**.  
+Every external integration must be encapsulated behind ports and adapters.
 
 ---
 
-## Stack principal
+## Main stack
 
-Según el ADR, la base tecnológica del proyecto es:
+According to the ADR, the project's main technical stack is:
 
 - **Backend:** Python + FastAPI
 - **Frontend:** React + TypeScript + Vite
-- **Despliegue:** Docker + Docker Compose
-- **Sandbox de navegación:** Playwright en contenedor aislado
-- **IA local opcional:** Ollama
+- **Deployment:** Docker + Docker Compose
+- **Browsing sandbox:** Playwright in an isolated container
+- **Optional local AI:** Ollama
 - **Testing:** Pytest
 - **CI/CD:** GitHub Actions
 
 ---
 
-## Módulos funcionales del sistema
+## Functional modules
 
-Los módulos principales descritos en el ADR son:
+The main modules described in the ADR are:
 
-1. **Cabeceras e identidad**
-   - extracción de remitente, asunto y validaciones SPF/DKIM/DMARC.
+1. **Headers and identity**
+   - sender extraction, subject extraction, and SPF/DKIM/DMARC validation.
 
-2. **Enlaces y ataques homóglifos**
-   - detección de IDN, normalización Punycode y resolución pasiva de URLs acortadas.
+2. **Links and homoglyph attacks**
+   - IDN detection, Punycode normalization, and passive short URL resolution.
 
-3. **Sandbox de navegación segura**
-   - captura visual y extracción de título mediante navegador aislado.
+3. **Safe browsing sandbox**
+   - visual capture and page title extraction through an isolated browser.
 
-4. **Adjuntos**
-   - análisis de PDFs, Office, macros, hashes y reglas YARA.
+4. **Attachments**
+   - PDF analysis, Office analysis, macros, hashes, and YARA rules.
 
-5. **Imágenes**
-   - OCR con Tesseract y extracción de metadatos EXIF.
+5. **Images**
+   - OCR with Tesseract and EXIF metadata extraction.
 
-6. **IA local**
-   - análisis complementario de ingeniería social y explicación en lenguaje natural, controlado por configuración.
-
----
-
-## Reglas de trabajo para agentes IA
-
-### 1. Revisar el ADR antes de cambios relevantes
-Si el cambio afecta arquitectura, contratos, módulos o despliegue, consultar primero `doc/ADR.md`.
-
-### 2. Respetar la separación por capas
-- No mover lógica de negocio a adaptadores.
-- No contaminar el dominio con SDKs, frameworks o detalles de red.
-- Mantener casos de uso coordinando puertos, no implementaciones concretas.
-
-### 3. Priorizar seguridad y privacidad
-PhishShield es una herramienta defensiva.  
-Cualquier cambio debe evitar exponer datos sensibles innecesariamente y mantener el enfoque local/self-hosted del proyecto.
-
-### 4. Mantener tipado y validación
-Usar modelos y validaciones consistentes con el stack del proyecto, especialmente en backend y contratos de API.
-
-### 5. Favorecer extensibilidad
-Las nuevas integraciones deben diseñarse para poder sustituirse sin romper el núcleo del sistema.
-
-### 6. Añadir o ajustar pruebas
-Si un cambio modifica comportamiento observable, añadir o actualizar tests en la capa adecuada.
-
-### 7. No introducir complejidad gratuita
-Preferir soluciones claras, modulares y coherentes con el ADR existente.
+6. **Local AI**
+   - complementary social engineering analysis and natural language explanation, controlled by configuration.
 
 ---
 
-## Qué debe hacer un agente antes de editar
+## Working rules for AI agents
 
-Checklist mínima:
+### 1. Review the ADR before relevant changes
 
-- leer `doc/ADR.md`,
-- identificar la capa afectada,
-- localizar el contrato o módulo impactado,
-- verificar si el cambio requiere tests,
-- mantener coherencia con Docker, FastAPI, React y adaptadores existentes.
+If a change affects architecture, contracts, modules, or deployment, consult `doc/ADR.md` first.
+
+### 2. Respect layer separation
+
+- Do not move business rules into adapters.
+- Do not contaminate the domain with SDKs, frameworks, network, filesystem, or runtime details.
+- Keep use cases coordinated through ports, not concrete implementations.
+
+### 3. Prioritize security and privacy
+
+PhishShield is a defensive security tool.  
+Every change must avoid unnecessary exposure of sensitive data and preserve the local/self-hosted approach.
+
+### 4. Keep typing and validation explicit
+
+Use explicit models and validation consistently with the project stack, especially in backend code and API contracts.
+
+### 5. Favor extensibility
+
+New integrations must be designed so they can be replaced without breaking the core system.
+
+### 6. Add or update tests
+
+If a change modifies observable behavior, add or update tests in the appropriate layer.
+
+### 7. Avoid accidental complexity
+
+Prefer clear, modular solutions aligned with the existing ADR.
 
 ---
 
-## Skills futuras
+## What an agent must do before editing
 
-Las skills específicas de PhishShield se organizarán en:
+Minimum checklist:
+
+- read `doc/ADR.md`,
+- identify the affected layer,
+- locate the impacted contract or module,
+- check whether tests are required,
+- keep consistency with Docker, FastAPI, React, and existing adapters.
+
+---
+
+## Project skills
+
+Project-specific skills are organized in:
 
 - `.skills/`
 
-La skill oficial `skill-creator` de Anthropic está instalada en el proyecto mediante el CLI `skills` y queda disponible en:
+The official Anthropic `skill-creator` skill is installed in the project through the `skills` CLI and is available at:
 
 - `.agents/skills/skill-creator/`
 
-Comando utilizado:
+Command used:
 
 ```bash
 npx skills add anthropics/skills --skill skill-creator --yes
 ```
 
-Se usará para crear, mejorar y evaluar las skills propias de PhishShield.
+It is used to create, improve, and evaluate PhishShield-specific skills.
 
-### Regla obligatoria para crear nuevas skills
+### Mandatory rule for creating new skills
 
-Toda nueva skill del proyecto debe crearse siguiendo como modelo la skill oficial:
+Every new project skill must be created using the official skill as the model:
 
 - `.agents/skills/skill-creator/`
 
-El agente debe aplicar ese flujo antes de redactar una skill:
+The agent must apply that workflow before writing a skill:
 
-1. capturar la intención de la skill,
-2. definir cuándo debe activarse,
-3. redactar `SKILL.md` con frontmatter `name` y `description`,
-4. mantener la skill accionable, específica y alineada con PhishShield,
-5. crear evals iniciales cuando la skill sea verificable,
-6. revisar alineación con `AGENT.md` y `doc/ADR.md`,
-7. actualizar `.skills/README.md`.
+1. capture the skill intent,
+2. define when the skill should trigger,
+3. write `SKILL.md` with `name` and `description` frontmatter,
+4. keep the skill actionable, specific, and aligned with PhishShield,
+5. create initial evals when the skill is objectively testable,
+6. verify alignment with `AGENT.md` and `doc/ADR.md`,
+7. update `.skills/README.md`.
 
-No se deben crear skills manualmente sin seguir este proceso.
+Do not create skills without following this process.
 
-### Skills previstas
+### Planned skills
 
-Las carpetas iniciales están preparadas, pero las skills se definirán más adelante con `skill-creator`.
+Initial folders are prepared, and skills are defined progressively with `skill-creator`.
 
 - `phishshield-architecture`  
-  Cambios arquitectónicos alineados con el ADR.
+  Architecture decisions aligned with the ADR.
 
 - `phishshield-backend`  
-  Trabajo en FastAPI, casos de uso, puertos y adaptadores.
+  FastAPI, use cases, ports, and adapters.
 
 - `phishshield-frontend`  
-  Trabajo en React, TypeScript, Vite y UI del panel forense.
+  React, TypeScript, Vite, and forensic dashboard UI.
 
 - `phishshield-security-analysis`  
-  Módulos de análisis de enlaces, adjuntos, OCR e indicadores forenses.
+  Link analysis, attachment analysis, OCR, and forensic indicators.
 
 - `phishshield-testing`  
-  Pruebas unitarias e integración con Pytest y mocks.
+  Unit and integration testing with Pytest and mocks.
 
-> Hasta que estas skills existan, usar este archivo, `.skills/README.md` y `doc/ADR.md` como referencia principal.
+> Until a skill exists, use this file, `.skills/README.md`, and `doc/ADR.md` as the main references.
 
 ---
 
-## Regla final
+## Final rule
 
-Si una decisión no está clara:
+If a decision is unclear:
 
-1. seguir primero `doc/ADR.md`,
-2. preservar la arquitectura hexagonal,
-3. priorizar seguridad, privacidad y mantenibilidad.
+1. follow `doc/ADR.md` first,
+2. preserve hexagonal architecture,
+3. prioritize security, privacy, and maintainability.
