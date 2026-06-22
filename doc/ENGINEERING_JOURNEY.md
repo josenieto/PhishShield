@@ -163,3 +163,136 @@ normalize_whitespace(text: str) -> str
 ```
 
 Start with RED tests before implementation.
+
+---
+
+## 2026-06-23 - Whitespace normalization TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Text normalization` domain group after completing invisible character helpers.
+
+The goal was to add another pure, dependency-free text normalization helper while preserving the TDD workflow.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+normalize_whitespace(text: str) -> str
+```
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the text normalization group is still being completed inside the Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/text_normalization/test_whitespace_normalization.py`
+- `src/domain/services/text_normalization/whitespace.py`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.text_normalization.whitespace'
+GREEN    -> 8 tests passed
+REFACTOR -> added docstring
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/text_normalization/test_whitespace_normalization.py
+```
+
+Result:
+
+```text
+8 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+normalize_unicode_text(text: str) -> str
+```
+
+Start with RED tests before implementation.
+
+---
+
+## 2026-06-23 - Unicode text normalization TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Text normalization` domain group after completing whitespace normalization.
+
+The goal was to add Unicode normalization as a pure, deterministic helper before moving to suspicious Unicode or homoglyph detection rules.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+normalize_unicode_text(text: str) -> str
+```
+
+The function uses Python standard library Unicode NFKC compatibility normalization to normalize visually different but compatible text forms while preserving readable content.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because there is no higher-level workflow consuming the full text normalization group.
+
+### Files changed
+
+- `tests/unit/domain/services/text_normalization/test_unicode_normalization.py`
+- `src/domain/services/text_normalization/unicode_text.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.text_normalization.unicode_text'
+GREEN    -> 6 tests passed
+REFACTOR -> added docstring
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/text_normalization/test_unicode_normalization.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/text_normalization
+```
+
+Result:
+
+```text
+27 passed
+```
+
+### Next step
+
+Continue the domain roadmap with the `Homoglyphs / suspicious Unicode` group, starting with a small TDD cycle for script detection or mixed-script detection.
