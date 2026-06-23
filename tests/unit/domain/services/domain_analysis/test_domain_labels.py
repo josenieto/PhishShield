@@ -2,6 +2,7 @@ import pytest
 
 from domain.services.domain_analysis.domains import (
     contains_punycode,
+    has_suspicious_subdomain_depth,
     is_punycode_label,
     split_domain_labels,
 )
@@ -71,3 +72,27 @@ def test_should_detect_domain_with_punycode_label(domain: str) -> None:
 )
 def test_should_return_false_when_domain_has_no_punycode_label(domain: str) -> None:
     assert contains_punycode(domain) is False
+
+
+@pytest.mark.parametrize(
+    ("domain", "expected"),
+    [
+        ("example.com", False),
+        ("login.example.com", False),
+        ("a.b.c.d.com", True),
+        ("one.two.three.four", False),
+        ("one.two.three.four.five", True),
+        ("", False),
+        ("   ", False),
+        ("a..b.c.d.e", True),
+    ],
+)
+def test_should_detect_suspicious_subdomain_depth(
+    domain: str,
+    expected: bool,
+) -> None:
+    assert has_suspicious_subdomain_depth(domain) is expected
+
+
+def test_should_use_custom_max_depth_for_suspicious_subdomain_depth() -> None:
+    assert has_suspicious_subdomain_depth("a.b.c", max_depth=2) is True
