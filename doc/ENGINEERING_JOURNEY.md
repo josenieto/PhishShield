@@ -831,3 +831,80 @@ has_suspicious_subdomain_depth(domain: str, max_depth: int = 4) -> bool
 ```
 
 Start with RED tests and reuse `split_domain_labels` if the contract remains suitable.
+
+---
+
+## 2026-06-25 - Suspicious subdomain depth TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Domain analysis` group after adding domain-level Punycode detection.
+
+The goal was to add a pure helper for detecting domains with unusually deep label structures before moving to IP-like host or suspicious TLD rules.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+has_suspicious_subdomain_depth(domain: str, max_depth: int = 4) -> bool
+```
+
+The function reuses `split_domain_labels` and returns `True` when the number of meaningful labels is greater than `max_depth`. It intentionally does not use public suffix lists, DNS lookups, or external services.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the `Domain analysis` group still has host-shape and TLD helpers pending.
+
+### Files changed
+
+- `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
+- `src/domain/services/domain_analysis/domains.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: cannot import name 'has_suspicious_subdomain_depth'
+GREEN    -> 30 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/domain_analysis/test_domain_labels.py
+```
+
+Result:
+
+```text
+30 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+86 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+looks_like_ip_address_host(host: str) -> bool
+```
+
+Start with RED tests and keep the implementation pure, using standard-library parsing if needed.
