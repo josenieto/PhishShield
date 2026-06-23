@@ -15,3 +15,11 @@ def split_domain_labels(domain: str) -> list[str]:
 def is_punycode_label(label: str) -> bool:
     """Return True when a domain label starts with the Punycode prefix."""
     return label.lower().startswith("xn--")
+
+
+def contains_punycode(domain: str) -> bool:
+    """Return True when any domain label uses the Punycode prefix."""
+    return any(
+        is_punycode_label(label)
+        for label in split_domain_labels(domain)
+    )
