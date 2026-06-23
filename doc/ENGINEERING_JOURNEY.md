@@ -754,3 +754,80 @@ contains_punycode(domain: str) -> bool
 ```
 
 Start with RED tests and reuse `split_domain_labels` and `is_punycode_label` internally if the contracts remain suitable.
+
+---
+
+## 2026-06-25 - Domain Punycode detection TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Domain analysis` group after adding single-label Punycode detection.
+
+The goal was to detect whether any meaningful label in a domain uses the Punycode `xn--` prefix while keeping the behavior pure and dependency-free.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+contains_punycode(domain: str) -> bool
+```
+
+The function reuses `split_domain_labels` and `is_punycode_label` so domain splitting and label-level Punycode detection remain single-purpose helpers. It does not decode IDNA, validate DNS, resolve domains, or perform IO.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the `Domain analysis` group is still being completed inside the Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
+- `src/domain/services/domain_analysis/domains.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: cannot import name 'contains_punycode'
+GREEN    -> 21 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/domain_analysis/test_domain_labels.py
+```
+
+Result:
+
+```text
+21 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+77 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+has_suspicious_subdomain_depth(domain: str, max_depth: int = 4) -> bool
+```
+
+Start with RED tests and reuse `split_domain_labels` if the contract remains suitable.
