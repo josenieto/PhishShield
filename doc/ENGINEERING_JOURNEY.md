@@ -373,3 +373,80 @@ contains_mixed_scripts(text: str) -> bool
 ```
 
 Start with RED tests and reuse `detect_unicode_scripts` internally if the contract remains suitable.
+
+---
+
+## 2026-06-23 - Mixed Unicode script detection TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Homoglyphs / suspicious Unicode` domain group after adding Unicode script detection.
+
+The goal was to create a pure domain rule that flags text containing more than one relevant Unicode script, a common signal in homoglyph phishing attempts.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+contains_mixed_scripts(text: str) -> bool
+```
+
+The function reuses `detect_unicode_scripts` and returns `True` when more than one relevant script is present. Neutral characters such as digits, punctuation, dots, and hyphens do not cause mixed-script detection by themselves.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the suspicious Unicode domain group is still being completed inside the Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/homoglyphs/test_script_detection.py`
+- `src/domain/services/homoglyphs/scripts.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: cannot import name 'contains_mixed_scripts'
+GREEN    -> 15 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/homoglyphs/test_script_detection.py
+```
+
+Result:
+
+```text
+15 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+42 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+contains_confusable_characters(text: str) -> bool
+```
+
+Start with RED tests and a minimal internal table for phishing-relevant confusable characters.

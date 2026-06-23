@@ -15,6 +15,11 @@ def detect_unicode_scripts(text: str) -> set[str]:
     return scripts
 
 
+def contains_mixed_scripts(text: str) -> bool:
+    """Return True when text contains more than one relevant Unicode script."""
+    return len(detect_unicode_scripts(text)) > 1
+
+
 def _is_latin(codepoint: int) -> bool:
     return 0x0041 <= codepoint <= 0x005A or 0x0061 <= codepoint <= 0x007A
 
