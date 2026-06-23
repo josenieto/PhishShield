@@ -677,3 +677,80 @@ is_punycode_label(label: str) -> bool
 ```
 
 Start with RED tests and keep the implementation pure and dependency-free.
+
+---
+
+## 2026-06-25 - Punycode label detection TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Domain analysis` group after adding domain label splitting.
+
+The goal was to add a pure helper for recognizing domain labels that use the Punycode `xn--` prefix before implementing full-domain Punycode detection.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+is_punycode_label(label: str) -> bool
+```
+
+The function checks whether a single domain label starts with the Punycode prefix in a case-insensitive way. It does not decode IDNA, validate DNS, resolve domains, or perform IO.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the `Domain analysis` group is still being built from pure helpers.
+
+### Files changed
+
+- `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
+- `src/domain/services/domain_analysis/domains.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> Tests added for missing is_punycode_label behavior
+GREEN    -> 14 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/domain_analysis/test_domain_labels.py
+```
+
+Result:
+
+```text
+14 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+70 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+contains_punycode(domain: str) -> bool
+```
+
+Start with RED tests and reuse `split_domain_labels` and `is_punycode_label` internally if the contracts remain suitable.

@@ -1,6 +1,9 @@
 import pytest
 
-from domain.services.domain_analysis.domains import split_domain_labels
+from domain.services.domain_analysis.domains import (
+    is_punycode_label,
+    split_domain_labels,
+)
 
 
 @pytest.mark.parametrize(
@@ -16,3 +19,29 @@ from domain.services.domain_analysis.domains import split_domain_labels
 )
 def test_should_split_domain_labels(domain: str, expected: list[str]) -> None:
     assert split_domain_labels(domain) == expected
+
+
+@pytest.mark.parametrize(
+    "label",
+    [
+        "xn--example",
+        "xn--paypl-3ve",
+        "XN--EXAMPLE",
+    ],
+)
+def test_should_detect_punycode_label(label: str) -> None:
+    assert is_punycode_label(label) is True
+
+
+@pytest.mark.parametrize(
+    "label",
+    [
+        "example",
+        "paypl",
+        "",
+        " xn--example",
+        "example-xn--",
+    ],
+)
+def test_should_return_false_for_non_punycode_label(label: str) -> None:
+    assert is_punycode_label(label) is False
