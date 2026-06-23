@@ -600,3 +600,80 @@ Result:
 ### Next step
 
 Run an architectural checkpoint for the completed `Homoglyphs / suspicious Unicode` domain group and decide whether to introduce an Application use case or continue with the next pure domain group.
+
+---
+
+## 2026-06-23 - Domain label splitting TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued with the next pure domain group after completing the initial `Homoglyphs / suspicious Unicode` helpers.
+
+The goal was to start `Domain analysis` with a small deterministic helper for splitting host or domain text into meaningful labels before adding Punycode or structural domain rules.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+split_domain_labels(domain: str) -> list[str]
+```
+
+The function trims surrounding whitespace, removes leading and trailing dots, splits by `.`, and ignores empty labels caused by repeated dots. This keeps the function tolerant and useful for later forensic rules without performing DNS validation or IO.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the `Domain analysis` group is just starting and its contracts are not stable enough to move upward.
+
+### Files changed
+
+- `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
+- `src/domain/services/domain_analysis/domains.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.domain_analysis'
+GREEN    -> 6 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/domain_analysis/test_domain_labels.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+62 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+is_punycode_label(label: str) -> bool
+```
+
+Start with RED tests and keep the implementation pure and dependency-free.
