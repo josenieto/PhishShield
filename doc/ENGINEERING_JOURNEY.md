@@ -450,3 +450,153 @@ contains_confusable_characters(text: str) -> bool
 ```
 
 Start with RED tests and a minimal internal table for phishing-relevant confusable characters.
+
+---
+
+## 2026-06-23 - Confusable character detection TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Homoglyphs / suspicious Unicode` domain group after mixed-script detection.
+
+The goal was to detect a small, explicit set of phishing-relevant Unicode characters that visually resemble common Latin characters.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+contains_confusable_characters(text: str) -> bool
+```
+
+The function uses a minimal internal table for Cyrillic and Greek characters commonly used in homoglyph-style phishing attempts. The table is intentionally small and dependency-free at this stage.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the suspicious Unicode domain group is still being completed inside the Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/homoglyphs/test_confusable_characters.py`
+- `src/domain/services/homoglyphs/confusables.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.homoglyphs.confusables'
+GREEN    -> 9 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/homoglyphs/test_confusable_characters.py
+```
+
+Result:
+
+```text
+9 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+51 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+find_confusable_characters(text: str) -> list[str]
+```
+
+Start with RED tests and preserve discovery order in the returned list.
+
+---
+
+## 2026-06-23 - Confusable character discovery TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Homoglyphs / suspicious Unicode` domain group after adding confusable character detection.
+
+The goal was to expose the actual suspicious characters found in text, not only a boolean flag, so later application-level analysis can report concrete evidence.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+find_confusable_characters(text: str) -> list[str]
+```
+
+The function returns phishing-relevant confusable characters in discovery order and preserves duplicates. This supports later reporting without introducing application-level models prematurely.
+
+`contains_confusable_characters` now reuses `find_confusable_characters` so the filtering logic has a single source of truth.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet; the next step is an architectural checkpoint to decide whether the suspicious Unicode group is stable enough to move upward.
+
+### Files changed
+
+- `tests/unit/domain/services/homoglyphs/test_confusable_characters.py`
+- `src/domain/services/homoglyphs/confusables.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: cannot import name 'find_confusable_characters'
+GREEN    -> 14 tests passed
+REFACTOR -> contains_confusable_characters reuses find_confusable_characters
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/homoglyphs/test_confusable_characters.py
+```
+
+Result:
+
+```text
+14 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+56 passed
+```
+
+### Next step
+
+Run an architectural checkpoint for the completed `Homoglyphs / suspicious Unicode` domain group and decide whether to introduce an Application use case or continue with the next pure domain group.
