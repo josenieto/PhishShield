@@ -1,3 +1,6 @@
+import ipaddress
+
+
 def split_domain_labels(domain: str) -> list[str]:
     """Split a domain into meaningful labels."""
     normalized_domain = domain.strip().strip(".")
@@ -31,3 +34,13 @@ def has_suspicious_subdomain_depth(
 ) -> bool:
     """Return True when a domain has more labels than the accepted depth."""
     return len(split_domain_labels(domain)) > max_depth
+
+
+def looks_like_ip_address_host(host: str) -> bool:
+    """Return True when a host is a valid IP address."""
+    try:
+        ipaddress.ip_address(host.strip())
+    except ValueError:
+        return False
+
+    return True

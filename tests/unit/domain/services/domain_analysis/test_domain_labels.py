@@ -4,6 +4,7 @@ from domain.services.domain_analysis.domains import (
     contains_punycode,
     has_suspicious_subdomain_depth,
     is_punycode_label,
+    looks_like_ip_address_host,
     split_domain_labels,
 )
 
@@ -96,3 +97,30 @@ def test_should_detect_suspicious_subdomain_depth(
 
 def test_should_use_custom_max_depth_for_suspicious_subdomain_depth() -> None:
     assert has_suspicious_subdomain_depth("a.b.c", max_depth=2) is True
+
+
+@pytest.mark.parametrize(
+    "host",
+    [
+        "192.168.1.1",
+        "8.8.8.8",
+        "2001:db8::1",
+        " 192.168.1.1 ",
+    ],
+)
+def test_should_detect_ip_address_host(host: str) -> None:
+    assert looks_like_ip_address_host(host) is True
+
+
+@pytest.mark.parametrize(
+    "host",
+    [
+        "example.com",
+        "999.999.999.999",
+        "192.168.1",
+        "",
+        "   ",
+    ],
+)
+def test_should_return_false_when_host_is_not_ip_address(host: str) -> None:
+    assert looks_like_ip_address_host(host) is False
