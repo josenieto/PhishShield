@@ -66,25 +66,19 @@ class AnalyzeDomainIndicatorsUseCase:
             command.suspicious_tlds,
         )
         confusable_characters = find_confusable_characters(domain)
-        findings: list[str] = []
-
-        if domain_contains_punycode:
-            findings.append(DOMAIN_CONTAINS_PUNYCODE)
-
-        if domain_has_mixed_scripts:
-            findings.append(DOMAIN_HAS_MIXED_SCRIPTS)
-
-        if domain_has_confusable_characters:
-            findings.append(DOMAIN_HAS_CONFUSABLE_CHARACTERS)
-
-        if domain_has_suspicious_subdomain_depth:
-            findings.append(DOMAIN_HAS_SUSPICIOUS_DEPTH)
-
-        if domain_looks_like_ip_address:
-            findings.append(DOMAIN_LOOKS_LIKE_IP_ADDRESS)
-
-        if domain_has_suspicious_tld:
-            findings.append(DOMAIN_HAS_SUSPICIOUS_TLD)
+        finding_conditions = [
+            (domain_contains_punycode, DOMAIN_CONTAINS_PUNYCODE),
+            (domain_has_mixed_scripts, DOMAIN_HAS_MIXED_SCRIPTS),
+            (domain_has_confusable_characters, DOMAIN_HAS_CONFUSABLE_CHARACTERS),
+            (domain_has_suspicious_subdomain_depth, DOMAIN_HAS_SUSPICIOUS_DEPTH),
+            (domain_looks_like_ip_address, DOMAIN_LOOKS_LIKE_IP_ADDRESS),
+            (domain_has_suspicious_tld, DOMAIN_HAS_SUSPICIOUS_TLD),
+        ]
+        findings = [
+            finding
+            for condition, finding in finding_conditions
+            if condition
+        ]
 
         return DomainIndicatorsAnalysis(
             domain=domain,

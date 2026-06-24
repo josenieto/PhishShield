@@ -100,3 +100,23 @@ def test_should_report_suspicious_tld_finding() -> None:
 
     assert result.has_suspicious_tld is True
     assert result.findings == ["DOMAIN_HAS_SUSPICIOUS_TLD"]
+
+
+def test_should_report_multiple_domain_findings_in_order() -> None:
+    use_case = AnalyzeDomainIndicatorsUseCase()
+
+    result = use_case.execute(
+        AnalyzeDomainIndicatorsCommand(
+            domain="a.b.c.d.xn--paypl-3ve.zip",
+            suspicious_tlds={"zip"},
+        )
+    )
+
+    assert result.contains_punycode is True
+    assert result.has_suspicious_subdomain_depth is True
+    assert result.has_suspicious_tld is True
+    assert result.findings == [
+        "DOMAIN_CONTAINS_PUNYCODE",
+        "DOMAIN_HAS_SUSPICIOUS_DEPTH",
+        "DOMAIN_HAS_SUSPICIOUS_TLD",
+    ]
