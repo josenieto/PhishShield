@@ -908,3 +908,80 @@ looks_like_ip_address_host(host: str) -> bool
 ```
 
 Start with RED tests and keep the implementation pure, using standard-library parsing if needed.
+
+---
+
+## 2026-06-25 - IP address host detection TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Domain analysis` group after adding suspicious subdomain depth detection.
+
+The goal was to add a pure helper for identifying hosts that are valid IP addresses, which is useful before composing domain and URL indicators at the Application layer.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+looks_like_ip_address_host(host: str) -> bool
+```
+
+The function uses Python's standard-library `ipaddress` module to validate IPv4 and IPv6 host strings after trimming surrounding whitespace. It does not resolve DNS, call the network, parse URLs, or perform IO.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet because the `Domain analysis` group still has suspicious TLD analysis pending.
+
+### Files changed
+
+- `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
+- `src/domain/services/domain_analysis/domains.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: cannot import name 'looks_like_ip_address_host'
+GREEN    -> 39 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/domain_analysis/test_domain_labels.py
+```
+
+Result:
+
+```text
+39 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+95 passed
+```
+
+### Next step
+
+Continue the same domain group with:
+
+```python
+has_suspicious_tld(domain: str, suspicious_tlds: set[str]) -> bool
+```
+
+Start with RED tests and keep the suspicious TLD list supplied as an argument instead of reading global configuration.
