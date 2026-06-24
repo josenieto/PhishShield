@@ -1143,3 +1143,74 @@ Result:
 ### Next step
 
 Decide whether to continue with the next pure domain group (`URL analysis`) or extend Application analysis around URLs once the pure URL helpers exist.
+
+---
+
+## 2026-06-28 - URL scheme analysis helpers
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+After completing the first Application use case for domain indicators, the next safe increment is to extend the pure Domain layer with URL analysis helpers.
+
+The selected scope is intentionally small: URL schemes can be analyzed as strings without network access, DNS resolution, browser automation, URL visits, or framework dependencies.
+
+### Decision
+
+Implemented two pure domain helpers:
+
+```python
+is_url_scheme_allowed(scheme: str, allowed_schemes: set[str]) -> bool
+is_suspicious_url_scheme(scheme: str) -> bool
+```
+
+The helpers normalize input by trimming whitespace and comparing case-insensitively. Suspicious schemes are limited to a deterministic built-in set for commonly abused schemes such as `javascript`, `data`, `file`, and `vbscript`.
+
+No ports, adapters, or Application use cases were created because this step does not cross an infrastructure boundary.
+
+### Files changed
+
+- `tests/unit/domain/services/url_analysis/test_url_schemes.py`
+- `src/domain/services/url_analysis/schemes.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.url_analysis'
+GREEN    -> URL scheme helper tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/url_analysis/test_url_schemes.py
+```
+
+Result:
+
+```text
+20 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+129 passed
+```
+
+### Next step
+
+Continue the `URL analysis` group with embedded credential detection in URLs.
