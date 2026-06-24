@@ -1056,3 +1056,90 @@ Result:
 ### Next step
 
 Run an architectural checkpoint for the completed `Domain analysis` group and decide whether to introduce an Application use case or continue with the next pure domain group.
+
+---
+
+## 2026-06-25 - Domain indicators application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project completed the initial `Text normalization`, `Homoglyphs / suspicious Unicode`, and `Domain analysis` pure domain helper groups.
+
+At this point the Application layer can add real value by composing multiple domain rules into a coherent domain-indicator analysis instead of wrapping one isolated helper.
+
+### Decision
+
+Introduced the first Application use case:
+
+```python
+AnalyzeDomainIndicatorsUseCase
+```
+
+The use case receives an `AnalyzeDomainIndicatorsCommand`, coordinates pure domain helpers, and returns a `DomainIndicatorsAnalysis` result with boolean indicators, discovered evidence, and finding codes.
+
+The use case currently reports these finding codes:
+
+```text
+DOMAIN_CONTAINS_PUNYCODE
+DOMAIN_HAS_MIXED_SCRIPTS
+DOMAIN_HAS_CONFUSABLE_CHARACTERS
+DOMAIN_HAS_SUSPICIOUS_DEPTH
+DOMAIN_LOOKS_LIKE_IP_ADDRESS
+DOMAIN_HAS_SUSPICIOUS_TLD
+```
+
+No ports or adapters were created because this use case does not cross an infrastructure boundary. It performs no IO, network access, DNS resolution, URL parsing, or framework work.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_domain_indicators.py`
+- `src/application/use_cases/analyze_domain_indicators.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_domain_indicators'
+GREEN    -> normal-domain analysis passed
+RED      -> Punycode finding missing
+GREEN    -> DOMAIN_CONTAINS_PUNYCODE finding added
+RED      -> Homoglyph findings missing
+GREEN    -> mixed-script and confusable-character findings added
+RED      -> structural findings missing
+GREEN    -> depth, IP-address host, and suspicious-TLD findings added
+REFACTOR -> finding codes extracted to module constants
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_domain_indicators.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+108 passed
+```
+
+### Next step
+
+Decide whether to continue with the next pure domain group (`URL analysis`) or extend Application analysis around URLs once the pure URL helpers exist.
