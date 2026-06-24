@@ -23,3 +23,11 @@ def contains_punycode(domain: str) -> bool:
         is_punycode_label(label)
         for label in split_domain_labels(domain)
     )
+
+
+def has_suspicious_subdomain_depth(
+    domain: str,
+    max_depth: int = 4,
+) -> bool:
+    """Return True when a domain has more labels than the accepted depth."""
+    return len(split_domain_labels(domain)) > max_depth
