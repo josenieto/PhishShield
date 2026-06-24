@@ -985,3 +985,74 @@ has_suspicious_tld(domain: str, suspicious_tlds: set[str]) -> bool
 ```
 
 Start with RED tests and keep the suspicious TLD list supplied as an argument instead of reading global configuration.
+
+---
+
+## 2026-06-25 - Suspicious TLD detection TDD cycle
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued the `Domain analysis` group after adding IP address host detection.
+
+The goal was to complete the planned pure domain helpers for structural domain analysis before deciding whether to introduce an Application use case.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+has_suspicious_tld(domain: str, suspicious_tlds: set[str]) -> bool
+```
+
+The function reuses `split_domain_labels`, inspects the final domain label, and compares it against a caller-provided set of suspicious TLDs. TLD values are compared case-insensitively, and entries with or without a leading dot are accepted.
+
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No Application use case was created yet; the next step is an architectural checkpoint for the completed `Domain analysis` group.
+
+### Files changed
+
+- `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
+- `src/domain/services/domain_analysis/domains.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: cannot import name 'has_suspicious_tld'
+GREEN    -> 46 tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/domain_analysis/test_domain_labels.py
+```
+
+Result:
+
+```text
+46 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+102 passed
+```
+
+### Next step
+
+Run an architectural checkpoint for the completed `Domain analysis` group and decide whether to introduce an Application use case or continue with the next pure domain group.
