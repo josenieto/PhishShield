@@ -3,6 +3,7 @@ import pytest
 from domain.services.domain_analysis.domains import (
     contains_punycode,
     has_suspicious_subdomain_depth,
+    has_suspicious_tld,
     is_punycode_label,
     looks_like_ip_address_host,
     split_domain_labels,
@@ -124,3 +125,34 @@ def test_should_detect_ip_address_host(host: str) -> None:
 )
 def test_should_return_false_when_host_is_not_ip_address(host: str) -> None:
     assert looks_like_ip_address_host(host) is False
+
+
+@pytest.mark.parametrize(
+    ("domain", "suspicious_tlds"),
+    [
+        ("example.zip", {"zip"}),
+        ("example.zip", {".zip"}),
+        ("login.example.TOP", {"top"}),
+    ],
+)
+def test_should_detect_suspicious_tld(
+    domain: str,
+    suspicious_tlds: set[str],
+) -> None:
+    assert has_suspicious_tld(domain, suspicious_tlds) is True
+
+
+@pytest.mark.parametrize(
+    ("domain", "suspicious_tlds"),
+    [
+        ("example.com", {"zip", "top"}),
+        ("", {"zip"}),
+        ("   ", {"zip"}),
+        ("example.zip", set()),
+    ],
+)
+def test_should_return_false_when_tld_is_not_suspicious(
+    domain: str,
+    suspicious_tlds: set[str],
+) -> None:
+    assert has_suspicious_tld(domain, suspicious_tlds) is False

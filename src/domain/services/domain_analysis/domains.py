@@ -44,3 +44,18 @@ def looks_like_ip_address_host(host: str) -> bool:
         return False
 
     return True
+
+
+def has_suspicious_tld(domain: str, suspicious_tlds: set[str]) -> bool:
+    """Return True when a domain ends with a suspicious TLD."""
+    labels = split_domain_labels(domain)
+
+    if not labels:
+        return False
+
+    normalized_suspicious_tlds = {
+        tld.lower().lstrip(".")
+        for tld in suspicious_tlds
+    }
+
+    return labels[-1].lower() in normalized_suspicious_tlds
