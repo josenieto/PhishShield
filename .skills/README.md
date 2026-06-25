@@ -36,6 +36,26 @@ Minimum required workflow:
 
 Do not create skills without following this process.
 
+## Skill need policy
+
+When a recurring or specialized area of work appears, first check whether a suitable project skill already exists.
+
+If no suitable skill exists and the area is clear, recurring, and important enough to benefit from specialist guidance, pause feature development and create or improve the skill using `skill-creator`.
+
+Create a project skill only when the area is:
+
+- recurring across multiple tasks;
+- specialized enough to need dedicated guidance;
+- important for architecture, security, testing, delivery, or product quality;
+- likely to reduce repeated explanations or prevent common mistakes.
+
+Do not create a project skill when:
+
+- the task is a one-off;
+- existing skills already cover it well;
+- a short note in `AGENT.md` or a project document is enough;
+- the skill would overlap heavily with another skill without adding clear value.
+
 ## Language policy
 
 All project skills, evals, prompts, assertions, examples, and documentation must be written in English.
@@ -86,7 +106,8 @@ Initial folders are prepared, and skills are defined progressively with `skill-c
   Guides React, TypeScript, Vite, and forensic dashboard UI work.
 
 - `phishshield-security-analysis`  
-  Guides phishing analysis modules: headers, links, homoglyphs, attachments, OCR, EXIF, YARA, and sandboxing.
+  Guides Domain and Application work for phishing indicators, forensic rules, finding codes, and pure analysis boundaries.  
+  Status: defined in `.skills/phishshield-security-analysis/SKILL.md` with initial evals in `.skills/phishshield-security-analysis/evals/evals.json`.
 
 - `phishshield-testing`  
   Guides unit testing, integration testing, mocks, Pytest, TDD Red-Green-Refactor, and forensic module validation.  
@@ -99,3 +120,4 @@ Skills created with this workflow:
 - `phishshield-backend`
 - `phishshield-architecture`
 - `phishshield-testing`
+- `phishshield-security-analysis`

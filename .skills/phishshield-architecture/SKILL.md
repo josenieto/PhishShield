@@ -1,6 +1,6 @@
 ---
 name: phishshield-architecture
-description: Specialized guidance for architectural decisions in PhishShield. Use this skill whenever the user asks to define, modify, or review repository structure, hexagonal architecture, Clean Architecture, Domain/Application/Infrastructure layers, ports, adapters, entrypoints, module boundaries, dependencies, external technology integration, Docker Compose from an architectural perspective, ADRs, or any decision that may affect maintainability. Also use it for backend, frontend, security, AI, or DevOps tasks when the main question is where code belongs, how to avoid coupling, whether a port/adapter is required, or whether a proposal contradicts doc/ADR.md.
+description: Specialized guidance for architectural decisions in PhishShield. Use this skill whenever the user asks to define, modify, or review repository structure, hexagonal architecture, Clean Architecture, Domain/Application/Infrastructure layers, ports, adapters, entrypoints, module boundaries, dependencies, external technology integration, Docker Compose from an architectural perspective, ADRs, domain group checkpoints, or any decision that may affect maintainability. Also use it after completing a pure Domain function group and before moving upward to Application, Infrastructure, or entrypoints. Use it for backend, frontend, security, AI, or DevOps tasks when the main question is where code belongs, how to avoid coupling, whether a port/adapter is required, or whether a proposal contradicts doc/ADR.md.
 ---
 
 # phishshield-architecture
@@ -32,8 +32,9 @@ When this skill triggers:
 3. Classify the affected elements as `Domain`, `Application`, `Infrastructure`, or `Entrypoints`.
 4. Detect dangerous dependencies or coupling to frameworks/libraries.
 5. Propose the correct boundary using ports and adapters when IO, external tools, or future replacement are involved.
-6. State which technical skill should continue the work if the architecture is already decided.
-7. Close with a short check against the architecture checklist.
+6. If a pure `Domain` group has just been completed, run a checkpoint before recommending any upward layer movement.
+7. State which technical skill should continue the work if the architecture is already decided.
+8. Close with a short check against the architecture checklist.
 
 The goal is not to produce more documentation. The goal is to prevent decisions that make the system rigid.
 
@@ -48,6 +49,7 @@ Use this skill when the task involves:
 - creating adapters;
 - reviewing dependencies between layers;
 - adding a new forensic module;
+- completing a pure `Domain` function group and deciding whether to move to `Application`;
 - integrating FastAPI, Playwright, Ollama, YARA, Tesseract, oletools, pdfminer, PyPDF2, idna, or other libraries;
 - reviewing technical proposals;
 - creating or updating ADRs;
@@ -229,6 +231,27 @@ Good port candidates:
 
 Ports should express system capabilities, not concrete tool names.
 
+## Domain group checkpoints
+
+After completing a pure `Domain` group, pause before moving upward and decide whether a higher layer is justified.
+
+Checklist:
+
+1. The group has enough cohesive behavior to support a use case.
+2. The functions are pure and tested.
+3. The next layer would compose multiple meaningful rules or expose a system action.
+4. No infrastructure dependency is required for the proposed `Application` use case.
+5. Ports are introduced only if the next step crosses IO, network, filesystem, browser, parser, AI, OCR, YARA, or external tool boundaries.
+
+Move upward when a use case composes meaningful behavior, not just because one helper exists.
+
+Example:
+
+```text
+Domain URL helpers completed -> AnalyzeUrlIndicatorsUseCase may be justified.
+One isolated helper added -> continue in Domain unless a real use case needs it.
+```
+
 Correct:
 
 ```python
@@ -336,7 +359,7 @@ Review and correct if you detect:
 ## Relationship with other skills
 
 - Use `phishshield-backend` for backend implementation details once the architecture is decided.
-- Use `phishshield-security-analysis` when the focus is concrete forensic analysis logic.
+- Use `phishshield-security-analysis` when it exists and the focus is concrete forensic analysis logic.
 - Use `phishshield-testing` when the focus is testing strategy or test implementation.
 - Use `phishshield-devops` when it exists and the focus is CI/CD or deployment.
 
