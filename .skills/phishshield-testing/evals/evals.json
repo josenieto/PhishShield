@@ -110,6 +110,24 @@
         "Runs affected tests and the full suite when cheap.",
         "Stops before committing and provides commit text."
       ]
+    },
+    {
+      "id": 7,
+      "prompt": "Review a PhishShield test suite for timing, difficulty level, and mock usage.",
+      "expected_output": "The answer should classify tests by level, identify slow-test thresholds, recommend pytest durations reporting, explain when to use real Domain helpers versus fakes or mocks for ports, and flag infrastructure usage in Domain tests.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-testing/SKILL.md"
+      ],
+      "assertions": [
+        "Classifies tests using Domain, Application, port, infrastructure, and integration levels.",
+        "Mentions timing thresholds or slow test review criteria.",
+        "Recommends pytest durations reporting.",
+        "States that pure Domain helpers should not be mocked by default.",
+        "States that Application tests should fake or mock ports but not concrete adapters.",
+        "Flags infrastructure usage in Domain tests as a design problem."
+      ]
     }
   ]
 }
