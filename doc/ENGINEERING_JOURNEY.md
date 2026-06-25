@@ -1424,3 +1424,96 @@ Result:
 ### Next step
 
 Run an architectural checkpoint for the completed `URL analysis` group and decide whether to introduce an Application use case.
+
+---
+
+## 2026-06-28 - URL indicators application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project completed the planned pure `URL analysis` domain helper group: URL scheme analysis, embedded credential detection, suspicious query density detection, and known shortener domain detection.
+
+At this point an Application use case is justified because it composes multiple cohesive URL indicator rules into a single analysis result. The use case still performs no network access, DNS resolution, redirects, browser work, adapters, or framework integration.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+AnalyzeUrlIndicatorsUseCase
+```
+
+The use case receives an `AnalyzeUrlIndicatorsCommand`, derives URL evidence with Python standard-library parsing, coordinates pure domain helpers, and returns a `UrlIndicatorsAnalysis` result with boolean indicators, derived evidence, and finding codes.
+
+The use case currently reports these finding codes:
+
+```text
+URL_SCHEME_NOT_ALLOWED
+URL_HAS_SUSPICIOUS_SCHEME
+URL_HAS_EMBEDDED_CREDENTIALS
+URL_HAS_SUSPICIOUS_QUERY_DENSITY
+URL_USES_KNOWN_SHORTENER_DOMAIN
+```
+
+No ports or adapters were created because this use case does not cross an infrastructure boundary.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_url_indicators.py`
+- `src/application/use_cases/analyze_url_indicators.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_url_indicators'
+GREEN    -> URL indicator use case tests passed
+REFACTOR -> not needed
+VERIFY   -> application tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_url_indicators.py
+```
+
+Result:
+
+```text
+8 passed
+```
+
+Command:
+
+```bash
+python -m pytest tests/unit/application
+```
+
+Result:
+
+```text
+15 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+168 passed
+```
+
+### Next step
+
+Decide whether to continue with another pure domain group, such as `Attachment analysis`, or introduce higher-level Application composition once more indicator groups exist.
