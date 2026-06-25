@@ -90,6 +90,26 @@
         "Avoids depending on AI or external reputation for a pure rule.",
         "Keeps the rule in the appropriate layer according to architecture."
       ]
+    },
+    {
+      "id": 6,
+      "prompt": "Implement a pure URL analysis helper following the PhishShield TDD workflow and stop before committing.",
+      "expected_output": "The answer should define behavior, add a failing Pytest test first, confirm Red, implement the minimum Green code, explicitly review Refactor, run affected and full tests when cheap, and stop with commit text instead of committing.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-testing/SKILL.md"
+      ],
+      "assertions": [
+        "Defines the behavior before implementation.",
+        "Adds or proposes a failing Pytest test before production code.",
+        "Confirms the Red state and expected failure reason.",
+        "Implements only the minimum code needed for Green.",
+        "Explicitly reviews the Refactor step or states that refactor is not needed.",
+        "Runs affected tests and the full suite when cheap.",
+        "Stops before committing and provides commit text."
+      ]
     }
   ]
 }
