@@ -1,0 +1,96 @@
+{
+  "skill_name": "phishshield-security-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a pure helper to detect known URL shortener domains.",
+      "expected_output": "The answer should keep the helper in Domain, accept a caller-provided shortener set, compare normalized domains without network access, and recommend TDD tests for known, unknown, empty, uppercase, trailing-dot, and subdomain cases.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-security-analysis/SKILL.md"
+      ],
+      "assertions": [
+        "Places the shortener detection helper in Domain.",
+        "Uses a caller-provided known shorteners set instead of global configuration.",
+        "Avoids HTTP requests, redirects, DNS, or reputation lookups.",
+        "Mentions normalization such as case-insensitive comparison or trailing-dot handling.",
+        "Proposes tests for known, unknown, empty, uppercase, trailing-dot, and subdomain cases."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Decide whether resolving bit.ly redirects belongs in Domain.",
+      "expected_output": "The answer should reject redirect resolution in Domain because it requires network access, recommend an Application port and Infrastructure adapter if needed, and keep pure shortener-domain matching separate.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-security-analysis/SKILL.md",
+        ".skills/phishshield-architecture/SKILL.md"
+      ],
+      "assertions": [
+        "Rejects redirect resolution in Domain.",
+        "Explains that redirect resolution requires network or HTTP access.",
+        "Recommends an Application port if the capability is needed.",
+        "Places the concrete HTTP resolver in Infrastructure.",
+        "Distinguishes pure shortener-domain matching from redirect resolution."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a rule for suspicious attachment double extensions.",
+      "expected_output": "The answer should treat filename-based double-extension detection as pure Domain logic, avoid opening files or parsing bytes, define edge cases, and suggest tests for dangerous, non-dangerous, single-extension, and extensionless filenames.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-security-analysis/SKILL.md"
+      ],
+      "assertions": [
+        "Places filename-based double-extension detection in Domain.",
+        "Avoids reading files, parsing bytes, running YARA, or using external parsers.",
+        "Defines dangerous and non-dangerous double-extension cases.",
+        "Includes single-extension and extensionless filename tests.",
+        "Treats filenames as hostile input."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Interpret SPF, DKIM, and DMARC results already computed by infrastructure.",
+      "expected_output": "The answer should allow pure Domain interpretation of already computed authentication results while keeping DNS queries, DKIM cryptographic validation, and raw header parsing outside Domain.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-security-analysis/SKILL.md"
+      ],
+      "assertions": [
+        "Allows interpretation of already computed SPF, DKIM, and DMARC results in Domain.",
+        "Keeps DNS queries out of Domain.",
+        "Keeps DKIM cryptographic validation out of Domain.",
+        "Keeps raw header parsing out of Domain when it requires infrastructure parsing.",
+        "Suggests tests for pass, fail, multiple failures, and unknown or missing values."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Design AnalyzeUrlIndicatorsUseCase after URL helpers are complete.",
+      "expected_output": "The answer should recommend an Application use case that composes pure URL analysis helpers, returns an explicit analysis result with findings and evidence, and avoids ports/adapters because no IO boundary is crossed yet.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-security-analysis/SKILL.md",
+        ".skills/phishshield-architecture/SKILL.md"
+      ],
+      "assertions": [
+        "Recommends Application orchestration because multiple URL helpers are complete.",
+        "Uses command and analysis result types or equivalent explicit contracts.",
+        "Composes pure URL helpers without concrete infrastructure.",
+        "Returns stable findings and supporting evidence.",
+        "Avoids ports or adapters unless URL visiting, DNS, network, or redirect resolution is introduced."
+      ]
+    }
+  ]
+}

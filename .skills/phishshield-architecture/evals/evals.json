@@ -102,6 +102,24 @@
         "Maintains a clear API contract between backend and frontend.",
         "Mentions maintainability, consistency, or security as a reason."
       ]
+    },
+    {
+      "id": 7,
+      "prompt": "We completed pure URL analysis helpers for schemes, embedded credentials, query density, and known shortener domains. Should we create an Application use case now?",
+      "expected_output": "The answer should run an architectural checkpoint, confirm that the helpers form a cohesive URL indicator group, recommend an Application use case only if it composes meaningful behavior, and avoid Infrastructure or ports unless IO or external boundaries are crossed.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        ".skills/phishshield-architecture/SKILL.md"
+      ],
+      "assertions": [
+        "Runs or describes a domain group checkpoint.",
+        "Recognizes that the completed helpers form a cohesive URL analysis group.",
+        "Recommends an Application use case only because it composes meaningful behavior.",
+        "Keeps URL visiting, redirects, DNS, and network access out of Domain and the pure use case.",
+        "Avoids creating ports or adapters unless an external boundary is crossed."
+      ]
     }
   ]
 }

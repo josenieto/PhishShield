@@ -1,6 +1,6 @@
 ---
 name: phishshield-testing
-description: Specialized guidance for testing and TDD in PhishShield. Use this skill whenever the user asks to create, modify, or review tests, apply TDD, design Pytest cases, test pure domain functions, validate use cases, mock ports, test adapters, review coverage, or implement a new function with a Red-Green-Refactor workflow. Also use it when the user asks to implement new logic, even if tests are not explicitly mentioned, because PhishShield development should start with tests whenever behavior is verifiable.
+description: Specialized guidance for testing and TDD in PhishShield. Use this skill whenever the user asks to create, modify, or review tests, apply TDD, design Pytest cases, test pure domain functions, validate use cases, mock ports, test adapters, review coverage, refactor safely, or implement new behavior with a Red-Green-Refactor-Verify workflow. Also use it when the user asks to implement new logic, even if tests are not explicitly mentioned, because PhishShield development should start with tests whenever behavior is verifiable.
 ---
 
 # phishshield-testing
@@ -14,7 +14,7 @@ This skill exists to avoid implementing logic first and adding superficial tests
 The default cycle is:
 
 ```text
-Red -> Green -> Refactor
+Red -> Green -> Refactor -> Verify
 ```
 
 Use classic TDD patterns when appropriate:
@@ -70,16 +70,21 @@ because the expected workflow in this project is to start with expected behavior
 
 When behavior is verifiable, work as follows:
 
-1. Define the expected behavior clearly.
-2. Write the smallest failing test.
-3. Run the test or state the exact command that should be run.
-4. Confirm the **Red** state.
-5. Implement the minimum code required to pass.
-6. Run the affected test.
-7. Confirm the **Green** state.
-8. Refactor only if it improves clarity without changing behavior.
-9. Run the affected tests again.
-10. Repeat with the next case.
+1. Check repository status before editing.
+2. Define the expected behavior clearly.
+3. Write the smallest failing test.
+4. Run the test or state the exact command that should be run.
+5. Confirm the **Red** state and the expected failure reason.
+6. Implement the minimum code required to pass.
+7. Run the affected test.
+8. Confirm the **Green** state.
+9. Review the **Refactor** step explicitly.
+10. Refactor only if it improves clarity without changing behavior.
+11. If no cleanup is useful, state `Refactor not needed.`
+12. Run affected tests again when refactoring changes code.
+13. **Verify** with the affected test scope and the full suite when it is still cheap.
+14. Stop before committing unless the user explicitly asks the agent to commit.
+15. Repeat with the next case.
 
 Do not group too many cases into one iteration. Keep changes small.
 
@@ -93,8 +98,8 @@ When using this skill, structure the answer as follows when applicable:
 3. Red test to add
 4. Minimal implementation needed for Green
 5. Refactor considerations
-6. Test command
-7. Next test case
+6. Verification commands
+7. Commit text or next test case
 ```
 
 If code should not be implemented yet, provide only the test plan.
@@ -108,8 +113,11 @@ Use this cycle by default.
 ```text
 Red: the test fails because the behavior does not exist.
 Green: the minimum implementation passes the test.
-Refactor: cleanup without changing behavior.
+Refactor: review cleanup without changing behavior.
+Verify: run the affected scope and full suite when it is cheap.
 ```
+
+The refactor phase is mandatory as a review step, but code changes are optional. If the implementation and tests are already clear, say `Refactor not needed.`
 
 ### Fake it till you make it
 
@@ -285,6 +293,21 @@ For the first pure domain function:
 tests/unit/domain/services/text_normalization/test_invisible_characters.py
 ```
 
+For pure URL analysis helpers:
+
+```text
+tests/unit/domain/services/url_analysis/test_url_schemes.py
+tests/unit/domain/services/url_analysis/test_embedded_credentials.py
+tests/unit/domain/services/url_analysis/test_query_density.py
+tests/unit/domain/services/url_analysis/test_shortener_domains.py
+```
+
+## Documentation scope
+
+Do not document every small test edit. Update `doc/ENGINEERING_JOURNEY.md` when the test work represents a meaningful engineering step, such as a new function group, a completed group checkpoint, a new use case, a testing strategy change, or an important rejection decision.
+
+For multiple small helpers inside the same function group, prefer concise grouped documentation unless a helper introduces a notable architectural or testing decision.
+
 ## Recommended first PhishShield case
 
 Suggested first iteration:
@@ -332,7 +355,10 @@ Reject or redesign a testing approach if it:
 - [ ] Test names describe behavior.
 - [ ] Normal and edge cases are covered.
 - [ ] Affected tests were run or the exact command was provided.
+- [ ] The refactor step was reviewed, even if no code changed.
+- [ ] Full suite was run when it was cheap enough for the current stage.
 - [ ] The minimum implementation does not break hexagonal architecture.
+- [ ] The agent stopped before commit unless explicitly asked to commit.
 
 ## Relationship with other skills
 
