@@ -1214,3 +1214,73 @@ Result:
 ### Next step
 
 Continue the `URL analysis` group with embedded credential detection in URLs.
+
+---
+
+## 2026-06-28 - Embedded URL credential detection
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The `URL analysis` group already detects allowed and suspicious schemes. The next phishing-relevant URL signal is embedded credentials in the URL authority, which can visually mislead users about the real destination host.
+
+This analysis can remain pure because it only parses the URL string with the Python standard library and does not visit the URL, resolve DNS, follow redirects, or perform network access.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+has_embedded_credentials(url: str) -> bool
+```
+
+The helper uses `urllib.parse.urlsplit` and checks credentials in the URL authority for HTTP and HTTPS URLs. This avoids treating `@` characters in paths, query strings, or mail addresses as embedded URL credentials.
+
+No ports, adapters, or Application use cases were created because this step remains fully inside the pure Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/url_analysis/test_embedded_credentials.py`
+- `src/domain/services/url_analysis/credentials.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.url_analysis.credentials'
+GREEN    -> embedded credential helper tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/url_analysis/test_embedded_credentials.py
+```
+
+Result:
+
+```text
+12 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+141 passed
+```
+
+### Next step
+
+Continue the `URL analysis` group with suspicious query density detection.
