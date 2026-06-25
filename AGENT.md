@@ -154,6 +154,49 @@ If a change modifies observable behavior, add or update tests in the appropriate
 
 Prefer clear, modular solutions aligned with the existing ADR.
 
+### 8. Respect the current layer progression
+
+The ADR defines the target stack. Do not introduce FastAPI, React, Docker, Playwright, Ollama, YARA, OCR, external parsers, or other infrastructure until the current layer progression requires it.
+
+After completing a pure `Domain` group, run an architectural checkpoint before moving upward to `Application`, `Infrastructure`, or entrypoints.
+
+---
+
+## Development workflow
+
+For behavior changes, use the smallest useful increment and follow this workflow:
+
+1. Check repository status before editing.
+2. Define the smallest behavior increment.
+3. **RED:** add the failing test and confirm the expected failure.
+4. **GREEN:** implement the minimum code required to pass.
+5. **REFACTOR:** review whether cleanup improves clarity without changing behavior.
+6. **VERIFY:** run affected tests and the full suite when it is still cheap.
+7. Update documentation only when the step is meaningful.
+8. Stop before committing unless the user explicitly asks the agent to commit.
+
+The refactor phase is mandatory as a review step, but code changes are optional. If no cleanup is useful, state `Refactor not needed.`
+
+### Commit message format
+
+Use this format when proposing or creating commits:
+
+```text
+type(scope): Action summary.
+
+- Body bullet with uppercase initial and final period.
+- Another body bullet with uppercase initial and final period.
+```
+
+Example:
+
+```text
+feat(domain): Add embedded URL credential detection.
+
+- Add pure URL embedded credential detection.
+- Use standard library URL parsing without network or DNS access.
+```
+
 ---
 
 ## Engineering journey documentation
@@ -166,10 +209,11 @@ Agents must update this document whenever a relevant engineering step occurs.
 
 Relevant steps include:
 
-- completing a TDD cycle;
+- completing a meaningful TDD cycle;
 - making an architectural decision;
 - deciding not to move up a layer;
 - creating a new domain function group;
+- completing a domain function group checkpoint;
 - adding a new port;
 - adding a new adapter;
 - introducing a new use case;
@@ -222,6 +266,8 @@ When a step changes architecture flow or layer progression, update the Mermaid d
 
 Do not over-document every small code edit. Document meaningful engineering steps that explain how the project evolves.
 
+For small helpers inside the same function group, prefer concise grouped entries unless the helper introduces a notable architectural or testing decision.
+
 ---
 
 ## What an agent must do before editing
@@ -232,15 +278,18 @@ Minimum checklist:
 - identify the affected layer,
 - locate the impacted contract or module,
 - check whether tests are required,
-- keep consistency with Docker, FastAPI, React, and existing adapters.
+- check whether the change should stay in the current layer,
+- keep consistency with the ADR target stack without introducing infrastructure prematurely.
 
 ---
 
 ## Project skills
 
-Project-specific skills are organized in:
+Project-authored skill definitions and evals are organized in:
 
 - `.skills/`
+
+Installed skills available to the agent runtime are organized under `.agents/skills/` when they are installed for this project. A skill definition in `.skills/` is not automatically runtime-available unless it is registered or installed through the active agent configuration.
 
 The official Anthropic `skill-creator` skill is installed in the project through the `skills` CLI and is available at:
 
