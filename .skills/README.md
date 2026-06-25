@@ -2,6 +2,8 @@
 
 This folder contains project-specific skills for **PhishShield**.
 
+Project skills are portable Markdown playbooks for humans and AI tools. Tool-specific integrations may load or wrap them, but the files in this repository remain the source of truth.
+
 The official Anthropic `skill-creator` skill is installed in this project through the `skills` CLI and is available at:
 
 ```text
@@ -14,7 +16,7 @@ Official command used:
 npx skills add anthropics/skills --skill skill-creator --yes
 ```
 
-`skill-creator` must be used to create, improve, evaluate, and maintain repository-specific skills.
+`skill-creator` is the responsible specialist for creating, improving, evaluating, and maintaining repository-specific skills.
 
 ## Mandatory rule for creating skills
 
@@ -42,6 +44,8 @@ When a recurring or specialized area of work appears, first check whether a suit
 
 If no suitable skill exists and the area is clear, recurring, and important enough to benefit from specialist guidance, pause feature development and create or improve the skill using `skill-creator`.
 
+Use `skill-creator` when available. If a future tool does not support it directly, follow the same workflow manually and keep the resulting project skill in `.skills/`.
+
 Create a project skill only when the area is:
 
 - recurring across multiple tasks;
@@ -55,6 +59,10 @@ Do not create a project skill when:
 - existing skills already cover it well;
 - a short note in `AGENT.md` or a project document is enough;
 - the skill would overlap heavily with another skill without adding clear value.
+
+The same principle applies to autonomous agents or specialist prompts: create one only when there is a clear, recurring, specialized need to delegate review, research, or auditing work. Do not create agents for one-off tasks or trivial checks.
+
+If a tool-specific agent wrapper is ever added, it must reference or mirror the project guidance here instead of becoming a separate source of truth.
 
 ## Language policy
 
