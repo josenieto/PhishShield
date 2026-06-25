@@ -1,6 +1,6 @@
 ---
 name: phishshield-backend
-description: Specialized guidance for backend work in PhishShield. Use this skill whenever the user asks to create, modify, or review Python/FastAPI code, use cases, ports, adapters, Pydantic models, API endpoints, parsers, backend forensic modules, Playwright/Ollama/YARA/OCR integration, backend Docker setup, or Pytest tests. Also use it when a task mentions hexagonal architecture, Domain/Application/Infrastructure, contracts, DTOs, validation, or .eml analysis from the backend, even if the user does not explicitly say "backend". If the task requires deciding layer boundaries or general architecture, apply phishshield-architecture first and then return to this skill for backend implementation.
+description: Specialized guidance for backend work in PhishShield. Use this skill whenever the user asks to create, modify, or review Python/FastAPI code, Application use cases, ports, adapters, Pydantic models, API endpoints, parsers, backend forensic modules, Playwright/Ollama/YARA/OCR integration, backend Docker setup, or Pytest tests around backend boundaries. Also use it when a task mentions Domain/Application/Infrastructure, contracts, DTOs, validation, or .eml analysis from the backend, even if the user does not explicitly say "backend". For pure Domain indicator helpers, prefer phishshield-testing and phishshield-security-analysis. If the task requires deciding layer boundaries or general architecture, apply phishshield-architecture first and then return to this skill for backend implementation.
 ---
 
 # phishshield-backend
@@ -28,10 +28,11 @@ When this skill triggers:
 1. Identify whether the task is backend implementation or an architectural decision.
 2. If there are doubts about layers, boundaries, or dependencies, apply `phishshield-architecture` first.
 3. Locate the affected layer: `Domain`, `Application`, `Infrastructure`, or `Entrypoints`.
-4. Design contracts before adapters when IO, network, sandboxing, AI, OCR, YARA, or external parsers are involved.
-5. Keep FastAPI as a thin entrypoint.
-6. Add or update tests if behavior changes.
-7. Close with a short check against the backend checklist.
+4. If the task is only a pure `Domain` indicator helper, prefer `phishshield-testing` and `phishshield-security-analysis` instead of expanding backend infrastructure.
+5. Design contracts before adapters when IO, network, sandboxing, AI, OCR, YARA, or external parsers are involved.
+6. Keep FastAPI as a thin entrypoint.
+7. Add or update tests if behavior changes.
+8. Close with a short check against the backend checklist.
 
 The goal is to produce implementable backend code without degrading hexagonal architecture.
 
@@ -54,6 +55,8 @@ Use this skill for tasks related to:
 - backend service Docker setup.
 
 Do not use this skill for purely frontend tasks unless they involve API contracts or shared models.
+
+Do not use this skill as the primary guide for isolated pure `Domain` helpers. For those tasks, use `phishshield-testing` for the TDD workflow and `phishshield-security-analysis` for forensic indicator boundaries.
 
 ## Expected response shape
 
