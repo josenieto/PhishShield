@@ -1354,3 +1354,73 @@ Result:
 ### Next step
 
 Continue the `URL analysis` group with known shortener domain detection.
+
+---
+
+## 2026-06-28 - Known URL shortener domain detection
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The `URL analysis` group already detects suspicious schemes, embedded credentials, and dense query strings. The final planned pure helper for this group detects whether a domain exactly matches a caller-provided known URL shortener set.
+
+The helper intentionally does not resolve redirects, perform HTTP requests, query DNS, or consult reputation services.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+has_url_shortener_domain(domain: str, known_shorteners: set[str]) -> bool
+```
+
+The helper normalizes the domain and known shorteners by trimming whitespace, removing trailing dots, and comparing case-insensitively. It requires an exact normalized domain match, so subdomains such as `sub.bit.ly` are not treated as the same shortener domain as `bit.ly`.
+
+No ports, adapters, or Application use cases were created because this step remains fully inside the pure Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/url_analysis/test_shortener_domains.py`
+- `src/domain/services/url_analysis/shorteners.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.url_analysis.shorteners'
+GREEN    -> shortener domain helper tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/url_analysis/test_shortener_domains.py
+```
+
+Result:
+
+```text
+10 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+160 passed
+```
+
+### Next step
+
+Run an architectural checkpoint for the completed `URL analysis` group and decide whether to introduce an Application use case.
