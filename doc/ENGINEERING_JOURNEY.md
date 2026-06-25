@@ -1284,3 +1284,73 @@ Result:
 ### Next step
 
 Continue the `URL analysis` group with suspicious query density detection.
+
+---
+
+## 2026-06-28 - Suspicious URL query density detection
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The `URL analysis` group already detects suspicious schemes and embedded credentials. The next pure signal is query density: URLs with many query parameters can indicate tracking, redirection, or payload-heavy phishing links.
+
+This helper remains deterministic and local because it only parses the URL string with the Python standard library.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+has_suspicious_query_density(url: str, threshold: int) -> bool
+```
+
+The helper uses `urllib.parse.urlsplit` to extract the query string and `urllib.parse.parse_qsl` to count parameters, including blank values. It returns `True` only when the number of query parameters is greater than the caller-provided threshold.
+
+No ports, adapters, or Application use cases were created because this step performs no network access, DNS resolution, redirects, browser work, or framework integration.
+
+### Files changed
+
+- `tests/unit/domain/services/url_analysis/test_query_density.py`
+- `src/domain/services/url_analysis/query.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.url_analysis.query'
+GREEN    -> query density helper tests passed
+REFACTOR -> not needed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/url_analysis/test_query_density.py
+```
+
+Result:
+
+```text
+9 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+150 passed
+```
+
+### Next step
+
+Continue the `URL analysis` group with known shortener domain detection.
