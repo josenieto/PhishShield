@@ -1,6 +1,7 @@
 import pytest
 
 from domain.services.attachment_analysis.attachments import (
+    has_double_extension,
     is_executable_extension,
     is_office_document_extension,
     is_pdf_extension,
@@ -104,3 +105,32 @@ def test_should_return_false_when_attachment_extension_is_not_pdf(
     filename: str,
 ) -> None:
     assert is_pdf_extension(filename) is False
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "invoice.pdf.exe",
+        "document.docx.scr",
+        "archive.tar.gz",
+        "ARCHIVE.TAR.GZ",
+    ],
+)
+def test_should_detect_double_attachment_extension(filename: str) -> None:
+    assert has_double_extension(filename) is True
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "invoice.pdf",
+        "filename-without-extension",
+        ".hiddenfile",
+        "",
+        "   ",
+    ],
+)
+def test_should_return_false_when_attachment_has_no_double_extension(
+    filename: str,
+) -> None:
+    assert has_double_extension(filename) is False
