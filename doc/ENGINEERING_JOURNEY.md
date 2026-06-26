@@ -1517,3 +1517,74 @@ Result:
 ### Next step
 
 Decide whether to continue with another pure domain group, such as `Attachment analysis`, or introduce higher-level Application composition once more indicator groups exist.
+
+---
+
+## 2026-06-28 - Executable attachment extension detection
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+After completing the initial domain, URL, and Application indicator use cases, the next pure `Domain` group is `Attachment analysis`.
+
+The first attachment helper intentionally operates only on filename metadata. It does not open files, read bytes, calculate hashes, parse Office/PDF content, run YARA, run OCR, or touch the filesystem.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+is_executable_extension(filename: str) -> bool
+```
+
+The helper detects executable filename extensions such as `.exe`, `.bat`, `.cmd`, `.scr`, `.ps1`, `.vbs`, `.js`, and `.jar`, comparing case-insensitively and supporting filenames with double extensions such as `invoice.pdf.exe`.
+
+No ports, adapters, or Application use cases were created because this step remains fully inside the pure Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py`
+- `src/domain/services/attachment_analysis/attachments.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.attachment_analysis'
+GREEN    -> executable attachment extension tests passed
+REFACTOR -> not needed
+VERIFY   -> attachment tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py
+```
+
+Result:
+
+```text
+15 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+183 passed
+```
+
+### Next step
+
+Continue the `Attachment analysis` group with Office document extension detection.
