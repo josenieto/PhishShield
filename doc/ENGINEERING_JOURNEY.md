@@ -1588,3 +1588,76 @@ Result:
 ### Next step
 
 Continue the `Attachment analysis` group with Office document extension detection.
+
+---
+
+## 2026-06-28 - Office attachment extension detection
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The `Attachment analysis` group started with executable extension detection. The next pure helper detects Office document extensions from filename metadata only.
+
+This remains a pure `Domain` rule: it does not parse Office files, inspect macros, read bytes, open files, run `oletools`, or touch the filesystem.
+
+### Decision
+
+Implemented one pure domain helper:
+
+```python
+is_office_document_extension(filename: str) -> bool
+```
+
+The helper detects Word, Excel, and PowerPoint extensions, including macro-enabled formats such as `.docm`, `.xlsm`, and `.pptm`, comparing case-insensitively.
+
+Refactored attachment extension matching through a shared private helper because executable and Office detection now use the same deterministic filename-extension pattern.
+
+No ports, adapters, or Application use cases were created because this step remains fully inside the pure Domain layer.
+
+### Files changed
+
+- `tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py`
+- `src/domain/services/attachment_analysis/attachments.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: cannot import name 'is_office_document_extension'
+GREEN    -> Office attachment extension tests passed
+REFACTOR -> shared private extension matching helper extracted
+VERIFY   -> attachment tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py
+```
+
+Result:
+
+```text
+31 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+199 passed
+```
+
+### Next step
+
+Continue the `Attachment analysis` group with PDF extension detection.
