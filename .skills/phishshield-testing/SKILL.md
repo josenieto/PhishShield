@@ -231,6 +231,77 @@ Examples:
 - do not call real Ollama in unit tests;
 - do not depend on real Tesseract except in explicit integration tests.
 
+## Test timing and difficulty policy
+
+Use lightweight quantitative checks to keep the feedback loop fast.
+
+Timing guidance:
+
+- The full unit-heavy suite should normally stay under 5 seconds at the current project stage.
+- Any individual unit test above 250 ms should be reviewed.
+- Pure Domain tests should normally be effectively instant and must not wait on IO.
+- Application use case tests should stay fast and deterministic.
+- Slower tests must be explicit integration tests or have a clear reason.
+
+Use this command to inspect slow tests:
+
+```bash
+python -m pytest --durations=10
+```
+
+### Test difficulty levels
+
+Use these levels to reason about test cost, isolation, and expected tooling.
+
+```text
+Level 1: Pure Domain function test.
+```
+
+- No mocks.
+- No IO.
+- No infrastructure.
+- Fast and deterministic.
+
+```text
+Level 2: Application use case test with real Domain helpers.
+```
+
+- Tests orchestration.
+- Uses real pure Domain helpers.
+- Uses no concrete adapters.
+
+```text
+Level 3: Application use case test with fake or mock ports.
+```
+
+- Tests orchestration across boundaries.
+- Uses fakes or mocks for ports.
+- Uses no real Infrastructure.
+
+```text
+Level 4: Infrastructure adapter test with controlled fixtures.
+```
+
+- Tests concrete adapters.
+- Uses mocks, local fixtures, or controlled resources.
+- Covers timeouts and failures where relevant.
+
+```text
+Level 5: Integration or end-to-end test with real external components.
+```
+
+- Must be explicit.
+- May be slower.
+- Should not be part of the fast unit feedback loop unless intended.
+
+### Mock and fake guidance
+
+Mock or fake ports and external boundaries.
+
+Do not mock pure Domain helpers by default. `Application` tests may use real Domain helpers because they are deterministic, fast, and dependency-free.
+
+If a unit test needs many mocks, review the design boundary. It may indicate that infrastructure behavior leaked into an inner layer.
+
 ## Entrypoint / FastAPI test rules
 
 API tests should:
@@ -357,6 +428,9 @@ Reject or redesign a testing approach if it:
 - [ ] Affected tests were run or the exact command was provided.
 - [ ] The refactor step was reviewed, even if no code changed.
 - [ ] Full suite was run when it was cheap enough for the current stage.
+- [ ] Slow tests were checked with `python -m pytest --durations=10` when timing is relevant.
+- [ ] Test difficulty level is appropriate for the affected layer.
+- [ ] Mocks or fakes are used for ports or infrastructure boundaries, not pure Domain helpers by default.
 - [ ] The minimum implementation does not break hexagonal architecture.
 - [ ] The agent stopped before commit unless explicitly asked to commit.
 
