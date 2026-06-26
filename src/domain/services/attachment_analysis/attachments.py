@@ -25,6 +25,8 @@ OFFICE_DOCUMENT_EXTENSIONS: frozenset[str] = frozenset(
     }
 )
 
+PDF_EXTENSIONS: frozenset[str] = frozenset({".pdf"})
+
 
 def is_executable_extension(filename: str) -> bool:
     """Return True when a filename ends with an executable extension."""
@@ -34,6 +36,11 @@ def is_executable_extension(filename: str) -> bool:
 def is_office_document_extension(filename: str) -> bool:
     """Return True when a filename ends with an Office document extension."""
     return _has_extension(filename, OFFICE_DOCUMENT_EXTENSIONS)
+
+
+def is_pdf_extension(filename: str) -> bool:
+    """Return True when a filename ends with a PDF extension."""
+    return _has_extension(filename, PDF_EXTENSIONS)
 
 
 def _has_extension(filename: str, extensions: frozenset[str]) -> bool:
