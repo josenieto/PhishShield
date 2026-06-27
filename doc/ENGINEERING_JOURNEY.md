@@ -2022,3 +2022,74 @@ Result:
 ### Next step
 
 Decide whether to add an Application use case for risk score orchestration or continue with another pure signal group first.
+
+---
+
+## 2026-06-28 - Risk score calculation application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The `Risk scoring` Domain group was completed with pure helpers for indicator weights, score capping, risk level classification, and critical indicator detection.
+
+At this point an Application use case is justified because risk score calculation composes multiple pure helpers into a single orchestration result while keeping weights and critical indicator sets explicit inputs.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+CalculateRiskScoreUseCase
+```
+
+The use case receives a `CalculateRiskScoreCommand`, coordinates the pure Domain helpers, and returns a `RiskScoreAnalysis` result with original indicators, raw score, capped score, risk level, and critical indicator evidence.
+
+No default weights, global configuration, ports, adapters, or infrastructure were introduced. Score weights and critical indicator sets remain caller-provided data.
+
+### Files changed
+
+- `tests/unit/application/test_calculate_risk_score.py`
+- `src/application/use_cases/calculate_risk_score.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.calculate_risk_score'
+GREEN    -> risk score application tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_calculate_risk_score.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+310 passed
+```
+
+### Next step
+
+Decide whether to continue with another pure signal group, such as `Social engineering heuristics`, or start defining higher-level analysis composition across existing use cases.
