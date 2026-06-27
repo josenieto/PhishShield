@@ -1746,3 +1746,97 @@ Result:
 ### Next step
 
 Run an architectural checkpoint for the completed `Attachment analysis` group and decide whether to introduce an Application use case.
+
+---
+
+## 2026-06-28 - Attachment indicators application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project completed the initial pure `Attachment analysis` helper group. The helpers classify filename extensions, detect double extensions, and detect suspicious Unicode filename characters without reading files or invoking parsers, YARA, OCR, Office tooling, PDF tooling, archive tooling, or filesystem operations.
+
+At this point an Application use case is justified because it composes multiple cohesive attachment metadata rules into a single analysis result.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+AnalyzeAttachmentIndicatorsUseCase
+```
+
+The use case receives an `AnalyzeAttachmentIndicatorsCommand`, coordinates pure domain helpers, and returns an `AttachmentIndicatorsAnalysis` result with extension category evidence, boolean indicators, and finding codes.
+
+The use case currently reports these finding codes:
+
+```text
+ATTACHMENT_HAS_EXECUTABLE_EXTENSION
+ATTACHMENT_HAS_OFFICE_DOCUMENT_EXTENSION
+ATTACHMENT_HAS_DOUBLE_EXTENSION
+ATTACHMENT_HAS_SUSPICIOUS_FILENAME_CHARS
+```
+
+PDF classification is preserved as evidence through `extension_category` and `has_pdf_extension`, but it does not emit a finding by itself because PDF attachments are common and not suspicious on their own.
+
+No ports or adapters were created because this use case does not cross an infrastructure boundary.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_attachment_indicators.py`
+- `src/application/use_cases/analyze_attachment_indicators.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_attachment_indicators'
+GREEN    -> attachment indicator use case tests passed
+REFACTOR -> not needed
+VERIFY   -> application tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_attachment_indicators.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest tests/unit/application
+```
+
+Result:
+
+```text
+21 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+240 passed
+```
+
+### Next step
+
+Decide whether to continue with another pure domain group, such as `Authentication result analysis`, or defer until email header parsing infrastructure can provide computed authentication results.
