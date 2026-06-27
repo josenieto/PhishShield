@@ -1840,3 +1840,97 @@ Result:
 ### Next step
 
 Decide whether to continue with another pure domain group, such as `Authentication result analysis`, or defer until email header parsing infrastructure can provide computed authentication results.
+
+---
+
+## 2026-06-28 - Authentication indicators domain and application analysis
+
+Type: TDD  
+Layer: Domain | Application  
+Status: Done
+
+### Context
+
+The project continued after the attachment metadata analysis group with another cohesive phishing signal family: already computed authentication results.
+
+SPF, DKIM, and DMARC validation itself requires infrastructure concerns such as header parsing, DNS, and cryptographic verification. The selected scope avoids those boundaries and only interprets authentication result strings already provided by a future adapter.
+
+### Decision
+
+Implemented pure Domain helpers for authentication result interpretation:
+
+```python
+is_authentication_aligned(spf_result: str, dkim_result: str, dmarc_result: str) -> bool
+has_authentication_failure(spf_result: str, dkim_result: str, dmarc_result: str) -> bool
+classify_authentication_risk(spf_result: str, dkim_result: str, dmarc_result: str) -> str
+summarize_authentication_findings(spf_result: str, dkim_result: str, dmarc_result: str) -> list[str]
+```
+
+The helpers normalize authentication values case-insensitively, preserve deterministic behavior, and classify risk with `DMARC` carrying the strongest weight:
+
+```text
+LOW
+MEDIUM
+HIGH
+CRITICAL
+UNKNOWN
+```
+
+Introduced the Application use case:
+
+```python
+AnalyzeAuthenticationIndicatorsUseCase
+```
+
+The use case receives an `AnalyzeAuthenticationIndicatorsCommand`, composes the Domain helpers, and returns an `AuthenticationIndicatorsAnalysis` result with original SPF/DKIM/DMARC evidence, booleans, risk level, and finding codes.
+
+No ports or adapters were created because no IO boundary is crossed yet. Header parsing, DNS checks, DKIM cryptographic validation, and DMARC policy lookup remain future Infrastructure responsibilities.
+
+### Files changed
+
+- `tests/unit/domain/services/authentication_analysis/test_authentication_results.py`
+- `src/domain/services/authentication_analysis/authentication_results.py`
+- `tests/unit/application/test_analyze_authentication_indicators.py`
+- `src/application/use_cases/analyze_authentication_indicators.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.authentication_analysis'
+GREEN    -> authentication domain tests passed
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_authentication_indicators'
+GREEN    -> authentication application tests passed
+REFACTOR -> extracted combined failure/weak result set
+VERIFY   -> targeted authentication tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/authentication_analysis tests/unit/application/test_analyze_authentication_indicators.py
+```
+
+Result:
+
+```text
+36 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+276 passed
+```
+
+### Next step
+
+Decide whether to continue with `Risk scoring`, which can now consume findings from domain, URL, attachment, and authentication analysis, or add another pure signal group first.
