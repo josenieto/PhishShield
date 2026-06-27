@@ -1934,3 +1934,91 @@ Result:
 ### Next step
 
 Decide whether to continue with `Risk scoring`, which can now consume findings from domain, URL, attachment, and authentication analysis, or add another pure signal group first.
+
+---
+
+## 2026-06-28 - Risk scoring domain helpers
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project already had cohesive findings from domain, URL, attachment, and authentication analysis. The next step was to add pure scoring helpers that can convert those finding codes into numeric risk evidence without introducing configuration files, infrastructure, ports, adapters, AI, external reputation, or global mutable weights.
+
+### Decision
+
+Implemented pure Domain helpers:
+
+```python
+calculate_indicator_score(indicators: list[str], weights: dict[str, int]) -> int
+combine_risk_scores(scores: list[int]) -> int
+cap_risk_score(score: int, min_score: int = 0, max_score: int = 100) -> int
+classify_risk_level(score: int) -> str
+has_critical_indicators(indicators: list[str], critical_indicators: set[str]) -> bool
+```
+
+The helpers keep weights and critical indicator sets explicit inputs. Unknown indicators are ignored, duplicate indicators are counted, and negative weights are allowed so future callers can model mitigating signals without adding special cases.
+
+Risk levels are currently classified with fixed first-version thresholds:
+
+```text
+LOW      -> score < 25
+MEDIUM   -> score >= 25 and score < 50
+HIGH     -> score >= 50 and score < 75
+CRITICAL -> score >= 75
+```
+
+No Application use case was introduced in this step. The cutoff is intentionally at completed Domain functionality so the next checkpoint can decide whether to add a separate risk score orchestration use case.
+
+### Files changed
+
+- `tests/unit/domain/services/risk_scoring/test_risk_scores.py`
+- `src/domain/services/risk_scoring/risk_scores.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.risk_scoring'
+GREEN    -> indicator score calculation tests passed
+RED      -> ImportError: cannot import name 'cap_risk_score'
+GREEN    -> score combination and capping tests passed
+RED      -> ImportError: cannot import name 'classify_risk_level'
+GREEN    -> risk level classification tests passed
+RED      -> ImportError: cannot import name 'has_critical_indicators'
+GREEN    -> critical indicator detection tests passed
+REFACTOR -> not needed
+VERIFY   -> risk scoring tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/risk_scoring/test_risk_scores.py
+```
+
+Result:
+
+```text
+28 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+304 passed
+```
+
+### Next step
+
+Decide whether to add an Application use case for risk score orchestration or continue with another pure signal group first.
