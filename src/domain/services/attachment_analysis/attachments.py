@@ -1,3 +1,10 @@
+from domain.services.homoglyphs.confusables import contains_confusable_characters
+from domain.services.homoglyphs.scripts import contains_mixed_scripts
+from domain.services.text_normalization.invisible_characters import (
+    contains_invisible_chars,
+)
+
+
 EXECUTABLE_EXTENSIONS: frozenset[str] = frozenset(
     {
         ".exe",
@@ -57,6 +64,15 @@ def has_double_extension(filename: str) -> bool:
     ]
 
     return len(filename_parts) >= 3
+
+
+def has_suspicious_filename_chars(filename: str) -> bool:
+    """Return True when a filename contains suspicious Unicode characters."""
+    return (
+        contains_invisible_chars(filename)
+        or contains_mixed_scripts(filename)
+        or contains_confusable_characters(filename)
+    )
 
 
 def _has_extension(filename: str, extensions: frozenset[str]) -> bool:
