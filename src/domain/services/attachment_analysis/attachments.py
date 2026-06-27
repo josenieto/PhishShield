@@ -43,6 +43,22 @@ def is_pdf_extension(filename: str) -> bool:
     return _has_extension(filename, PDF_EXTENSIONS)
 
 
+def has_double_extension(filename: str) -> bool:
+    """Return True when a filename has at least two extension segments."""
+    normalized_filename = filename.strip()
+
+    if not normalized_filename or normalized_filename.startswith("."):
+        return False
+
+    filename_parts = [
+        part
+        for part in normalized_filename.split(".")
+        if part
+    ]
+
+    return len(filename_parts) >= 3
+
+
 def _has_extension(filename: str, extensions: frozenset[str]) -> bool:
     normalized_filename = filename.strip().lower()
 
