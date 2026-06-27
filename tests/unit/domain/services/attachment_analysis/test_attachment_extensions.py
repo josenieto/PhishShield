@@ -1,6 +1,14 @@
 import pytest
 
 from domain.services.attachment_analysis.attachments import (
+    ATTACHMENT_ARCHIVE,
+    ATTACHMENT_EXECUTABLE,
+    ATTACHMENT_IMAGE,
+    ATTACHMENT_OFFICE,
+    ATTACHMENT_PDF,
+    ATTACHMENT_TEXT,
+    ATTACHMENT_UNKNOWN,
+    classify_attachment_extension,
     has_double_extension,
     is_executable_extension,
     is_office_document_extension,
@@ -134,3 +142,27 @@ def test_should_return_false_when_attachment_has_no_double_extension(
     filename: str,
 ) -> None:
     assert has_double_extension(filename) is False
+
+
+@pytest.mark.parametrize(
+    ("filename", "expected_category"),
+    [
+        ("invoice.pdf", ATTACHMENT_PDF),
+        ("document.docm", ATTACHMENT_OFFICE),
+        ("spreadsheet.xlsm", ATTACHMENT_OFFICE),
+        ("payload.exe", ATTACHMENT_EXECUTABLE),
+        ("photo.png", ATTACHMENT_IMAGE),
+        ("archive.zip", ATTACHMENT_ARCHIVE),
+        ("notes.txt", ATTACHMENT_TEXT),
+        ("README.MD", ATTACHMENT_TEXT),
+        ("unknown.bin", ATTACHMENT_UNKNOWN),
+        ("filename-without-extension", ATTACHMENT_UNKNOWN),
+        ("", ATTACHMENT_UNKNOWN),
+        ("   ", ATTACHMENT_UNKNOWN),
+    ],
+)
+def test_should_classify_attachment_extension(
+    filename: str,
+    expected_category: str,
+) -> None:
+    assert classify_attachment_extension(filename) == expected_category

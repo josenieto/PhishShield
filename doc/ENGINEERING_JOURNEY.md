@@ -1661,3 +1661,88 @@ Result:
 ### Next step
 
 Continue the `Attachment analysis` group with PDF extension detection.
+
+---
+
+## 2026-06-28 - Attachment analysis domain group checkpoint
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The `Attachment analysis` group now contains the planned pure filename and extension helpers. The group stayed focused on metadata-only analysis and deliberately avoided file access, byte parsing, macro extraction, YARA, OCR, PDF tooling, Office tooling, archive tooling, and filesystem operations.
+
+The smaller helpers after Office extension detection were not documented individually to avoid over-documenting repetitive pure helper work. This entry records the group checkpoint instead.
+
+### Decision
+
+Completed the initial pure `Attachment analysis` helper group with:
+
+```python
+is_pdf_extension(filename: str) -> bool
+has_double_extension(filename: str) -> bool
+has_suspicious_filename_chars(filename: str) -> bool
+classify_attachment_extension(filename: str) -> str
+```
+
+The classification helper returns these stable categories:
+
+```text
+PDF
+OFFICE
+EXECUTABLE
+IMAGE
+ARCHIVE
+TEXT
+UNKNOWN
+```
+
+No ports, adapters, or Application use cases were created yet. The next step is an architectural checkpoint to decide whether `AnalyzeAttachmentIndicatorsUseCase` is justified now or whether another pure domain group should come first.
+
+### Files changed
+
+- `tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py`
+- `tests/unit/domain/services/attachment_analysis/test_attachment_filenames.py`
+- `src/domain/services/attachment_analysis/attachments.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ImportError: missing attachment classification constants/helpers
+GREEN    -> attachment classification tests passed
+REFACTOR -> not needed
+VERIFY   -> attachment tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/attachment_analysis
+```
+
+Result:
+
+```text
+66 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+234 passed
+```
+
+### Next step
+
+Run an architectural checkpoint for the completed `Attachment analysis` group and decide whether to introduce an Application use case.

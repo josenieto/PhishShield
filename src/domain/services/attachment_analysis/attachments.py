@@ -34,6 +34,43 @@ OFFICE_DOCUMENT_EXTENSIONS: frozenset[str] = frozenset(
 
 PDF_EXTENSIONS: frozenset[str] = frozenset({".pdf"})
 
+IMAGE_EXTENSIONS: frozenset[str] = frozenset(
+    {
+        ".gif",
+        ".jpeg",
+        ".jpg",
+        ".png",
+        ".webp",
+    }
+)
+
+ARCHIVE_EXTENSIONS: frozenset[str] = frozenset(
+    {
+        ".7z",
+        ".gz",
+        ".rar",
+        ".tar",
+        ".zip",
+    }
+)
+
+TEXT_EXTENSIONS: frozenset[str] = frozenset(
+    {
+        ".csv",
+        ".log",
+        ".md",
+        ".txt",
+    }
+)
+
+ATTACHMENT_PDF = "PDF"
+ATTACHMENT_OFFICE = "OFFICE"
+ATTACHMENT_EXECUTABLE = "EXECUTABLE"
+ATTACHMENT_IMAGE = "IMAGE"
+ATTACHMENT_ARCHIVE = "ARCHIVE"
+ATTACHMENT_TEXT = "TEXT"
+ATTACHMENT_UNKNOWN = "UNKNOWN"
+
 
 def is_executable_extension(filename: str) -> bool:
     """Return True when a filename ends with an executable extension."""
@@ -73,6 +110,24 @@ def has_suspicious_filename_chars(filename: str) -> bool:
         or contains_mixed_scripts(filename)
         or contains_confusable_characters(filename)
     )
+
+
+def classify_attachment_extension(filename: str) -> str:
+    """Classify a filename by its attachment extension category."""
+    classification_conditions = [
+        (is_pdf_extension(filename), ATTACHMENT_PDF),
+        (is_office_document_extension(filename), ATTACHMENT_OFFICE),
+        (is_executable_extension(filename), ATTACHMENT_EXECUTABLE),
+        (_has_extension(filename, IMAGE_EXTENSIONS), ATTACHMENT_IMAGE),
+        (_has_extension(filename, ARCHIVE_EXTENSIONS), ATTACHMENT_ARCHIVE),
+        (_has_extension(filename, TEXT_EXTENSIONS), ATTACHMENT_TEXT),
+    ]
+
+    for condition, category in classification_conditions:
+        if condition:
+            return category
+
+    return ATTACHMENT_UNKNOWN
 
 
 def _has_extension(filename: str, extensions: frozenset[str]) -> bool:
