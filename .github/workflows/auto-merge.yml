@@ -1,0 +1,36 @@
+name: Auto PR and Merge
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+      - 'master'
+      - 'integration/**' # Evita bucles infinitos en tus ramas principales
+
+jobs:
+  auto-pr-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
+          base: main # Cambia 'main' por 'integration/master' o tu rama destino exacta
+          title: "Auto PR: Merge ${{ github.ref_name }} into main"
+          body: "Pull Request generado automáticamente por GitHub Actions."
+
+      - name: Merge Pull Request
+        if: steps.cpr.outputs.pull-request-number != ''
+        run: |
+          gh pr merge ${{ steps.cpr.outputs.pull-request-number }} --merge --auto --delete-branch=false
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
