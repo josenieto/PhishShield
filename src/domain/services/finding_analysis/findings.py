@@ -24,3 +24,13 @@ def filter_findings_by_category(
         for finding in findings
         if finding.category == category
     ]
+
+
+def count_findings_by_category(findings: list[Finding]) -> dict[str, int]:
+    """Return finding counts grouped by exact category."""
+    category_counts: dict[str, int] = {}
+
+    for finding in findings:
+        category_counts[finding.category] = category_counts.get(finding.category, 0) + 1
+
+    return category_counts
