@@ -2183,3 +2183,82 @@ Result:
 ### Next step
 
 Decide whether to add an Application use case for social engineering indicator analysis or continue with another pure Domain group.
+
+---
+
+## 2026-06-28 - Social engineering indicators application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The `Social engineering heuristics` Domain group was completed with deterministic helpers for urgency, financial pressure, credential request wording, signal counting, and social engineering risk classification.
+
+At this point an Application use case is justified because it composes the cohesive Domain helpers into a single analysis result while keeping term dictionaries explicit caller-provided inputs.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+AnalyzeSocialEngineeringIndicatorsUseCase
+```
+
+The use case receives an `AnalyzeSocialEngineeringIndicatorsCommand`, coordinates the pure Domain helpers, and returns a `SocialEngineeringIndicatorsAnalysis` result with original text, boolean indicators, signal counts, risk level, and finding codes.
+
+The use case currently reports these finding codes:
+
+```text
+SOCIAL_ENGINEERING_HAS_URGENCY_TERMS
+SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS
+SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS
+```
+
+No default term dictionaries, ports, adapters, AI, external NLP, configuration files, or infrastructure were introduced.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_social_engineering_indicators.py`
+- `src/application/use_cases/analyze_social_engineering_indicators.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_social_engineering_indicators'
+GREEN    -> social engineering application tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_social_engineering_indicators.py
+```
+
+Result:
+
+```text
+5 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+346 passed
+```
+
+### Next step
+
+Decide whether to start higher-level analysis composition across existing use cases or continue with another pure Domain group such as `Finding analysis` or `Hash analysis`.
