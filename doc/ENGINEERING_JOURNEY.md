@@ -2093,3 +2093,93 @@ Result:
 ### Next step
 
 Decide whether to continue with another pure signal group, such as `Social engineering heuristics`, or start defining higher-level analysis composition across existing use cases.
+
+---
+
+## 2026-06-28 - Social engineering domain heuristics
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project continued after technical indicator and risk score analysis with deterministic text heuristics for social engineering signals. The selected scope avoids AI, external NLP libraries, prompt files, language models, configuration files, and infrastructure boundaries.
+
+### Decision
+
+Implemented pure Domain helpers:
+
+```python
+contains_urgency_terms(text: str, terms: set[str]) -> bool
+contains_financial_pressure_terms(text: str, terms: set[str]) -> bool
+contains_credential_request_terms(text: str, terms: set[str]) -> bool
+count_social_engineering_signals(text: str, signal_terms: dict[str, set[str]]) -> dict[str, int]
+classify_social_engineering_risk(signal_counts: dict[str, int]) -> str
+```
+
+The helpers perform case-insensitive deterministic matching over caller-provided term sets. Empty and blank terms are ignored, categories with no detected terms are preserved with zero counts, and negative signal counts are ignored when classifying risk.
+
+Social engineering risk is currently classified with simple first-version thresholds:
+
+```text
+LOW      -> 0 total signals
+MEDIUM   -> 1 total signal
+HIGH     -> 2 total signals
+CRITICAL -> 3 or more total signals
+```
+
+No Application use case was introduced yet. The cutoff remains at completed Domain functionality so the next checkpoint can decide whether to compose these heuristics in Application.
+
+### Files changed
+
+- `tests/unit/domain/services/social_engineering/test_text_signals.py`
+- `src/domain/services/social_engineering/text_signals.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.social_engineering'
+GREEN    -> urgency term tests passed
+RED      -> ImportError: cannot import name 'contains_financial_pressure_terms'
+GREEN    -> financial pressure term tests passed
+RED      -> ImportError: cannot import name 'contains_credential_request_terms'
+GREEN    -> credential request term tests passed
+RED      -> ImportError: cannot import name 'count_social_engineering_signals'
+GREEN    -> social engineering signal counting tests passed
+RED      -> ImportError: cannot import name 'SOCIAL_ENGINEERING_CRITICAL'
+GREEN    -> social engineering risk classification tests passed
+REFACTOR -> extracted shared term matching helper
+VERIFY   -> social engineering tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/social_engineering/test_text_signals.py
+```
+
+Result:
+
+```text
+31 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+341 passed
+```
+
+### Next step
+
+Decide whether to add an Application use case for social engineering indicator analysis or continue with another pure Domain group.
