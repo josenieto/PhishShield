@@ -2512,3 +2512,74 @@ Result:
 ### Next step
 
 Decide whether to introduce a finding code registry for mapping existing string finding codes to `Finding` objects, or defer registry work until report composition needs it.
+
+---
+
+## 2026-06-29 - Finding code summary application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project introduced an initial Domain finding definition registry that maps selected finding codes to immutable `Finding` value objects. Existing analysis use cases still return string finding codes, while `SummarizeAnalysisFindingsUseCase` expects `list[Finding]`.
+
+This step adds a small Application bridge between those two representations without migrating existing use cases or introducing infrastructure.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+SummarizeFindingCodesUseCase
+```
+
+The use case receives a `SummarizeFindingCodesCommand` with `list[str]` finding codes, builds `Finding` objects through the Domain registry, and delegates summary creation to `SummarizeAnalysisFindingsUseCase`.
+
+No full finding registry expansion, API schema, report rendering, ports, adapters, or infrastructure were introduced.
+
+### Files changed
+
+- `tests/unit/application/test_summarize_finding_codes.py`
+- `src/application/use_cases/summarize_finding_codes.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.summarize_finding_codes'
+GREEN    -> finding code summary tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_summarize_finding_codes.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+418 passed
+```
+
+### Next step
+
+Decide whether to expand the finding definition registry incrementally or start designing the first IO boundary and port for email or attachment ingestion.
