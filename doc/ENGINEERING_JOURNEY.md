@@ -2441,3 +2441,74 @@ Result:
 ### Next step
 
 Decide whether hash string validation needs an Application use case now, or defer Application until an infrastructure adapter can provide calculated attachment hashes.
+
+---
+
+## 2026-06-29 - Analysis findings summary application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project completed pure Domain helpers for `Finding` value objects, including category counting, severity sorting, and highest severity extraction.
+
+At this point a small Application use case is justified to summarize already calculated `Finding` objects without parsing inputs, rendering reports, mapping string codes to metadata, or crossing infrastructure boundaries.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+SummarizeAnalysisFindingsUseCase
+```
+
+The use case receives a `SummarizeAnalysisFindingsCommand` with explicit `list[Finding]` input and returns an `AnalysisFindingsSummary` with original findings, severity-sorted findings, category counts, highest severity, and total finding count.
+
+No finding code registry, default severity mapping, report rendering, API schema, ports, adapters, or infrastructure were introduced.
+
+### Files changed
+
+- `tests/unit/application/test_summarize_analysis_findings.py`
+- `src/application/use_cases/summarize_analysis_findings.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.summarize_analysis_findings'
+GREEN    -> analysis findings summary tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_summarize_analysis_findings.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+403 passed
+```
+
+### Next step
+
+Decide whether to introduce a finding code registry for mapping existing string finding codes to `Finding` objects, or defer registry work until report composition needs it.
