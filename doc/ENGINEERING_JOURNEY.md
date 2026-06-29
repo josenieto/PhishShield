@@ -2364,3 +2364,80 @@ Result:
 ### Next step
 
 Decide whether to add an Application-level report composition use case or continue with another pure Domain group such as `Hash analysis`.
+
+---
+
+## 2026-06-29 - Hash analysis domain helpers
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+After completing finding analysis helpers, the project continued with pure hash analysis helpers for already calculated textual hashes.
+
+Hash calculation from files or bytes is an infrastructure concern. The selected scope only normalizes and validates hash strings that a future adapter may provide.
+
+### Decision
+
+Implemented pure Domain helpers:
+
+```python
+normalize_hash(value: str) -> str
+is_empty_hash(value: str) -> bool
+is_valid_sha256(value: str) -> bool
+```
+
+The contract remains strict on `str` inputs. The helpers do not accept `None`, do not open files, do not read bytes, do not calculate hashes from content, and do not call external reputation services.
+
+`is_valid_sha256` normalizes surrounding whitespace and casing before validating SHA-256 string format.
+
+### Files changed
+
+- `tests/unit/domain/services/hash_analysis/test_hashes.py`
+- `src/domain/services/hash_analysis/hashes.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.services.hash_analysis'
+GREEN    -> hash normalization tests passed
+RED      -> ImportError: cannot import name 'is_empty_hash'
+GREEN    -> empty hash detection tests passed
+RED      -> ImportError: cannot import name 'is_valid_sha256'
+GREEN    -> SHA-256 validation tests passed
+REFACTOR -> not needed
+VERIFY   -> hash analysis tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/hash_analysis/test_hashes.py
+```
+
+Result:
+
+```text
+15 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+390 passed
+```
+
+### Next step
+
+Decide whether hash string validation needs an Application use case now, or defer Application until an infrastructure adapter can provide calculated attachment hashes.
