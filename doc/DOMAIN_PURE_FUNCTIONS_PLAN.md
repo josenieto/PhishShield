@@ -82,16 +82,16 @@ For each functional group:
 
 | Group | Status | Priority |
 |---|---:|---:|
-| Text normalization | Pending | High |
-| Homoglyphs / suspicious Unicode | Pending | High |
-| Domain analysis | Pending | High |
-| URL analysis | Pending | High |
-| Attachment analysis | Pending | High |
-| Authentication result analysis | Pending | Medium |
-| Risk scoring | Pending | High |
-| Social engineering heuristics | Pending | Medium |
-| Finding analysis | Pending | Medium |
-| Hash analysis | Pending | Medium |
+| Text normalization | Done | High |
+| Homoglyphs / suspicious Unicode | Done | High |
+| Domain analysis | Done | High |
+| URL analysis | Done | High |
+| Attachment analysis | Done | High |
+| Authentication result analysis | Done | Medium |
+| Risk scoring | Done | High |
+| Social engineering heuristics | Done | Medium |
+| Finding analysis | Done | Medium |
+| Hash analysis | Done | Medium |
 
 ---
 
@@ -1223,13 +1223,13 @@ src/domain/services/finding_analysis/
 
 ## Candidate functions
 
-### `deduplicate_findings`
+### `deduplicate_finding_codes`
 
 ```python
-deduplicate_findings(findings: list[str]) -> list[str]
+deduplicate_finding_codes(finding_codes: list[str]) -> list[str]
 ```
 
-Removes duplicate findings.
+Removes duplicate finding codes while preserving first occurrence order.
 
 Suggested tests:
 
@@ -1243,10 +1243,22 @@ Suggested tests:
 ### `sort_findings_by_severity`
 
 ```python
-sort_findings_by_severity(findings: list[dict]) -> list[dict]
+sort_findings_by_severity(findings: list[Finding]) -> list[Finding]
 ```
 
 Sorts findings by severity.
+
+Current severity order:
+
+```text
+CRITICAL
+HIGH
+MEDIUM
+LOW
+UNKNOWN
+```
+
+Unrecognized severities are treated as `UNKNOWN`, and sorting preserves input order for findings with the same severity.
 
 Suggested tests:
 
@@ -1261,9 +1273,9 @@ Suggested tests:
 
 ```python
 filter_findings_by_category(
-    findings: list[dict],
+    findings: list[Finding],
     category: str,
-) -> list[dict]
+) -> list[Finding]
 ```
 
 Filters findings by category.
@@ -1280,10 +1292,30 @@ Suggested tests:
 ### `count_findings_by_category`
 
 ```python
-count_findings_by_category(findings: list[dict]) -> dict[str, int]
+count_findings_by_category(findings: list[Finding]) -> dict[str, int]
 ```
 
 Counts findings by category.
+
+## Current value object
+
+Finding analysis uses the immutable `Finding` value object instead of dict-based findings.
+
+Suggested location:
+
+```text
+src/domain/value_objects/finding.py
+```
+
+Current shape:
+
+```python
+Finding(
+    code: str,
+    category: str,
+    severity: str,
+)
+```
 
 Suggested tests:
 
@@ -1319,6 +1351,8 @@ Pure functions for validating and normalizing already calculated hashes.
 
 Calculating a hash by reading a file does not belong in the domain.  
 Validating a hash received as a string may belong in the domain.
+
+The implemented contract is strict on `str` inputs. The hash helpers do not accept `None`; callers must provide textual hash values.
 
 ## Suggested location
 
@@ -1381,7 +1415,7 @@ Suggested tests:
 
 - empty string;
 - spaces;
-- `None` if the contract decides to accept it;
+- whitespace-only strings;
 - valid hash.
 
 ## Outside the domain
@@ -1391,6 +1425,7 @@ This group must not:
 - open files;
 - read bytes;
 - calculate SHA-256 from content;
+- calculate hashes from attachments or filesystem paths;
 - query VirusTotal or other APIs.
 
 ## Possible next layer
@@ -1420,6 +1455,8 @@ Suggested iteration order:
 9. hash_analysis
 10. finding_analysis
 ```
+
+The first pure Domain iteration for these listed groups is complete. Future work should decide whether to move upward to Application composition, define ports for IO boundaries, or add new pure groups.
 
 Reason:
 
