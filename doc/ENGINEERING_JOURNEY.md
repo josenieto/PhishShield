@@ -2262,3 +2262,105 @@ Result:
 ### Next step
 
 Decide whether to start higher-level analysis composition across existing use cases or continue with another pure Domain group such as `Finding analysis` or `Hash analysis`.
+
+---
+
+## 2026-06-29 - Finding analysis domain helpers
+
+Type: TDD  
+Layer: Domain  
+Status: Done
+
+### Context
+
+The project accumulated multiple Application use cases that return finding codes. Before introducing report composition or API output models, the project needed a small set of pure helpers for composing, filtering, counting, and ordering findings.
+
+During this work, the design moved away from dictionary-based findings and introduced an immutable `Finding` value object for category and severity operations.
+
+### Decision
+
+Implemented pure Domain finding analysis helpers:
+
+```python
+deduplicate_finding_codes(finding_codes: list[str]) -> list[str]
+filter_findings_by_category(findings: list[Finding], category: str) -> list[Finding]
+count_findings_by_category(findings: list[Finding]) -> dict[str, int]
+sort_findings_by_severity(findings: list[Finding]) -> list[Finding]
+```
+
+The `Finding` value object is immutable and carries:
+
+```python
+code: str
+category: str
+severity: str
+```
+
+Severity sorting uses this explicit order:
+
+```text
+CRITICAL
+HIGH
+MEDIUM
+LOW
+UNKNOWN
+```
+
+Sorting is stable, so findings with the same severity preserve their original order. Unrecognized severities are treated as `UNKNOWN`.
+
+No Application report composition, API schema, finding registry, database access, or infrastructure was introduced.
+
+### Files changed
+
+- `tests/unit/domain/value_objects/test_finding.py`
+- `src/domain/value_objects/finding.py`
+- `tests/unit/domain/services/finding_analysis/test_findings.py`
+- `src/domain/services/finding_analysis/findings.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'domain.value_objects.finding'
+GREEN    -> Finding value object tests passed
+RED      -> ModuleNotFoundError: No module named 'domain.services.finding_analysis'
+GREEN    -> finding code deduplication tests passed
+REFACTOR -> renamed helper to deduplicate_finding_codes
+RED      -> ImportError: cannot import name 'filter_findings_by_category'
+GREEN    -> finding category filtering tests passed
+RED      -> ImportError: cannot import name 'count_findings_by_category'
+GREEN    -> finding category counting tests passed
+RED      -> ImportError: cannot import name 'sort_findings_by_severity'
+GREEN    -> finding severity sorting tests passed
+VERIFY   -> finding analysis tests and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/domain/services/finding_analysis/test_findings.py tests/unit/domain/value_objects/test_finding.py
+```
+
+Result:
+
+```text
+29 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+375 passed
+```
+
+### Next step
+
+Decide whether to add an Application-level report composition use case or continue with another pure Domain group such as `Hash analysis`.
