@@ -61,3 +61,14 @@ def sort_findings_by_severity(findings: list[Finding]) -> list[Finding]:
             _SEVERITY_ORDER[FINDING_SEVERITY_UNKNOWN],
         ),
     )
+
+
+def get_highest_finding_severity(findings: list[Finding]) -> str:
+    """Return the highest recognized severity in a list of findings."""
+    sorted_findings = sort_findings_by_severity(findings)
+
+    for finding in sorted_findings:
+        if finding.severity in _SEVERITY_ORDER:
+            return finding.severity
+
+    return FINDING_SEVERITY_UNKNOWN
