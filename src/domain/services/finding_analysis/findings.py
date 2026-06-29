@@ -1,4 +1,20 @@
-from domain.value_objects.finding import Finding
+from domain.value_objects.finding import (
+    FINDING_SEVERITY_CRITICAL,
+    FINDING_SEVERITY_HIGH,
+    FINDING_SEVERITY_LOW,
+    FINDING_SEVERITY_MEDIUM,
+    FINDING_SEVERITY_UNKNOWN,
+    Finding,
+)
+
+
+_SEVERITY_ORDER = {
+    FINDING_SEVERITY_CRITICAL: 0,
+    FINDING_SEVERITY_HIGH: 1,
+    FINDING_SEVERITY_MEDIUM: 2,
+    FINDING_SEVERITY_LOW: 3,
+    FINDING_SEVERITY_UNKNOWN: 4,
+}
 
 
 def deduplicate_finding_codes(finding_codes: list[str]) -> list[str]:
@@ -34,3 +50,14 @@ def count_findings_by_category(findings: list[Finding]) -> dict[str, int]:
         category_counts[finding.category] = category_counts.get(finding.category, 0) + 1
 
     return category_counts
+
+
+def sort_findings_by_severity(findings: list[Finding]) -> list[Finding]:
+    """Return findings sorted from highest to lowest severity."""
+    return sorted(
+        findings,
+        key=lambda finding: _SEVERITY_ORDER.get(
+            finding.severity,
+            _SEVERITY_ORDER[FINDING_SEVERITY_UNKNOWN],
+        ),
+    )
