@@ -145,6 +145,38 @@ def test_should_build_known_authentication_finding_from_code() -> None:
     )
 
 
+def test_should_build_spf_failed_authentication_finding_from_code() -> None:
+    assert build_finding_from_code("AUTHENTICATION_SPF_FAILED") == Finding(
+        code="AUTHENTICATION_SPF_FAILED",
+        category=FINDING_CATEGORY_AUTHENTICATION,
+        severity=FINDING_SEVERITY_HIGH,
+    )
+
+
+def test_should_build_dkim_failed_authentication_finding_from_code() -> None:
+    assert build_finding_from_code("AUTHENTICATION_DKIM_FAILED") == Finding(
+        code="AUTHENTICATION_DKIM_FAILED",
+        category=FINDING_CATEGORY_AUTHENTICATION,
+        severity=FINDING_SEVERITY_HIGH,
+    )
+
+
+def test_should_build_multiple_failures_authentication_finding_from_code() -> None:
+    assert build_finding_from_code("AUTHENTICATION_HAS_MULTIPLE_FAILURES") == Finding(
+        code="AUTHENTICATION_HAS_MULTIPLE_FAILURES",
+        category=FINDING_CATEGORY_AUTHENTICATION,
+        severity=FINDING_SEVERITY_CRITICAL,
+    )
+
+
+def test_should_build_unknown_results_authentication_finding_from_code() -> None:
+    assert build_finding_from_code("AUTHENTICATION_RESULTS_UNKNOWN") == Finding(
+        code="AUTHENTICATION_RESULTS_UNKNOWN",
+        category=FINDING_CATEGORY_AUTHENTICATION,
+        severity=FINDING_SEVERITY_MEDIUM,
+    )
+
+
 def test_should_build_known_social_engineering_finding_from_code() -> None:
     assert build_finding_from_code(
         "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS"
@@ -323,5 +355,43 @@ def test_should_build_attachment_findings_from_codes_preserving_order() -> None:
             code="ATTACHMENT_HAS_SUSPICIOUS_FILENAME_CHARS",
             category=FINDING_CATEGORY_ATTACHMENT,
             severity=FINDING_SEVERITY_HIGH,
+        ),
+    ]
+
+
+def test_should_build_authentication_findings_from_codes_preserving_order() -> None:
+    assert build_findings_from_codes(
+        [
+            "AUTHENTICATION_SPF_FAILED",
+            "AUTHENTICATION_DKIM_FAILED",
+            "AUTHENTICATION_DMARC_FAILED",
+            "AUTHENTICATION_HAS_MULTIPLE_FAILURES",
+            "AUTHENTICATION_RESULTS_UNKNOWN",
+        ]
+    ) == [
+        Finding(
+            code="AUTHENTICATION_SPF_FAILED",
+            category=FINDING_CATEGORY_AUTHENTICATION,
+            severity=FINDING_SEVERITY_HIGH,
+        ),
+        Finding(
+            code="AUTHENTICATION_DKIM_FAILED",
+            category=FINDING_CATEGORY_AUTHENTICATION,
+            severity=FINDING_SEVERITY_HIGH,
+        ),
+        Finding(
+            code="AUTHENTICATION_DMARC_FAILED",
+            category=FINDING_CATEGORY_AUTHENTICATION,
+            severity=FINDING_SEVERITY_CRITICAL,
+        ),
+        Finding(
+            code="AUTHENTICATION_HAS_MULTIPLE_FAILURES",
+            category=FINDING_CATEGORY_AUTHENTICATION,
+            severity=FINDING_SEVERITY_CRITICAL,
+        ),
+        Finding(
+            code="AUTHENTICATION_RESULTS_UNKNOWN",
+            category=FINDING_CATEGORY_AUTHENTICATION,
+            severity=FINDING_SEVERITY_MEDIUM,
         ),
     ]
