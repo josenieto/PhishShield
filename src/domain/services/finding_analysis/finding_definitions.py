@@ -7,6 +7,7 @@ from domain.value_objects.finding import (
     FINDING_CATEGORY_URL,
     FINDING_SEVERITY_CRITICAL,
     FINDING_SEVERITY_HIGH,
+    FINDING_SEVERITY_MEDIUM,
     FINDING_SEVERITY_UNKNOWN,
     Finding,
 )
@@ -22,6 +23,26 @@ _FINDING_DEFINITIONS = {
         code="URL_HAS_EMBEDDED_CREDENTIALS",
         category=FINDING_CATEGORY_URL,
         severity=FINDING_SEVERITY_HIGH,
+    ),
+    "URL_SCHEME_NOT_ALLOWED": Finding(
+        code="URL_SCHEME_NOT_ALLOWED",
+        category=FINDING_CATEGORY_URL,
+        severity=FINDING_SEVERITY_MEDIUM,
+    ),
+    "URL_HAS_SUSPICIOUS_SCHEME": Finding(
+        code="URL_HAS_SUSPICIOUS_SCHEME",
+        category=FINDING_CATEGORY_URL,
+        severity=FINDING_SEVERITY_HIGH,
+    ),
+    "URL_HAS_SUSPICIOUS_QUERY_DENSITY": Finding(
+        code="URL_HAS_SUSPICIOUS_QUERY_DENSITY",
+        category=FINDING_CATEGORY_URL,
+        severity=FINDING_SEVERITY_MEDIUM,
+    ),
+    "URL_USES_KNOWN_SHORTENER_DOMAIN": Finding(
+        code="URL_USES_KNOWN_SHORTENER_DOMAIN",
+        category=FINDING_CATEGORY_URL,
+        severity=FINDING_SEVERITY_MEDIUM,
     ),
     "ATTACHMENT_HAS_EXECUTABLE_EXTENSION": Finding(
         code="ATTACHMENT_HAS_EXECUTABLE_EXTENSION",
