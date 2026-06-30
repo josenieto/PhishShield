@@ -187,6 +187,24 @@ def test_should_build_known_social_engineering_finding_from_code() -> None:
     )
 
 
+def test_should_build_urgency_social_engineering_finding_from_code() -> None:
+    assert build_finding_from_code("SOCIAL_ENGINEERING_HAS_URGENCY_TERMS") == Finding(
+        code="SOCIAL_ENGINEERING_HAS_URGENCY_TERMS",
+        category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
+        severity=FINDING_SEVERITY_MEDIUM,
+    )
+
+
+def test_should_build_financial_pressure_social_engineering_finding_from_code() -> None:
+    assert build_finding_from_code(
+        "SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS"
+    ) == Finding(
+        code="SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS",
+        category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
+        severity=FINDING_SEVERITY_MEDIUM,
+    )
+
+
 def test_should_build_unknown_finding_from_unmapped_code() -> None:
     assert build_finding_from_code("UNKNOWN_FINDING_CODE") == Finding(
         code="UNKNOWN_FINDING_CODE",
@@ -393,5 +411,31 @@ def test_should_build_authentication_findings_from_codes_preserving_order() -> N
             code="AUTHENTICATION_RESULTS_UNKNOWN",
             category=FINDING_CATEGORY_AUTHENTICATION,
             severity=FINDING_SEVERITY_MEDIUM,
+        ),
+    ]
+
+
+def test_should_build_social_engineering_findings_from_codes_preserving_order() -> None:
+    assert build_findings_from_codes(
+        [
+            "SOCIAL_ENGINEERING_HAS_URGENCY_TERMS",
+            "SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS",
+            "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS",
+        ]
+    ) == [
+        Finding(
+            code="SOCIAL_ENGINEERING_HAS_URGENCY_TERMS",
+            category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
+            severity=FINDING_SEVERITY_MEDIUM,
+        ),
+        Finding(
+            code="SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS",
+            category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
+            severity=FINDING_SEVERITY_MEDIUM,
+        ),
+        Finding(
+            code="SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS",
+            category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
+            severity=FINDING_SEVERITY_HIGH,
         ),
     ]
