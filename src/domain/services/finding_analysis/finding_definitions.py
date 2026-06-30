@@ -13,122 +13,133 @@ from domain.value_objects.finding import (
 )
 
 
+def _finding(code: str, category: str, severity: str) -> Finding:
+    return Finding(
+        code=code,
+        category=category,
+        severity=severity,
+    )
+
+
 _FINDING_DEFINITIONS = {
-    "DOMAIN_CONTAINS_PUNYCODE": Finding(
-        code="DOMAIN_CONTAINS_PUNYCODE",
-        category=FINDING_CATEGORY_DOMAIN,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "DOMAIN_HAS_MIXED_SCRIPTS": Finding(
-        code="DOMAIN_HAS_MIXED_SCRIPTS",
-        category=FINDING_CATEGORY_DOMAIN,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "DOMAIN_HAS_CONFUSABLE_CHARACTERS": Finding(
-        code="DOMAIN_HAS_CONFUSABLE_CHARACTERS",
-        category=FINDING_CATEGORY_DOMAIN,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "DOMAIN_HAS_SUSPICIOUS_DEPTH": Finding(
-        code="DOMAIN_HAS_SUSPICIOUS_DEPTH",
-        category=FINDING_CATEGORY_DOMAIN,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "DOMAIN_LOOKS_LIKE_IP_ADDRESS": Finding(
-        code="DOMAIN_LOOKS_LIKE_IP_ADDRESS",
-        category=FINDING_CATEGORY_DOMAIN,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "DOMAIN_HAS_SUSPICIOUS_TLD": Finding(
-        code="DOMAIN_HAS_SUSPICIOUS_TLD",
-        category=FINDING_CATEGORY_DOMAIN,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "URL_HAS_EMBEDDED_CREDENTIALS": Finding(
-        code="URL_HAS_EMBEDDED_CREDENTIALS",
-        category=FINDING_CATEGORY_URL,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "URL_SCHEME_NOT_ALLOWED": Finding(
-        code="URL_SCHEME_NOT_ALLOWED",
-        category=FINDING_CATEGORY_URL,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "URL_HAS_SUSPICIOUS_SCHEME": Finding(
-        code="URL_HAS_SUSPICIOUS_SCHEME",
-        category=FINDING_CATEGORY_URL,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "URL_HAS_SUSPICIOUS_QUERY_DENSITY": Finding(
-        code="URL_HAS_SUSPICIOUS_QUERY_DENSITY",
-        category=FINDING_CATEGORY_URL,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "URL_USES_KNOWN_SHORTENER_DOMAIN": Finding(
-        code="URL_USES_KNOWN_SHORTENER_DOMAIN",
-        category=FINDING_CATEGORY_URL,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "ATTACHMENT_HAS_EXECUTABLE_EXTENSION": Finding(
-        code="ATTACHMENT_HAS_EXECUTABLE_EXTENSION",
-        category=FINDING_CATEGORY_ATTACHMENT,
-        severity=FINDING_SEVERITY_CRITICAL,
-    ),
-    "ATTACHMENT_HAS_OFFICE_DOCUMENT_EXTENSION": Finding(
-        code="ATTACHMENT_HAS_OFFICE_DOCUMENT_EXTENSION",
-        category=FINDING_CATEGORY_ATTACHMENT,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "ATTACHMENT_HAS_DOUBLE_EXTENSION": Finding(
-        code="ATTACHMENT_HAS_DOUBLE_EXTENSION",
-        category=FINDING_CATEGORY_ATTACHMENT,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "ATTACHMENT_HAS_SUSPICIOUS_FILENAME_CHARS": Finding(
-        code="ATTACHMENT_HAS_SUSPICIOUS_FILENAME_CHARS",
-        category=FINDING_CATEGORY_ATTACHMENT,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "AUTHENTICATION_DMARC_FAILED": Finding(
-        code="AUTHENTICATION_DMARC_FAILED",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_CRITICAL,
-    ),
-    "AUTHENTICATION_SPF_FAILED": Finding(
-        code="AUTHENTICATION_SPF_FAILED",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "AUTHENTICATION_DKIM_FAILED": Finding(
-        code="AUTHENTICATION_DKIM_FAILED",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "AUTHENTICATION_HAS_MULTIPLE_FAILURES": Finding(
-        code="AUTHENTICATION_HAS_MULTIPLE_FAILURES",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_CRITICAL,
-    ),
-    "AUTHENTICATION_RESULTS_UNKNOWN": Finding(
-        code="AUTHENTICATION_RESULTS_UNKNOWN",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS": Finding(
-        code="SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS",
-        category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
-        severity=FINDING_SEVERITY_HIGH,
-    ),
-    "SOCIAL_ENGINEERING_HAS_URGENCY_TERMS": Finding(
-        code="SOCIAL_ENGINEERING_HAS_URGENCY_TERMS",
-        category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
-    "SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS": Finding(
-        code="SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS",
-        category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
-        severity=FINDING_SEVERITY_MEDIUM,
-    ),
+    finding.code: finding
+    for finding in [
+        _finding(
+            "DOMAIN_CONTAINS_PUNYCODE",
+            FINDING_CATEGORY_DOMAIN,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "DOMAIN_HAS_MIXED_SCRIPTS",
+            FINDING_CATEGORY_DOMAIN,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "DOMAIN_HAS_CONFUSABLE_CHARACTERS",
+            FINDING_CATEGORY_DOMAIN,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "DOMAIN_HAS_SUSPICIOUS_DEPTH",
+            FINDING_CATEGORY_DOMAIN,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "DOMAIN_LOOKS_LIKE_IP_ADDRESS",
+            FINDING_CATEGORY_DOMAIN,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "DOMAIN_HAS_SUSPICIOUS_TLD",
+            FINDING_CATEGORY_DOMAIN,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "URL_HAS_EMBEDDED_CREDENTIALS",
+            FINDING_CATEGORY_URL,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "URL_SCHEME_NOT_ALLOWED",
+            FINDING_CATEGORY_URL,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "URL_HAS_SUSPICIOUS_SCHEME",
+            FINDING_CATEGORY_URL,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "URL_HAS_SUSPICIOUS_QUERY_DENSITY",
+            FINDING_CATEGORY_URL,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "URL_USES_KNOWN_SHORTENER_DOMAIN",
+            FINDING_CATEGORY_URL,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "ATTACHMENT_HAS_EXECUTABLE_EXTENSION",
+            FINDING_CATEGORY_ATTACHMENT,
+            FINDING_SEVERITY_CRITICAL,
+        ),
+        _finding(
+            "ATTACHMENT_HAS_OFFICE_DOCUMENT_EXTENSION",
+            FINDING_CATEGORY_ATTACHMENT,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "ATTACHMENT_HAS_DOUBLE_EXTENSION",
+            FINDING_CATEGORY_ATTACHMENT,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "ATTACHMENT_HAS_SUSPICIOUS_FILENAME_CHARS",
+            FINDING_CATEGORY_ATTACHMENT,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "AUTHENTICATION_DMARC_FAILED",
+            FINDING_CATEGORY_AUTHENTICATION,
+            FINDING_SEVERITY_CRITICAL,
+        ),
+        _finding(
+            "AUTHENTICATION_SPF_FAILED",
+            FINDING_CATEGORY_AUTHENTICATION,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "AUTHENTICATION_DKIM_FAILED",
+            FINDING_CATEGORY_AUTHENTICATION,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "AUTHENTICATION_HAS_MULTIPLE_FAILURES",
+            FINDING_CATEGORY_AUTHENTICATION,
+            FINDING_SEVERITY_CRITICAL,
+        ),
+        _finding(
+            "AUTHENTICATION_RESULTS_UNKNOWN",
+            FINDING_CATEGORY_AUTHENTICATION,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS",
+            FINDING_CATEGORY_SOCIAL_ENGINEERING,
+            FINDING_SEVERITY_HIGH,
+        ),
+        _finding(
+            "SOCIAL_ENGINEERING_HAS_URGENCY_TERMS",
+            FINDING_CATEGORY_SOCIAL_ENGINEERING,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+        _finding(
+            "SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS",
+            FINDING_CATEGORY_SOCIAL_ENGINEERING,
+            FINDING_SEVERITY_MEDIUM,
+        ),
+    ]
 }
 
 
