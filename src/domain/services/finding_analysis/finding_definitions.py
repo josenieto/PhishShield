@@ -19,6 +19,31 @@ _FINDING_DEFINITIONS = {
         category=FINDING_CATEGORY_DOMAIN,
         severity=FINDING_SEVERITY_HIGH,
     ),
+    "DOMAIN_HAS_MIXED_SCRIPTS": Finding(
+        code="DOMAIN_HAS_MIXED_SCRIPTS",
+        category=FINDING_CATEGORY_DOMAIN,
+        severity=FINDING_SEVERITY_HIGH,
+    ),
+    "DOMAIN_HAS_CONFUSABLE_CHARACTERS": Finding(
+        code="DOMAIN_HAS_CONFUSABLE_CHARACTERS",
+        category=FINDING_CATEGORY_DOMAIN,
+        severity=FINDING_SEVERITY_HIGH,
+    ),
+    "DOMAIN_HAS_SUSPICIOUS_DEPTH": Finding(
+        code="DOMAIN_HAS_SUSPICIOUS_DEPTH",
+        category=FINDING_CATEGORY_DOMAIN,
+        severity=FINDING_SEVERITY_MEDIUM,
+    ),
+    "DOMAIN_LOOKS_LIKE_IP_ADDRESS": Finding(
+        code="DOMAIN_LOOKS_LIKE_IP_ADDRESS",
+        category=FINDING_CATEGORY_DOMAIN,
+        severity=FINDING_SEVERITY_MEDIUM,
+    ),
+    "DOMAIN_HAS_SUSPICIOUS_TLD": Finding(
+        code="DOMAIN_HAS_SUSPICIOUS_TLD",
+        category=FINDING_CATEGORY_DOMAIN,
+        severity=FINDING_SEVERITY_MEDIUM,
+    ),
     "URL_HAS_EMBEDDED_CREDENTIALS": Finding(
         code="URL_HAS_EMBEDDED_CREDENTIALS",
         category=FINDING_CATEGORY_URL,
