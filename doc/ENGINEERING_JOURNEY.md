@@ -2612,6 +2612,7 @@ Finding codes are flattened in stable technical module order:
 domain
 urls in input order
 attachments in input order
+authentication
 ```
 
 Social engineering text analysis, risk scoring, finding summaries, ports, infrastructure adapters, and `.eml` parsing remain outside this step.
@@ -2660,3 +2661,72 @@ Result:
 ### Next step
 
 Decide whether to extend extracted email analysis with social engineering text indicators or add finding code aggregation and summary to the extracted email technical analysis result.
+
+---
+
+## 2026-06-29 - Extracted email text indicator analysis
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project already had `ExtractedEmailContent` and technical indicator analysis for extracted email data. The next step was to compose social engineering analysis over already extracted subject and body text without introducing parsing, IO, ports, adapters, AI, or infrastructure.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+AnalyzeExtractedEmailTextIndicatorsUseCase
+```
+
+The use case receives an `AnalyzeExtractedEmailTextIndicatorsCommand`, joins `subject` and `body_text` with a newline when both are present, runs `AnalyzeSocialEngineeringIndicatorsUseCase`, and returns an `ExtractedEmailTextIndicatorsAnalysis` with analyzed text, social engineering analysis, and finding codes.
+
+No risk scoring, finding summaries, full email analysis composition, ports, adapters, `.eml` parsing, or infrastructure were introduced.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_extracted_email_text_indicators.py`
+- `src/application/use_cases/analyze_extracted_email_text_indicators.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_extracted_email_text_indicators'
+GREEN    -> extracted email text indicator tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_extracted_email_text_indicators.py
+```
+
+Result:
+
+```text
+6 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+459 passed
+```
+
+### Next step
+
+Compose technical and text extracted email analyses into a full extracted email analysis use case, then add summary and risk scoring in later focused steps.
