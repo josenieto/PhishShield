@@ -2730,3 +2730,74 @@ Result:
 ### Next step
 
 Compose technical and text extracted email analyses into a full extracted email analysis use case, then add summary and risk scoring in later focused steps.
+
+---
+
+## 2026-06-29 - Extracted email analysis composition
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project had separate Application use cases for extracted email technical indicators and extracted email text indicators. The next step was to compose those analyses into a full extracted email analysis workflow while staying inside Application and avoiding IO, ports, adapters, `.eml` parsing, API schemas, and infrastructure.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+AnalyzeExtractedEmailUseCase
+```
+
+The use case receives an `AnalyzeExtractedEmailCommand`, runs technical analysis, runs text analysis, combines finding codes, deduplicates finding codes for reporting and risk scoring, builds a finding code summary, and calculates risk score from the unique finding codes.
+
+Raw `finding_codes` preserve duplicated evidence. `unique_finding_codes` are used for summary and risk score to avoid double-counting repeated findings.
+
+No IO boundary, ports, adapters, `.eml` parser, FastAPI endpoint, report renderer, or infrastructure was introduced.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_extracted_email.py`
+- `src/application/use_cases/analyze_extracted_email.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_extracted_email'
+GREEN    -> extracted email analysis composition tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_extracted_email.py
+```
+
+Result:
+
+```text
+5 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+464 passed
+```
+
+### Next step
+
+Decide whether to introduce the first Application port for extracting `ExtractedEmailContent` from email bytes, or first add a small refactor around Application use case composition dependencies.
