@@ -2583,3 +2583,80 @@ Result:
 ### Next step
 
 Decide whether to expand the finding definition registry incrementally or start designing the first IO boundary and port for email or attachment ingestion.
+
+---
+
+## 2026-06-29 - Extracted email technical indicator analysis
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project introduced `ExtractedEmailContent` as an immutable Application model for email data that has already been extracted by a future adapter. The next step was to compose existing technical indicator use cases over that extracted content without introducing `.eml` parsing, filesystem access, ports, adapters, or infrastructure.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+AnalyzeExtractedEmailTechnicalIndicatorsUseCase
+```
+
+The use case receives an `AnalyzeExtractedEmailTechnicalIndicatorsCommand`, analyzes the extracted sender domain, URLs, attachment filenames, and SPF/DKIM/DMARC results, and returns an `ExtractedEmailTechnicalIndicatorsAnalysis` with module analyses and flattened finding codes.
+
+Finding codes are flattened in stable technical module order:
+
+```text
+domain
+urls in input order
+attachments in input order
+```
+
+Social engineering text analysis, risk scoring, finding summaries, ports, infrastructure adapters, and `.eml` parsing remain outside this step.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_extracted_email_technical_indicators.py`
+- `src/application/use_cases/analyze_extracted_email_technical_indicators.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_extracted_email_technical_indicators'
+GREEN    -> extracted email technical indicator tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_extracted_email_technical_indicators.py
+```
+
+Result:
+
+```text
+7 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+453 passed
+```
+
+### Next step
+
+Decide whether to extend extracted email analysis with social engineering text indicators or add finding code aggregation and summary to the extracted email technical analysis result.
