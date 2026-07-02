@@ -120,6 +120,23 @@
         "Keeps URL visiting, redirects, DNS, and network access out of Domain and the pure use case.",
         "Avoids creating ports or adapters unless an external boundary is crossed."
       ]
+    },
+    {
+      "id": 8,
+      "prompt": "We need to extract URLs from email body text in PythonEmailContentExtractorAdapter. Should we add a pure Domain helper extract_urls_from_text and call it from the adapter?",
+      "expected_output": "The answer should reject putting email-body URL extraction in Domain. It should explain that extracting URLs from external email content is adapter/extraction responsibility, while Domain URL services analyze already extracted URLs. It should recommend keeping URL extraction in Infrastructure or behind an Application extraction port, and preserve Domain purity.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-architecture/SKILL.md"
+      ],
+      "assertions": [
+        "Rejects calling a Domain helper from an Infrastructure adapter for extracting URLs from email body text.",
+        "Distinguishes extraction from external formats from analysis of already extracted values.",
+        "Places email body URL extraction in Infrastructure or behind an Application extraction port.",
+        "Keeps Domain URL services focused on analyzing already extracted URLs.",
+        "Mentions that dependency direction alone is not enough; responsibility boundaries also matter."
+      ]
     }
   ]
 }
