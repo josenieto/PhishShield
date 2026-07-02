@@ -2868,3 +2868,74 @@ Result:
 ### Next step
 
 Decide whether to add a thin Application use case that accepts raw email bytes through `EmailContentExtractorPort` and delegates to `AnalyzeExtractedEmailUseCase`, or incrementally improve the email parser adapter with URL extraction from plain text.
+
+---
+
+## 2026-06-29 - Raw email analysis application use case
+
+Type: TDD  
+Layer: Application  
+Status: Done
+
+### Context
+
+The project introduced `EmailContentExtractorPort` and a first Infrastructure adapter for converting raw email bytes into `ExtractedEmailContent`. The next step was to add an Application use case that consumes raw email bytes through the port and delegates the extracted content to the existing extracted email analysis composition.
+
+### Decision
+
+Introduced the Application use case:
+
+```python
+AnalyzeRawEmailUseCase
+```
+
+The use case receives an `AnalyzeRawEmailCommand`, uses an injected `EmailContentExtractorPort` to obtain `ExtractedEmailContent`, and delegates to `AnalyzeExtractedEmailUseCase` for the actual analysis.
+
+The use case depends on the Application port contract and does not instantiate infrastructure adapters directly.
+
+No FastAPI endpoint, filesystem access, upload handling, API schema, or infrastructure wiring was introduced.
+
+### Files changed
+
+- `tests/unit/application/test_analyze_raw_email.py`
+- `src/application/use_cases/analyze_raw_email.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'application.use_cases.analyze_raw_email'
+GREEN    -> raw email analysis use case tests passed
+REFACTOR -> not needed
+VERIFY   -> application test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/test_analyze_raw_email.py
+```
+
+Result:
+
+```text
+3 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+473 passed
+```
+
+### Next step
+
+Add an integration-style test that wires `AnalyzeRawEmailUseCase` with `PythonEmailContentExtractorAdapter`, or introduce the first FastAPI endpoint after defining API schemas.
