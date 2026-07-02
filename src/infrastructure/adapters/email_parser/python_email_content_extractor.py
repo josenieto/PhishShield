@@ -10,6 +10,7 @@ from application.models.extracted_email import ExtractedEmailContent
 
 
 _HTTP_URL_PATTERN = re.compile(r"https?://\S+", re.IGNORECASE)
+_AUTHENTICATION_RESULT_PATTERN_TEMPLATE = r"\b{mechanism}=([a-zA-Z]+)"
 _TRAILING_URL_PUNCTUATION = ".,;:!?) ]"
 
 
@@ -19,6 +20,7 @@ class PythonEmailContentExtractorAdapter:
         message = BytesParser(policy=policy.default).parsebytes(email_bytes)
 
         body_text = _extract_plain_text_body(message)
+        spf_result, dkim_result, dmarc_result = _extract_authentication_results(message)
 
         return ExtractedEmailContent(
             sender_domain=_extract_sender_domain(message),
@@ -26,9 +28,9 @@ class PythonEmailContentExtractorAdapter:
             attachment_filenames=_extract_attachment_filenames(message),
             subject=_decode_header_value(message.get("Subject", "")),
             body_text=body_text,
-            spf_result="unknown",
-            dkim_result="unknown",
-            dmarc_result="unknown",
+            spf_result=spf_result,
+            dkim_result=dkim_result,
+            dmarc_result=dmarc_result,
         )
 
 
@@ -78,6 +80,32 @@ def _extract_urls_from_text(text: str) -> tuple[str, ...]:
         match.group(0).rstrip(_TRAILING_URL_PUNCTUATION)
         for match in _HTTP_URL_PATTERN.finditer(text)
     )
+
+
+def _extract_authentication_results(message: Message) -> tuple[str, str, str]:
+    authentication_results = "\n".join(
+        str(header_value)
+        for header_value in message.get_all("Authentication-Results", [])
+    )
+
+    return (
+        _extract_authentication_result(authentication_results, "spf"),
+        _extract_authentication_result(authentication_results, "dkim"),
+        _extract_authentication_result(authentication_results, "dmarc"),
+    )
+
+
+def _extract_authentication_result(header_value: str, mechanism: str) -> str:
+    result_match = re.search(
+        _AUTHENTICATION_RESULT_PATTERN_TEMPLATE.format(mechanism=mechanism),
+        header_value,
+        re.IGNORECASE,
+    )
+
+    if result_match is None:
+        return "unknown"
+
+    return result_match.group(1).lower()
 
 
 def _is_plain_text_body_part(part: Message) -> bool:
