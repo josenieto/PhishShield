@@ -1,3 +1,5 @@
+import re
+
 from email import policy
 from email.header import decode_header, make_header
 from email.message import EmailMessage, Message
@@ -7,17 +9,23 @@ from email.utils import parseaddr
 from application.models.extracted_email import ExtractedEmailContent
 
 
+_HTTP_URL_PATTERN = re.compile(r"https?://\S+", re.IGNORECASE)
+_TRAILING_URL_PUNCTUATION = ".,;:!?) ]"
+
+
 class PythonEmailContentExtractorAdapter:
     def extract(self, email_bytes: bytes) -> ExtractedEmailContent:
         """Extract normalized email content using Python's standard email parser."""
         message = BytesParser(policy=policy.default).parsebytes(email_bytes)
 
+        body_text = _extract_plain_text_body(message)
+
         return ExtractedEmailContent(
             sender_domain=_extract_sender_domain(message),
-            urls=(),
+            urls=_extract_urls_from_text(body_text),
             attachment_filenames=_extract_attachment_filenames(message),
             subject=_decode_header_value(message.get("Subject", "")),
-            body_text=_extract_plain_text_body(message),
+            body_text=body_text,
             spf_result="unknown",
             dkim_result="unknown",
             dmarc_result="unknown",
@@ -63,6 +71,13 @@ def _extract_plain_text_body(message: Message) -> str:
         return _decode_text_part(message)
 
     return ""
+
+
+def _extract_urls_from_text(text: str) -> tuple[str, ...]:
+    return tuple(
+        match.group(0).rstrip(_TRAILING_URL_PUNCTUATION)
+        for match in _HTTP_URL_PATTERN.finditer(text)
+    )
 
 
 def _is_plain_text_body_part(part: Message) -> bool:
