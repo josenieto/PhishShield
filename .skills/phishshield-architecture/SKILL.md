@@ -176,6 +176,41 @@ Infrastructure contains concrete adapters:
 
 Infrastructure translates between the external world and Application contracts.
 
+### 3.1 Extraction belongs to adapters, analysis belongs to Domain
+
+Infrastructure adapters must not use Domain services to extract data from external formats.
+
+Domain services analyze already extracted and normalized values. They must not be responsible for extracting URLs, attachments, hashes, authentication results, text, metadata, or indicators from `.eml`, HTML, PDFs, Office files, OCR output, filesystem paths, byte streams, network responses, or external tool output.
+
+Correct flow:
+
+```text
+raw .eml bytes
+    -> Application port
+    -> Infrastructure email parser adapter
+    -> ExtractedEmailContent(urls=..., attachment_filenames=...)
+    -> Application use case
+    -> Domain URL / attachment / authentication analysis
+```
+
+Incorrect flow:
+
+```text
+Infrastructure email parser adapter
+    -> Domain service for extracting URLs from email body
+```
+
+Examples:
+
+- Extract URLs from email body: Infrastructure adapter or dedicated extraction port.
+- Analyze an already extracted URL: Domain/Application.
+- Extract attachment filenames from `.eml`: Infrastructure adapter.
+- Analyze an already extracted attachment filename: Domain/Application.
+- Extract SPF/DKIM/DMARC result strings from headers: Infrastructure adapter.
+- Interpret SPF/DKIM/DMARC result strings: Domain/Application.
+- Calculate a hash from bytes or files: Infrastructure adapter behind a port.
+- Validate an already calculated hash string: Domain.
+
 ### 4. Entrypoints do not contain business rules
 
 An entrypoint should:

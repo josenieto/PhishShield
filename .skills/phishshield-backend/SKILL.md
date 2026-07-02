@@ -197,6 +197,7 @@ PhishShield analyzes potentially malicious artifacts. Work defensively.
 - Parse robustly.
 - Do not trust declared headers.
 - Extract sender, subject, body, attachments, and links without executing content.
+- Keep extraction from `.eml` in infrastructure adapters. Domain services should receive already extracted values and analyze them; do not place email-body URL extraction, attachment extraction, or header parsing helpers in Domain just because they can be implemented as pure functions.
 
 ### Headers
 
