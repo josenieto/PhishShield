@@ -2939,3 +2939,76 @@ Result:
 ### Next step
 
 Add an integration-style test that wires `AnalyzeRawEmailUseCase` with `PythonEmailContentExtractorAdapter`, or introduce the first FastAPI endpoint after defining API schemas.
+
+---
+
+## 2026-06-29 - Email parser authentication result extraction
+
+Type: TDD  
+Layer: Infrastructure  
+Status: Done
+
+### Context
+
+The email parser adapter already extracted sender domain, subject, plain text body, attachment filenames, and plain text URLs from raw email bytes. However, extracted SPF/DKIM/DMARC results still defaulted to `unknown`, which limited the usefulness of the existing authentication analysis use case.
+
+The selected scope extracts already computed authentication result strings from `Authentication-Results` headers. It does not perform DNS SPF checks, DKIM cryptographic validation, DMARC policy lookup, or alignment calculation.
+
+### Decision
+
+Extended `PythonEmailContentExtractorAdapter` to extract simple SPF, DKIM, and DMARC result tokens from `Authentication-Results` headers.
+
+Supported behavior:
+
+```text
+spf=pass|fail|...
+dkim=pass|fail|...
+dmarc=pass|fail|...
+```
+
+Missing headers or missing individual mechanisms remain `unknown`. Result keys are matched case-insensitively and returned lowercase.
+
+### Files changed
+
+- `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor.py`
+- `src/infrastructure/adapters/email_parser/python_email_content_extractor.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> authentication result tests returned unknown values
+GREEN    -> Authentication-Results extraction tests passed
+REFACTOR -> not needed
+VERIFY   -> infrastructure adapter test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor.py
+```
+
+Result:
+
+```text
+20 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+488 passed
+```
+
+### Next step
+
+Add an integration-style test wiring `AnalyzeRawEmailUseCase` with `PythonEmailContentExtractorAdapter`, using raw email bytes that include URLs, attachment filenames, social engineering text, and authentication results.
