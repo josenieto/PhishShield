@@ -1,4 +1,5 @@
 from email import policy
+from email.header import decode_header, make_header
 from email.message import EmailMessage, Message
 from email.parser import BytesParser
 from email.utils import parseaddr
@@ -15,7 +16,7 @@ class PythonEmailContentExtractorAdapter:
             sender_domain=_extract_sender_domain(message),
             urls=(),
             attachment_filenames=_extract_attachment_filenames(message),
-            subject=str(message.get("Subject", "")),
+            subject=_decode_header_value(message.get("Subject", "")),
             body_text=_extract_plain_text_body(message),
             spf_result="unknown",
             dkim_result="unknown",
@@ -31,6 +32,13 @@ def _extract_sender_domain(message: Message) -> str:
         return ""
 
     return sender_email.rsplit("@", maxsplit=1)[1].lower()
+
+
+def _decode_header_value(value: object) -> str:
+    if not value:
+        return ""
+
+    return str(make_header(decode_header(str(value))))
 
 
 def _extract_attachment_filenames(message: Message) -> tuple[str, ...]:
