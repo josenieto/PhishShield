@@ -1,3 +1,5 @@
+import pytest
+
 from domain.services.finding_analysis.finding_definitions import (
     build_finding_from_code,
     build_findings_from_codes,
@@ -11,43 +13,24 @@ from domain.value_objects.finding import (
 )
 
 
-def test_should_build_known_authentication_finding_from_code() -> None:
-    assert build_finding_from_code("AUTHENTICATION_DMARC_FAILED") == Finding(
-        code="AUTHENTICATION_DMARC_FAILED",
+@pytest.mark.parametrize(
+    ("code", "severity"),
+    [
+        ("AUTHENTICATION_DMARC_FAILED", FINDING_SEVERITY_CRITICAL),
+        ("AUTHENTICATION_SPF_FAILED", FINDING_SEVERITY_HIGH),
+        ("AUTHENTICATION_DKIM_FAILED", FINDING_SEVERITY_HIGH),
+        ("AUTHENTICATION_HAS_MULTIPLE_FAILURES", FINDING_SEVERITY_CRITICAL),
+        ("AUTHENTICATION_RESULTS_UNKNOWN", FINDING_SEVERITY_MEDIUM),
+    ],
+)
+def test_should_build_authentication_finding_from_code(
+    code: str,
+    severity: str,
+) -> None:
+    assert build_finding_from_code(code) == Finding(
+        code=code,
         category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_CRITICAL,
-    )
-
-
-def test_should_build_spf_failed_authentication_finding_from_code() -> None:
-    assert build_finding_from_code("AUTHENTICATION_SPF_FAILED") == Finding(
-        code="AUTHENTICATION_SPF_FAILED",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_HIGH,
-    )
-
-
-def test_should_build_dkim_failed_authentication_finding_from_code() -> None:
-    assert build_finding_from_code("AUTHENTICATION_DKIM_FAILED") == Finding(
-        code="AUTHENTICATION_DKIM_FAILED",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_HIGH,
-    )
-
-
-def test_should_build_multiple_failures_authentication_finding_from_code() -> None:
-    assert build_finding_from_code("AUTHENTICATION_HAS_MULTIPLE_FAILURES") == Finding(
-        code="AUTHENTICATION_HAS_MULTIPLE_FAILURES",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_CRITICAL,
-    )
-
-
-def test_should_build_unknown_results_authentication_finding_from_code() -> None:
-    assert build_finding_from_code("AUTHENTICATION_RESULTS_UNKNOWN") == Finding(
-        code="AUTHENTICATION_RESULTS_UNKNOWN",
-        category=FINDING_CATEGORY_AUTHENTICATION,
-        severity=FINDING_SEVERITY_MEDIUM,
+        severity=severity,
     )
 
 
