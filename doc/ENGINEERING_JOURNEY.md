@@ -2801,3 +2801,70 @@ Result:
 ### Next step
 
 Decide whether to introduce the first Application port for extracting `ExtractedEmailContent` from email bytes, or first add a small refactor around Application use case composition dependencies.
+
+---
+
+## 2026-06-29 - Python email content extractor adapter
+
+Type: TDD  
+Layer: Infrastructure  
+Status: Done
+
+### Context
+
+The project introduced `EmailContentExtractorPort` in Application to define an IO boundary for converting raw email bytes into `ExtractedEmailContent`. The next step was to add the first concrete Infrastructure adapter while keeping the scope narrow and avoiding FastAPI, filesystem reads, URL extraction, authentication validation, hash calculation, YARA, OCR, AI, and sandbox behavior.
+
+### Decision
+
+Introduced the Infrastructure adapter:
+
+```python
+PythonEmailContentExtractorAdapter
+```
+
+The adapter uses Python's standard library email parser to extract sender domain, subject, plain text body, and attachment filenames from raw email bytes. URL extraction remains empty for now, and SPF/DKIM/DMARC results are returned as `unknown` because real authentication validation requires separate infrastructure concerns such as DNS and cryptographic checks.
+
+### Files changed
+
+- `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor.py`
+- `src/infrastructure/adapters/email_parser/python_email_content_extractor.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### TDD flow
+
+```text
+RED      -> ModuleNotFoundError: No module named 'infrastructure.adapters.email_parser.python_email_content_extractor'
+GREEN    -> email content extractor adapter tests passed
+REFACTOR -> not needed
+VERIFY   -> infrastructure adapter test and full suite passed
+```
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor.py
+```
+
+Result:
+
+```text
+5 passed
+```
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+470 passed
+```
+
+### Next step
+
+Decide whether to add a thin Application use case that accepts raw email bytes through `EmailContentExtractorPort` and delegates to `AnalyzeExtractedEmailUseCase`, or incrementally improve the email parser adapter with URL extraction from plain text.
