@@ -154,3 +154,20 @@ def test_should_return_empty_urls_when_plain_text_body_has_no_urls() -> None:
     extracted_email = adapter.extract(email_bytes)
 
     assert extracted_email.urls == ()
+
+
+def test_should_extract_urls_from_html_only_body() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML link",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body>Please visit https://example.com/login.</body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ("https://example.com/login",)

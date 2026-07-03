@@ -5,6 +5,8 @@ from email.header import decode_header, make_header
 from email.message import EmailMessage, Message
 from email.parser import BytesParser
 from email.utils import parseaddr
+from html import unescape
+from html.parser import HTMLParser
 
 from application.models.extracted_email import ExtractedEmailContent
 
@@ -67,10 +69,18 @@ def _extract_plain_text_body(message: Message) -> str:
             if _is_plain_text_body_part(part)
         ]
 
-        return "\n".join(body_part for body_part in body_parts if body_part)
+        body_text = "\n".join(body_part for body_part in body_parts if body_part)
+
+        if body_text:
+            return body_text
+
+        return _extract_html_body(message)
 
     if _is_plain_text_body_part(message):
         return _decode_text_part(message)
+
+    if _is_html_body_part(message):
+        return _html_to_text(_decode_text_part(message))
 
     return ""
 
@@ -113,6 +123,44 @@ def _is_plain_text_body_part(part: Message) -> bool:
         part.get_content_type() == "text/plain"
         and part.get_content_disposition() != "attachment"
     )
+
+
+def _extract_html_body(message: Message) -> str:
+    body_parts = [
+        _html_to_text(_decode_text_part(part))
+        for part in message.walk()
+        if _is_html_body_part(part)
+    ]
+
+    return "\n".join(body_part for body_part in body_parts if body_part)
+
+
+def _is_html_body_part(part: Message) -> bool:
+    return (
+        part.get_content_type() == "text/html"
+        and part.get_content_disposition() != "attachment"
+    )
+
+
+def _html_to_text(html_content: str) -> str:
+    parser = _VisibleTextHtmlParser()
+    parser.feed(html_content)
+
+    return " ".join(unescape(parser.text).split())
+
+
+class _VisibleTextHtmlParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self._text_parts: list[str] = []
+
+    @property
+    def text(self) -> str:
+        return " ".join(self._text_parts)
+
+    def handle_data(self, data: str) -> None:
+        if data.strip():
+            self._text_parts.append(data.strip())
 
 
 def _decode_text_part(part: Message) -> str:
