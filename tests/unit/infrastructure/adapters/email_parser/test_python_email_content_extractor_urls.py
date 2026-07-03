@@ -171,3 +171,39 @@ def test_should_extract_urls_from_html_only_body() -> None:
     extracted_email = adapter.extract(email_bytes)
 
     assert extracted_email.urls == ("https://example.com/login",)
+
+
+def test_should_not_extract_urls_after_body_size_limit() -> None:
+    adapter = PythonEmailContentExtractorAdapter(max_body_chars=20)
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Limited links",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"This prefix is long. https://example.com/login",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == "This prefix is long."
+    assert extracted_email.urls == ()
+
+
+def test_should_extract_urls_before_body_size_limit() -> None:
+    adapter = PythonEmailContentExtractorAdapter(max_body_chars=31)
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Limited links",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"https://example.com/login after limit",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == "https://example.com/login after"
+    assert extracted_email.urls == ("https://example.com/login",)

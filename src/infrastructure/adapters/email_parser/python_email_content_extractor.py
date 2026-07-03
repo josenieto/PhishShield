@@ -14,14 +14,18 @@ from application.models.extracted_email import ExtractedEmailContent
 _HTTP_URL_PATTERN = re.compile(r"https?://\S+", re.IGNORECASE)
 _AUTHENTICATION_RESULT_PATTERN_TEMPLATE = r"\b{mechanism}=([a-zA-Z]+)"
 _TRAILING_URL_PUNCTUATION = ".,;:!?) ]"
+_DEFAULT_MAX_BODY_CHARS = 100_000
 
 
 class PythonEmailContentExtractorAdapter:
+    def __init__(self, max_body_chars: int = _DEFAULT_MAX_BODY_CHARS) -> None:
+        self._max_body_chars = max_body_chars
+
     def extract(self, email_bytes: bytes) -> ExtractedEmailContent:
         """Extract normalized email content using Python's standard email parser."""
         message = BytesParser(policy=policy.default).parsebytes(email_bytes)
 
-        body_text = _extract_plain_text_body(message)
+        body_text = _limit_text(_extract_plain_text_body(message), self._max_body_chars)
         spf_result, dkim_result, dmarc_result = _extract_authentication_results(message)
 
         return ExtractedEmailContent(
@@ -90,6 +94,13 @@ def _extract_urls_from_text(text: str) -> tuple[str, ...]:
         match.group(0).rstrip(_TRAILING_URL_PUNCTUATION)
         for match in _HTTP_URL_PATTERN.finditer(text)
     )
+
+
+def _limit_text(text: str, max_chars: int) -> str:
+    if max_chars <= 0:
+        return ""
+
+    return text[:max_chars]
 
 
 def _extract_authentication_results(message: Message) -> tuple[str, str, str]:
