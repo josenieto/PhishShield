@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phishshield"
+version = "0.1.0"
+description = "Local, self-hosted phishing email analysis toolkit."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "pydantic>=2.0,<3.0",
+    "python-multipart>=0.0.9,<1.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "httpx>=0.28,<1.0",
+    "pytest>=9.0,<10.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
