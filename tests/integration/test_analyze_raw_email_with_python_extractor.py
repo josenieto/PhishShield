@@ -62,3 +62,56 @@ def test_should_analyze_raw_email_with_python_extractor() -> None:
     assert result.finding_code_summary.highest_severity == "CRITICAL"
     assert result.risk_score.risk_level == "CRITICAL"
     assert result.risk_score.has_critical_indicators is True
+
+
+def test_should_analyze_html_only_raw_email_with_python_extractor() -> None:
+    use_case = AnalyzeRawEmailUseCase(
+        email_content_extractor=PythonEmailContentExtractorAdapter()
+    )
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.zip>",
+            b"Subject: =?utf-8?q?Urgent_account_notice?=",
+            b"Authentication-Results: mx.example.com; spf=fail smtp.mailfrom=bad.example; dkim=pass header.d=example.com; dmarc=fail header.from=example.com",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><p>Please verify your account at https://example.com/login.</p></body></html>",
+        ]
+    )
+
+    result = use_case.execute(
+        AnalyzeRawEmailCommand(
+            email_bytes=email_bytes,
+            suspicious_tlds={"zip"},
+            allowed_url_schemes={"https"},
+            known_shorteners={"bit.ly"},
+            urgency_terms={"urgent"},
+            financial_pressure_terms={"payment required"},
+            credential_request_terms={"verify your account"},
+            finding_weights={
+                "DOMAIN_HAS_SUSPICIOUS_TLD": 20,
+                "AUTHENTICATION_DMARC_FAILED": 50,
+                "AUTHENTICATION_SPF_FAILED": 25,
+                "SOCIAL_ENGINEERING_HAS_URGENCY_TERMS": 10,
+                "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS": 25,
+            },
+            critical_indicators={"AUTHENTICATION_DMARC_FAILED"},
+        )
+    )
+
+    assert result.technical_analysis.domain_analysis.domain == "example.zip"
+    assert result.technical_analysis.url_analyses[0].url == "https://example.com/login"
+    assert result.technical_analysis.authentication_analysis.spf_result == "fail"
+    assert result.technical_analysis.authentication_analysis.dkim_result == "pass"
+    assert result.technical_analysis.authentication_analysis.dmarc_result == "fail"
+    assert result.text_analysis.analyzed_text == (
+        "Urgent account notice\n"
+        "Please verify your account at https://example.com/login."
+    )
+    assert "DOMAIN_HAS_SUSPICIOUS_TLD" in result.finding_codes
+    assert "AUTHENTICATION_DMARC_FAILED" in result.finding_codes
+    assert "SOCIAL_ENGINEERING_HAS_URGENCY_TERMS" in result.finding_codes
+    assert "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS" in result.finding_codes
+    assert result.finding_code_summary.highest_severity == "CRITICAL"
+    assert result.risk_score.risk_level == "CRITICAL"
+    assert result.risk_score.has_critical_indicators is True
