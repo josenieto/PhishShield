@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import pytest
 
 from infrastructure.entrypoints.api.routers.analyze_email import (
     _DEFAULT_MAX_UPLOAD_BYTES,
@@ -84,6 +85,38 @@ def test_should_reject_oversized_uploaded_email() -> None:
     assert response.status_code == 413
     assert response.json() == {
         "detail": "Uploaded email exceeds maximum allowed size."
+    }
+
+
+def test_should_return_422_when_email_analysis_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+    class FailingAnalyzeRawEmailUseCase:
+        def execute(self, command):
+            raise ValueError("boom")
+
+    monkeypatch.setattr(
+        "infrastructure.entrypoints.api.routers.analyze_email._build_analyze_raw_email_use_case",
+        lambda: FailingAnalyzeRawEmailUseCase(),
+    )
+
+    client = _client()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Broken",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Body.",
+        ]
+    )
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("broken.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 422
+    assert response.json() == {
+        "detail": "Uploaded email could not be analyzed."
     }
 
 
