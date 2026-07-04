@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from infrastructure.entrypoints.api.routers.analyze_email import router
+from infrastructure.entrypoints.api.routers.analyze_email import (
+    _DEFAULT_MAX_UPLOAD_BYTES,
+    router,
+)
 
 
 def test_should_analyze_uploaded_plain_text_email() -> None:
@@ -67,6 +70,21 @@ def test_should_return_response_for_empty_uploaded_email() -> None:
     payload = response.json()
     assert payload["finding_codes"] == ["AUTHENTICATION_RESULTS_UNKNOWN"]
     assert payload["finding_summary"]["total_findings"] == 1
+
+
+def test_should_reject_oversized_uploaded_email() -> None:
+    client = _client()
+    oversized_email = b"x" * (_DEFAULT_MAX_UPLOAD_BYTES + 1)
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("oversized.eml", oversized_email, "message/rfc822")},
+    )
+
+    assert response.status_code == 413
+    assert response.json() == {
+        "detail": "Uploaded email exceeds maximum allowed size."
+    }
 
 
 def _client() -> TestClient:
