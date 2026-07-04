@@ -20,24 +20,33 @@ _DEFAULT_MAX_UPLOAD_BYTES = 1_000_000
 @router.post("/analyze-email", response_model=AnalyzeEmailResponse)
 async def analyze_email(file: UploadFile = File(...)) -> AnalyzeEmailResponse:
     email_bytes = await _read_upload_file_with_limit(file)
-    use_case = AnalyzeRawEmailUseCase(
-        email_content_extractor=PythonEmailContentExtractorAdapter()
-    )
-    analysis = use_case.execute(
-        AnalyzeRawEmailCommand(
-            email_bytes=email_bytes,
-            suspicious_tlds=_default_suspicious_tlds(),
-            allowed_url_schemes=_default_allowed_url_schemes(),
-            known_shorteners=_default_known_shorteners(),
-            urgency_terms=_default_urgency_terms(),
-            financial_pressure_terms=_default_financial_pressure_terms(),
-            credential_request_terms=_default_credential_request_terms(),
-            finding_weights=_default_finding_weights(),
-            critical_indicators=_default_critical_indicators(),
+    try:
+        analysis = _build_analyze_raw_email_use_case().execute(
+            AnalyzeRawEmailCommand(
+                email_bytes=email_bytes,
+                suspicious_tlds=_default_suspicious_tlds(),
+                allowed_url_schemes=_default_allowed_url_schemes(),
+                known_shorteners=_default_known_shorteners(),
+                urgency_terms=_default_urgency_terms(),
+                financial_pressure_terms=_default_financial_pressure_terms(),
+                credential_request_terms=_default_credential_request_terms(),
+                finding_weights=_default_finding_weights(),
+                critical_indicators=_default_critical_indicators(),
+            )
         )
-    )
+    except Exception:
+        raise HTTPException(
+            status_code=422,
+            detail="Uploaded email could not be analyzed.",
+        ) from None
 
     return extracted_email_analysis_to_response(analysis)
+
+
+def _build_analyze_raw_email_use_case() -> AnalyzeRawEmailUseCase:
+    return AnalyzeRawEmailUseCase(
+        email_content_extractor=PythonEmailContentExtractorAdapter()
+    )
 
 
 async def _read_upload_file_with_limit(
