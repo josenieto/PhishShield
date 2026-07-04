@@ -132,6 +132,7 @@ If a change affects architecture, contracts, modules, or deployment, consult `do
 - Do not move business rules into adapters.
 - Do not contaminate the domain with SDKs, frameworks, network, filesystem, or runtime details.
 - Keep use cases coordinated through ports, not concrete implementations.
+- Keep extraction from external formats in infrastructure adapters or behind application ports. Domain services analyze already extracted values; they must not extract URLs, attachments, authentication results, hashes, text, or metadata from `.eml`, HTML, PDFs, Office files, OCR output, byte streams, filesystem paths, network responses, or external tool output.
 
 ### 3. Prioritize security and privacy
 
