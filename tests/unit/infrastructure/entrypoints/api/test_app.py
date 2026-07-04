@@ -18,6 +18,13 @@ def test_should_include_analyze_email_route() -> None:
     assert "/analyze-email" in route_paths
 
 
+def test_should_include_health_route() -> None:
+    app = create_app()
+    route_paths = set(app.openapi()["paths"])
+
+    assert "/health" in route_paths
+
+
 def test_should_analyze_email_through_created_app() -> None:
     client = TestClient(create_app())
     email_bytes = b"\r\n".join(
@@ -41,3 +48,12 @@ def test_should_analyze_email_through_created_app() -> None:
     assert "DOMAIN_CONTAINS_PUNYCODE" in payload["finding_codes"]
     assert "AUTHENTICATION_DMARC_FAILED" in payload["finding_codes"]
     assert payload["finding_summary"]["highest_severity"] == "CRITICAL"
+
+
+def test_should_return_health_response_through_created_app() -> None:
+    client = TestClient(create_app())
+
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
