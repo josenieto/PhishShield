@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from application.use_cases.analyze_raw_email import (
     AnalyzeRawEmailCommand,
@@ -14,11 +14,12 @@ from infrastructure.entrypoints.api.schemas.analyze_email import (
 
 
 router = APIRouter()
+_DEFAULT_MAX_UPLOAD_BYTES = 1_000_000
 
 
 @router.post("/analyze-email", response_model=AnalyzeEmailResponse)
 async def analyze_email(file: UploadFile = File(...)) -> AnalyzeEmailResponse:
-    email_bytes = await file.read()
+    email_bytes = await _read_upload_file_with_limit(file)
     use_case = AnalyzeRawEmailUseCase(
         email_content_extractor=PythonEmailContentExtractorAdapter()
     )
@@ -37,6 +38,21 @@ async def analyze_email(file: UploadFile = File(...)) -> AnalyzeEmailResponse:
     )
 
     return extracted_email_analysis_to_response(analysis)
+
+
+async def _read_upload_file_with_limit(
+    file: UploadFile,
+    max_bytes: int = _DEFAULT_MAX_UPLOAD_BYTES,
+) -> bytes:
+    email_bytes = await file.read(max_bytes + 1)
+
+    if len(email_bytes) > max_bytes:
+        raise HTTPException(
+            status_code=413,
+            detail="Uploaded email exceeds maximum allowed size.",
+        )
+
+    return email_bytes
 
 
 def _default_suspicious_tlds() -> set[str]:
