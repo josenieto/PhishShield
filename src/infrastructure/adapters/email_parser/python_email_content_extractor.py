@@ -59,9 +59,9 @@ def _decode_header_value(value: object) -> str:
 
 def _extract_attachment_filenames(message: Message) -> tuple[str, ...]:
     return tuple(
-        filename
+        decoded_filename
         for part in message.walk()
-        if (filename := part.get_filename())
+        if (decoded_filename := _decode_header_value(part.get_filename()))
     )
 
 

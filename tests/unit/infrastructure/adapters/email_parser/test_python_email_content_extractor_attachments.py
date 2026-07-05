@@ -54,3 +54,29 @@ def test_should_ignore_text_attachment_as_body_text() -> None:
 
     assert extracted_email.body_text == "Real body."
     assert extracted_email.attachment_filenames == ("notes.txt",)
+
+
+def test_should_decode_encoded_attachment_filename() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Encoded attachment",
+            b"Content-Type: multipart/mixed; boundary=boundary",
+            b"",
+            b"--boundary",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"See attachment.",
+            b"--boundary",
+            b"Content-Type: application/pdf",
+            b"Content-Disposition: attachment; filename=\"=?utf-8?b?aW52b2ljZS5wZGY=?=\"",
+            b"",
+            b"fake pdf bytes",
+            b"--boundary--",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.attachment_filenames == ("invoice.pdf",)
