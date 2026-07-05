@@ -1,3 +1,5 @@
+import pytest
+
 from infrastructure.adapters.email_parser.python_email_content_extractor import (
     PythonEmailContentExtractorAdapter,
 )
@@ -118,6 +120,29 @@ def test_should_extract_spf_result_from_received_spf_when_authentication_results
     extracted_email = adapter.extract(email_bytes)
 
     assert extracted_email.spf_result == "fail"
+    assert extracted_email.dkim_result == "unknown"
+    assert extracted_email.dmarc_result == "unknown"
+
+
+@pytest.mark.parametrize("received_spf_result", ["softfail", "neutral", "none"])
+def test_should_extract_received_spf_result_variants(
+    received_spf_result: str,
+) -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: SPF fallback variants",
+            f"Received-SPF: {received_spf_result} (mx.example.com: SPF result)".encode(),
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Body.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.spf_result == received_spf_result
     assert extracted_email.dkim_result == "unknown"
     assert extracted_email.dmarc_result == "unknown"
 
