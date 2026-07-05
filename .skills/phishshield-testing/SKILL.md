@@ -200,11 +200,29 @@ If complex mocks are needed to test a domain function, that logic probably does 
 `application` tests should:
 
 - test use cases;
+- use real pure Domain helpers by default;
 - use fakes or mocks for ports;
 - verify orchestration;
 - avoid real adapters;
 - cover application errors;
 - cover optional flows such as disabled AI.
+
+Do not mock pure Domain helpers just to isolate a use case. Application is allowed to depend on Domain, and using real Domain behavior gives confidence that orchestration and rules work together.
+
+Use fakes or mocks for:
+
+- Application ports;
+- Infrastructure adapters;
+- filesystem, network, browser, AI, OCR, YARA, external parsers;
+- expensive, non-deterministic, or IO-bound collaborators.
+
+Do not use fakes or mocks for:
+
+- pure Domain helpers;
+- deterministic value objects;
+- pure scoring, finding, URL, domain, attachment, authentication, or social engineering rules.
+
+If an Application test becomes slow because of a Domain helper, review whether the helper is still pure and belongs in Domain. Do not hide that problem with mocks.
 
 Example:
 
