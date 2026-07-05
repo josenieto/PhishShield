@@ -63,6 +63,11 @@ raw email bytes
 
 The flow is usable in tests and does not require filesystem access, FastAPI, external services, DNS, AI, OCR, YARA, Playwright, or PDF/Office parsers.
 
+The current API surface is:
+
+- `GET /health`
+- `POST /analyze-email`
+
 ---
 
 ## Current Email Parser Scope
@@ -94,6 +99,14 @@ It intentionally does not perform:
 
 ## Near-Term Roadmap
 
+| Step | Status |
+|---|---:|
+| API Entrypoint | Done |
+| API App Factory | Done |
+| Input Limits And Error Handling | Done |
+| Email Parser Robustness | In progress |
+| Integration Tests | In progress |
+
 ### 1. API Entrypoint
 
 Add the first FastAPI endpoint for raw email upload analysis.
@@ -116,6 +129,12 @@ Constraints:
 - keep defaults private until configuration is introduced;
 - avoid filesystem access in the first endpoint.
 
+Status:
+
+```text
+Done
+```
+
 ### 2. API App Factory
 
 After the router exists, add a minimal FastAPI app factory and include the router.
@@ -125,6 +144,12 @@ Constraints:
 - no global side-effect-heavy app setup;
 - no database or external services;
 - keep dependency wiring explicit and small.
+
+Status:
+
+```text
+Done
+```
 
 ### 3. Input Limits And Error Handling
 
@@ -137,6 +162,12 @@ Initial concerns:
 - malformed email behavior;
 - parser failures;
 - response stability.
+
+Status:
+
+```text
+Done
+```
 
 ### 4. Email Parser Robustness
 
