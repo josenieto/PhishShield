@@ -128,6 +128,23 @@
         "States that Application tests should fake or mock ports but not concrete adapters.",
         "Flags infrastructure usage in Domain tests as a design problem."
       ]
+    },
+    {
+      "id": 8,
+      "prompt": "We are testing an Application use case that composes pure Domain helpers. Should we mock the Domain helpers to keep the test isolated?",
+      "expected_output": "The answer should say not to mock pure Domain helpers by default. Application is allowed to depend on Domain, and tests should use real Domain behavior unless it crosses a port or external boundary. It should recommend fakes or mocks for ports, adapters, IO, network, filesystem, browser, AI, OCR, YARA, external parsers, or expensive/non-deterministic collaborators.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        ".skills/phishshield-testing/SKILL.md"
+      ],
+      "assertions": [
+        "States that pure Domain helpers should not be mocked by default in Application tests.",
+        "Explains that Application may depend on Domain under the architecture.",
+        "Recommends real Domain behavior for deterministic pure helpers.",
+        "Recommends fakes or mocks for ports and external boundaries.",
+        "Mentions IO, adapters, network, filesystem, browser, AI, OCR, YARA, external parsers, or non-deterministic collaborators as mock/fake candidates."
+      ]
     }
   ]
 }
