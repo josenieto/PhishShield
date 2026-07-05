@@ -139,3 +139,25 @@ def test_should_prefer_authentication_results_spf_over_received_spf() -> None:
     extracted_email = adapter.extract(email_bytes)
 
     assert extracted_email.spf_result == "pass"
+
+
+def test_should_extract_authentication_results_across_multiple_headers() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Multiple auth headers",
+            b"Authentication-Results: mx1.example.com; spf=pass smtp.mailfrom=example.com",
+            b"Authentication-Results: mx2.example.com; dkim=fail header.d=bad.example",
+            b"Authentication-Results: mx3.example.com; dmarc=pass header.from=example.com",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Body.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.spf_result == "pass"
+    assert extracted_email.dkim_result == "fail"
+    assert extracted_email.dmarc_result == "pass"
