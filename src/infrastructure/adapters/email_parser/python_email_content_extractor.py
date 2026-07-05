@@ -13,6 +13,10 @@ from application.models.extracted_email import ExtractedEmailContent
 
 _HTTP_URL_PATTERN = re.compile(r"https?://\S+", re.IGNORECASE)
 _AUTHENTICATION_RESULT_PATTERN_TEMPLATE = r"\b{mechanism}=([a-zA-Z]+)"
+_RECEIVED_SPF_RESULT_PATTERN = re.compile(
+    r"\b(pass|fail|softfail|neutral|none|temperror|permerror)\b",
+    re.IGNORECASE,
+)
 _TRAILING_URL_PUNCTUATION = ".,;:!?) ]"
 _DEFAULT_MAX_BODY_CHARS = 100_000
 
@@ -109,8 +113,13 @@ def _extract_authentication_results(message: Message) -> tuple[str, str, str]:
         for header_value in message.get_all("Authentication-Results", [])
     )
 
+    spf_result = _extract_authentication_result(authentication_results, "spf")
+
+    if spf_result == "unknown":
+        spf_result = _extract_received_spf_result(message)
+
     return (
-        _extract_authentication_result(authentication_results, "spf"),
+        spf_result,
         _extract_authentication_result(authentication_results, "dkim"),
         _extract_authentication_result(authentication_results, "dmarc"),
     )
@@ -122,6 +131,19 @@ def _extract_authentication_result(header_value: str, mechanism: str) -> str:
         header_value,
         re.IGNORECASE,
     )
+
+    if result_match is None:
+        return "unknown"
+
+    return result_match.group(1).lower()
+
+
+def _extract_received_spf_result(message: Message) -> str:
+    received_spf_headers = "\n".join(
+        str(header_value)
+        for header_value in message.get_all("Received-SPF", [])
+    )
+    result_match = _RECEIVED_SPF_RESULT_PATTERN.search(received_spf_headers)
 
     if result_match is None:
         return "unknown"

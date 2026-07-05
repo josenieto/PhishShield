@@ -100,3 +100,42 @@ def test_should_extract_authentication_results_case_insensitively() -> None:
     assert extracted_email.spf_result == "pass"
     assert extracted_email.dkim_result == "fail"
     assert extracted_email.dmarc_result == "pass"
+
+
+def test_should_extract_spf_result_from_received_spf_when_authentication_results_missing() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: SPF fallback",
+            b"Received-SPF: fail (mx.example.com: domain of bad.example does not designate 192.0.2.1 as permitted sender)",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Body.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.spf_result == "fail"
+    assert extracted_email.dkim_result == "unknown"
+    assert extracted_email.dmarc_result == "unknown"
+
+
+def test_should_prefer_authentication_results_spf_over_received_spf() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: SPF precedence",
+            b"Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=example.com",
+            b"Received-SPF: fail (mx.example.com: domain of example.com does not designate 192.0.2.1 as permitted sender)",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Body.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.spf_result == "pass"
