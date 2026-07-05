@@ -161,3 +161,23 @@ def test_should_extract_authentication_results_across_multiple_headers() -> None
     assert extracted_email.spf_result == "pass"
     assert extracted_email.dkim_result == "fail"
     assert extracted_email.dmarc_result == "pass"
+
+
+def test_should_extract_authentication_error_results_from_headers() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Auth errors",
+            b"Authentication-Results: mx.example.com; spf=temperror smtp.mailfrom=example.com; dkim=permerror header.d=example.com; dmarc=temperror header.from=example.com",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Body.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.spf_result == "temperror"
+    assert extracted_email.dkim_result == "permerror"
+    assert extracted_email.dmarc_result == "temperror"
