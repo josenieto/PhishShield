@@ -1,0 +1,6 @@
+From: Security Team <security@example.com>
+Subject: Account notice
+Received-SPF: fail (mx.example.com: domain of bad.example does not designate 192.0.2.1 as permitted sender)
+Content-Type: text/plain; charset=utf-8
+
+Please review your account.
