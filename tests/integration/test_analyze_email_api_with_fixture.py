@@ -29,3 +29,26 @@ def test_should_analyze_uploaded_suspicious_eml_fixture() -> None:
     assert payload["finding_summary"]["highest_severity"] == "CRITICAL"
     assert payload["risk_score"]["risk_level"] == "CRITICAL"
     assert payload["risk_score"]["has_critical_indicators"] is True
+
+
+def test_should_analyze_uploaded_benign_eml_fixture() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "benign_account_summary.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("benign_account_summary.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == []
+    assert payload["unique_finding_codes"] == []
+    assert payload["finding_summary"]["total_findings"] == 0
+    assert payload["finding_summary"]["highest_severity"] == "UNKNOWN"
+    assert payload["risk_score"]["raw_score"] == 0
+    assert payload["risk_score"]["capped_score"] == 0
+    assert payload["risk_score"]["risk_level"] == "LOW"
+    assert payload["risk_score"]["has_critical_indicators"] is False
