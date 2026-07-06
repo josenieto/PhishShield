@@ -206,3 +206,24 @@ def test_should_extract_authentication_error_results_from_headers() -> None:
     assert extracted_email.spf_result == "temperror"
     assert extracted_email.dkim_result == "permerror"
     assert extracted_email.dmarc_result == "temperror"
+
+
+def test_should_use_first_received_spf_result_when_multiple_headers_are_present() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Multiple Received-SPF",
+            b"Received-SPF: softfail (mx1.example.com: SPF result)",
+            b"Received-SPF: pass (mx2.example.com: SPF result)",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Body.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.spf_result == "softfail"
+    assert extracted_email.dkim_result == "unknown"
+    assert extracted_email.dmarc_result == "unknown"
