@@ -1,0 +1,15 @@
+From: Billing Team <billing@example.com>
+Subject: Invoice attached
+Content-Type: multipart/mixed; boundary=boundary
+
+--boundary
+Content-Type: text/plain; charset=utf-8
+
+Please review the attached invoice.
+
+--boundary
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="invoice.pdf"
+
+fake pdf bytes
+--boundary--
