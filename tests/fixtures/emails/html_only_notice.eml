@@ -1,0 +1,10 @@
+From: Support Team <support@example.com>
+Subject: HTML notice
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <body>
+    <h1>Account notice</h1>
+    <p>Please verify your account at https://example.com/login.</p>
+  </body>
+</html>
