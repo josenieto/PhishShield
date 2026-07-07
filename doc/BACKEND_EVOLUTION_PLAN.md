@@ -220,6 +220,8 @@ Pending:
 - multi-attachment fixtures;
 - API error-contract fixtures for malformed or unexpected uploads.
 
+Malformed but parseable uploads now degrade to a controlled low-information analysis response. Unexpected analyzer failures remain mapped to `422` at the API boundary.
+
 ### 6. Current Quality Baseline
 
 The current suite is warning-free and covers the raw email analysis flow through:
