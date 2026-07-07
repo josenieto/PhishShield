@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import pytest
 
-from infrastructure.config.analysis_defaults import DEFAULT_MAX_UPLOAD_BYTES
+from infrastructure.config.api_defaults import DEFAULT_MAX_UPLOAD_BYTES
 from infrastructure.entrypoints.api.routers.analyze_email import router
 
 

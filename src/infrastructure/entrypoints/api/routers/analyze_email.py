@@ -7,6 +7,7 @@ from application.use_cases.analyze_raw_email import (
 from infrastructure.adapters.email_parser.python_email_content_extractor import (
     PythonEmailContentExtractorAdapter,
 )
+from infrastructure.config.api_defaults import DEFAULT_MAX_UPLOAD_BYTES
 from infrastructure.config.analysis_defaults import (
     DEFAULT_ALLOWED_URL_SCHEMES,
     DEFAULT_CREDENTIAL_REQUEST_TERMS,
@@ -14,7 +15,6 @@ from infrastructure.config.analysis_defaults import (
     DEFAULT_FINDING_WEIGHTS,
     DEFAULT_FINANCIAL_PRESSURE_TERMS,
     DEFAULT_KNOWN_SHORTENERS,
-    DEFAULT_MAX_UPLOAD_BYTES,
     DEFAULT_SUSPICIOUS_TLDS,
     DEFAULT_URGENCY_TERMS,
 )
