@@ -74,3 +74,26 @@ def test_should_analyze_uploaded_suspicious_attachment_eml_fixture() -> None:
     assert payload["risk_score"]["capped_score"] == 70
     assert payload["risk_score"]["risk_level"] == "HIGH"
     assert payload["risk_score"]["has_critical_indicators"] is True
+
+
+def test_should_degrade_safely_for_malformed_uploaded_eml_fixture() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "malformed_missing_headers.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("malformed_missing_headers.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == ["AUTHENTICATION_RESULTS_UNKNOWN"]
+    assert payload["unique_finding_codes"] == ["AUTHENTICATION_RESULTS_UNKNOWN"]
+    assert payload["finding_summary"]["highest_severity"] == "MEDIUM"
+    assert payload["finding_summary"]["total_findings"] == 1
+    assert payload["risk_score"]["raw_score"] == 15
+    assert payload["risk_score"]["capped_score"] == 15
+    assert payload["risk_score"]["risk_level"] == "LOW"
+    assert payload["risk_score"]["has_critical_indicators"] is False
