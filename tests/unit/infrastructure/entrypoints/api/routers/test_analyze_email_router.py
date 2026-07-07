@@ -2,10 +2,8 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import pytest
 
-from infrastructure.entrypoints.api.routers.analyze_email import (
-    _DEFAULT_MAX_UPLOAD_BYTES,
-    router,
-)
+from infrastructure.config.analysis_defaults import DEFAULT_MAX_UPLOAD_BYTES
+from infrastructure.entrypoints.api.routers.analyze_email import router
 
 
 def test_should_analyze_uploaded_plain_text_email() -> None:
@@ -75,7 +73,7 @@ def test_should_return_response_for_empty_uploaded_email() -> None:
 
 def test_should_reject_oversized_uploaded_email() -> None:
     client = _client()
-    oversized_email = b"x" * (_DEFAULT_MAX_UPLOAD_BYTES + 1)
+    oversized_email = b"x" * (DEFAULT_MAX_UPLOAD_BYTES + 1)
 
     response = client.post(
         "/analyze-email",

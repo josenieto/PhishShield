@@ -1,5 +1,7 @@
 DEFAULT_SUSPICIOUS_TLDS: set[str] = {"mov", "top", "xyz", "zip"}
 
+DEFAULT_MAX_UPLOAD_BYTES = 1_000_000
+
 DEFAULT_ALLOWED_URL_SCHEMES: set[str] = {"http", "https"}
 
 DEFAULT_KNOWN_SHORTENERS: set[str] = {"bit.ly", "t.co", "tinyurl.com"}
