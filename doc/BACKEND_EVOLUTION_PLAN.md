@@ -79,8 +79,10 @@ The current `PythonEmailContentExtractorAdapter` extracts:
 - plain text body;
 - basic HTML-only body fallback;
 - HTTP and HTTPS URLs from extracted body text;
-- attachment filenames;
-- already computed SPF/DKIM/DMARC result tokens from `Authentication-Results` headers.
+- decoded attachment filenames;
+- already computed SPF/DKIM/DMARC result tokens from `Authentication-Results` headers;
+- SPF fallback result tokens from `Received-SPF` headers;
+- repeated `Authentication-Results` and `Received-SPF` headers.
 
 It intentionally does not perform:
 
@@ -105,7 +107,9 @@ It intentionally does not perform:
 | API App Factory | Done |
 | Input Limits And Error Handling | Done |
 | Email Parser Robustness | In progress |
-| Integration Tests | In progress |
+| Fixture-Based Parser Integration Tests | Done |
+| API Fixture Integration Tests | In progress |
+| Warning-Free Test Suite | Done |
 
 ### 1. API Entrypoint
 
@@ -173,24 +177,57 @@ Done
 
 Improve extraction incrementally with tests.
 
-Candidate steps:
+Covered steps:
 
-- encoded sender and attachment filenames;
-- multipart edge cases;
-- HTML fallback edge cases;
-- URL extraction edge cases;
+- decoded subject headers;
+- decoded attachment filenames;
+- HTML-only fallback extraction;
+- URL extraction from extracted body text;
 - multiple `Authentication-Results` headers;
-- Received-SPF fallback parsing if useful.
+- `Received-SPF` fallback parsing;
+- `Received-SPF` result variants;
+- multiple `Received-SPF` headers.
+
+Remaining candidate steps:
+
+- encoded sender display names if they become relevant for future adapters;
+- malformed multipart edge cases;
+- unusual charset handling;
+- deeply nested multipart structures;
+- parser failure behavior for malformed but safely handled emails.
 
 ### 5. Integration Tests
 
 Keep adding integration-style tests for important flows:
 
-- text/plain raw email;
-- HTML-only raw email;
-- emails with attachments;
-- emails with authentication headers;
-- malformed but safely handled emails.
+Done:
+
+- text/plain raw email analysis;
+- HTML-only raw email analysis;
+- authentication fixture parsing;
+- `Received-SPF` fixture parsing;
+- multipart attachment fixture parsing;
+- encoded subject and encoded attachment filename fixture parsing;
+- HTML-only fixture parsing;
+- suspicious API upload fixture;
+- benign API upload fixture;
+- suspicious attachment API upload fixture.
+
+Pending:
+
+- malformed but safely handled emails;
+- unusual charset fixtures;
+- multi-attachment fixtures;
+- API error-contract fixtures for malformed or unexpected uploads.
+
+### 6. Current Quality Baseline
+
+The current suite is warning-free and covers the raw email analysis flow through:
+
+- parser unit tests;
+- parser fixture integration tests;
+- raw email use case integration tests;
+- API upload fixture integration tests.
 
 ---
 
