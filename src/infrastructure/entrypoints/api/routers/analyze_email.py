@@ -14,6 +14,7 @@ from infrastructure.config.analysis_defaults import (
     DEFAULT_FINDING_WEIGHTS,
     DEFAULT_FINANCIAL_PRESSURE_TERMS,
     DEFAULT_KNOWN_SHORTENERS,
+    DEFAULT_MAX_UPLOAD_BYTES,
     DEFAULT_SUSPICIOUS_TLDS,
     DEFAULT_URGENCY_TERMS,
 )
@@ -24,7 +25,6 @@ from infrastructure.entrypoints.api.schemas.analyze_email import (
 
 
 router = APIRouter()
-_DEFAULT_MAX_UPLOAD_BYTES = 1_000_000
 
 
 @router.post("/analyze-email", response_model=AnalyzeEmailResponse)
@@ -61,7 +61,7 @@ def _build_analyze_raw_email_use_case() -> AnalyzeRawEmailUseCase:
 
 async def _read_upload_file_with_limit(
     file: UploadFile,
-    max_bytes: int = _DEFAULT_MAX_UPLOAD_BYTES,
+    max_bytes: int = DEFAULT_MAX_UPLOAD_BYTES,
 ) -> bytes:
     email_bytes = await file.read(max_bytes + 1)
 
@@ -72,4 +72,3 @@ async def _read_upload_file_with_limit(
         )
 
     return email_bytes
-
