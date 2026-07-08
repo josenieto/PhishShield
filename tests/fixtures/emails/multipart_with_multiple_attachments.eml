@@ -1,0 +1,27 @@
+From: Billing Team <billing@example.com>
+Subject: Multiple attachments
+Content-Type: multipart/mixed; boundary=boundary
+
+--boundary
+Content-Type: text/plain; charset=utf-8
+
+Please review the attached documents.
+
+--boundary
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="invoice.pdf"
+
+fake pdf bytes
+
+--boundary
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="payment-details.zip"
+
+fake zip bytes
+
+--boundary
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment; filename="notes.txt"
+
+attached notes
+--boundary--
