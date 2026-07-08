@@ -7,7 +7,7 @@ from application.use_cases.analyze_raw_email import (
 from infrastructure.adapters.email_parser.python_email_content_extractor import (
     PythonEmailContentExtractorAdapter,
 )
-from infrastructure.config.api_defaults import DEFAULT_MAX_UPLOAD_BYTES
+from infrastructure.config.api_defaults import DEFAULT_API_SETTINGS
 from infrastructure.config.analysis_defaults import (
     DEFAULT_ALLOWED_URL_SCHEMES,
     DEFAULT_CREDENTIAL_REQUEST_TERMS,
@@ -61,7 +61,7 @@ def _build_analyze_raw_email_use_case() -> AnalyzeRawEmailUseCase:
 
 async def _read_upload_file_with_limit(
     file: UploadFile,
-    max_bytes: int = DEFAULT_MAX_UPLOAD_BYTES,
+    max_bytes: int = DEFAULT_API_SETTINGS.max_upload_bytes,
 ) -> bytes:
     email_bytes = await file.read(max_bytes + 1)
 
