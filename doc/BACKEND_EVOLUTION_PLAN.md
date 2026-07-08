@@ -182,7 +182,10 @@ Covered steps:
 - decoded subject headers;
 - decoded attachment filenames;
 - HTML-only fallback extraction;
+- non-UTF-8 plain text body decoding;
+- non-UTF-8 encoded subject decoding;
 - URL extraction from extracted body text;
+- multiple attachment extraction;
 - multiple `Authentication-Results` headers;
 - `Received-SPF` fallback parsing;
 - `Received-SPF` result variants;
@@ -192,7 +195,7 @@ Remaining candidate steps:
 
 - encoded sender display names if they become relevant for future adapters;
 - malformed multipart edge cases;
-- unusual charset handling;
+- additional unusual charset edge cases if real samples expose gaps;
 - deeply nested multipart structures;
 - parser failure behavior for malformed but safely handled emails.
 
@@ -207,7 +210,9 @@ Done:
 - authentication fixture parsing;
 - `Received-SPF` fixture parsing;
 - multipart attachment fixture parsing;
+- multi-attachment fixture parsing;
 - encoded subject and encoded attachment filename fixture parsing;
+- unusual charset fixture parsing;
 - HTML-only fixture parsing;
 - suspicious API upload fixture;
 - benign API upload fixture;
@@ -215,9 +220,7 @@ Done:
 
 Pending:
 
-- malformed but safely handled emails;
-- unusual charset fixtures;
-- multi-attachment fixtures;
+- malformed multipart edge cases;
 - API error-contract fixtures for malformed or unexpected uploads.
 
 Malformed but parseable uploads now degrade to a controlled low-information analysis response. Unexpected analyzer failures remain mapped to `422` at the API boundary.
