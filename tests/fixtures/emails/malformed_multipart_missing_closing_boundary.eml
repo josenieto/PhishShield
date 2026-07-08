@@ -1,0 +1,14 @@
+From: Support Team <support@example.com>
+Subject: Broken multipart
+Content-Type: multipart/mixed; boundary=broken
+
+--broken
+Content-Type: text/plain; charset=utf-8
+
+Please review your account.
+
+--broken
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="invoice.pdf"
+
+fake pdf bytes

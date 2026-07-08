@@ -119,3 +119,12 @@ Current API behavior:
 - oversized uploads return `413` with `{"detail": "Uploaded email exceeds maximum allowed size."}`;
 - unexpected analysis failures return `422` with `{"detail": "Uploaded email could not be analyzed."}`;
 - malformed but parseable emails degrade to a controlled low-information response instead of failing the request.
+
+Current contract examples covered by integration tests include:
+
+- suspicious upload -> `200` with findings and critical risk;
+- benign upload -> `200` with no findings and low risk;
+- suspicious attachment upload -> `200` with attachment findings;
+- malformed but parseable upload -> `200` with controlled fallback findings;
+- oversized upload -> `413` with stable error payload;
+- unexpected analyzer failure -> `422` with stable error payload.
