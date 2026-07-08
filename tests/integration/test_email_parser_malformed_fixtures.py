@@ -26,3 +26,21 @@ def test_should_degrade_safely_for_malformed_eml_fixture() -> None:
     assert extracted_email.spf_result == "unknown"
     assert extracted_email.dkim_result == "unknown"
     assert extracted_email.dmarc_result == "unknown"
+
+
+def test_should_degrade_safely_for_malformed_multipart_eml_fixture() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = (
+        _FIXTURES_DIR / "malformed_multipart_missing_closing_boundary.eml"
+    ).read_bytes()
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.sender_domain == "example.com"
+    assert extracted_email.subject == "Broken multipart"
+    assert extracted_email.body_text == "Please review your account."
+    assert extracted_email.urls == ()
+    assert extracted_email.attachment_filenames == ("invoice.pdf",)
+    assert extracted_email.spf_result == "unknown"
+    assert extracted_email.dkim_result == "unknown"
+    assert extracted_email.dmarc_result == "unknown"
