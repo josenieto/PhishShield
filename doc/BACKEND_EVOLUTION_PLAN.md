@@ -194,7 +194,6 @@ Covered steps:
 Remaining candidate steps:
 
 - encoded sender display names if they become relevant for future adapters;
-- malformed multipart edge cases;
 - additional unusual charset edge cases if real samples expose gaps;
 - deeply nested multipart structures;
 - parser failure behavior for malformed but safely handled emails.
@@ -213,6 +212,7 @@ Done:
 - multi-attachment fixture parsing;
 - encoded subject and encoded attachment filename fixture parsing;
 - unusual charset fixture parsing;
+- malformed multipart fixture parsing;
 - HTML-only fixture parsing;
 - suspicious API upload fixture;
 - benign API upload fixture;
@@ -220,7 +220,6 @@ Done:
 
 Pending:
 
-- malformed multipart edge cases;
 - API error-contract fixtures for malformed or unexpected uploads.
 
 Malformed but parseable uploads now degrade to a controlled low-information analysis response. Unexpected analyzer failures remain mapped to `422` at the API boundary.
