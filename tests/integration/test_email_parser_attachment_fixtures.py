@@ -30,3 +30,19 @@ def test_should_extract_encoded_subject_and_attachment_from_eml_fixture() -> Non
     assert extracted_email.subject == "Urgent invoice notice"
     assert extracted_email.body_text == "Please review the attached invoice."
     assert extracted_email.attachment_filenames == ("invoice.pdf",)
+
+
+def test_should_extract_multiple_attachments_from_multipart_eml_fixture() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = (_FIXTURES_DIR / "multipart_with_multiple_attachments.eml").read_bytes()
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.sender_domain == "example.com"
+    assert extracted_email.subject == "Multiple attachments"
+    assert extracted_email.body_text == "Please review the attached documents."
+    assert extracted_email.attachment_filenames == (
+        "invoice.pdf",
+        "payment-details.zip",
+        "notes.txt",
+    )
