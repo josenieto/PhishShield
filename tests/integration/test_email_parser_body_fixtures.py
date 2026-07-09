@@ -34,3 +34,14 @@ def test_should_decode_latin1_plain_text_body_from_eml_fixture() -> None:
     assert extracted_email.sender_domain == "example.com"
     assert extracted_email.subject == "Account notice"
     assert extracted_email.body_text == "Revisión de cuenta requerida."
+
+
+def test_should_decode_quoted_printable_plain_text_body_from_eml_fixture() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = (_FIXTURES_DIR / "quoted_printable_body_notice.eml").read_bytes()
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.sender_domain == "example.com"
+    assert extracted_email.subject == "Account notice"
+    assert extracted_email.body_text == "Please review your account summary."
