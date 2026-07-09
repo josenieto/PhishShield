@@ -198,7 +198,11 @@ class _VisibleTextHtmlParser(HTMLParser):
 
 def _decode_text_part(part: Message) -> str:
     if isinstance(part, EmailMessage):
-        content = part.get_content()
+        try:
+            content = part.get_content()
+        except LookupError:
+            content = None
+
         if isinstance(content, str):
             return content.strip()
 
@@ -207,4 +211,8 @@ def _decode_text_part(part: Message) -> str:
         return ""
 
     charset = part.get_content_charset() or "utf-8"
-    return payload.decode(charset, errors="replace").strip()
+
+    try:
+        return payload.decode(charset, errors="replace").strip()
+    except LookupError:
+        return payload.decode("utf-8", errors="replace").strip()
