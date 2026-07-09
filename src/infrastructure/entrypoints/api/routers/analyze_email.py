@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 
 from application.use_cases.analyze_raw_email import (
     AnalyzeRawEmailCommand,
@@ -28,8 +28,15 @@ router = APIRouter()
 
 
 @router.post("/analyze-email", response_model=AnalyzeEmailResponse)
-async def analyze_email(file: UploadFile = File(...)) -> AnalyzeEmailResponse:
-    email_bytes = await _read_upload_file_with_limit(file)
+async def analyze_email(
+    request: Request,
+    file: UploadFile = File(...),
+) -> AnalyzeEmailResponse:
+    api_settings = getattr(request.app.state, "api_settings", DEFAULT_API_SETTINGS)
+    email_bytes = await _read_upload_file_with_limit(
+        file,
+        max_bytes=api_settings.max_upload_bytes,
+    )
     try:
         analysis = _build_analyze_raw_email_use_case().execute(
             AnalyzeRawEmailCommand(

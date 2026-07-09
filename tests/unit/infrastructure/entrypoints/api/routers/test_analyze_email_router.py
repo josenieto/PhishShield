@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 import pytest
 
-from infrastructure.config.api_defaults import DEFAULT_API_SETTINGS
+from infrastructure.config.api_defaults import ApiSettings, DEFAULT_API_SETTINGS
 from infrastructure.entrypoints.api.routers.analyze_email import router
 
 
@@ -116,6 +116,20 @@ def test_should_return_422_when_email_analysis_fails(monkeypatch: pytest.MonkeyP
     assert response.json() == {
         "detail": "Uploaded email could not be analyzed."
     }
+
+
+def test_should_use_configured_upload_limit_from_app_state() -> None:
+    app = FastAPI()
+    app.state.api_settings = ApiSettings(max_upload_bytes=5)
+    app.include_router(router)
+    client = TestClient(app)
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("oversized.eml", b"123456", "message/rfc822")},
+    )
+
+    assert response.status_code == 413
 
 
 def _client() -> TestClient:
