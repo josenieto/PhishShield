@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import pytest
 
 from infrastructure.entrypoints.api.app import create_app
 
@@ -57,3 +58,22 @@ def test_should_return_health_response_through_created_app() -> None:
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+
+
+def test_should_load_api_settings_from_environment(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("PHISHSHIELD_MAX_UPLOAD_BYTES", "123")
+
+    app = create_app()
+
+    assert app.state.api_settings.max_upload_bytes == 123
+
+
+def test_should_raise_error_when_api_settings_are_invalid(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("PHISHSHIELD_MAX_UPLOAD_BYTES", "0")
+
+    with pytest.raises(ValueError):
+        create_app()
