@@ -22,6 +22,29 @@ python -m pytest
 python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
 ```
 
+### Runtime Configuration
+
+The API reads runtime settings from environment variables when the app is created.
+
+Available variables:
+
+| Variable | Default | Description |
+|---|---:|---|
+| `PHISHSHIELD_MAX_UPLOAD_BYTES` | `1_000_000` | Maximum accepted `.eml` upload size in bytes. Must be a positive integer. |
+
+POSIX example:
+
+```bash
+PHISHSHIELD_MAX_UPLOAD_BYTES=2000000 python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
+```
+
+PowerShell example:
+
+```powershell
+$env:PHISHSHIELD_MAX_UPLOAD_BYTES = "2000000"
+python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
+```
+
 ### Health Check
 
 ```bash
@@ -38,7 +61,7 @@ Request notes:
 
 - field name: `file`
 - expected content type: `message/rfc822`
-- current default upload limit: `1_000_000` bytes
+- default upload limit: `1_000_000` bytes, configurable with `PHISHSHIELD_MAX_UPLOAD_BYTES`
 
 Successful responses return a JSON body with:
 
