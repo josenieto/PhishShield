@@ -106,10 +106,14 @@ It intentionally does not perform:
 | API Entrypoint | Done |
 | API App Factory | Done |
 | Input Limits And Error Handling | Done |
-| Email Parser Robustness | In progress |
+| Email Parser Robustness | Done |
 | Fixture-Based Parser Integration Tests | Done |
-| API Fixture Integration Tests | In progress |
+| API Fixture Integration Tests | Done |
 | Warning-Free Test Suite | Done |
+| Runtime Config Readiness | Done |
+| Docker Backend Runtime | Done |
+| Backend CI And Docker Smoke | Done |
+| API Documentation | Done |
 
 ### 1. API Entrypoint
 
@@ -233,6 +237,25 @@ The current suite is warning-free and covers the raw email analysis flow through
 - raw email use case integration tests;
 - API upload fixture integration tests.
 
+The backend also runs:
+
+- locally with `uvicorn`;
+- in Docker through the root `Dockerfile`;
+- in Docker Compose through `compose.yaml`;
+- in GitHub Actions through backend tests and a Docker health smoke workflow.
+
+---
+
+## Next Focus
+
+The next recommended group is frontend MVP planning.
+
+Short-term goals:
+
+- keep `README.md` as a backend quickstart;
+- keep `doc/API.md` as the external API contract reference;
+- use the current backend API, Docker runtime, and CI baseline as the contract for a first frontend upload/results flow.
+
 ---
 
 ## Explicitly Deferred
@@ -251,7 +274,7 @@ These capabilities remain deferred until a dedicated port/adapter step is justif
 - OCR;
 - Ollama or other AI integrations;
 - frontend dashboard;
-- Docker Compose runtime wiring.
+- multi-service Docker Compose runtime wiring.
 
 ---
 
