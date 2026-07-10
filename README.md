@@ -26,6 +26,8 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 
 The API reads runtime settings from environment variables when the app is created.
 
+`.env.example` documents the currently supported runtime variables. Export them in your shell or provide them through your runtime environment.
+
 Available variables:
 
 | Variable | Default | Description |
