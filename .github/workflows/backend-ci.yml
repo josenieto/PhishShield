@@ -2,8 +2,6 @@ name: Backend CI
 
 on:
   push:
-    branches:
-      - integration/master
   pull_request:
     branches:
       - integration/master
