@@ -1,0 +1,7 @@
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      PHISHSHIELD_MAX_UPLOAD_BYTES: ${PHISHSHIELD_MAX_UPLOAD_BYTES:-1000000}

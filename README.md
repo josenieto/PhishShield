@@ -22,6 +22,31 @@ python -m pytest
 python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
 ```
 
+### Run With Docker
+
+Build and run the backend with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+The Compose file forwards:
+
+- `8000:8000`
+- `PHISHSHIELD_MAX_UPLOAD_BYTES` from the shell or Compose environment
+
+Health check example:
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+Analyze email example:
+
+```bash
+curl -X POST http://127.0.0.1:8000/analyze-email -F "file=@tests/fixtures/emails/suspicious_html_notice.eml;type=message/rfc822"
+```
+
 ### Runtime Configuration
 
 The API reads runtime settings from environment variables when the app is created.
