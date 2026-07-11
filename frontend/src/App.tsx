@@ -1,24 +1,170 @@
+import { useState } from "react";
+
+import { analyzeEmail } from "./api/analyzeEmail";
+import type { AnalyzeEmailResponse } from "./types/api";
+
+
+const FILE_INPUT_ACCEPT = ".eml,message/rfc822";
+
+
+function severityClassName(severity: string): string {
+  return `severity-badge severity-${severity.toLowerCase()}`;
+}
+
+
 export default function App() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [analysis, setAnalysis] = useState<AnalyzeEmailResponse | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  async function handleAnalyzeSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (selectedFile === null) {
+      setErrorMessage("Choose an .eml file before starting the analysis.");
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setErrorMessage("");
+
+    try {
+      const result = await analyzeEmail(selectedFile);
+      setAnalysis(result);
+    } catch (error) {
+      setAnalysis(null);
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unexpected analysis error.",
+      );
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }
+
   return (
     <main className="app-shell">
       <section className="hero-card">
         <p className="eyebrow">PhishShield</p>
         <h1>Email analysis frontend MVP</h1>
         <p className="lede">
-          The backend is ready. This frontend scaffold will become the upload and
-          results flow for `.eml` analysis.
+          Upload an `.eml` file and inspect the current backend risk score plus
+          extracted findings.
         </p>
 
-        <div className="status-grid">
+        <form className="upload-panel" onSubmit={handleAnalyzeSubmit}>
+          <label className="file-input-card" htmlFor="email-file">
+            <span className="file-input-title">Email file</span>
+            <span className="file-input-help">
+              Choose a `.eml` message to send to `/api/analyze-email`.
+            </span>
+            <input
+              id="email-file"
+              type="file"
+              accept={FILE_INPUT_ACCEPT}
+              onChange={(event) => {
+                setSelectedFile(event.target.files?.[0] ?? null);
+                setErrorMessage("");
+              }}
+            />
+          </label>
+
+          <div className="upload-actions">
+            <div className="selected-file-card">
+              <span className="selected-file-label">Selected file</span>
+              <strong>{selectedFile?.name ?? "No file selected yet"}</strong>
+            </div>
+
+            <button type="submit" disabled={isAnalyzing || selectedFile === null}>
+              {isAnalyzing ? "Analyzing..." : "Analyze email"}
+            </button>
+          </div>
+        </form>
+
+        {errorMessage && <p className="error-banner">{errorMessage}</p>}
+
+        <div className="status-grid status-grid-top">
           <article>
             <h2>Backend API</h2>
             <p>`POST /api/analyze-email` proxied to `http://127.0.0.1:8000`.</p>
           </article>
           <article>
             <h2>Next Step</h2>
-            <p>Add the first upload form and render risk score plus findings.</p>
+            <p>Refine the UI, drag and drop, and grouped findings if this flow works.</p>
           </article>
         </div>
+
+        {analysis && (
+          <section className="analysis-panel">
+            <div className="analysis-summary-grid">
+              <article className="summary-card summary-card-accent">
+                <span className="summary-label">Risk level</span>
+                <strong>{analysis.risk_score.risk_level}</strong>
+                <span className="summary-subtext">
+                  Score {analysis.risk_score.raw_score} / {analysis.risk_score.capped_score}
+                </span>
+              </article>
+
+              <article className="summary-card">
+                <span className="summary-label">Critical indicators</span>
+                <strong>
+                  {analysis.risk_score.has_critical_indicators ? "Present" : "None"}
+                </strong>
+                <span className="summary-subtext">
+                  Highest severity {analysis.finding_summary.highest_severity}
+                </span>
+              </article>
+
+              <article className="summary-card">
+                <span className="summary-label">Findings</span>
+                <strong>{analysis.finding_summary.total_findings}</strong>
+                <span className="summary-subtext">
+                  {analysis.unique_finding_codes.length} unique indicators
+                </span>
+              </article>
+            </div>
+
+            <section className="findings-panel">
+              <div className="panel-heading">
+                <h2>Sorted findings</h2>
+                <p>Ordered by severity using the backend summary.</p>
+              </div>
+
+              <ul className="finding-list">
+                {analysis.finding_summary.sorted_findings.map((finding) => (
+                  <li key={finding.code} className="finding-item">
+                    <div>
+                      <strong>{finding.code}</strong>
+                      <p>{finding.category}</p>
+                    </div>
+                    <span className={severityClassName(finding.severity)}>
+                      {finding.severity}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="findings-panel">
+              <div className="panel-heading">
+                <h2>Indicator codes</h2>
+                <p>Unique finding codes returned by the backend.</p>
+              </div>
+
+              <div className="indicator-chip-grid">
+                {analysis.unique_finding_codes.length === 0 ? (
+                  <span className="indicator-chip indicator-chip-safe">No findings</span>
+                ) : (
+                  analysis.unique_finding_codes.map((findingCode) => (
+                    <span key={findingCode} className="indicator-chip">
+                      {findingCode}
+                    </span>
+                  ))
+                )}
+              </div>
+            </section>
+          </section>
+        )}
       </section>
     </main>
   );
