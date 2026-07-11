@@ -18,6 +18,19 @@ function severityClassName(severity: string): string {
 }
 
 
+function groupFindingsByCategory(analysis: AnalyzeEmailResponse) {
+  const groupedFindings = new Map<string, AnalyzeEmailResponse["finding_summary"]["sorted_findings"]>();
+
+  for (const finding of analysis.finding_summary.sorted_findings) {
+    const currentFindings = groupedFindings.get(finding.category) ?? [];
+    currentFindings.push(finding);
+    groupedFindings.set(finding.category, currentFindings);
+  }
+
+  return Array.from(groupedFindings.entries());
+}
+
+
 export default function App() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [analysis, setAnalysis] = useState<AnalyzeEmailResponse | null>(null);
@@ -164,23 +177,34 @@ export default function App() {
 
             <section className="findings-panel">
               <div className="panel-heading">
-                <h2>Sorted findings</h2>
-                <p>Ordered by severity using the backend summary.</p>
+                <h2>Findings by category</h2>
+                <p>Grouped by backend category and ordered by severity inside each section.</p>
               </div>
 
-              <ul className="finding-list">
-                {analysis.finding_summary.sorted_findings.map((finding) => (
-                  <li key={finding.code} className="finding-item">
-                    <div>
-                      <strong>{finding.code}</strong>
-                      <p>{finding.category}</p>
+              <div className="finding-category-grid">
+                {groupFindingsByCategory(analysis).map(([category, findings]) => (
+                  <section key={category} className="finding-category-card">
+                    <div className="finding-category-header">
+                      <h3>{category}</h3>
+                      <span className="category-count-chip">{findings.length}</span>
                     </div>
-                    <span className={severityClassName(finding.severity)}>
-                      {finding.severity}
-                    </span>
-                  </li>
+
+                    <ul className="finding-list">
+                      {findings.map((finding) => (
+                        <li key={finding.code} className="finding-item">
+                          <div>
+                            <strong>{finding.code}</strong>
+                            <p>{finding.category}</p>
+                          </div>
+                          <span className={severityClassName(finding.severity)}>
+                            {finding.severity}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
                 ))}
-              </ul>
+              </div>
             </section>
 
             <section className="findings-panel">

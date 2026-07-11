@@ -197,6 +197,45 @@ button:disabled {
   padding: 1rem 1.1rem;
 }
 
+.finding-category-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.finding-category-card {
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(30, 41, 59, 0.48);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.finding-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.finding-category-header h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  letter-spacing: 0.04em;
+}
+
+.category-count-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.18);
+  color: #bfdbfe;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .panel-heading {
   margin-bottom: 0.9rem;
 }
