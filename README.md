@@ -22,6 +22,43 @@ python -m pytest
 python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
 ```
 
+### Run Frontend
+
+The frontend lives in `frontend/` and uses Vite's development proxy to call the backend through `/api`.
+
+Start the backend first:
+
+```bash
+python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
+```
+
+Then start the frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend development server proxies:
+
+```text
+/api -> http://127.0.0.1:8000
+```
+
+Open the URL printed by Vite, usually:
+
+```text
+http://127.0.0.1:5173
+```
+
+On Windows PowerShell environments that block `npm.ps1`, use:
+
+```powershell
+cmd /c npm install
+cmd /c npm run dev
+```
+
 ### Run With Docker
 
 Build and run the backend with Docker Compose:
