@@ -6,6 +6,8 @@ This document defines the first usable frontend for PhishShield.
 
 Its purpose is to keep the initial React UI focused on the current backend contract while avoiding premature complexity before broader forensic modules or production packaging are introduced.
 
+The current frontend MVP is functionally complete enough to support upload and result inspection. The next frontend work should focus on UX polish or backend response enrichment when the UI needs additional evidence fields.
+
 ---
 
 ## Current Scope
