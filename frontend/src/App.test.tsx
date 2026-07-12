@@ -68,8 +68,16 @@ describe("App", () => {
   it("should render a success state after analysis completes", async () => {
     const user = userEvent.setup();
     vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue({
-      finding_codes: ["AUTHENTICATION_RESULTS_UNKNOWN"],
-      unique_finding_codes: ["AUTHENTICATION_RESULTS_UNKNOWN"],
+      finding_codes: [
+        "AUTHENTICATION_RESULTS_UNKNOWN",
+        "DOMAIN_HAS_SUSPICIOUS_TLD",
+        "DOMAIN_CONTAINS_PUNYCODE",
+      ],
+      unique_finding_codes: [
+        "AUTHENTICATION_RESULTS_UNKNOWN",
+        "DOMAIN_HAS_SUSPICIOUS_TLD",
+        "DOMAIN_CONTAINS_PUNYCODE",
+      ],
       finding_summary: {
         findings: [
           {
@@ -77,25 +85,50 @@ describe("App", () => {
             category: "AUTHENTICATION",
             severity: "MEDIUM",
           },
+          {
+            code: "DOMAIN_HAS_SUSPICIOUS_TLD",
+            category: "DOMAIN",
+            severity: "MEDIUM",
+          },
+          {
+            code: "DOMAIN_CONTAINS_PUNYCODE",
+            category: "DOMAIN",
+            severity: "HIGH",
+          },
         ],
         sorted_findings: [
+          {
+            code: "DOMAIN_CONTAINS_PUNYCODE",
+            category: "DOMAIN",
+            severity: "HIGH",
+          },
           {
             code: "AUTHENTICATION_RESULTS_UNKNOWN",
             category: "AUTHENTICATION",
             severity: "MEDIUM",
           },
+          {
+            code: "DOMAIN_HAS_SUSPICIOUS_TLD",
+            category: "DOMAIN",
+            severity: "MEDIUM",
+          },
         ],
         finding_counts_by_category: {
           AUTHENTICATION: 1,
+          DOMAIN: 2,
         },
-        highest_severity: "MEDIUM",
-        total_findings: 1,
+        highest_severity: "HIGH",
+        total_findings: 3,
       },
       risk_score: {
-        indicators: ["AUTHENTICATION_RESULTS_UNKNOWN"],
-        raw_score: 15,
-        capped_score: 15,
-        risk_level: "LOW",
+        indicators: [
+          "AUTHENTICATION_RESULTS_UNKNOWN",
+          "DOMAIN_HAS_SUSPICIOUS_TLD",
+          "DOMAIN_CONTAINS_PUNYCODE",
+        ],
+        raw_score: 65,
+        capped_score: 65,
+        risk_level: "HIGH",
         has_critical_indicators: false,
       },
     });
@@ -112,5 +145,8 @@ describe("App", () => {
 
     expect(await screen.findByText("Analysis completed")).toBeInTheDocument();
     expect(screen.getByText("Results are shown below using the current backend response model.")).toBeInTheDocument();
+    expect(screen.getByText("Findings by category")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "AUTHENTICATION" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "DOMAIN" })).toBeInTheDocument();
   });
 });
