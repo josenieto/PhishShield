@@ -26,7 +26,7 @@ describe("App", () => {
   });
 
   it("should show an error for files that are not .eml", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ applyAccept: false });
     render(<App />);
 
     const input = emailFileInput();
@@ -35,7 +35,7 @@ describe("App", () => {
     await user.upload(input, invalidFile);
 
     expect(
-      await screen.findByText("Only .eml files are supported in the current frontend MVP."),
+      await screen.findByText(/only \.eml files are supported/i),
     ).toBeInTheDocument();
   });
 
