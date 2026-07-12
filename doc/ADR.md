@@ -1,10 +1,17 @@
-# Architectural Decision Record (ADR): PhishShield Complete
+# Architectural Decision Record (ADR): PhishShield Target Architecture
 
 ## 1. Context and Problem
 
 Modern phishing bypasses traditional filters through social engineering techniques, homoglyph attacks using Unicode/Punycode lookalike characters, and hidden payloads in attachments such as Office macros, links inside PDFs, and text embedded in images.
 
 Current enterprise solutions are often proprietary, expensive, and require sending sensitive data to third-party clouds, which weakens privacy. PhishShield needs to be a defensive, local, self-hosted, open-source, and extensible tool for visual and safe forensic analysis of `.eml` email files.
+
+This ADR describes the target architecture and long-term capability set.
+
+The current implemented MVP scope is tracked separately in:
+
+- `doc/BACKEND_EVOLUTION_PLAN.md`
+- `doc/FRONTEND_MVP_PLAN.md`
 
 ---
 
@@ -29,10 +36,15 @@ Current enterprise solutions are often proprietary, expensive, and require sendi
 ### 2.3 Deployment and Distribution Strategy
 
 - **Model:** **Local self-hosted web application** distributed through **Docker and Docker Compose**.
-- **Container architecture:**
+- **Target container architecture:**
   1. `Frontend`: serves the React web UI on port 3000.
   2. `Backend`: exposes the FastAPI API that runs security rules on port 8000.
   3. `Playwright/Browser`: runs an isolated Chromium browser container to capture screenshots of links without putting the user's host system at risk.
+
+- **Current MVP runtime scope:**
+  1. `Backend`: Dockerfile and Compose runtime are implemented and validated.
+  2. `Frontend`: Vite development flow is implemented. Frontend containerization is still deferred.
+  3. `Playwright/Browser`: deferred.
 
 ---
 
@@ -72,6 +84,8 @@ Current enterprise solutions are often proprietary, expensive, and require sendi
 
 ## 4. Private Local AI Engine
 
+This section describes a deferred target capability. It is not part of the current implemented MVP.
+
 ### 4.1 Current Approach: Ollama in Docker
 
 - **Implementation:** integrates the official `ollama/ollama` image in `docker-compose.yml`. The Python backend connects through the official `ollama` library.
@@ -89,6 +103,6 @@ Current enterprise solutions are often proprietary, expensive, and require sendi
 
 ## 5. Quality Strategy and Repository Lifecycle
 
-- **Testing:** strict use of **Pytest** for unit tests of algorithms such as homoglyph detection and header rules, plus integration tests for adapters such as Playwright and parsers. Mocks must be used to simulate network connections during tests.
-- **GitHub Actions:** automatic pipeline that runs Pytest, verifies code formatting with tools such as Black or Flake8, and builds the final image for Docker Hub on every commit or pull request.
+- **Testing:** backend behavior is validated with **Pytest**. Frontend behavior is validated with **Vitest** and **React Testing Library**. Integration tests cover parser, API, and runtime-focused flows. Network-dependent capabilities should be isolated behind ports and mocked or faked where appropriate.
+- **GitHub Actions:** the current CI pipeline runs backend tests, frontend tests and build, and a backend Docker health smoke workflow. Formatting, linting, and image publishing remain future improvements.
 - **Community management:** public GitHub Issues are used for roadmap tracking with labels such as `enhancement` and `good first issue`, and Git tags are used for formal versioning such as `v1.0.0` and `v1.1.0`.

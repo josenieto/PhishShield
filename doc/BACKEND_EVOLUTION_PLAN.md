@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document tracks PhishShield backend evolution after the first pure Domain iteration.
+This document tracks PhishShield backend evolution from the first pure Domain iteration through the current API, runtime, Docker, and CI MVP.
 
 Its goal is to keep near-term backend work useful and maintainable while preserving the hexagonal architecture defined in `doc/ADR.md`.
 
@@ -254,7 +254,8 @@ Short-term goals:
 
 - keep `README.md` as a backend quickstart;
 - keep `doc/API.md` as the external API contract reference;
-- use the current backend API, Docker runtime, and CI baseline as the contract for a first frontend upload/results flow.
+- use the current backend API, Docker runtime, and CI baseline as the contract for a first frontend upload/results flow;
+- use `doc/FRONTEND_MVP_PLAN.md` as the roadmap for current frontend work.
 
 ---
 
