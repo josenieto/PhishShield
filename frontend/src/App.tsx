@@ -145,8 +145,23 @@ export default function App() {
           </article>
         </div>
 
+        {analysis === null && !errorMessage && (
+          <section className="empty-state-panel">
+            <h2>No analysis yet</h2>
+            <p>
+              Upload an `.eml` file to render the current backend findings and risk
+              summary.
+            </p>
+          </section>
+        )}
+
         {analysis && (
           <section className="analysis-panel">
+            <div className="success-banner">
+              <strong>Analysis completed</strong>
+              <span>Results are shown below using the current backend response model.</span>
+            </div>
+
             <div className="analysis-summary-grid">
               <article className="summary-card summary-card-accent">
                 <span className="summary-label">Risk level</span>
