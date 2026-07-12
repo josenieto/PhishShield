@@ -113,6 +113,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 
 - API contract: `doc/API.md`
 - Backend roadmap: `doc/BACKEND_EVOLUTION_PLAN.md`
+- Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
 
 ### Health Check
 
