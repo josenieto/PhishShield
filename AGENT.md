@@ -45,7 +45,7 @@ The only acceptable exceptions are explicit test samples or fixtures where multi
 
 Its goal is to detect modern phishing indicators without depending on third-party cloud services for the main analysis workflow, preserving privacy, traceability, and technical extensibility.
 
-The system analyzes, among other aspects:
+The full target product analyzes, among other aspects:
 
 - email headers and sender identity,
 - links and homoglyph attacks,
@@ -53,6 +53,11 @@ The system analyzes, among other aspects:
 - PDF and Office attachments,
 - OCR and image metadata,
 - optional local AI-assisted explanations when enabled.
+
+The current implemented scope is tracked in:
+
+- `doc/BACKEND_EVOLUTION_PLAN.md`
+- `doc/FRONTEND_MVP_PLAN.md`
 
 ---
 
@@ -92,14 +97,29 @@ According to the ADR, the project's main technical stack is:
 - **Deployment:** Docker + Docker Compose
 - **Browsing sandbox:** Playwright in an isolated container
 - **Optional local AI:** Ollama
-- **Testing:** Pytest
+- **Testing:** Pytest for backend, Vitest + React Testing Library for frontend
 - **CI/CD:** GitHub Actions
+
+Current active stack in the repository:
+
+- Python + FastAPI backend
+- React + TypeScript + Vite frontend
+- backend Docker runtime and Compose wiring
+- GitHub Actions for backend tests, frontend tests/build, and Docker health smoke
+
+Still deferred unless explicitly selected as the current roadmap group:
+
+- Playwright browser sandbox
+- Ollama or other AI integrations
+- YARA
+- OCR
+- PDF and Office forensic parsing beyond current metadata/filename scope
 
 ---
 
 ## Functional modules
 
-The main modules described in the ADR are:
+The ADR describes these target capability groups:
 
 1. **Headers and identity**
    - sender extraction, subject extraction, and SPF/DKIM/DMARC validation.
@@ -118,6 +138,8 @@ The main modules described in the ADR are:
 
 6. **Local AI**
    - complementary social engineering analysis and natural language explanation, controlled by configuration.
+
+These groups are architectural targets, not a statement that every module is implemented today. Use the backend and frontend plan documents for current status.
 
 ---
 
@@ -157,7 +179,11 @@ Prefer clear, modular solutions aligned with the existing ADR.
 
 ### 8. Respect the current layer progression
 
-The ADR defines the target stack. Do not introduce FastAPI, React, Docker, Playwright, Ollama, YARA, OCR, external parsers, or other infrastructure until the current layer progression requires it.
+The ADR defines the target stack. Do not introduce a new infrastructure family until the active roadmap group requires it.
+
+Already introduced infrastructure such as FastAPI, React/Vite, Docker, Docker Compose, and GitHub Actions may be extended when working inside their active roadmap group.
+
+Playwright, Ollama, YARA, OCR, and broader PDF or Office parsing remain deferred unless they become the explicit focus of the current group.
 
 After completing a pure `Domain` group, run an architectural checkpoint before moving upward to `Application`, `Infrastructure`, or entrypoints.
 
@@ -206,7 +232,7 @@ The project maintains an engineering journey document at:
 
 - `doc/ENGINEERING_JOURNEY.md`
 
-Agents must update this document whenever a relevant engineering step occurs.
+Agents should update this document for meaningful milestones, architectural decisions, strategy shifts, or phase closures.
 
 Relevant steps include:
 
@@ -222,6 +248,7 @@ Relevant steps include:
 - adding a new project skill;
 - creating or changing a testing strategy;
 - making an important rejection decision.
+- closing a major roadmap group.
 
 Use this entry format:
 
@@ -263,9 +290,9 @@ Result:
 ...
 ```
 
-When a step changes architecture flow or layer progression, update the Mermaid diagrams in `doc/ENGINEERING_JOURNEY.md`.
+When a step changes architecture flow or layer progression, update the Mermaid diagrams in `doc/ENGINEERING_JOURNEY.md` if those diagrams exist and the change is still meaningful.
 
-Do not over-document every small code edit. Document meaningful engineering steps that explain how the project evolves.
+Do not over-document every small code edit. Prefer milestone-oriented entries over per-helper noise.
 
 For small helpers inside the same function group, prefer concise grouped entries unless the helper introduces a notable architectural or testing decision.
 
@@ -276,11 +303,12 @@ For small helpers inside the same function group, prefer concise grouped entries
 Minimum checklist:
 
 - read `doc/ADR.md`,
+- read the current roadmap document for the active group when relevant,
 - identify the affected layer,
 - locate the impacted contract or module,
 - check whether tests are required,
 - check whether the change should stay in the current layer,
-- keep consistency with the ADR target stack without introducing infrastructure prematurely.
+- keep consistency with the ADR target stack without introducing deferred infrastructure prematurely.
 
 ---
 

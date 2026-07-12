@@ -2,7 +2,7 @@
 
 Local, self-hosted phishing email analysis toolkit.
 
-## Backend Development
+## Development
 
 ### Install
 
@@ -14,6 +14,14 @@ python -m pip install -e ".[test]"
 
 ```bash
 python -m pytest
+```
+
+### Run Frontend Tests
+
+```bash
+cd frontend
+npm run test
+npm run build
 ```
 
 ### Run API
