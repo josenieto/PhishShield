@@ -30,6 +30,17 @@ def test_should_analyze_uploaded_suspicious_eml_fixture() -> None:
     assert payload["finding_summary"]["highest_severity"] == "CRITICAL"
     assert payload["risk_score"]["risk_level"] == "CRITICAL"
     assert payload["risk_score"]["has_critical_indicators"] is True
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "example.zip",
+        "subject": "Urgent account notice",
+        "urls": ["https://example.com/login"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "fail",
+            "dkim_result": "pass",
+            "dmarc_result": "fail",
+        },
+    }
 
 
 def test_should_analyze_uploaded_benign_eml_fixture() -> None:
@@ -53,6 +64,17 @@ def test_should_analyze_uploaded_benign_eml_fixture() -> None:
     assert payload["risk_score"]["capped_score"] == 0
     assert payload["risk_score"]["risk_level"] == "LOW"
     assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "example.com",
+        "subject": "Weekly account summary",
+        "urls": [],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
 
 
 def test_should_analyze_uploaded_suspicious_attachment_eml_fixture() -> None:
@@ -75,6 +97,17 @@ def test_should_analyze_uploaded_suspicious_attachment_eml_fixture() -> None:
     assert payload["risk_score"]["capped_score"] == 70
     assert payload["risk_score"]["risk_level"] == "HIGH"
     assert payload["risk_score"]["has_critical_indicators"] is True
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "example.com",
+        "subject": "Invoice attached",
+        "urls": [],
+        "attachment_filenames": ["invoice.pdf.exe"],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
 
 
 def test_should_degrade_safely_for_malformed_uploaded_eml_fixture() -> None:
@@ -98,6 +131,17 @@ def test_should_degrade_safely_for_malformed_uploaded_eml_fixture() -> None:
     assert payload["risk_score"]["capped_score"] == 15
     assert payload["risk_score"]["risk_level"] == "LOW"
     assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "",
+        "subject": "",
+        "urls": ["https://example.com/login"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "unknown",
+            "dkim_result": "unknown",
+            "dmarc_result": "unknown",
+        },
+    }
 
 
 def test_should_degrade_safely_for_malformed_multipart_uploaded_eml_fixture() -> None:
@@ -129,6 +173,11 @@ def test_should_degrade_safely_for_malformed_multipart_uploaded_eml_fixture() ->
     assert payload["risk_score"]["capped_score"] == 15
     assert payload["risk_score"]["risk_level"] == "LOW"
     assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"]["authentication_results"] == {
+        "spf_result": "unknown",
+        "dkim_result": "unknown",
+        "dmarc_result": "unknown",
+    }
 
 
 def test_should_return_413_for_oversized_uploaded_eml_fixture() -> None:

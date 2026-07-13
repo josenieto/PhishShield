@@ -43,6 +43,7 @@ Successful responses return a JSON body with:
 - `unique_finding_codes`: deduplicated finding codes;
 - `finding_summary`: categorized finding metadata and highest severity;
 - `risk_score`: weighted score, capped score, risk level, and critical-indicator flag.
+- `extracted_evidence`: normalized sender, subject, URLs, attachment filenames, and extracted authentication results.
 
 Current response model fields:
 
@@ -58,6 +59,13 @@ Current response model fields:
 - `risk_score.capped_score: int`
 - `risk_score.risk_level: str`
 - `risk_score.has_critical_indicators: bool`
+- `extracted_evidence.sender_domain: str`
+- `extracted_evidence.subject: str`
+- `extracted_evidence.urls: list[str]`
+- `extracted_evidence.attachment_filenames: list[str]`
+- `extracted_evidence.authentication_results.spf_result: str`
+- `extracted_evidence.authentication_results.dkim_result: str`
+- `extracted_evidence.authentication_results.dmarc_result: str`
 
 ### Example Response
 
@@ -122,6 +130,19 @@ Current response model fields:
     "capped_score": 100,
     "risk_level": "CRITICAL",
     "has_critical_indicators": true
+  },
+  "extracted_evidence": {
+    "sender_domain": "example.zip",
+    "subject": "Urgent account notice",
+    "urls": [
+      "https://example.com/login"
+    ],
+    "attachment_filenames": [],
+    "authentication_results": {
+      "spf_result": "fail",
+      "dkim_result": "pass",
+      "dmarc_result": "fail"
+    }
   }
 }
 ```

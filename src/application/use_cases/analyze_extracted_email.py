@@ -41,6 +41,7 @@ class AnalyzeExtractedEmailCommand:
 
 @dataclass(frozen=True)
 class ExtractedEmailAnalysis:
+    extracted_email: ExtractedEmailContent
     technical_analysis: ExtractedEmailTechnicalIndicatorsAnalysis
     text_analysis: ExtractedEmailTextIndicatorsAnalysis
     finding_codes: tuple[str, ...]
@@ -83,6 +84,7 @@ class AnalyzeExtractedEmailUseCase:
         )
 
         return ExtractedEmailAnalysis(
+            extracted_email=command.extracted_email,
             technical_analysis=technical_analysis,
             text_analysis=text_analysis,
             finding_codes=finding_codes,
