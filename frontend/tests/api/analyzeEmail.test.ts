@@ -1,6 +1,6 @@
-import { describe, expect, it, vi, afterEach } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { analyzeEmail } from "./analyzeEmail";
+import { analyzeEmail } from "../../src/api/analyzeEmail";
 
 
 const SAMPLE_FILE = new File(["sample"], "sample.eml", {
