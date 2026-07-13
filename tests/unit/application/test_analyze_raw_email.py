@@ -64,6 +64,7 @@ def test_should_analyze_extracted_email_content() -> None:
         "SOCIAL_ENGINEERING_HAS_URGENCY_TERMS",
         "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS",
     )
+    assert result.extracted_email == extractor.extracted_email
     assert result.finding_code_summary.highest_severity == "CRITICAL"
     assert result.risk_score.has_critical_indicators is True
 

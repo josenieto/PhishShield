@@ -20,9 +20,24 @@ export type RiskScoreResponse = {
   has_critical_indicators: boolean;
 };
 
+export type AuthenticationResultsResponse = {
+  spf_result: string;
+  dkim_result: string;
+  dmarc_result: string;
+};
+
+export type ExtractedEvidenceResponse = {
+  sender_domain: string;
+  subject: string;
+  urls: string[];
+  attachment_filenames: string[];
+  authentication_results: AuthenticationResultsResponse;
+};
+
 export type AnalyzeEmailResponse = {
   finding_codes: string[];
   unique_finding_codes: string[];
   finding_summary: FindingSummaryResponse;
   risk_score: RiskScoreResponse;
+  extracted_evidence: ExtractedEvidenceResponse;
 };

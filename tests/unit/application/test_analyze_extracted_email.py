@@ -34,6 +34,7 @@ def test_should_analyze_clean_extracted_email() -> None:
 
     assert result.technical_analysis.finding_codes == ()
     assert result.text_analysis.finding_codes == ()
+    assert result.extracted_email == extracted_email
     assert result.finding_codes == ()
     assert result.unique_finding_codes == ()
     assert result.finding_code_summary.total_findings == 0
