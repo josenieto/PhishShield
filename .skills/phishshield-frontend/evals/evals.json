@@ -1,0 +1,77 @@
+{
+  "skill_name": "phishshield-frontend",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We need to add drag-and-drop upload to the PhishShield frontend. How should we implement it without overcomplicating the current MVP?",
+      "expected_output": "The answer should keep the work inside frontend/, preserve the existing file input for accessibility, validate .eml files, reuse the current React/Vite stack, and mention frontend tests for the interaction.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/API.md",
+        "doc/FRONTEND_MVP_PLAN.md",
+        ".skills/phishshield-frontend/SKILL.md"
+      ],
+      "expectations": [
+        "Keeps the change inside the current frontend stack and folder.",
+        "Preserves or recommends keeping the ordinary file input alongside drag and drop.",
+        "Mentions .eml validation or file-type handling.",
+        "Avoids introducing unnecessary state managers, routing, or Tailwind by default.",
+        "Mentions frontend tests for upload behavior."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The frontend on localhost:5173 needs to call the backend on localhost:8000. Should we add CORS to FastAPI right now?",
+      "expected_output": "The answer should prefer the Vite proxy for local development, explain that backend CORS is not needed for the current dev setup, and only suggest CORS if deployment later requires cross-origin browser requests.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/FRONTEND_MVP_PLAN.md",
+        ".skills/phishshield-frontend/SKILL.md"
+      ],
+      "expectations": [
+        "Prefers the Vite proxy for local development.",
+        "Avoids adding backend CORS as the default immediate solution.",
+        "Explains when CORS would become necessary later.",
+        "Keeps the recommendation aligned with the current frontend MVP architecture."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Improve the PhishShield frontend results screen so an analyst can understand the output faster without redesigning the whole app.",
+      "expected_output": "The answer should focus on clearer frontend UX using the existing backend response, prioritize risk and findings readability, preserve raw indicator visibility, and avoid a broad design-system rewrite.",
+      "files": [
+        "AGENT.md",
+        "doc/API.md",
+        "doc/FRONTEND_MVP_PLAN.md",
+        ".skills/phishshield-frontend/SKILL.md"
+      ],
+      "expectations": [
+        "Prioritizes risk summary and findings readability.",
+        "Uses grouped findings, severity, category counts, or similar forensic UX improvements.",
+        "Avoids proposing a large design-system or routing rewrite as the default move.",
+        "Preserves access to raw finding or indicator codes.",
+        "Mentions frontend tests when behavior changes are proposed."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Add screenshot previews for suspicious URLs in the frontend results.",
+      "expected_output": "The answer should recognize that browser evidence depends on backend support, defer frontend-only screenshot UI until the backend exposes the required data, and suggest API or architecture work first if needed.",
+      "files": [
+        "AGENT.md",
+        "doc/ADR.md",
+        "doc/API.md",
+        "doc/FRONTEND_MVP_PLAN.md",
+        ".skills/phishshield-frontend/SKILL.md"
+      ],
+      "expectations": [
+        "States that screenshot evidence requires backend support or API enrichment.",
+        "Avoids inventing frontend-only screenshot behavior without backend data.",
+        "Suggests architecture or backend coordination before adding the UI.",
+        "Keeps Playwright-related work deferred unless it becomes the active roadmap group."
+      ]
+    }
+  ]
+}
