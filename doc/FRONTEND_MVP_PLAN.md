@@ -30,10 +30,23 @@ The current frontend MVP lets a user:
 
 - Frontend stack: React + TypeScript + Vite.
 - Frontend lives in `frontend/`.
+- Runtime frontend code lives in `frontend/src/`.
+- Frontend tests live in `frontend/tests/`.
+- Frontend test setup lives in `frontend/tests/setup.ts`.
+- Frontend `.test.ts` and `.test.tsx` files should not be placed inside `frontend/src/`.
 - Vite development proxy maps `/api` to `http://127.0.0.1:8000`.
 - No backend CORS is required for the current development flow.
 - The backend remains runnable without Docker.
 - Docker remains optional for frontend and backend development.
+
+---
+
+## Frontend Test Structure
+
+- Runtime frontend code belongs in `frontend/src/`.
+- Frontend tests belong in `frontend/tests/`.
+- Vitest and React Testing Library setup belongs in `frontend/tests/setup.ts`.
+- Do not place `.test.ts` or `.test.tsx` files inside `frontend/src/`.
 
 ---
 
@@ -52,7 +65,9 @@ Done:
 - finding category counts;
 - empty state;
 - success state;
-- Vitest + React Testing Library coverage for the current upload/results flow;
+- explicit loading, empty, success, and error result states;
+- extracted `AnalysisResults` component for result rendering;
+- Vitest + React Testing Library coverage for the current upload/results flow, organized under `frontend/tests/`;
 - frontend test/build job in GitHub Actions.
 
 ---
@@ -75,14 +90,14 @@ These items are intentionally out of scope for the current frontend MVP:
 
 ## Next Steps
 
-The next recommended group after this MVP is frontend UX polish.
+The next recommended group after this MVP is API response enrichment or continued frontend UX polish.
 
 Potential mini-steps:
 
-1. Extract an `AnalysisResults` component.
-2. Add dedicated tests for grouped findings and category counts.
-3. Improve result hierarchy and severity visual language.
-4. Revisit backend API enrichment if the frontend needs more evidence fields.
+1. Improve result hierarchy and severity visual language.
+2. Enrich the backend API response if the frontend needs URLs, attachments, or authentication evidence details.
+3. Add dedicated `AnalysisResults` tests if the component grows in complexity.
+4. Keep new frontend tests under `frontend/tests/` as a repository rule.
 
 ---
 
