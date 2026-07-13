@@ -111,7 +111,8 @@ Initial folders are prepared, and skills are defined progressively with `skill-c
   Status: defined in `.skills/phishshield-backend/SKILL.md` with initial evals in `.skills/phishshield-backend/evals/evals.json`.
 
 - `phishshield-frontend`  
-  Guides React, TypeScript, Vite, and forensic dashboard UI work.
+  Guides React, TypeScript, Vite, upload/result flows, frontend testing, and forensic dashboard UX.  
+  Status: defined in `.skills/phishshield-frontend/SKILL.md` with initial evals in `.skills/phishshield-frontend/evals/evals.json`.
 
 - `phishshield-security-analysis`  
   Guides Domain and Application work for phishing indicators, forensic rules, finding codes, and pure analysis boundaries.  
@@ -129,3 +130,4 @@ Skills created with this workflow:
 - `phishshield-architecture`
 - `phishshield-testing`
 - `phishshield-security-analysis`
+- `phishshield-frontend`
