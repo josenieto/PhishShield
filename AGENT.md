@@ -173,6 +173,13 @@ New integrations must be designed so they can be replaced without breaking the c
 
 If a change modifies observable behavior, add or update tests in the appropriate layer.
 
+Frontend repository structure rule:
+
+- production frontend code lives under `frontend/src/`;
+- frontend tests live under `frontend/tests/`;
+- frontend test setup files also live under `frontend/tests/`;
+- do not place frontend `.test.ts` or `.test.tsx` files inside `frontend/src/`.
+
 ### 7. Avoid accidental complexity
 
 Prefer clear, modular solutions aligned with the existing ADR.

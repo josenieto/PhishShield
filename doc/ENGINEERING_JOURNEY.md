@@ -3012,3 +3012,62 @@ Result:
 ### Next step
 
 Add an integration-style test wiring `AnalyzeRawEmailUseCase` with `PythonEmailContentExtractorAdapter`, using raw email bytes that include URLs, attachment filenames, social engineering text, and authentication results.
+
+---
+
+## 2026-07-03 - Frontend test structure cleanup
+
+Type: Refactor  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+The frontend MVP already had Vitest and React Testing Library coverage, but the tests and test setup lived under `frontend/src/`. For repository consistency and cleaner separation between runtime code and verification code, the frontend needed the same structural clarity already used by the backend.
+
+### Decision
+
+Moved frontend tests and test setup into `frontend/tests/` and updated the Vitest configuration to load setup from the new location.
+
+Also documented a repository design rule in `AGENT.md`: frontend production code belongs in `frontend/src/`, while frontend test files and test setup belong in `frontend/tests/`.
+
+### Files changed
+
+- `frontend/tests/App.test.tsx`
+- `frontend/tests/api/analyzeEmail.test.ts`
+- `frontend/tests/setup.ts`
+- `frontend/vite.config.ts`
+- `AGENT.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+```
+
+Result:
+
+```text
+13 passed
+```
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run build
+```
+
+Result:
+
+```text
+vite build OK
+```
+
+### Next step
+
+Continue with frontend UX hardening or enrich the backend API response model with more evidence that the frontend can render.
