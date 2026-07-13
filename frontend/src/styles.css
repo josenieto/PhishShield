@@ -126,8 +126,14 @@ h1 {
 .file-input-help,
 .summary-subtext,
 .panel-heading p,
-.finding-item p {
+.finding-item p,
+.muted-copy {
   color: #cbd5e1;
+}
+
+code {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.95em;
 }
 
 .upload-actions {
@@ -197,6 +203,14 @@ button:disabled {
   border-color: rgba(96, 165, 250, 0.4);
 }
 
+.success-banner code,
+.empty-state-panel code,
+.lede code,
+.file-input-help code,
+.status-grid code {
+  color: #dbeafe;
+}
+
 .analysis-panel {
   display: grid;
   gap: 1rem;
@@ -225,6 +239,25 @@ button:disabled {
 
 .findings-panel {
   padding: 1rem 1.1rem;
+}
+
+.category-overview-grid {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.category-overview-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  background: rgba(30, 41, 59, 0.58);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.category-overview-card strong {
+  font-size: 1.15rem;
 }
 
 .finding-category-grid {

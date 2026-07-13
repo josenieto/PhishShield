@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 import { analyzeEmail } from "./api/analyzeEmail";
+import { AnalysisResults } from "./components/AnalysisResults";
 import type { AnalyzeEmailResponse } from "./types/api";
 
 
@@ -10,24 +11,6 @@ const FILE_INPUT_ACCEPT = ".eml,message/rfc822";
 function isSupportedEmailFile(file: File): boolean {
   const normalizedName = file.name.trim().toLowerCase();
   return normalizedName.endsWith(".eml");
-}
-
-
-function severityClassName(severity: string): string {
-  return `severity-badge severity-${severity.toLowerCase()}`;
-}
-
-
-function groupFindingsByCategory(analysis: AnalyzeEmailResponse) {
-  const groupedFindings = new Map<string, AnalyzeEmailResponse["finding_summary"]["sorted_findings"]>();
-
-  for (const finding of analysis.finding_summary.sorted_findings) {
-    const currentFindings = groupedFindings.get(finding.category) ?? [];
-    currentFindings.push(finding);
-    groupedFindings.set(finding.category, currentFindings);
-  }
-
-  return Array.from(groupedFindings.entries());
 }
 
 
@@ -41,11 +24,13 @@ export default function App() {
   function handleSelectedFile(file: File | null): void {
     if (file === null) {
       setSelectedFile(null);
+      setErrorMessage("");
       return;
     }
 
     if (!isSupportedEmailFile(file)) {
       setSelectedFile(null);
+      setAnalysis(null);
       setErrorMessage("Only .eml files are supported in the current frontend MVP.");
       return;
     }
@@ -54,7 +39,7 @@ export default function App() {
     setErrorMessage("");
   }
 
-  async function handleAnalyzeSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleAnalyzeSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (selectedFile === null) {
@@ -64,6 +49,7 @@ export default function App() {
 
     setIsAnalyzing(true);
     setErrorMessage("");
+    setAnalysis(null);
 
     try {
       const result = await analyzeEmail(selectedFile);
@@ -82,10 +68,10 @@ export default function App() {
     <main className="app-shell">
       <section className="hero-card">
         <p className="eyebrow">PhishShield</p>
-        <h1>Email analysis frontend MVP</h1>
+        <h1>Local email triage workbench</h1>
         <p className="lede">
-          Upload an `.eml` file and inspect the current backend risk score plus
-          extracted findings.
+          Upload an <code>.eml</code> message and inspect the local backend risk posture,
+          grouped indicators, and current evidence summary.
         </p>
 
         <form className="upload-panel" onSubmit={handleAnalyzeSubmit}>
@@ -108,7 +94,7 @@ export default function App() {
           >
             <span className="file-input-title">Email file</span>
             <span className="file-input-help">
-              Choose or drag a `.eml` message to send to `/api/analyze-email`.
+              Choose or drag a <code>.eml</code> message to send to <code>/api/analyze-email</code>.
             </span>
             <input
               id="email-file"
@@ -127,7 +113,7 @@ export default function App() {
             </div>
 
             <button type="submit" disabled={isAnalyzing || selectedFile === null}>
-              {isAnalyzing ? "Analyzing..." : "Analyze email"}
+              {isAnalyzing ? "Analyzing local email..." : "Analyze email"}
             </button>
           </div>
         </form>
@@ -136,112 +122,42 @@ export default function App() {
 
         <div className="status-grid status-grid-top">
           <article>
-            <h2>Backend API</h2>
-            <p>`POST /api/analyze-email` proxied to `http://127.0.0.1:8000`.</p>
+            <h2>Execution path</h2>
+            <p>
+              Browser upload to <code>/api/analyze-email</code>, proxied to the local
+              FastAPI service at <code>http://127.0.0.1:8000</code>.
+            </p>
           </article>
           <article>
-            <h2>Next Step</h2>
-            <p>Refine the UI, drag and drop, and grouped findings if this flow works.</p>
+            <h2>Current scope</h2>
+            <p>
+              The MVP focuses on local <code>.eml</code> triage, risk scoring, grouped
+              findings, and a readable evidence summary.
+            </p>
           </article>
         </div>
 
-        {analysis === null && !errorMessage && (
+        {isAnalyzing && (
           <section className="empty-state-panel">
-            <h2>No analysis yet</h2>
+            <h2>Analysis in progress</h2>
             <p>
-              Upload an `.eml` file to render the current backend findings and risk
-              summary.
+              The selected email is being submitted to the local backend for risk scoring
+              and indicator triage.
             </p>
           </section>
         )}
 
-        {analysis && (
-          <section className="analysis-panel">
-            <div className="success-banner">
-              <strong>Analysis completed</strong>
-              <span>Results are shown below using the current backend response model.</span>
-            </div>
-
-            <div className="analysis-summary-grid">
-              <article className="summary-card summary-card-accent">
-                <span className="summary-label">Risk level</span>
-                <strong>{analysis.risk_score.risk_level}</strong>
-                <span className="summary-subtext">
-                  Score {analysis.risk_score.raw_score} / {analysis.risk_score.capped_score}
-                </span>
-              </article>
-
-              <article className="summary-card">
-                <span className="summary-label">Critical indicators</span>
-                <strong>
-                  {analysis.risk_score.has_critical_indicators ? "Present" : "None"}
-                </strong>
-                <span className="summary-subtext">
-                  Highest severity {analysis.finding_summary.highest_severity}
-                </span>
-              </article>
-
-              <article className="summary-card">
-                <span className="summary-label">Findings</span>
-                <strong>{analysis.finding_summary.total_findings}</strong>
-                <span className="summary-subtext">
-                  {analysis.unique_finding_codes.length} unique indicators
-                </span>
-              </article>
-            </div>
-
-            <section className="findings-panel">
-              <div className="panel-heading">
-                <h2>Findings by category</h2>
-                <p>Grouped by backend category and ordered by severity inside each section.</p>
-              </div>
-
-              <div className="finding-category-grid">
-                {groupFindingsByCategory(analysis).map(([category, findings]) => (
-                  <section key={category} className="finding-category-card">
-                    <div className="finding-category-header">
-                      <h3>{category}</h3>
-                      <span className="category-count-chip">{findings.length}</span>
-                    </div>
-
-                    <ul className="finding-list">
-                      {findings.map((finding) => (
-                        <li key={finding.code} className="finding-item">
-                          <div>
-                            <strong>{finding.code}</strong>
-                            <p>{finding.category}</p>
-                          </div>
-                          <span className={severityClassName(finding.severity)}>
-                            {finding.severity}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                ))}
-              </div>
-            </section>
-
-            <section className="findings-panel">
-              <div className="panel-heading">
-                <h2>Indicator codes</h2>
-                <p>Unique finding codes returned by the backend.</p>
-              </div>
-
-              <div className="indicator-chip-grid">
-                {analysis.unique_finding_codes.length === 0 ? (
-                  <span className="indicator-chip indicator-chip-safe">No findings</span>
-                ) : (
-                  analysis.unique_finding_codes.map((findingCode) => (
-                    <span key={findingCode} className="indicator-chip">
-                      {findingCode}
-                    </span>
-                  ))
-                )}
-              </div>
-            </section>
+        {analysis === null && !errorMessage && !isAnalyzing && (
+          <section className="empty-state-panel">
+            <h2>No analysis loaded</h2>
+            <p>
+              Upload an <code>.eml</code> file to render the current backend findings,
+              risk score, and grouped indicators.
+            </p>
           </section>
         )}
+
+        {analysis && <AnalysisResults analysis={analysis} selectedFileName={selectedFile?.name ?? "selected-email.eml"} />}
       </section>
     </main>
   );
