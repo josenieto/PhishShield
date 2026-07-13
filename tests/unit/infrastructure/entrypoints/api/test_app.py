@@ -49,6 +49,12 @@ def test_should_analyze_email_through_created_app() -> None:
     assert "DOMAIN_CONTAINS_PUNYCODE" in payload["finding_codes"]
     assert "AUTHENTICATION_DMARC_FAILED" in payload["finding_codes"]
     assert payload["finding_summary"]["highest_severity"] == "CRITICAL"
+    assert payload["extracted_evidence"]["sender_domain"] == "xn--paypl-3ve.zip"
+    assert payload["extracted_evidence"]["authentication_results"] == {
+        "spf_result": "fail",
+        "dkim_result": "pass",
+        "dmarc_result": "fail",
+    }
 
 
 def test_should_return_health_response_through_created_app() -> None:

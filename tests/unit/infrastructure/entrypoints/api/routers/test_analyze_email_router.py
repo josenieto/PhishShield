@@ -31,6 +31,17 @@ def test_should_analyze_uploaded_plain_text_email() -> None:
     assert "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS" in payload["finding_codes"]
     assert payload["finding_summary"]["highest_severity"] == "CRITICAL"
     assert payload["risk_score"]["has_critical_indicators"] is True
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "xn--paypl-3ve.zip",
+        "subject": "Urgent account notice",
+        "urls": ["https://example.com/login"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "fail",
+            "dkim_result": "pass",
+            "dmarc_result": "fail",
+        },
+    }
 
 
 def test_should_analyze_uploaded_html_email() -> None:
@@ -55,6 +66,8 @@ def test_should_analyze_uploaded_html_email() -> None:
     assert "DOMAIN_HAS_SUSPICIOUS_TLD" in payload["finding_codes"]
     assert "SOCIAL_ENGINEERING_HAS_URGENCY_TERMS" in payload["finding_codes"]
     assert "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS" in payload["finding_codes"]
+    assert payload["extracted_evidence"]["subject"] == "Urgent account notice"
+    assert payload["extracted_evidence"]["urls"] == ["https://example.com/login"]
 
 
 def test_should_return_response_for_empty_uploaded_email() -> None:
@@ -69,6 +82,17 @@ def test_should_return_response_for_empty_uploaded_email() -> None:
     payload = response.json()
     assert payload["finding_codes"] == ["AUTHENTICATION_RESULTS_UNKNOWN"]
     assert payload["finding_summary"]["total_findings"] == 1
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "",
+        "subject": "",
+        "urls": [],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "unknown",
+            "dkim_result": "unknown",
+            "dmarc_result": "unknown",
+        },
+    }
 
 
 def test_should_reject_oversized_uploaded_email() -> None:
