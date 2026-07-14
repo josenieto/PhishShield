@@ -75,6 +75,33 @@ const SAMPLE_ANALYSIS = {
     risk_level: "HIGH",
     has_critical_indicators: false,
   },
+  extracted_evidence: {
+    sender_domain: "example.zip",
+    subject: "Urgent account notice",
+    urls: ["https://example.com/login"],
+    attachment_filenames: ["invoice.pdf.exe"],
+    authentication_results: {
+      spf_result: "fail",
+      dkim_result: "pass",
+      dmarc_result: "fail",
+    },
+  },
+};
+
+
+const SAMPLE_ANALYSIS_WITH_EMPTY_EVIDENCE = {
+  ...SAMPLE_ANALYSIS,
+  extracted_evidence: {
+    sender_domain: "",
+    subject: "",
+    urls: [],
+    attachment_filenames: [],
+    authentication_results: {
+      spf_result: "unknown",
+      dkim_result: "",
+      dmarc_result: "unknown",
+    },
+  },
 };
 
 
@@ -153,6 +180,14 @@ describe("App", () => {
 
     expect(await screen.findByText("Analysis completed")).toBeInTheDocument();
     expect(screen.getByText(/review the local triage output for/i)).toBeInTheDocument();
+    expect(screen.getByText("Extracted evidence")).toBeInTheDocument();
+    expect(screen.getByText("example.zip")).toBeInTheDocument();
+    expect(screen.getByText("Urgent account notice")).toBeInTheDocument();
+    expect(screen.getByText("https://example.com/login")).toBeInTheDocument();
+    expect(screen.getByText("invoice.pdf.exe")).toBeInTheDocument();
+    expect(screen.getByText("SPF")).toBeInTheDocument();
+    expect(screen.getAllByText("fail")).toHaveLength(2);
+    expect(screen.getByText("pass")).toBeInTheDocument();
     expect(screen.getByText("Evidence overview")).toBeInTheDocument();
     expect(screen.getByText("Findings by category")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "AUTHENTICATION" })).toBeInTheDocument();
@@ -224,5 +259,26 @@ describe("App", () => {
     await waitFor(() => {
       expect(screen.getByText("security-review.eml")).toBeInTheDocument();
     });
+  });
+
+  it("should render empty evidence states when extracted evidence is missing", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS_WITH_EMPTY_EVIDENCE);
+
+    render(<App />);
+
+    const input = emailFileInput();
+    const emailFile = new File(["sample"], "empty-evidence.eml", {
+      type: "message/rfc822",
+    });
+
+    await user.upload(input, emailFile);
+    await user.click(screen.getByRole("button", { name: "Analyze email" }));
+
+    expect(await screen.findByText("Extracted evidence")).toBeInTheDocument();
+    expect(screen.getAllByText("Not available")).toHaveLength(3);
+    expect(screen.getByText("No URLs extracted")).toBeInTheDocument();
+    expect(screen.getByText("No attachments extracted")).toBeInTheDocument();
+    expect(screen.getAllByText("unknown")).toHaveLength(2);
   });
 });
