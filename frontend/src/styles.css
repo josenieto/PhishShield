@@ -445,6 +445,11 @@ button:disabled {
   margin: 0;
 }
 
+.finding-explanation {
+  margin-top: 0.35rem;
+  max-width: 60ch;
+}
+
 .severity-badge,
 .indicator-chip {
   display: inline-flex;
