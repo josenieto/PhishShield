@@ -173,6 +173,23 @@ New integrations must be designed so they can be replaced without breaking the c
 
 If a change modifies observable behavior, add or update tests in the appropriate layer.
 
+Testing distribution guideline:
+
+- treat test distribution as a health signal, not a hard quota;
+- prefer most backend behavioral coverage in `Domain`, because it is the cheapest and most deterministic layer to test;
+- use `Application` tests to validate orchestration, ports, deduplication, scoring composition, and use case contracts;
+- use `Infrastructure` and API tests to validate adapters, parsers, framework boundaries, configuration, and error handling;
+- keep end-to-end and smoke coverage small, stable, and focused on critical user journeys.
+
+Current target distribution guideline for PhishShield:
+
+- `Domain`: 55-60%;
+- `Application`: 20-25%;
+- `Infrastructure/API`: 10-15%;
+- `E2E/smoke`: 5-10%.
+
+These percentages are based on feedback speed, maintenance cost, and diagnostic value. Do not add artificial tests just to match the ratio.
+
 Frontend repository structure rule:
 
 - production frontend code lives under `frontend/src/`;

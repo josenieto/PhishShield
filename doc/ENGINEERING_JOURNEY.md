@@ -3071,3 +3071,66 @@ vite build OK
 ### Next step
 
 Continue with frontend UX hardening or enrich the backend API response model with more evidence that the frontend can render.
+
+---
+
+## 2026-07-03 - Cost-aware testing distribution guideline
+
+Type: Testing  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+PhishShield already had a strong testing culture, but its testing guidance described layer-specific rules more than portfolio balance. The project needed an explicit, documented rationale for how much testing effort should normally live in `Domain`, `Application`, `Infrastructure/API`, and `E2E/smoke`, based on feedback speed, diagnostic value, and maintenance cost.
+
+### Decision
+
+Documented a cost-aware testing distribution guideline as a repository-level quality rule.
+
+The guidance is intentionally approximate and must be treated as a health signal, not a hard quota:
+
+- `Domain`: 55-60%
+- `Application`: 20-25%
+- `Infrastructure/API`: 10-15%
+- `E2E/smoke`: 5-10%
+
+This rationale is now reflected in repository guidance, the ADR, and the PhishShield testing skill so future work can make testing decisions with explicit cost-awareness.
+
+### Files changed
+
+- `AGENT.md`
+- `doc/ADR.md`
+- `.skills/phishshield-testing/SKILL.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+PowerShell test counting snapshot
+```
+
+Result:
+
+```text
+domain: 165 (49.0%)
+application: 75 (22.3%)
+infrastructure: 61 (18.1%)
+integration: 22 (6.5%)
+frontend: 14 (4.2%)
+total: 337
+```
+
+This snapshot is approximate and file-structure based. It is still useful as a baseline:
+
+- `Application` is already inside the target band.
+- `Integration` is already inside the target band for high-cost tests.
+- `Domain` is slightly below the target range, which suggests future behavior additions should continue preferring pure rule coverage when possible.
+- `Infrastructure` is slightly above the target range, which is acceptable for the current MVP because the `.eml` parser and API boundary are strategically important.
+- `Frontend` is tracked separately from the backend pyramid in day-to-day work, but the snapshot confirms that its current footprint remains small.
+
+### Next step
+
+Use this snapshot as a future comparison point and continue favoring new low-cost coverage in `Domain` and `Application` unless the risk clearly lives in parser, adapter, API, or runtime wiring behavior.
