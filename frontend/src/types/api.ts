@@ -2,6 +2,7 @@ export type FindingResponse = {
   code: string;
   category: string;
   severity: string;
+  explanation: string;
 };
 
 export type FindingSummaryResponse = {

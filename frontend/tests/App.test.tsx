@@ -28,16 +28,19 @@ const SAMPLE_ANALYSIS = {
         code: "AUTHENTICATION_RESULTS_UNKNOWN",
         category: "AUTHENTICATION",
         severity: "MEDIUM",
+        explanation: "Authentication results were unavailable or could not be extracted, which reduces trust in sender validation.",
       },
       {
         code: "DOMAIN_HAS_SUSPICIOUS_TLD",
         category: "DOMAIN",
         severity: "MEDIUM",
+        explanation: "The domain uses a top-level domain that is more commonly associated with abuse or impersonation.",
       },
       {
         code: "DOMAIN_CONTAINS_PUNYCODE",
         category: "DOMAIN",
         severity: "HIGH",
+        explanation: "The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
       },
     ],
     sorted_findings: [
@@ -45,16 +48,19 @@ const SAMPLE_ANALYSIS = {
         code: "DOMAIN_CONTAINS_PUNYCODE",
         category: "DOMAIN",
         severity: "HIGH",
+        explanation: "The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
       },
       {
         code: "AUTHENTICATION_RESULTS_UNKNOWN",
         category: "AUTHENTICATION",
         severity: "MEDIUM",
+        explanation: "Authentication results were unavailable or could not be extracted, which reduces trust in sender validation.",
       },
       {
         code: "DOMAIN_HAS_SUSPICIOUS_TLD",
         category: "DOMAIN",
         severity: "MEDIUM",
+        explanation: "The domain uses a top-level domain that is more commonly associated with abuse or impersonation.",
       },
     ],
     finding_counts_by_category: {
@@ -196,6 +202,7 @@ describe("App", () => {
     expect(screen.getByText("Findings by category")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "AUTHENTICATION" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "DOMAIN" })).toBeInTheDocument();
+    expect(screen.getByText(/The domain contains Punycode/i)).toBeInTheDocument();
     expect(screen.getAllByText("2")[0]).toBeInTheDocument();
     expect(screen.getAllByText("DOMAIN_CONTAINS_PUNYCODE")).toHaveLength(2);
   });
