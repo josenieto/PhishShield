@@ -244,6 +244,13 @@ The backend also runs:
 - in Docker Compose through `compose.yaml`;
 - in GitHub Actions through backend tests and a Docker health smoke workflow.
 
+Coverage is currently available in observability mode only:
+
+- backend: `python -m pytest --cov=src --cov-report=term-missing`
+- frontend: `cd frontend && npm run test:coverage`
+
+The project does not enforce coverage thresholds in CI yet. The current goal is to make coverage visible before deciding whether any gates are useful.
+
 ---
 
 ## Next Focus
