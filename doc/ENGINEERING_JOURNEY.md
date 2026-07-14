@@ -3198,3 +3198,49 @@ Frontend coverage: statements 93.76%, branches 80.95%, functions 81.25%, lines 9
 ### Next step
 
 Keep coverage in observability mode for now and revisit later whether reporting-only CI publishing or soft thresholds would add value without creating unhelpful pressure.
+
+---
+
+## 2026-07-04 - Full-suite verification trigger policy
+
+Type: Testing  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+After introducing backend-provided finding explanations, a partial local verification scope passed, but `Backend CI` later failed on the full backend suite because shared contract changes affected tests outside the manually selected subset. The issue was resolved quickly, but the project needed an explicit rule for when partial verification is insufficient.
+
+### Decision
+
+Documented a full-suite verification trigger policy.
+
+- Changes to shared backend contracts such as value objects, finding definitions, Application result models, API schemas, and parser adapters must end with `python -m pytest`.
+- Changes to shared frontend contracts such as frontend API types or shared result-rendering components must end with `cmd /c npm run test` and `cmd /c npm run build`.
+- Partial scopes remain useful during development, but not as final verification for cross-layer contract changes.
+
+This policy now lives in `AGENT.md` and the PhishShield testing skill.
+
+### Files changed
+
+- `AGENT.md`
+- `.skills/phishshield-testing/SKILL.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+not run
+```
+
+Result:
+
+```text
+Documentation-only process hardening update.
+```
+
+### Next step
+
+Use the new verification trigger rule as the default workflow for future cross-layer contract changes and continue with MVP cleanup or realistic fixture expansion.
