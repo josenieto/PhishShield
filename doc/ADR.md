@@ -104,5 +104,11 @@ This section describes a deferred target capability. It is not part of the curre
 ## 5. Quality Strategy and Repository Lifecycle
 
 - **Testing:** backend behavior is validated with **Pytest**. Frontend behavior is validated with **Vitest** and **React Testing Library**. Integration tests cover parser, API, and runtime-focused flows. Network-dependent capabilities should be isolated behind ports and mocked or faked where appropriate.
+- **Testing distribution:** PhishShield follows a cost-aware testing pyramid aligned with its hexagonal architecture. The target distribution is a health signal, not a hard quota:
+  - `Domain`: 55-60%
+  - `Application`: 20-25%
+  - `Infrastructure/API`: 10-15%
+  - `E2E/smoke`: 5-10%
+- **Testing rationale:** pure `Domain` tests should carry most behavioral combinations because they are the cheapest, fastest, and most deterministic. `Application` tests validate orchestration and contracts. `Infrastructure` and API tests validate adapters and framework boundaries. `E2E` and smoke tests remain intentionally small because they are slower, more fragile, and more expensive to diagnose.
 - **GitHub Actions:** the current CI pipeline runs backend tests, frontend tests and build, and a backend Docker health smoke workflow. Formatting, linting, and image publishing remain future improvements.
 - **Community management:** public GitHub Issues are used for roadmap tracking with labels such as `enhancement` and `good first issue`, and Git tags are used for formal versioning such as `v1.0.0` and `v1.1.0`.
