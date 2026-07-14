@@ -32,6 +32,17 @@ describe("analyzeEmail", () => {
         risk_level: "LOW",
         has_critical_indicators: false,
       },
+      extracted_evidence: {
+        sender_domain: "example.com",
+        subject: "Weekly account summary",
+        urls: [],
+        attachment_filenames: [],
+        authentication_results: {
+          spf_result: "pass",
+          dkim_result: "pass",
+          dmarc_result: "pass",
+        },
+      },
     };
 
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
