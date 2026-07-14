@@ -3134,3 +3134,67 @@ This snapshot is approximate and file-structure based. It is still useful as a b
 ### Next step
 
 Use this snapshot as a future comparison point and continue favoring new low-cost coverage in `Domain` and `Application` unless the risk clearly lives in parser, adapter, API, or runtime wiring behavior.
+
+---
+
+## 2026-07-03 - Coverage observability setup
+
+Type: Testing  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+PhishShield already had strong behavioral test coverage and a documented test distribution guideline, but it did not yet expose formal code coverage metrics. The immediate need was observability, not enforcement: make backend and frontend coverage measurable without introducing CI gates or minimum thresholds prematurely.
+
+### Decision
+
+Added coverage tooling in observability mode only.
+
+- Backend now includes `pytest-cov` in test dependencies.
+- Frontend now includes Vitest V8 coverage support and a dedicated `test:coverage` script.
+- Documentation now exposes coverage commands explicitly and states that coverage is not yet enforced in CI.
+
+### Files changed
+
+- `pyproject.toml`
+- `frontend/package.json`
+- `frontend/vite.config.ts`
+- `README.md`
+- `doc/BACKEND_EVOLUTION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pip install -e ".[test]"
+cd frontend
+cmd /c npm install
+```
+
+Result:
+
+```text
+Coverage dependencies installed successfully.
+```
+
+Command:
+
+```bash
+python -m pytest --cov=src --cov-report=term-missing
+cd frontend
+cmd /c npm run test:coverage
+```
+
+Result:
+
+```text
+Backend coverage: 99%
+Frontend coverage: statements 93.76%, branches 80.95%, functions 81.25%, lines 93.76%
+```
+
+### Next step
+
+Keep coverage in observability mode for now and revisit later whether reporting-only CI publishing or soft thresholds would add value without creating unhelpful pressure.
