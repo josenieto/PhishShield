@@ -24,11 +24,13 @@ def test_should_store_finding_values() -> None:
         code="URL_HAS_EMBEDDED_CREDENTIALS",
         category=FINDING_CATEGORY_URL,
         severity=FINDING_SEVERITY_HIGH,
+        explanation="The URL includes embedded credentials.",
     )
 
     assert finding.code == "URL_HAS_EMBEDDED_CREDENTIALS"
     assert finding.category == FINDING_CATEGORY_URL
     assert finding.severity == FINDING_SEVERITY_HIGH
+    assert finding.explanation == "The URL includes embedded credentials."
 
 
 def test_should_compare_findings_by_value() -> None:
@@ -45,6 +47,12 @@ def test_should_keep_different_findings_distinct() -> None:
         FINDING_CATEGORY_URL,
         FINDING_SEVERITY_HIGH,
     )
+
+
+def test_should_default_explanation_to_empty_string() -> None:
+    finding = Finding("A_FINDING", FINDING_CATEGORY_URL, FINDING_SEVERITY_HIGH)
+
+    assert finding.explanation == ""
 
 
 def test_should_be_immutable() -> None:

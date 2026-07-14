@@ -30,6 +30,7 @@ def test_should_convert_finding_to_response() -> None:
             code="DOMAIN_CONTAINS_PUNYCODE",
             category=FINDING_CATEGORY_DOMAIN,
             severity=FINDING_SEVERITY_HIGH,
+            explanation="The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
         )
     )
 
@@ -37,6 +38,7 @@ def test_should_convert_finding_to_response() -> None:
         code="DOMAIN_CONTAINS_PUNYCODE",
         category=FINDING_CATEGORY_DOMAIN,
         severity=FINDING_SEVERITY_HIGH,
+        explanation="The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
     )
 
 
@@ -45,11 +47,13 @@ def test_should_convert_finding_summary_to_response() -> None:
         code="DOMAIN_CONTAINS_PUNYCODE",
         category=FINDING_CATEGORY_DOMAIN,
         severity=FINDING_SEVERITY_HIGH,
+        explanation="The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
     )
     authentication_finding = Finding(
         code="AUTHENTICATION_DMARC_FAILED",
         category=FINDING_CATEGORY_AUTHENTICATION,
         severity=FINDING_SEVERITY_CRITICAL,
+        explanation="DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy.",
     )
     summary = AnalysisFindingsSummary(
         findings=[domain_finding, authentication_finding],
@@ -70,11 +74,13 @@ def test_should_convert_finding_summary_to_response() -> None:
                 code="DOMAIN_CONTAINS_PUNYCODE",
                 category=FINDING_CATEGORY_DOMAIN,
                 severity=FINDING_SEVERITY_HIGH,
+                explanation="The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
             ),
             FindingResponse(
                 code="AUTHENTICATION_DMARC_FAILED",
                 category=FINDING_CATEGORY_AUTHENTICATION,
                 severity=FINDING_SEVERITY_CRITICAL,
+                explanation="DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy.",
             ),
         ],
         sorted_findings=[
@@ -82,11 +88,13 @@ def test_should_convert_finding_summary_to_response() -> None:
                 code="AUTHENTICATION_DMARC_FAILED",
                 category=FINDING_CATEGORY_AUTHENTICATION,
                 severity=FINDING_SEVERITY_CRITICAL,
+                explanation="DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy.",
             ),
             FindingResponse(
                 code="DOMAIN_CONTAINS_PUNYCODE",
                 category=FINDING_CATEGORY_DOMAIN,
                 severity=FINDING_SEVERITY_HIGH,
+                explanation="The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
             ),
         ],
         finding_counts_by_category={
@@ -156,6 +164,7 @@ def test_should_convert_extracted_email_analysis_to_response() -> None:
         code="AUTHENTICATION_DMARC_FAILED",
         category=FINDING_CATEGORY_AUTHENTICATION,
         severity=FINDING_SEVERITY_CRITICAL,
+        explanation="DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy.",
     )
     analysis = ExtractedEmailAnalysis(
         extracted_email=extracted_email,
@@ -190,6 +199,7 @@ def test_should_convert_extracted_email_analysis_to_response() -> None:
                     code="AUTHENTICATION_DMARC_FAILED",
                     category=FINDING_CATEGORY_AUTHENTICATION,
                     severity=FINDING_SEVERITY_CRITICAL,
+                    explanation="DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy.",
                 )
             ],
             sorted_findings=[
@@ -197,6 +207,7 @@ def test_should_convert_extracted_email_analysis_to_response() -> None:
                     code="AUTHENTICATION_DMARC_FAILED",
                     category=FINDING_CATEGORY_AUTHENTICATION,
                     severity=FINDING_SEVERITY_CRITICAL,
+                    explanation="DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy.",
                 )
             ],
             finding_counts_by_category={FINDING_CATEGORY_AUTHENTICATION: 1},

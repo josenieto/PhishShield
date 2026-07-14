@@ -30,6 +30,7 @@ export function FindingsByCategory({ analysis }: FindingsByCategoryProps) {
                   <div>
                     <strong>{finding.code}</strong>
                     <p>{finding.category} signal</p>
+                    <p className="finding-explanation">{finding.explanation}</p>
                   </div>
                   <span className={severityClassName(finding.severity)}>{finding.severity}</span>
                 </li>

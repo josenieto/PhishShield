@@ -49,8 +49,8 @@ Current response model fields:
 
 - `finding_codes: list[str]`
 - `unique_finding_codes: list[str]`
-- `finding_summary.findings: list[{code, category, severity}]`
-- `finding_summary.sorted_findings: list[{code, category, severity}]`
+- `finding_summary.findings: list[{code, category, severity, explanation}]`
+- `finding_summary.sorted_findings: list[{code, category, severity, explanation}]`
 - `finding_summary.finding_counts_by_category: dict[str, int]`
 - `finding_summary.highest_severity: str`
 - `finding_summary.total_findings: int`
@@ -90,24 +90,28 @@ Current response model fields:
       {
         "code": "DOMAIN_HAS_SUSPICIOUS_TLD",
         "category": "DOMAIN",
-        "severity": "HIGH"
+        "severity": "HIGH",
+        "explanation": "The domain uses a top-level domain that is more commonly associated with abuse or impersonation."
       },
       {
         "code": "AUTHENTICATION_DMARC_FAILED",
         "category": "AUTHENTICATION",
-        "severity": "CRITICAL"
+        "severity": "CRITICAL",
+        "explanation": "DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy."
       }
     ],
     "sorted_findings": [
       {
         "code": "AUTHENTICATION_DMARC_FAILED",
         "category": "AUTHENTICATION",
-        "severity": "CRITICAL"
+        "severity": "CRITICAL",
+        "explanation": "DMARC authentication failed, which can indicate that the message does not align with the claimed sender domain policy."
       },
       {
         "code": "DOMAIN_HAS_SUSPICIOUS_TLD",
         "category": "DOMAIN",
-        "severity": "HIGH"
+        "severity": "HIGH",
+        "explanation": "The domain uses a top-level domain that is more commonly associated with abuse or impersonation."
       }
     ],
     "finding_counts_by_category": {

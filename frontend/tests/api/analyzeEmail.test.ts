@@ -19,11 +19,25 @@ describe("analyzeEmail", () => {
       finding_codes: [],
       unique_finding_codes: [],
       finding_summary: {
-        findings: [],
-        sorted_findings: [],
+        findings: [
+          {
+            code: "DOMAIN_CONTAINS_PUNYCODE",
+            category: "DOMAIN",
+            severity: "HIGH",
+            explanation: "The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
+          },
+        ],
+        sorted_findings: [
+          {
+            code: "DOMAIN_CONTAINS_PUNYCODE",
+            category: "DOMAIN",
+            severity: "HIGH",
+            explanation: "The domain contains Punycode, which can be used to create visually deceptive lookalike domains.",
+          },
+        ],
         finding_counts_by_category: {},
-        highest_severity: "UNKNOWN",
-        total_findings: 0,
+        highest_severity: "HIGH",
+        total_findings: 1,
       },
       risk_score: {
         indicators: [],
