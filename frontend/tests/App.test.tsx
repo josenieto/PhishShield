@@ -180,6 +180,10 @@ describe("App", () => {
 
     expect(await screen.findByText("Analysis completed")).toBeInTheDocument();
     expect(screen.getByText(/review the local triage output for/i)).toBeInTheDocument();
+    expect(screen.getByText("Risk assessment")).toBeInTheDocument();
+    expect(
+      screen.getByText("No critical indicators were observed, but the returned findings still require analyst review."),
+    ).toBeInTheDocument();
     expect(screen.getByText("Extracted evidence")).toBeInTheDocument();
     expect(screen.getByText("example.zip")).toBeInTheDocument();
     expect(screen.getByText("Urgent account notice")).toBeInTheDocument();
@@ -188,7 +192,7 @@ describe("App", () => {
     expect(screen.getByText("SPF")).toBeInTheDocument();
     expect(screen.getAllByText("fail")).toHaveLength(2);
     expect(screen.getByText("pass")).toBeInTheDocument();
-    expect(screen.getByText("Evidence overview")).toBeInTheDocument();
+    expect(screen.getByText("Indicator distribution")).toBeInTheDocument();
     expect(screen.getByText("Findings by category")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "AUTHENTICATION" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "DOMAIN" })).toBeInTheDocument();
