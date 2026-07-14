@@ -16,12 +16,29 @@ python -m pip install -e ".[test]"
 python -m pytest
 ```
 
+### Run Backend Coverage
+
+Coverage is currently observational only. No CI gate or minimum threshold is enforced yet.
+
+```bash
+python -m pytest --cov=src --cov-report=term-missing
+```
+
 ### Run Frontend Tests
 
 ```bash
 cd frontend
 npm run test
 npm run build
+```
+
+### Run Frontend Coverage
+
+Coverage is currently observational only. No CI gate or minimum threshold is enforced yet.
+
+```bash
+cd frontend
+npm run test:coverage
 ```
 
 ### Run API
