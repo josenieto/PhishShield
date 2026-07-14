@@ -21,3 +21,4 @@ class Finding:
     code: str
     category: str
     severity: str
+    explanation: str = ""

@@ -24,11 +24,15 @@ def test_should_build_social_engineering_finding_from_code(
     code: str,
     severity: str,
 ) -> None:
-    assert build_finding_from_code(code) == Finding(
+    finding = build_finding_from_code(code)
+
+    assert finding == Finding(
         code=code,
         category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
         severity=severity,
+        explanation=finding.explanation,
     )
+    assert finding.explanation != ""
 
 
 def test_should_build_social_engineering_findings_from_codes_preserving_order() -> None:
@@ -43,15 +47,18 @@ def test_should_build_social_engineering_findings_from_codes_preserving_order() 
             code="SOCIAL_ENGINEERING_HAS_URGENCY_TERMS",
             category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
             severity=FINDING_SEVERITY_MEDIUM,
+            explanation="The message uses urgency language to pressure the recipient into acting quickly.",
         ),
         Finding(
             code="SOCIAL_ENGINEERING_HAS_FINANCIAL_PRESSURE_TERMS",
             category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
             severity=FINDING_SEVERITY_MEDIUM,
+            explanation="The message uses financial pressure language to push the recipient toward immediate action.",
         ),
         Finding(
             code="SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS",
             category=FINDING_CATEGORY_SOCIAL_ENGINEERING,
             severity=FINDING_SEVERITY_HIGH,
+            explanation="The message asks for account verification or credentials, which is a common phishing tactic.",
         ),
     ]

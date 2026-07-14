@@ -11,6 +11,7 @@ class FindingResponse(BaseModel):
     code: str
     category: str
     severity: str
+    explanation: str
 
 
 class FindingSummaryResponse(BaseModel):
@@ -56,6 +57,7 @@ def finding_to_response(finding: Finding) -> FindingResponse:
         code=finding.code,
         category=finding.category,
         severity=finding.severity,
+        explanation=finding.explanation,
     )
 
 
