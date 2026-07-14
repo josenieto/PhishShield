@@ -104,6 +104,39 @@ When behavior is verifiable, work as follows:
 
 Do not group too many cases into one iteration. Keep changes small.
 
+### Full-suite verification triggers
+
+Run the full backend suite with:
+
+```bash
+python -m pytest
+```
+
+before marking work complete when a change touches any of these shared backend contracts:
+
+- `domain/value_objects/*`;
+- Domain finding definitions;
+- Application result models or summaries;
+- API response schemas;
+- parser adapters that feed multiple layers;
+- configuration defaults reused across tests and runtime wiring.
+
+Run frontend verification with:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+when a change touches:
+
+- frontend API response types;
+- shared UI result structures;
+- analysis rendering components reused across the main flow.
+
+Use partial test scopes during development, but do not treat them as final verification for cross-layer contract changes.
+
 ## Expected response shape
 
 When using this skill, structure the answer as follows when applicable:

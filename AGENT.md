@@ -228,6 +228,12 @@ For behavior changes, use the smallest useful increment and follow this workflow
 
 The refactor phase is mandatory as a review step, but code changes are optional. If no cleanup is useful, state `Refactor not needed.`
 
+Full-suite verification trigger policy:
+
+- run `python -m pytest` before marking work complete when a change touches shared value objects, Domain finding definitions, Application result models, API response schemas, parser adapters, or other contracts reused across multiple backend layers;
+- run frontend verification with `cmd /c npm run test` and `cmd /c npm run build` when a change touches frontend API types, shared UI result models, or frontend rendering contracts;
+- partial test scopes are useful during development, but they are not sufficient as final verification for cross-layer contract changes.
+
 ### Commit message format
 
 Use this format when proposing or creating commits:
