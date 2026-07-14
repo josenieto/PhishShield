@@ -19,6 +19,7 @@ The current frontend MVP lets a user:
 - submit it to the backend through `POST /api/analyze-email`;
 - inspect the returned risk level and scores;
 - inspect critical-indicator status;
+- inspect extracted sender, subject, URLs, attachment names, and authentication results;
 - inspect findings grouped by category;
 - inspect finding category counts;
 - inspect unique finding codes;
@@ -61,6 +62,7 @@ Done:
 - basic `.eml` validation;
 - frontend-specific error messages for backend/network failures;
 - risk summary cards;
+- extracted evidence rendering for sender, subject, URLs, attachments, and authentication results;
 - grouped findings by category;
 - finding category counts;
 - empty state;
@@ -90,13 +92,13 @@ These items are intentionally out of scope for the current frontend MVP:
 
 ## Next Steps
 
-The next recommended group after this MVP is API response enrichment or continued frontend UX polish.
+The next recommended group after this MVP is continued frontend UX polish over the enriched evidence model.
 
 Potential mini-steps:
 
 1. Improve result hierarchy and severity visual language.
-2. Enrich the backend API response if the frontend needs URLs, attachments, or authentication evidence details.
-3. Add dedicated `AnalysisResults` tests if the component grows in complexity.
+2. Add dedicated `AnalysisResults` tests if the component grows in complexity.
+3. Decide whether evidence fields need deeper per-item context or explanation text.
 4. Keep new frontend tests under `frontend/tests/` as a repository rule.
 
 ---
