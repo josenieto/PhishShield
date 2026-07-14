@@ -17,6 +17,22 @@ The default cycle is:
 Red -> Green -> Refactor -> Verify
 ```
 
+PhishShield also uses a cost-aware testing distribution guideline. Treat it as a health signal, not a hard quota:
+
+- `Domain`: 55-60%
+- `Application`: 20-25%
+- `Infrastructure/API`: 10-15%
+- `E2E/smoke`: 5-10%
+
+The reason for this shape is practical:
+
+- `Domain` tests are the cheapest, fastest, and most deterministic, so they should carry most behavior combinations.
+- `Application` tests verify orchestration, ports, contracts, deduplication, and scoring flow.
+- `Infrastructure` and API tests verify parser behavior, adapters, framework boundaries, configuration, and serialization.
+- `E2E` and smoke tests are valuable but expensive, so they should stay focused on a few critical flows.
+
+Do not add artificial tests to satisfy percentages. Use the distribution to detect imbalance or excessive reliance on slow tests.
+
 Use classic TDD patterns when appropriate:
 
 - Fake it till you make it
@@ -248,6 +264,22 @@ Examples:
 - do not open real Chromium in domain unit tests;
 - do not call real Ollama in unit tests;
 - do not depend on real Tesseract except in explicit integration tests.
+
+## Cost-aware testing distribution
+
+Use the following guidance when deciding where to add coverage:
+
+- prefer `Domain` when the behavior is pure and deterministic;
+- prefer `Application` when validating orchestration across real Domain helpers and mocked or faked ports;
+- prefer `Infrastructure` when the risk lives in parsing, adapters, configuration, framework integration, or serialization;
+- use `E2E` or smoke tests only for a few critical end-to-end user journeys.
+
+When the suite starts to drift, use these questions:
+
+1. Are we pushing too much behavior upward into expensive tests?
+2. Are we missing cheap tests in `Domain` for core forensic rules?
+3. Are API and adapter boundaries covered where parsing or configuration can break?
+4. Are high-level tests duplicating lower-level coverage without adding confidence?
 
 ## Test timing and difficulty policy
 
