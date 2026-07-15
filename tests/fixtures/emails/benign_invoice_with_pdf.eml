@@ -1,0 +1,19 @@
+From: Billing Team <billing@vendor-payments.example.com>
+Subject: Invoice for July services
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=vendor-payments.example.com; dkim=pass header.d=vendor-payments.example.com; dmarc=pass header.from=vendor-payments.example.com
+Content-Type: multipart/mixed; boundary=pdf-boundary
+
+--pdf-boundary
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Please find attached the invoice for July services.
+If you have any questions, reply to this message and our team will help you.
+
+--pdf-boundary
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="invoice_july_2026.pdf"
+
+fake pdf payload
+--pdf-boundary--
