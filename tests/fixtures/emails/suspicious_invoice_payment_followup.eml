@@ -1,0 +1,19 @@
+From: Accounts Payable <billing@vendor-payments.example.com>
+Subject: Invoice overdue - payment required today
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=vendor-payments.example.com; dkim=pass header.d=vendor-payments.example.com; dmarc=pass header.from=vendor-payments.example.com
+Content-Type: multipart/mixed; boundary=invoice-boundary
+
+--invoice-boundary
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your invoice is overdue and payment required today to avoid service interruption.
+Please review the attached remittance copy and process it immediately.
+
+--invoice-boundary
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="invoice_july_2026.pdf.exe"
+
+fake executable payload
+--invoice-boundary--
