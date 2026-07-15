@@ -84,16 +84,16 @@ def test_should_detect_credential_request_phrase() -> None:
     assert contains_credential_request_terms(text, terms) is True
 
 
-def test_should_detect_credential_request_keyword() -> None:
-    text = "Reset your password immediately."
-    terms = {"password"}
+def test_should_detect_credential_request_password_phrase() -> None:
+    text = "Please confirm your password immediately."
+    terms = {"confirm your password"}
 
     assert contains_credential_request_terms(text, terms) is True
 
 
 def test_should_return_false_when_text_has_no_credential_request_terms() -> None:
     text = "Your monthly report is ready."
-    terms = {"verify your account", "password"}
+    terms = {"verify your account", "confirm your password"}
 
     assert contains_credential_request_terms(text, terms) is False
 
@@ -106,7 +106,7 @@ def test_should_detect_credential_request_terms_case_insensitively() -> None:
 
 
 def test_should_return_false_when_credential_request_text_is_empty() -> None:
-    assert contains_credential_request_terms("", {"password"}) is False
+    assert contains_credential_request_terms("", {"confirm your password"}) is False
 
 
 def test_should_return_false_when_credential_request_terms_are_empty() -> None:
@@ -145,13 +145,20 @@ def test_should_preserve_social_engineering_categories_with_zero_count() -> None
     text = "Your monthly report is ready."
     signal_terms = {
         "urgency": {"urgent"},
-        "credential_request": {"password"},
+        "credential_request": {"confirm your password"},
     }
 
     assert count_social_engineering_signals(text, signal_terms) == {
         "urgency": 0,
         "credential_request": 0,
     }
+
+
+def test_should_not_treat_generic_password_reset_wording_as_credential_request() -> None:
+    text = "We received a request to reset your password."
+    terms = {"confirm your password", "enter your password", "verify your account"}
+
+    assert contains_credential_request_terms(text, terms) is False
 
 
 def test_should_return_zero_counts_when_social_engineering_text_is_empty() -> None:

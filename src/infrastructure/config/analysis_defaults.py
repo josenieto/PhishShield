@@ -14,7 +14,8 @@ DEFAULT_FINANCIAL_PRESSURE_TERMS: set[str] = {
 
 DEFAULT_CREDENTIAL_REQUEST_TERMS: set[str] = {
     "confirm your login",
-    "password",
+    "confirm your password",
+    "enter your password",
     "verify your account",
 }
 

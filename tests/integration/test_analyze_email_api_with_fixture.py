@@ -147,8 +147,8 @@ def test_should_keep_benign_password_reset_notice_low_risk() -> None:
 
     payload = response.json()
 
-    assert payload["finding_codes"] == ["SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS"]
-    assert payload["risk_score"]["risk_level"] == "MEDIUM"
+    assert payload["finding_codes"] == []
+    assert payload["risk_score"]["risk_level"] == "LOW"
     assert payload["risk_score"]["has_critical_indicators"] is False
     assert payload["extracted_evidence"] == {
         "sender_domain": "accounts.example.com",
