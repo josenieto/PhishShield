@@ -1,0 +1,9 @@
+From: Admin Team <admin@xn--secure-updates-9db.com>
+Subject: Account access review
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=xn--secure-updates-9db.com; dkim=pass header.d=xn--secure-updates-9db.com; dmarc=pass header.from=xn--secure-updates-9db.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your account access settings were reviewed.
+You can check the latest activity at https://xn--secure-updates-9db.com/security/review.

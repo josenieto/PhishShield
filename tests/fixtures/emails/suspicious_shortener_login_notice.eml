@@ -1,0 +1,10 @@
+From: Account Review <security@account-review.example.com>
+Subject: Confirm your login activity
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=account-review.example.com; dkim=pass header.d=account-review.example.com; dmarc=pass header.from=account-review.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+We noticed a change in your account activity.
+Please confirm your login information at https://bit.ly/account-review-check.
+This link will remain available for a limited time.

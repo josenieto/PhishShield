@@ -134,6 +134,64 @@ def test_should_keep_benign_security_alert_fixture_without_critical_indicators()
     }
 
 
+def test_should_keep_benign_password_reset_notice_low_risk() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "benign_password_reset_notice.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("benign_password_reset_notice.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == ["SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS"]
+    assert payload["risk_score"]["risk_level"] == "MEDIUM"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "accounts.example.com",
+        "subject": "Password reset requested for your account",
+        "urls": ["https://accounts.example.com/reset-password"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
+def test_should_keep_benign_invoice_with_pdf_low_risk() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "benign_invoice_with_pdf.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("benign_invoice_with_pdf.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == []
+    assert payload["risk_score"]["risk_level"] == "LOW"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "vendor-payments.example.com",
+        "subject": "Invoice for July services",
+        "urls": [],
+        "attachment_filenames": ["invoice_july_2026.pdf"],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
 def test_should_analyze_uploaded_suspicious_attachment_eml_fixture() -> None:
     client = TestClient(create_app())
     email_bytes = (_FIXTURES_DIR / "suspicious_attachment.eml").read_bytes()
@@ -195,6 +253,65 @@ def test_should_flag_suspicious_password_reset_fixture() -> None:
             "spf_result": "fail",
             "dkim_result": "pass",
             "dmarc_result": "fail",
+        },
+    }
+
+
+def test_should_flag_suspicious_shortener_login_notice_fixture() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "suspicious_shortener_login_notice.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("suspicious_shortener_login_notice.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert "URL_USES_KNOWN_SHORTENER_DOMAIN" in payload["finding_codes"]
+    assert "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS" in payload["finding_codes"]
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["risk_score"]["risk_level"] in {"LOW", "MEDIUM", "HIGH"}
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "account-review.example.com",
+        "subject": "Confirm your login activity",
+        "urls": ["https://bit.ly/account-review-check"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
+def test_should_flag_suspicious_lookalike_domain_notice_fixture() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "suspicious_lookalike_domain_notice.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("suspicious_lookalike_domain_notice.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert "DOMAIN_CONTAINS_PUNYCODE" in payload["finding_codes"]
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["risk_score"]["risk_level"] in {"LOW", "MEDIUM", "HIGH"}
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "xn--secure-updates-9db.com",
+        "subject": "Account access review",
+        "urls": ["https://xn--secure-updates-9db.com/security/review"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
         },
     }
 
