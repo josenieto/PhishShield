@@ -262,6 +262,10 @@ The current backend MVP is functionally complete for the local email analysis fl
 - tune scoring weights only when fixture evidence shows a need;
 - avoid opening new infrastructure families before the current flow is better calibrated.
 
+The current calibration baseline is documented in:
+
+- `doc/SCORING_CALIBRATION.md`
+
 ---
 
 ## Next Focus
@@ -273,6 +277,7 @@ Short-term goals:
 - expand the fixture corpus with more realistic benign and suspicious emails;
 - review whether current scoring weights still match the richer fixture set;
 - keep `doc/API.md` as the external API contract reference;
+- use `doc/SCORING_CALIBRATION.md` as the baseline before changing weights or critical indicators;
 - preserve the current backend API, Docker runtime, CI baseline, and explanation/evidence contract as the foundation for further product polish.
 
 ---

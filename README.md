@@ -151,6 +151,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - API contract: `doc/API.md`
 - Backend roadmap: `doc/BACKEND_EVOLUTION_PLAN.md`
 - Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
+- Scoring calibration baseline: `doc/SCORING_CALIBRATION.md`
 
 The current recommended next group after the MVP analysis flow is realistic fixture expansion and scoring refinement.
 
