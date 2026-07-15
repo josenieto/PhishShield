@@ -21,6 +21,7 @@ The current frontend MVP lets a user:
 - inspect critical-indicator status;
 - inspect extracted sender, subject, URLs, attachment names, and authentication results;
 - inspect findings grouped by category;
+- inspect backend-provided finding explanations;
 - inspect finding category counts;
 - inspect unique finding codes;
 - see loading, empty, success, and error states.
@@ -64,6 +65,7 @@ Done:
 - risk summary cards;
 - extracted evidence rendering for sender, subject, URLs, attachments, and authentication results;
 - grouped findings by category;
+- backend-provided finding explanations rendered in the findings view;
 - finding category counts;
 - empty state;
 - success state;
@@ -86,19 +88,19 @@ These items are intentionally out of scope for the current frontend MVP:
 - screenshots or browser-evidence rendering;
 - frontend Docker image;
 - production static hosting strategy;
-- broader API response enrichment for full extracted email details.
+- deeper analyst guidance such as remediation recommendations or report export.
 
 ---
 
 ## Next Steps
 
-The next recommended group after this MVP is continued frontend UX polish over the enriched evidence model.
+The next recommended frontend group after this MVP is realistic fixture-driven polish over the current evidence and explanation model.
 
 Potential mini-steps:
 
 1. Improve result hierarchy and severity visual language.
 2. Add dedicated `AnalysisResults` tests if the component grows in complexity.
-3. Decide whether evidence fields need deeper per-item context or explanation text.
+3. Revisit wording only when backend fixtures reveal confusing analyst-facing phrasing.
 4. Keep new frontend tests under `frontend/tests/` as a repository rule.
 
 ---

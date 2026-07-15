@@ -2,6 +2,18 @@
 
 Local, self-hosted phishing email analysis toolkit.
 
+## Current MVP
+
+The current MVP provides a local `.eml` analysis flow with:
+
+- FastAPI backend analysis for uploaded email messages;
+- React + TypeScript + Vite frontend upload and result inspection flow;
+- extracted evidence rendering for sender, subject, URLs, attachment names, and authentication results;
+- grouped findings with backend-provided severity and explanation text;
+- backend Docker runtime and Compose wiring;
+- CI coverage for backend tests, frontend tests/build, and backend Docker smoke;
+- coverage reporting in observability mode for backend and frontend.
+
 ## Development
 
 ### Install
@@ -139,6 +151,8 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - API contract: `doc/API.md`
 - Backend roadmap: `doc/BACKEND_EVOLUTION_PLAN.md`
 - Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
+
+The current recommended next group after the MVP analysis flow is realistic fixture expansion and scoring refinement.
 
 ### Health Check
 
