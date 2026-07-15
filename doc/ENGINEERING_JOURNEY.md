@@ -3294,3 +3294,53 @@ Result:
 ### Next step
 
 Run the full backend suite, observe whether the new fixtures reveal false positives or false negatives, and only then decide whether scoring weights need adjustment.
+
+---
+
+## 2026-07-04 - Ambiguous fixture expansion baseline
+
+Type: Testing  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+The first realistic fixture batch validated obvious benign and obviously suspicious emails. The next useful step was to add more ambiguous cases that could expose over-sensitive social engineering rules or under-sensitive scoring for suspicious domains and shorteners without relying on authentication failures.
+
+### Decision
+
+Added four more realistic `.eml` fixtures:
+
+- benign password reset notice;
+- benign invoice with a normal PDF attachment;
+- suspicious shortener-based login review notice with otherwise passing authentication;
+- suspicious lookalike domain notice with otherwise passing authentication.
+
+Added API integration expectations to observe the current baseline without changing scoring weights.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_password_reset_notice.eml`
+- `tests/fixtures/emails/benign_invoice_with_pdf.eml`
+- `tests/fixtures/emails/suspicious_shortener_login_notice.eml`
+- `tests/fixtures/emails/suspicious_lookalike_domain_notice.eml`
+- `tests/integration/test_analyze_email_api_with_fixture.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+563 passed
+```
+
+### Next step
+
+Review the resulting risk levels from the ambiguous suspicious cases and decide whether scoring weights should stay as-is or be slightly tightened for shortener-plus-credential and lookalike-domain patterns.
