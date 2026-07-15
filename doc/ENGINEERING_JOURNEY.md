@@ -3344,3 +3344,53 @@ Result:
 ### Next step
 
 Review the resulting risk levels from the ambiguous suspicious cases and decide whether scoring weights should stay as-is or be slightly tightened for shortener-plus-credential and lookalike-domain patterns.
+
+---
+
+## 2026-07-04 - Scoring calibration baseline document
+
+Type: Documentation  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+After two rounds of realistic fixture expansion and one targeted credential-request refinement, the project had enough evidence to describe a usable scoring baseline. The missing piece was a dedicated reference that captured current expected outcomes before future tuning starts changing weights again.
+
+### Decision
+
+Added `doc/SCORING_CALIBRATION.md` as the current MVP calibration reference.
+
+The document records:
+
+- current benign and suspicious fixture expectations;
+- the confirmed credential-request false-positive fix;
+- the current rule that weight changes should follow fixture evidence;
+- the next calibration questions for future scoring work.
+
+Also linked the document from `README.md` and `doc/BACKEND_EVOLUTION_PLAN.md`.
+
+### Files changed
+
+- `doc/SCORING_CALIBRATION.md`
+- `README.md`
+- `doc/BACKEND_EVOLUTION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+not run
+```
+
+Result:
+
+```text
+Documentation-only calibration baseline update.
+```
+
+### Next step
+
+Use the calibration baseline as the reference point before making any additional scoring or critical-indicator changes.
