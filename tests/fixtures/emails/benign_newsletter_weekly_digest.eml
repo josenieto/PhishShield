@@ -1,0 +1,13 @@
+From: Product News <newsletter@updates.example.com>
+Subject: Your weekly product digest
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=updates.example.com; dkim=pass header.d=updates.example.com; dmarc=pass header.from=updates.example.com
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <body>
+    <p>Hello,</p>
+    <p>Here is your weekly product digest with the latest feature updates.</p>
+    <p>Read more at https://updates.example.com/blog/weekly-digest.</p>
+    <p>If you no longer want these emails, you can manage preferences in your account settings.</p>
+  </body>
+</html>
