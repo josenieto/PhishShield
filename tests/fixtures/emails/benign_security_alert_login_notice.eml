@@ -1,0 +1,10 @@
+From: Security Team <security@accounts.example.com>
+Subject: New sign-in noticed on your account
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=accounts.example.com; dkim=pass header.d=accounts.example.com; dmarc=pass header.from=accounts.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+We noticed a new sign-in to your account from a Chrome browser on Windows.
+If this was you, no further action is required.
+You can review account activity at https://accounts.example.com/security/activity.

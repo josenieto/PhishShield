@@ -3244,3 +3244,53 @@ Documentation-only process hardening update.
 ### Next step
 
 Use the new verification trigger rule as the default workflow for future cross-layer contract changes and continue with MVP cleanup or realistic fixture expansion.
+
+---
+
+## 2026-07-04 - Realistic fixture expansion baseline
+
+Type: Testing  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+The MVP analysis flow was already functionally complete, but most fixture coverage still leaned toward synthetic parser cases and a small number of API examples. Before changing scoring, the project needed a slightly more realistic baseline of benign and suspicious emails to observe how the current heuristics behave in analyst-facing scenarios.
+
+### Decision
+
+Added four more realistic `.eml` fixtures without changing scoring weights:
+
+- benign weekly newsletter;
+- benign account security alert;
+- suspicious password reset message with shortener and authentication failures;
+- suspicious invoice payment follow-up with financial pressure language and executable attachment.
+
+Added API integration expectations for each fixture to establish baseline current behavior before any future score tuning.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_newsletter_weekly_digest.eml`
+- `tests/fixtures/emails/benign_security_alert_login_notice.eml`
+- `tests/fixtures/emails/suspicious_password_reset_portal.eml`
+- `tests/fixtures/emails/suspicious_invoice_payment_followup.eml`
+- `tests/integration/test_analyze_email_api_with_fixture.py`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest
+```
+
+Result:
+
+```text
+559 passed
+```
+
+### Next step
+
+Run the full backend suite, observe whether the new fixtures reveal false positives or false negatives, and only then decide whether scoring weights need adjustment.
