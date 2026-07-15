@@ -68,6 +68,11 @@ The current API surface is:
 - `GET /health`
 - `POST /analyze-email`
 
+The current response contract now includes:
+
+- grouped findings with category, severity, and stable explanation text;
+- extracted evidence with sender domain, subject, URLs, attachment filenames, and SPF/DKIM/DMARC result summary.
+
 ---
 
 ## Current Email Parser Scope
@@ -251,18 +256,24 @@ Coverage is currently available in observability mode only:
 
 The project does not enforce coverage thresholds in CI yet. The current goal is to make coverage visible before deciding whether any gates are useful.
 
+The current backend MVP is functionally complete for the local email analysis flow. The next backend-focused group should improve realism rather than breadth:
+
+- add more realistic benign and suspicious fixtures;
+- tune scoring weights only when fixture evidence shows a need;
+- avoid opening new infrastructure families before the current flow is better calibrated.
+
 ---
 
 ## Next Focus
 
-The next recommended group is frontend MVP planning.
+The next recommended group is realistic fixture expansion and scoring refinement.
 
 Short-term goals:
 
-- keep `README.md` as a backend quickstart;
+- expand the fixture corpus with more realistic benign and suspicious emails;
+- review whether current scoring weights still match the richer fixture set;
 - keep `doc/API.md` as the external API contract reference;
-- use the current backend API, Docker runtime, and CI baseline as the contract for a first frontend upload/results flow;
-- use `doc/FRONTEND_MVP_PLAN.md` as the roadmap for current frontend work.
+- preserve the current backend API, Docker runtime, CI baseline, and explanation/evidence contract as the foundation for further product polish.
 
 ---
 
