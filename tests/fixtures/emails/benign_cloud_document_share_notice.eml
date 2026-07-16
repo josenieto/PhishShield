@@ -1,0 +1,10 @@
+From: Collaboration Updates <no-reply@docs.example.com>
+Subject: A document was shared with you
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=docs.example.com; dkim=pass header.d=docs.example.com; dmarc=pass header.from=docs.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Taylor shared the document "Q3 planning agenda" with you.
+Open it at https://docs.example.com/document/q3-planning-agenda.
+You are receiving this message because collaboration notifications are enabled for your workspace.

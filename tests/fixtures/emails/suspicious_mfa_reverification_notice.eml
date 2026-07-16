@@ -1,0 +1,9 @@
+From: Identity Center <admin@xn--mfa-portal-8sb.com>
+Subject: Verify your account security settings
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=xn--mfa-portal-8sb.com; dkim=pass header.d=xn--mfa-portal-8sb.com; dmarc=pass header.from=xn--mfa-portal-8sb.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+We updated your multi-factor authentication settings after a recent policy review.
+Verify your account at https://xn--mfa-portal-8sb.com/security/review to keep access active.

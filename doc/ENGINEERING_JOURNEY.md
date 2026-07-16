@@ -3499,3 +3499,51 @@ Frontend build: vite build OK
 ### Next step
 
 Validate the frontend suite and build, then decide whether the next frontend-facing improvement should focus on runtime validation or a broader analyst workbench layout redesign.
+
+---
+
+## 2026-07-06 - Expand realistic scoring calibration fixtures
+
+Type: Testing  
+Layer: Backend  
+Status: Done
+
+### Context
+
+The existing MVP calibration baseline already covered several clearly benign and clearly suspicious emails, but it still lacked common business cases such as shipping updates and collaboration-share notices, along with a few additional subtle suspicious lures that do not rely on authentication failure.
+
+### Decision
+
+Expanded the realistic API fixture baseline with benign shipping and cloud-share notifications plus suspicious cloud-share and MFA re-verification lures.
+
+The current scoring and social-engineering configuration already handled these scenarios reasonably, so no rule or weight changes were needed in this step.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_shipping_delivery_update.eml`
+- `tests/fixtures/emails/benign_cloud_document_share_notice.eml`
+- `tests/fixtures/emails/suspicious_cloud_document_share_lure.eml`
+- `tests/fixtures/emails/suspicious_mfa_reverification_notice.eml`
+- `tests/integration/test_analyze_email_api_with_fixture.py`
+- `doc/SCORING_CALIBRATION.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/integration/test_analyze_email_api_with_fixture.py
+python -m pytest
+```
+
+Result:
+
+```text
+API fixture integration tests: 19 passed
+Full backend suite: 568 passed
+```
+
+### Next step
+
+Run the full backend suite, then decide whether the next calibration pass should add QR-themed phishing lures or more benign business-notification fixtures.
