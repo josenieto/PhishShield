@@ -3318,6 +3318,13 @@ Added four more realistic `.eml` fixtures:
 
 Added API integration expectations to observe the current baseline without changing scoring weights.
 
+Observed outcome after verification:
+
+- benign password reset notices now stay `LOW` after narrowing credential-request phrases;
+- suspicious shortener plus credential-request messages currently land at `MEDIUM` with `raw_score=40`;
+- isolated lookalike-domain notices currently land at `MEDIUM` with `raw_score=30`;
+- no additional weight changes were needed in this round.
+
 ### Files changed
 
 - `tests/fixtures/emails/benign_password_reset_notice.eml`
@@ -3343,7 +3350,7 @@ Result:
 
 ### Next step
 
-Review the resulting risk levels from the ambiguous suspicious cases and decide whether scoring weights should stay as-is or be slightly tightened for shortener-plus-credential and lookalike-domain patterns.
+Keep the current weights unchanged for now and continue adding fixture evidence before making any further scoring or critical-indicator changes.
 
 ---
 
