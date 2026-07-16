@@ -153,7 +153,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
 - Scoring calibration baseline: `doc/SCORING_CALIBRATION.md`
 
-The current recommended next group after the MVP analysis flow is realistic fixture expansion and scoring refinement.
+The current recommended next group after this MVP release-candidate hardening pass is report/export planning or an additional runtime validation pass on an environment with Docker available.
 
 ### Health Check
 
