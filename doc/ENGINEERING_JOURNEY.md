@@ -3547,3 +3547,51 @@ Full backend suite: 568 passed
 ### Next step
 
 Run the full backend suite, then decide whether the next calibration pass should add QR-themed phishing lures or more benign business-notification fixtures.
+
+---
+
+## 2026-07-06 - Add second realistic scoring calibration batch
+
+Type: Testing  
+Layer: Backend  
+Status: Done
+
+### Context
+
+The first expanded calibration batch improved confidence in shipping and collaboration emails, but the fixture baseline still lacked common benign operational notifications such as billing receipts and HR notices, along with suspicious QR-themed and attachment-free invoice-payment lures.
+
+### Decision
+
+Added a second realistic calibration batch covering benign billing and HR notifications plus suspicious QR login and invoice-link payment lures.
+
+The current rules and weights already produced acceptable outcomes for these scenarios, so this step remained fixture- and documentation-focused without changing scoring logic.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_billing_payment_receipt.eml`
+- `tests/fixtures/emails/benign_hr_policy_update.eml`
+- `tests/fixtures/emails/suspicious_qr_login_lure.eml`
+- `tests/fixtures/emails/suspicious_invoice_link_payment_lure.eml`
+- `tests/integration/test_analyze_email_api_with_fixture.py`
+- `doc/SCORING_CALIBRATION.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/integration/test_analyze_email_api_with_fixture.py
+python -m pytest
+```
+
+Result:
+
+```text
+API fixture integration tests: 23 passed
+Full backend suite: 572 passed
+```
+
+### Next step
+
+Run the full backend suite, then decide whether a future calibration pass should introduce QR-specific wording signals or more subtle account-support fixtures.
