@@ -245,6 +245,14 @@ type(scope): Action summary.
 - Another body bullet with uppercase initial and final period.
 ```
 
+Expectations:
+
+- Use a one-line summary plus a blank line plus body bullets for non-trivial commits.
+- Do not propose summary-only commit messages for `feat`, `fix`, `refactor`, `test`, or meaningful `docs` changes unless the change is truly trivial.
+- Keep the summary concise and action-oriented, with an uppercase initial and final period.
+- Keep each body bullet concise, with an uppercase initial and final period.
+- Match the repository's recent commit style when proposing commit text.
+
 Example:
 
 ```text
@@ -252,6 +260,16 @@ feat(domain): Add embedded URL credential detection.
 
 - Add pure URL embedded credential detection.
 - Use standard library URL parsing without network or DNS access.
+```
+
+Additional example:
+
+```text
+feat(frontend): Add Markdown analysis report export.
+
+- Generate a frontend-side Markdown report from the current analysis result.
+- Add a download action to the completed analysis state.
+- Cover report generation and export UI behavior with frontend tests.
 ```
 
 ---
