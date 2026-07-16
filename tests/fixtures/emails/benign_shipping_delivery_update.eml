@@ -1,0 +1,10 @@
+From: Delivery Updates <tracking@shipments.example.com>
+Subject: Your package is on the way
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=shipments.example.com; dkim=pass header.d=shipments.example.com; dmarc=pass header.from=shipments.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your order 847201 has shipped and is expected to arrive on Thursday.
+Track your delivery at https://shipments.example.com/track/847201.
+If you need to update delivery preferences, visit your order details page.
