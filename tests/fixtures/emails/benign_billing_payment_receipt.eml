@@ -1,0 +1,10 @@
+From: Billing Team <billing@billing.example.com>
+Subject: Payment receipt for your subscription
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=billing.example.com; dkim=pass header.d=billing.example.com; dmarc=pass header.from=billing.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+We received your payment for the July subscription renewal.
+You can view the receipt at https://billing.example.com/receipts/2026-07.
+Thank you for using our service.

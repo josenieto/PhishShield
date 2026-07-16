@@ -1,0 +1,9 @@
+From: Accounts Desk <billing@secure-payments.example.com>
+Subject: Invoice payment required
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=secure-payments.example.com; dkim=pass header.d=secure-payments.example.com; dmarc=pass header.from=secure-payments.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your invoice remains unpaid and payment required today to avoid interruption.
+Review the invoice and submit payment at https://t.co/pay-invoice-review.
