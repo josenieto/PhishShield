@@ -9,20 +9,37 @@ type CreateMarkdownReportParams = {
 };
 
 
+const MARKDOWN_SPECIAL_CHARACTERS = /([\\`*_{}\[\]()#+\-!>|])/g;
+
+
+function sanitizeMarkdownValue(value: string): string {
+  return value
+    .replace(/[\r\n\t]+/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim()
+    .replace(MARKDOWN_SPECIAL_CHARACTERS, "\\$1");
+}
+
+
+function formatDisplayValue(value: string): string {
+  return sanitizeMarkdownValue(displayValue(value));
+}
+
+
 function formatList(items: string[], emptyLabel: string): string[] {
   if (items.length === 0) {
-    return [`- ${emptyLabel}`];
+    return [`- ${sanitizeMarkdownValue(emptyLabel)}`];
   }
 
-  return items.map((item) => `- ${item}`);
+  return items.map((item) => `- ${sanitizeMarkdownValue(item)}`);
 }
 
 
 function formatFinding(finding: FindingResponse): string[] {
   return [
-    `- ${finding.code} [${finding.severity}]`,
-    `  Category: ${finding.category}`,
-    `  Explanation: ${finding.explanation}`,
+    `- ${sanitizeMarkdownValue(finding.code)} [${sanitizeMarkdownValue(finding.severity)}]`,
+    `  Category: ${sanitizeMarkdownValue(finding.category)}`,
+    `  Explanation: ${sanitizeMarkdownValue(finding.explanation)}`,
   ];
 }
 
@@ -34,7 +51,7 @@ export function createMarkdownReport({ analysis, selectedFileName }: CreateMarkd
     "# PhishShield Analysis Report",
     "",
     "## Overview",
-    `- File: ${selectedFileName}`,
+    `- File: ${sanitizeMarkdownValue(selectedFileName)}`,
     `- Risk level: ${analysis.risk_score.risk_level}`,
     `- Raw score: ${analysis.risk_score.raw_score}`,
     `- Capped score: ${analysis.risk_score.capped_score}`,
@@ -44,8 +61,8 @@ export function createMarkdownReport({ analysis, selectedFileName }: CreateMarkd
     `- Unique finding codes: ${analysis.unique_finding_codes.length}`,
     "",
     "## Extracted Evidence",
-    `- Sender domain: ${displayValue(analysis.extracted_evidence.sender_domain)}`,
-    `- Subject: ${displayValue(analysis.extracted_evidence.subject)}`,
+    `- Sender domain: ${formatDisplayValue(analysis.extracted_evidence.sender_domain)}`,
+    `- Subject: ${formatDisplayValue(analysis.extracted_evidence.subject)}`,
     "",
     "### URLs",
     ...formatList(analysis.extracted_evidence.urls, "No URLs extracted"),
@@ -54,9 +71,9 @@ export function createMarkdownReport({ analysis, selectedFileName }: CreateMarkd
     ...formatList(analysis.extracted_evidence.attachment_filenames, "No attachments extracted"),
     "",
     "### Authentication Results",
-    `- SPF: ${displayValue(analysis.extracted_evidence.authentication_results.spf_result)}`,
-    `- DKIM: ${displayValue(analysis.extracted_evidence.authentication_results.dkim_result)}`,
-    `- DMARC: ${displayValue(analysis.extracted_evidence.authentication_results.dmarc_result)}`,
+    `- SPF: ${formatDisplayValue(analysis.extracted_evidence.authentication_results.spf_result)}`,
+    `- DKIM: ${formatDisplayValue(analysis.extracted_evidence.authentication_results.dkim_result)}`,
+    `- DMARC: ${formatDisplayValue(analysis.extracted_evidence.authentication_results.dmarc_result)}`,
     "",
     "## Findings By Category",
   ];
@@ -66,7 +83,7 @@ export function createMarkdownReport({ analysis, selectedFileName }: CreateMarkd
   } else {
     for (const [category, findings] of groupedFindings) {
       lines.push("");
-      lines.push(`### ${category}`);
+      lines.push(`### ${sanitizeMarkdownValue(category)}`);
       lines.push(`- Count: ${findings.length}`);
       lines.push("");
 
