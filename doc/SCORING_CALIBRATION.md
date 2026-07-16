@@ -38,8 +38,8 @@ Do not change scoring weights without fixture evidence.
 | `benign_invoice_with_pdf.eml` | Benign | `LOW` | A normal invoice email with a PDF attachment stays low risk. |
 | `suspicious_html_notice.eml` | Suspicious | `CRITICAL` | Strong domain, authentication, and social-engineering signals align with a clearly malicious posture. |
 | `suspicious_password_reset_portal.eml` | Suspicious | `HIGH` or `CRITICAL` | Shortener, suspicious TLD, failed authentication, and credential request remain clearly suspicious. |
-| `suspicious_shortener_login_notice.eml` | Suspicious | Suspicious, non-critical | Useful for observing shortener plus credential-request behavior without relying on auth failure. |
-| `suspicious_lookalike_domain_notice.eml` | Suspicious | Suspicious, non-critical | Isolates lookalike-domain risk with otherwise passing authentication. |
+| `suspicious_shortener_login_notice.eml` | Suspicious | `MEDIUM`, non-critical | Shortener plus explicit login confirmation wording currently lands at `raw_score=40`, which is visible without being over-escalated. |
+| `suspicious_lookalike_domain_notice.eml` | Suspicious | `MEDIUM`, non-critical | An isolated Punycode/lookalike domain currently lands at `raw_score=30`, which keeps the signal visible without treating it as critical alone. |
 | `suspicious_invoice_payment_followup.eml` | Suspicious | `HIGH` or `CRITICAL` | Executable attachment and financial pressure remain strong high-risk signals. |
 
 ---
@@ -87,6 +87,7 @@ This keeps explicit phishing-style credential requests suspicious while allowing
 - Narrowing detection phrases is sometimes a better first move than lowering weights globally.
 - Suspicious shortener and lookalike-domain emails are useful calibration cases because they test subtle threat posture without depending on authentication failure.
 - Executable attachments remain one of the strongest and most reliable critical indicators in the current MVP.
+- The current scoring weights already place shortener-plus-credential and isolated lookalike-domain cases in `MEDIUM`, which is acceptable for the current MVP baseline.
 
 ---
 
@@ -94,9 +95,9 @@ This keeps explicit phishing-style credential requests suspicious while allowing
 
 The next scoring review should focus on these questions:
 
-1. Should shortener plus explicit credential-request wording remain non-critical, or should it score higher?
-2. Should an isolated lookalike domain remain non-critical, or should its current weight increase?
-3. Do we need more benign security or identity-related fixtures before changing weights again?
-4. Are there legitimate billing or account-support cases that still look too suspicious under the current terms?
+1. Do we need more benign security or identity-related fixtures before changing weights again?
+2. Are there legitimate billing or account-support cases that still look too suspicious under the current terms?
+3. Should subtle suspicious cases move above `MEDIUM` only when an additional supporting signal appears?
+4. Are current critical indicators still reserved for the strongest combinations of evidence?
 
 Until those questions are backed by fixture evidence, keep the current weights unchanged.
