@@ -4,6 +4,7 @@ import { FindingsByCategory } from "./analysis-results/FindingsByCategory";
 import { IndicatorCodes } from "./analysis-results/IndicatorCodes";
 import { IndicatorDistribution } from "./analysis-results/IndicatorDistribution";
 import { RiskSummary } from "./analysis-results/RiskSummary";
+import { downloadMarkdownReport } from "../report/downloadMarkdownReport";
 
 
 type AnalysisResultsProps = {
@@ -20,6 +21,17 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
         <span>
           Review the local triage output for <code>{selectedFileName}</code>.
         </span>
+        <div className="success-banner-actions">
+          <button
+            type="button"
+            className="secondary-action-button"
+            onClick={() => {
+              downloadMarkdownReport({ analysis, selectedFileName });
+            }}
+          >
+            Download Markdown report
+          </button>
+        </div>
       </div>
 
       <RiskSummary analysis={analysis} />
