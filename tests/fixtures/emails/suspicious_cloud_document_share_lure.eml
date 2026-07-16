@@ -1,0 +1,10 @@
+From: SharePoint Alerts <notify@secure-doc-share.example.com>
+Subject: Shared document requires account review
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=secure-doc-share.example.com; dkim=pass header.d=secure-doc-share.example.com; dmarc=pass header.from=secure-doc-share.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+A protected document has been shared with you.
+To open the file, verify your account at https://tinyurl.com/review-secure-share.
+This access window is available for a limited time.

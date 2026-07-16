@@ -36,9 +36,13 @@ Do not change scoring weights without fixture evidence.
 | `benign_security_alert_login_notice.eml` | Benign | `LOW` | Legitimate security wording does not create critical or elevated risk on its own. |
 | `benign_password_reset_notice.eml` | Benign | `LOW` | Previously over-triggered due to the generic `password` term; now clean after narrowing credential-request phrases. |
 | `benign_invoice_with_pdf.eml` | Benign | `LOW` | A normal invoice email with a PDF attachment stays low risk. |
+| `benign_shipping_delivery_update.eml` | Benign | `LOW` | A routine shipping notification with a legitimate tracking link stays low risk. |
+| `benign_cloud_document_share_notice.eml` | Benign | `LOW` | A normal collaboration share notice stays low risk despite document-sharing wording and a normal HTTPS link. |
 | `suspicious_html_notice.eml` | Suspicious | `CRITICAL` | Strong domain, authentication, and social-engineering signals align with a clearly malicious posture. |
 | `suspicious_password_reset_portal.eml` | Suspicious | `HIGH` or `CRITICAL` | Shortener, suspicious TLD, failed authentication, and credential request remain clearly suspicious. |
+| `suspicious_cloud_document_share_lure.eml` | Suspicious | `MEDIUM`, non-critical | A shortener plus account-verification wording lands at `raw_score=40`, making the lure visible without treating it like a confirmed compromise on its own. |
 | `suspicious_shortener_login_notice.eml` | Suspicious | `MEDIUM`, non-critical | Shortener plus explicit login confirmation wording currently lands at `raw_score=40`, which is visible without being over-escalated. |
+| `suspicious_mfa_reverification_notice.eml` | Suspicious | `HIGH`, non-critical | A lookalike Punycode domain plus account-verification wording lands at `raw_score=55`, which is appropriately elevated without relying on authentication failure. |
 | `suspicious_lookalike_domain_notice.eml` | Suspicious | `MEDIUM`, non-critical | An isolated Punycode/lookalike domain currently lands at `raw_score=30`, which keeps the signal visible without treating it as critical alone. |
 | `suspicious_invoice_payment_followup.eml` | Suspicious | `HIGH` or `CRITICAL` | Executable attachment and financial pressure remain strong high-risk signals. |
 
@@ -86,6 +90,9 @@ This keeps explicit phishing-style credential requests suspicious while allowing
 - Broad keyword-only social-engineering terms can create false positives faster than scoring weights do.
 - Narrowing detection phrases is sometimes a better first move than lowering weights globally.
 - Suspicious shortener and lookalike-domain emails are useful calibration cases because they test subtle threat posture without depending on authentication failure.
+- Benign shipping and document-sharing notifications currently stay clean under the narrowed social-engineering phrases, which is a good sign for common business email traffic.
+- A shortener plus account-verification wording remains a useful medium-risk lure baseline even when authentication passes.
+- A lookalike Punycode domain combined with account-verification wording now provides a stable high-risk, non-critical calibration case without needing failed authentication.
 - Executable attachments remain one of the strongest and most reliable critical indicators in the current MVP.
 - The current scoring weights already place shortener-plus-credential and isolated lookalike-domain cases in `MEDIUM`, which is acceptable for the current MVP baseline.
 
@@ -95,7 +102,7 @@ This keeps explicit phishing-style credential requests suspicious while allowing
 
 The next scoring review should focus on these questions:
 
-1. Do we need more benign security or identity-related fixtures before changing weights again?
+1. Do we need realistic QR-themed or attachment-free invoice lures before changing weights again?
 2. Are there legitimate billing or account-support cases that still look too suspicious under the current terms?
 3. Should subtle suspicious cases move above `MEDIUM` only when an additional supporting signal appears?
 4. Are current critical indicators still reserved for the strongest combinations of evidence?

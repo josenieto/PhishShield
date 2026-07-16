@@ -192,6 +192,64 @@ def test_should_keep_benign_invoice_with_pdf_low_risk() -> None:
     }
 
 
+def test_should_keep_benign_shipping_delivery_fixture_low_risk() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "benign_shipping_delivery_update.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("benign_shipping_delivery_update.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == []
+    assert payload["risk_score"]["risk_level"] == "LOW"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "shipments.example.com",
+        "subject": "Your package is on the way",
+        "urls": ["https://shipments.example.com/track/847201"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
+def test_should_keep_benign_cloud_document_share_fixture_low_risk() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "benign_cloud_document_share_notice.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("benign_cloud_document_share_notice.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == []
+    assert payload["risk_score"]["risk_level"] == "LOW"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "docs.example.com",
+        "subject": "A document was shared with you",
+        "urls": ["https://docs.example.com/document/q3-planning-agenda"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
 def test_should_analyze_uploaded_suspicious_attachment_eml_fixture() -> None:
     client = TestClient(create_app())
     email_bytes = (_FIXTURES_DIR / "suspicious_attachment.eml").read_bytes()
@@ -257,6 +315,38 @@ def test_should_flag_suspicious_password_reset_fixture() -> None:
     }
 
 
+def test_should_flag_suspicious_cloud_document_share_lure_fixture() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "suspicious_cloud_document_share_lure.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("suspicious_cloud_document_share_lure.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert "URL_USES_KNOWN_SHORTENER_DOMAIN" in payload["finding_codes"]
+    assert "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS" in payload["finding_codes"]
+    assert payload["risk_score"]["raw_score"] == 40
+    assert payload["risk_score"]["capped_score"] == 40
+    assert payload["risk_score"]["risk_level"] == "MEDIUM"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "secure-doc-share.example.com",
+        "subject": "Shared document requires account review",
+        "urls": ["https://tinyurl.com/review-secure-share"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
 def test_should_flag_suspicious_shortener_login_notice_fixture() -> None:
     client = TestClient(create_app())
     email_bytes = (_FIXTURES_DIR / "suspicious_shortener_login_notice.eml").read_bytes()
@@ -278,6 +368,38 @@ def test_should_flag_suspicious_shortener_login_notice_fixture() -> None:
         "sender_domain": "account-review.example.com",
         "subject": "Confirm your login activity",
         "urls": ["https://bit.ly/account-review-check"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
+def test_should_flag_suspicious_mfa_reverification_notice_fixture() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "suspicious_mfa_reverification_notice.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("suspicious_mfa_reverification_notice.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert "DOMAIN_CONTAINS_PUNYCODE" in payload["finding_codes"]
+    assert "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS" in payload["finding_codes"]
+    assert payload["risk_score"]["raw_score"] == 55
+    assert payload["risk_score"]["capped_score"] == 55
+    assert payload["risk_score"]["risk_level"] == "HIGH"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "xn--mfa-portal-8sb.com",
+        "subject": "Verify your account security settings",
+        "urls": ["https://xn--mfa-portal-8sb.com/security/review"],
         "attachment_filenames": [],
         "authentication_results": {
             "spf_result": "pass",
