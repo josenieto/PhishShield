@@ -3448,3 +3448,54 @@ Docker smoke: not run locally because docker is unavailable in this environment
 ### Next step
 
 Use the current branch state as the MVP v0.1 release-candidate baseline and choose the next product-facing group, such as report/export planning or further runtime validation on a Docker-enabled machine.
+
+---
+
+## 2026-07-06 - Frontend Markdown report export
+
+Type: Feature  
+Layer: Frontend  
+Status: Done
+
+### Context
+
+The MVP already returned a structured, analyst-readable result in the browser, but there was no lightweight way to capture that result outside the live UI for sharing, note taking, or case tracking.
+
+### Decision
+
+Added an initial frontend-side Markdown export flow that generates a report directly from the existing API response without introducing a new backend endpoint or export-specific infrastructure.
+
+This keeps the feature small, local, and aligned with the current MVP architecture while preserving room for richer export formats later.
+
+### Files changed
+
+- `frontend/src/components/AnalysisResults.tsx`
+- `frontend/src/report/createMarkdownReport.ts`
+- `frontend/src/report/downloadMarkdownReport.ts`
+- `frontend/src/styles.css`
+- `frontend/tests/App.test.tsx`
+- `frontend/tests/report/createMarkdownReport.test.ts`
+- `README.md`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 17 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Validate the frontend suite and build, then decide whether the next frontend-facing improvement should focus on runtime validation or a broader analyst workbench layout redesign.
