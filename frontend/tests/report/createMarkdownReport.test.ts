@@ -95,7 +95,7 @@ describe("createMarkdownReport", () => {
     });
 
     expect(report).toContain("# PhishShield Analysis Report");
-    expect(report).toContain("- File: security-review.eml");
+    expect(report).toContain("- File: security\\-review.eml");
     expect(report).toContain("- Risk level: HIGH");
     expect(report).toContain("- Raw score: 65");
     expect(report).toContain("- Critical indicators: Not observed");
@@ -107,10 +107,10 @@ describe("createMarkdownReport", () => {
     expect(report).toContain("- SPF: fail");
     expect(report).toContain("## Findings By Category");
     expect(report).toContain("### DOMAIN");
-    expect(report).toContain("- DOMAIN_CONTAINS_PUNYCODE [HIGH]");
+    expect(report).toContain("- DOMAIN\\_CONTAINS\\_PUNYCODE [HIGH]");
     expect(report).toContain("Explanation: The domain contains Punycode");
     expect(report).toContain("## Unique Indicator Codes");
-    expect(report).toContain("- DOMAIN_HAS_SUSPICIOUS_TLD");
+    expect(report).toContain("- DOMAIN\\_HAS\\_SUSPICIOUS\\_TLD");
   });
 
   it("should render empty placeholders when evidence lists are missing", () => {
@@ -144,5 +144,50 @@ describe("createMarkdownReport", () => {
     expect(report).toContain("- DKIM: Not available");
     expect(report).toContain("- No findings returned by the backend.");
     expect(report).toContain("- No findings");
+  });
+
+  it("should sanitize attacker-controlled values before writing Markdown", () => {
+    const report = createMarkdownReport({
+      analysis: {
+        ...SAMPLE_ANALYSIS,
+        unique_finding_codes: ["DOMAIN_CONTAINS_PUNYCODE\n## Hidden section"],
+        finding_summary: {
+          ...SAMPLE_ANALYSIS.finding_summary,
+          sorted_findings: [
+            {
+              code: "DOMAIN_CONTAINS_PUNYCODE\n## Hidden section",
+              category: "DOMAIN\n## Fake category",
+              severity: "HIGH",
+              explanation: "Review now\n- Risk level: LOW",
+            },
+          ],
+        },
+        extracted_evidence: {
+          sender_domain: "example.zip\n## Fake sender",
+          subject: "Invoice update\n## Trusted Result",
+          urls: ["https://example.com/login?a=[test]"],
+          attachment_filenames: ["invoice.pdf\n- Risk level: LOW"],
+          authentication_results: {
+            spf_result: "fail\n## SPF safe",
+            dkim_result: "pass",
+            dmarc_result: "fail",
+          },
+        },
+      },
+      selectedFileName: "security-review.eml\n## Hidden file",
+    });
+
+    expect(report).toContain("- File: security\\-review.eml \\#\\# Hidden file");
+    expect(report).toContain("- Sender domain: example.zip \\#\\# Fake sender");
+    expect(report).toContain("- Subject: Invoice update \\#\\# Trusted Result");
+    expect(report).toContain("- https://example.com/login?a=\\[test\\]");
+    expect(report).toContain("- invoice.pdf \\- Risk level: LOW");
+    expect(report).toContain("- SPF: fail \\#\\# SPF safe");
+    expect(report).toContain("### DOMAIN \\#\\# Fake category");
+    expect(report).toContain("- DOMAIN\\_CONTAINS\\_PUNYCODE \\#\\# Hidden section [HIGH]");
+    expect(report).toContain("  Explanation: Review now \\- Risk level: LOW");
+    expect(report).not.toContain("\n## Trusted Result\n");
+    expect(report).not.toContain("\n## Hidden section\n");
+    expect(report).not.toContain("\n- Risk level: LOW\n");
   });
 });
