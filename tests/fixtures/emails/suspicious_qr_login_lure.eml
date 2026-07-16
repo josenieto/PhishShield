@@ -1,0 +1,19 @@
+From: Access Review <security@account-check.example.com>
+Subject: Scan the QR code to verify your account
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=account-check.example.com; dkim=pass header.d=account-check.example.com; dmarc=pass header.from=account-check.example.com
+Content-Type: multipart/mixed; boundary=qr-boundary
+
+--qr-boundary
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+To keep your mailbox active, scan the attached QR code and verify your account.
+If the image does not open, use https://bit.ly/account-qr-review for manual access.
+
+--qr-boundary
+Content-Type: image/png
+Content-Disposition: attachment; filename="secure_qr_login.png"
+
+fake qr image payload
+--qr-boundary--
