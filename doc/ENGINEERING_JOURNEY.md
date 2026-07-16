@@ -3401,3 +3401,50 @@ Documentation-only calibration baseline update.
 ### Next step
 
 Use the calibration baseline as the reference point before making any additional scoring or critical-indicator changes.
+
+---
+
+## 2026-07-04 - MVP v0.1 release-candidate hardening
+
+Type: Testing  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+The MVP analysis flow was already stable in day-to-day development, but before treating it as a release-candidate baseline the project needed one consolidated verification pass across backend tests, frontend tests, frontend build, and runtime packaging expectations.
+
+### Decision
+
+Validated the current MVP release-candidate state with the full backend suite and the full frontend verification flow.
+
+The Docker runtime smoke step could not be executed in this environment because the `docker` CLI is not available locally, so runtime packaging remains validated through the existing CI workflow and should be rechecked manually in a Docker-enabled environment when needed.
+
+### Files changed
+
+- `README.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Backend: 564 passed
+Frontend: 14 passed
+Frontend build: vite build OK
+Docker smoke: not run locally because docker is unavailable in this environment
+```
+
+### Next step
+
+Use the current branch state as the MVP v0.1 release-candidate baseline and choose the next product-facing group, such as report/export planning or further runtime validation on a Docker-enabled machine.
