@@ -10,6 +10,7 @@ The current MVP provides a local `.eml` analysis flow with:
 - React + TypeScript + Vite frontend upload and result inspection flow;
 - extracted evidence rendering for sender, subject, URLs, attachment names, and authentication results;
 - grouped findings with backend-provided severity and explanation text;
+- frontend-side Markdown report download for the current analysis result;
 - backend Docker runtime and Compose wiring;
 - CI coverage for backend tests, frontend tests/build, and backend Docker smoke;
 - coverage reporting in observability mode for backend and frontend.
@@ -153,7 +154,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
 - Scoring calibration baseline: `doc/SCORING_CALIBRATION.md`
 
-The current recommended next group after this MVP release-candidate hardening pass is report/export planning or an additional runtime validation pass on an environment with Docker available.
+The current recommended next group after the initial Markdown report export is additional runtime validation on an environment with Docker available or a frontend workbench layout redesign.
 
 ### Health Check
 

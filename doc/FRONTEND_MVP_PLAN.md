@@ -24,6 +24,7 @@ The current frontend MVP lets a user:
 - inspect backend-provided finding explanations;
 - inspect finding category counts;
 - inspect unique finding codes;
+- download a Markdown report for the current analysis result;
 - see loading, empty, success, and error states.
 
 ---
@@ -70,6 +71,7 @@ Done:
 - empty state;
 - success state;
 - explicit loading, empty, success, and error result states;
+- frontend-side Markdown report export based on the current API result;
 - extracted `AnalysisResults` component for result rendering;
 - Vitest + React Testing Library coverage for the current upload/results flow, organized under `frontend/tests/`;
 - frontend test/build job in GitHub Actions.
@@ -88,13 +90,14 @@ These items are intentionally out of scope for the current frontend MVP:
 - screenshots or browser-evidence rendering;
 - frontend Docker image;
 - production static hosting strategy;
-- deeper analyst guidance such as remediation recommendations or report export.
+- deeper analyst guidance such as remediation recommendations;
+- richer report export targets such as HTML, PDF, or backend-generated export workflows.
 
 ---
 
 ## Next Steps
 
-The next recommended frontend group after this MVP is realistic fixture-driven polish over the current evidence and explanation model.
+The next recommended frontend group after this Markdown export addition is realistic fixture-driven polish over the current evidence and explanation model.
 
 Potential mini-steps:
 
