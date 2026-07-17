@@ -1,0 +1,13 @@
+From: Support Team <support@helpdesk.example.com>
+Subject: Support case update available
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=helpdesk.example.com; dkim=pass header.d=helpdesk.example.com; dmarc=pass header.from=helpdesk.example.com
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <body>
+    <p>Hello,</p>
+    <p>We posted an update to your support case.</p>
+    <p>Review it in the support portal at https://helpdesk.example.com/tickets/59302.</p>
+    <p>If you still need help, reply to the existing case and our team will continue assisting you.</p>
+  </body>
+</html>
