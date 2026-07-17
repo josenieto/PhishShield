@@ -12,6 +12,7 @@ The current MVP provides a local `.eml` analysis flow with:
 - grouped findings with backend-provided severity and explanation text;
 - frontend-side Markdown report download for the current analysis result;
 - backend Docker runtime and Compose wiring;
+- Docker Compose runtime validated with health, benign/suspicious analysis, and upload-limit smoke checks in a Docker-enabled environment;
 - CI coverage for backend tests, frontend tests/build, and backend Docker smoke;
 - coverage reporting in observability mode for backend and frontend.
 
@@ -110,6 +111,13 @@ The Compose file forwards:
 - `8000:8000`
 - `PHISHSHIELD_MAX_UPLOAD_BYTES` from the shell or Compose environment
 
+Validated Docker runtime smoke checks currently include:
+
+- `GET /health` returning `{"status":"ok"}`;
+- `POST /analyze-email` with a suspicious fixture returning a `CRITICAL` posture;
+- `POST /analyze-email` with a benign fixture returning a `LOW` posture;
+- upload-limit validation returning `413` with `{"detail":"Uploaded email exceeds maximum allowed size."}` when `PHISHSHIELD_MAX_UPLOAD_BYTES` is set below the fixture size.
+
 Health check example:
 
 ```bash
@@ -154,7 +162,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
 - Scoring calibration baseline: `doc/SCORING_CALIBRATION.md`
 
-The current recommended next group after the initial Markdown report export is additional runtime validation on an environment with Docker available or a frontend workbench layout redesign.
+The current recommended next group after Docker runtime validation and the frontend workbench redesign is parser/runtime polish or a future v0.2 planning step.
 
 ### Health Check
 
