@@ -3690,3 +3690,50 @@ Full backend suite: 576 passed
 ### Next step
 
 Run the full backend suite, then decide whether a future calibration pass should focus on HTML-only lures, subtler support impersonation, or new text signals.
+
+---
+
+## 2026-07-06 - Add HTML-only calibration fixtures
+
+Type: Testing  
+Layer: Backend  
+Status: Done
+
+### Context
+
+The calibration baseline already covered a wide range of plain-text business and phishing scenarios, but it still lacked explicit HTML-only benign notifications and an HTML-only credential lure to confirm that the parser fallback path continues to support realistic scoring behavior.
+
+### Decision
+
+Added HTML-only newsletter and support fixtures plus an HTML-only credential lure.
+
+The first draft of these fixtures exposed a practical limitation in the current extraction path: links embedded only in HTML anchors were not surfaced by these simple fixtures. The fixtures were then adjusted to include visible URLs in the HTML body, which matches the current parser behavior and still validates the intended scoring path without changing parsing logic.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_html_only_newsletter_notice.eml`
+- `tests/fixtures/emails/benign_html_only_support_update.eml`
+- `tests/fixtures/emails/suspicious_html_only_credential_lure.eml`
+- `tests/integration/test_analyze_email_api_with_fixture.py`
+- `doc/SCORING_CALIBRATION.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/integration/test_analyze_email_api_with_fixture.py
+python -m pytest
+```
+
+Result:
+
+```text
+API fixture integration tests: 30 passed
+Full backend suite: 579 passed
+```
+
+### Next step
+
+Run the full backend suite, then decide whether a future calibration or parser pass should cover richer HTML-only link extraction or more subtle HTML phishing variations.

@@ -366,6 +366,64 @@ def test_should_keep_benign_vendor_portal_notice_fixture_low_risk() -> None:
     }
 
 
+def test_should_keep_benign_html_only_newsletter_fixture_low_risk() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "benign_html_only_newsletter_notice.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("benign_html_only_newsletter_notice.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == []
+    assert payload["risk_score"]["risk_level"] == "LOW"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "updates.example.com",
+        "subject": "Product highlights for this week",
+        "urls": ["https://updates.example.com/blog/product-highlights"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
+def test_should_keep_benign_html_only_support_update_fixture_low_risk() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "benign_html_only_support_update.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("benign_html_only_support_update.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["finding_codes"] == []
+    assert payload["risk_score"]["risk_level"] == "LOW"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "helpdesk.example.com",
+        "subject": "Support case update available",
+        "urls": ["https://helpdesk.example.com/tickets/59302"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
 def test_should_analyze_uploaded_suspicious_attachment_eml_fixture() -> None:
     client = TestClient(create_app())
     email_bytes = (_FIXTURES_DIR / "suspicious_attachment.eml").read_bytes()
@@ -486,6 +544,38 @@ def test_should_flag_suspicious_account_support_lure_fixture() -> None:
         "sender_domain": "xn--account-help-3kb.com",
         "subject": "Support case requires account verification",
         "urls": ["https://xn--account-help-3kb.com/case/review"],
+        "attachment_filenames": [],
+        "authentication_results": {
+            "spf_result": "pass",
+            "dkim_result": "pass",
+            "dmarc_result": "pass",
+        },
+    }
+
+
+def test_should_flag_suspicious_html_only_credential_lure_fixture() -> None:
+    client = TestClient(create_app())
+    email_bytes = (_FIXTURES_DIR / "suspicious_html_only_credential_lure.eml").read_bytes()
+
+    response = client.post(
+        "/analyze-email",
+        files={"file": ("suspicious_html_only_credential_lure.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert "URL_USES_KNOWN_SHORTENER_DOMAIN" in payload["finding_codes"]
+    assert "SOCIAL_ENGINEERING_HAS_CREDENTIAL_REQUEST_TERMS" in payload["finding_codes"]
+    assert payload["risk_score"]["raw_score"] == 40
+    assert payload["risk_score"]["capped_score"] == 40
+    assert payload["risk_score"]["risk_level"] == "MEDIUM"
+    assert payload["risk_score"]["has_critical_indicators"] is False
+    assert payload["extracted_evidence"] == {
+        "sender_domain": "account-review.example.com",
+        "subject": "Verify your account access now",
+        "urls": ["https://bit.ly/account-html-review"],
         "attachment_filenames": [],
         "authentication_results": {
             "spf_result": "pass",
