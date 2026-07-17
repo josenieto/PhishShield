@@ -33,6 +33,27 @@ Current non-blocking follow-up areas after the MVP v0.1 baseline are:
 python -m pip install -e ".[test]"
 ```
 
+To install local development guardrails as well:
+
+```bash
+python -m pip install -e ".[test,dev]"
+pre-commit install
+pre-commit install --hook-type commit-msg
+```
+
+Current local hooks cover:
+
+- basic repository hygiene checks;
+- `Domain` and `Application` import boundary checks;
+- commit-message format validation;
+- scoring-sensitive change checks that require both test evidence and `doc/SCORING_CALIBRATION.md` updates.
+
+Run all configured hooks manually with:
+
+```bash
+pre-commit run --all-files
+```
+
 ### Run Tests
 
 ```bash
