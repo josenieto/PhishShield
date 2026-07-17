@@ -4,7 +4,7 @@
 
 This document defines an incremental technical backlog of candidate pure functions for the PhishShield `domain` layer.
 
-It is not a plan to implement everything at once.  
+It is not a plan to implement everything at once.
 Its purpose is to preserve context, group related functions, and support controlled progress:
 
 ```text
@@ -99,7 +99,7 @@ For each functional group:
 
 ## Purpose
 
-Pure functions for normalizing text before applying analysis rules.  
+Pure functions for normalizing text before applying analysis rules.
 They are useful for subjects, visible sender names, visual domains, body text, OCR-extracted text, and filenames.
 
 ## Suggested location
@@ -813,7 +813,7 @@ After this group is complete:
 
 Interpret already computed SPF, DKIM, and DMARC results.
 
-The domain must not query DNS or validate cryptographic signatures.  
+The domain must not query DNS or validate cryptographic signatures.
 It may only classify results already calculated by infrastructure.
 
 ## Suggested location
@@ -1349,7 +1349,7 @@ After this group is complete:
 
 Pure functions for validating and normalizing already calculated hashes.
 
-Calculating a hash by reading a file does not belong in the domain.  
+Calculating a hash by reading a file does not belong in the domain.
 Validating a hash received as a string may belong in the domain.
 
 The implemented contract is strict on `str` inputs. The hash helpers do not accept `None`; callers must provide textual hash values.

@@ -102,24 +102,24 @@ Each `SKILL.md` must include:
 
 Initial folders are prepared, and skills are defined progressively with `skill-creator`.
 
-- `phishshield-architecture`  
-  Guides architectural changes, layer separation, port/adapter decisions, and alignment with `doc/ADR.md`.  
+- `phishshield-architecture`
+  Guides architectural changes, layer separation, port/adapter decisions, and alignment with `doc/ADR.md`.
   Status: defined in `.skills/phishshield-architecture/SKILL.md` with initial evals in `.skills/phishshield-architecture/evals/evals.json`.
 
-- `phishshield-backend`  
-  Guides Python, FastAPI, use cases, contracts, validation, and backend adapters.  
+- `phishshield-backend`
+  Guides Python, FastAPI, use cases, contracts, validation, and backend adapters.
   Status: defined in `.skills/phishshield-backend/SKILL.md` with initial evals in `.skills/phishshield-backend/evals/evals.json`.
 
-- `phishshield-frontend`  
-  Guides React, TypeScript, Vite, upload/result flows, frontend testing, and forensic dashboard UX.  
+- `phishshield-frontend`
+  Guides React, TypeScript, Vite, upload/result flows, frontend testing, and forensic dashboard UX.
   Status: defined in `.skills/phishshield-frontend/SKILL.md` with initial evals in `.skills/phishshield-frontend/evals/evals.json`.
 
-- `phishshield-security-analysis`  
-  Guides Domain and Application work for phishing indicators, forensic rules, finding codes, and pure analysis boundaries.  
+- `phishshield-security-analysis`
+  Guides Domain and Application work for phishing indicators, forensic rules, finding codes, and pure analysis boundaries.
   Status: defined in `.skills/phishshield-security-analysis/SKILL.md` with initial evals in `.skills/phishshield-security-analysis/evals/evals.json`.
 
-- `phishshield-testing`  
-  Guides unit testing, integration testing, mocks, Pytest, TDD Red-Green-Refactor, and forensic module validation.  
+- `phishshield-testing`
+  Guides unit testing, integration testing, mocks, Pytest, TDD Red-Green-Refactor, and forensic module validation.
   Status: defined in `.skills/phishshield-testing/SKILL.md` with initial evals in `.skills/phishshield-testing/evals/evals.json`.
 
 ## Created skills
