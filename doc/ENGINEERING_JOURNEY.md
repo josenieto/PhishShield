@@ -3642,3 +3642,51 @@ Frontend build: vite build OK
 ### Next step
 
 Polish the analyst-facing hierarchy inside the new workbench layout and adjust wording only when realistic fixtures reveal confusing presentation.
+
+---
+
+## 2026-07-06 - Add support and cloud-share calibration fixtures
+
+Type: Testing  
+Layer: Backend  
+Status: Done
+
+### Context
+
+The calibration baseline already covered shipping, billing, HR, QR, and invoice-link scenarios, but it still lacked routine support-account workflows and a stronger cloud-share case that combined subtle lure wording with authentication failure signals.
+
+### Decision
+
+Added benign support-ticket and vendor-portal fixtures plus suspicious account-support and cloud-share authentication-failure lures.
+
+The current scoring logic still handled the benign cases cleanly and escalated the stronger cloud-share lure appropriately, so this step only expanded fixtures, tests, and calibration documentation.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_support_ticket_update.eml`
+- `tests/fixtures/emails/benign_vendor_portal_notice.eml`
+- `tests/fixtures/emails/suspicious_account_support_lure.eml`
+- `tests/fixtures/emails/suspicious_cloud_share_auth_failure.eml`
+- `tests/integration/test_analyze_email_api_with_fixture.py`
+- `doc/SCORING_CALIBRATION.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/integration/test_analyze_email_api_with_fixture.py
+python -m pytest
+```
+
+Result:
+
+```text
+API fixture integration tests: 27 passed
+Full backend suite: 576 passed
+```
+
+### Next step
+
+Run the full backend suite, then decide whether a future calibration pass should focus on HTML-only lures, subtler support impersonation, or new text signals.

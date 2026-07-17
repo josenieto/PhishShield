@@ -1,0 +1,9 @@
+From: Account Support <support@xn--account-help-3kb.com>
+Subject: Support case requires account verification
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=xn--account-help-3kb.com; dkim=pass header.d=xn--account-help-3kb.com; dmarc=pass header.from=xn--account-help-3kb.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your recent support case cannot continue until you verify your account.
+Open https://xn--account-help-3kb.com/case/review to confirm your login details.

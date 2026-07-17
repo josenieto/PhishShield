@@ -1,0 +1,10 @@
+From: Vendor Portal <notifications@vendor-portal.example.com>
+Subject: New document available in your vendor portal
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=vendor-portal.example.com; dkim=pass header.d=vendor-portal.example.com; dmarc=pass header.from=vendor-portal.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+A new statement is available in your vendor portal.
+Review it at https://vendor-portal.example.com/statements/july-2026.
+This message is informational and no additional action is required unless you have questions.
