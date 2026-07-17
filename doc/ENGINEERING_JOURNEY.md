@@ -3595,3 +3595,50 @@ Full backend suite: 572 passed
 ### Next step
 
 Run the full backend suite, then decide whether a future calibration pass should introduce QR-specific wording signals or more subtle account-support fixtures.
+
+---
+
+## 2026-07-06 - Frontend analyst workbench layout redesign
+
+Type: Refactor  
+Layer: Frontend  
+Status: Done
+
+### Context
+
+The frontend analysis flow was already functional, but the page still felt narrow and overly vertical for a triage-oriented workflow. The upload form, execution context, and analysis output all competed for the same stacked space, which made the UI feel closer to a demo page than an analyst tool.
+
+### Decision
+
+Redesigned the frontend shell into a wider analyst-workbench layout with a dedicated sidebar for upload and runtime context plus a separate main panel for loading, empty, and analysis-result states.
+
+The result sections were also rearranged to use the available horizontal space more effectively while preserving the same backend contract and user flow.
+
+### Files changed
+
+- `frontend/src/App.tsx`
+- `frontend/src/components/AnalysisResults.tsx`
+- `frontend/src/styles.css`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 19 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Polish the analyst-facing hierarchy inside the new workbench layout and adjust wording only when realistic fixtures reveal confusing presentation.
