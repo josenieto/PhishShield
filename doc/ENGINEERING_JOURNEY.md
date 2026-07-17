@@ -3737,3 +3737,55 @@ Full backend suite: 579 passed
 ### Next step
 
 Run the full backend suite, then decide whether a future calibration or parser pass should cover richer HTML-only link extraction or more subtle HTML phishing variations.
+
+---
+
+## 2026-07-06 - Docker runtime validation
+
+Type: Validation  
+Layer: Infrastructure  
+Status: Done
+
+### Context
+
+The backend Docker runtime and Compose wiring were already implemented, but local validation in this environment had been blocked because the `docker` CLI was unavailable. A final MVP confidence pass still needed explicit runtime confirmation from a Docker-enabled machine.
+
+### Decision
+
+Validated the backend Docker Compose runtime on an external Docker-enabled environment using health, benign-analysis, suspicious-analysis, and upload-limit smoke checks.
+
+The runtime behavior matched the expected API contract and scoring baseline, so no runtime code changes were required.
+
+### Files changed
+
+- `README.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+docker --version
+docker compose version
+curl http://127.0.0.1:8000/health
+curl -X POST http://127.0.0.1:8000/analyze-email -F "file=@tests/fixtures/emails/suspicious_html_notice.eml;type=message/rfc822"
+curl -X POST http://127.0.0.1:8000/analyze-email -F "file=@tests/fixtures/emails/benign_account_summary.eml;type=message/rfc822"
+PHISHSHIELD_MAX_UPLOAD_BYTES=5 docker compose up --build
+curl -i -X POST http://127.0.0.1:8000/analyze-email -F "file=@tests/fixtures/emails/benign_account_summary.eml;type=message/rfc822"
+```
+
+Result:
+
+```text
+Docker version: 26.1.5+dfsg1
+Docker Compose version: v5.3.0
+Health check: {"status":"ok"}
+Suspicious fixture: CRITICAL, raw_score=180, capped_score=100, has_critical_indicators=true
+Benign fixture: LOW, raw_score=0, capped_score=0, has_critical_indicators=false
+Upload limit: HTTP/1.1 413 Request Entity Too Large with {"detail":"Uploaded email exceeds maximum allowed size."}
+```
+
+### Next step
+
+Decide whether the next phase should focus on parser/runtime polish, richer HTML extraction, or formalizing the v0.2 roadmap.
