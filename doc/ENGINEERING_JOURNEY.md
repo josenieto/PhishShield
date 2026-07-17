@@ -3830,3 +3830,53 @@ Baseline already validated by prior backend, frontend, and Docker runtime verifi
 ### Next step
 
 Focus the next phase on parser/runtime polish, richer HTML extraction, report/export improvements, or formal v0.2 roadmap planning without reopening the MVP v0.1 scope.
+
+---
+
+## 2026-07-06 - Add local pre-commit guardrails
+
+Type: Tooling  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+After establishing the MVP v0.1 release-candidate baseline, the next need was to protect the repository from gradual drift in commit discipline and architectural boundaries, especially inside `src/domain/` and `src/application/`.
+
+### Decision
+
+Added local `pre-commit` guardrails for repository hygiene, Domain/Application import boundaries, commit-message format validation, and scoring-sensitive change checks.
+
+The goal is to keep the hooks lightweight and focused on architecture and workflow discipline rather than turning them into a full replacement for CI.
+
+### Files changed
+
+- `.pre-commit-config.yaml`
+- `scripts/check_architecture_boundaries.py`
+- `scripts/check_commit_message.py`
+- `scripts/check_scoring_changes.py`
+- `pyproject.toml`
+- `README.md`
+- `AGENT.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python scripts/check_architecture_boundaries.py src/domain/services/social_engineering/text_signals.py src/application/use_cases/calculate_risk_score.py
+python scripts/check_scoring_changes.py tests/integration/test_analyze_email_api_with_fixture.py doc/SCORING_CALIBRATION.md src/infrastructure/config/analysis_defaults.py
+python scripts/check_commit_message.py <temporary valid commit message file>
+python scripts/check_commit_message.py <temporary invalid commit message file>
+```
+
+Result:
+
+```text
+Targeted guard-script validation passed.
+```
+
+### Next step
+
+Observe the hook ergonomics during normal development and only extend them further if a repeated workflow failure or architectural drift pattern appears.
