@@ -1,0 +1,10 @@
+From: Support Team <support@helpdesk.example.com>
+Subject: Update on your support ticket
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=helpdesk.example.com; dkim=pass header.d=helpdesk.example.com; dmarc=pass header.from=helpdesk.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+We added a new reply to your support ticket regarding the login issue you reported.
+You can review the update at https://helpdesk.example.com/tickets/48291.
+If the issue is resolved, you may close the ticket from the support portal.

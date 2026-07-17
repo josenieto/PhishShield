@@ -1,0 +1,9 @@
+From: Share Center <notify@secure-share-center.example.com>
+Subject: Secure file share requires account confirmation
+Authentication-Results: mx.example.com; spf=fail smtp.mailfrom=mailer.bad-example.net; dkim=pass header.d=bad-example.net; dmarc=fail header.from=secure-share-center.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+A protected file was shared with you.
+Verify your account at https://tinyurl.com/confirm-secure-share to open the shared document immediately.
