@@ -19,19 +19,35 @@ body {
 
 .app-shell {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
   padding: 2rem;
 }
 
+.workbench-shell {
+  width: min(1480px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+}
+
 .hero-card {
-  width: min(900px, 100%);
   padding: 2.5rem;
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 24px;
   background: rgba(15, 23, 42, 0.72);
   backdrop-filter: blur(14px);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.workbench-hero {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.8fr);
+  align-items: end;
+}
+
+.workbench-lede {
+  margin: 0;
+  justify-self: end;
 }
 
 .eyebrow {
@@ -63,6 +79,40 @@ h1 {
 
 .status-grid-top {
   margin-top: 1.75rem;
+}
+
+.workbench-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.workbench-sidebar,
+.workbench-main {
+  display: grid;
+  gap: 1rem;
+}
+
+.sidebar-card {
+  padding: 1.4rem;
+}
+
+.sidebar-card-heading {
+  margin-bottom: 1rem;
+}
+
+.sidebar-card-heading h2 {
+  margin: 0 0 0.35rem;
+}
+
+.sidebar-card-heading p {
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.sidebar-status-grid {
+  grid-template-columns: 1fr;
 }
 
 .status-grid article {
@@ -172,7 +222,7 @@ button:disabled {
 }
 
 .error-banner {
-  margin: 1rem 0 0;
+  margin: 0;
   padding: 0.9rem 1rem;
   border-radius: 14px;
   background: rgba(127, 29, 29, 0.45);
@@ -192,6 +242,11 @@ button:disabled {
 
 .empty-state-panel {
   background: rgba(15, 23, 42, 0.64);
+}
+
+.empty-state-panel-main {
+  min-height: 220px;
+  align-content: center;
 }
 
 .empty-state-panel h2,
@@ -225,7 +280,13 @@ button:disabled {
 .analysis-panel {
   display: grid;
   gap: 1rem;
-  margin-top: 1.75rem;
+}
+
+.analysis-secondary-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+  align-items: start;
 }
 
 .analysis-summary-grid {
@@ -506,8 +567,22 @@ button:disabled {
 }
 
 @media (max-width: 720px) {
+  .app-shell {
+    padding: 1rem;
+  }
+
   .hero-card {
     padding: 1.5rem;
+  }
+
+  .workbench-hero,
+  .workbench-grid,
+  .analysis-secondary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .workbench-lede {
+    justify-self: start;
   }
 
   .evidence-card-wide {

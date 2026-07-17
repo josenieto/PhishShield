@@ -35,8 +35,10 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
       </div>
 
       <RiskSummary analysis={analysis} />
-      <ExtractedEvidence extractedEvidence={analysis.extracted_evidence} />
-      <IndicatorDistribution analysis={analysis} />
+      <div className="analysis-secondary-grid">
+        <ExtractedEvidence extractedEvidence={analysis.extracted_evidence} />
+        <IndicatorDistribution analysis={analysis} />
+      </div>
       <FindingsByCategory analysis={analysis} />
       <IndicatorCodes findingCodes={analysis.unique_finding_codes} />
     </section>
