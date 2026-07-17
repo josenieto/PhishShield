@@ -42,9 +42,12 @@ Do not change scoring weights without fixture evidence.
 | `benign_hr_policy_update.eml` | Benign | `LOW` | A normal internal HR policy update remains low risk despite policy-review wording and a normal HTTPS link. |
 | `benign_support_ticket_update.eml` | Benign | `LOW` | A routine support-ticket update stays low risk despite account-help wording and a normal portal link. |
 | `benign_vendor_portal_notice.eml` | Benign | `LOW` | A normal vendor-portal notification remains low risk without financial pressure or credential requests. |
+| `benign_html_only_newsletter_notice.eml` | Benign | `LOW` | An HTML-only newsletter remains low risk and confirms the current HTML-body fallback handles benign link extraction correctly. |
+| `benign_html_only_support_update.eml` | Benign | `LOW` | An HTML-only support update stays low risk and confirms the current parser fallback keeps support links visible. |
 | `suspicious_html_notice.eml` | Suspicious | `CRITICAL` | Strong domain, authentication, and social-engineering signals align with a clearly malicious posture. |
 | `suspicious_password_reset_portal.eml` | Suspicious | `HIGH` or `CRITICAL` | Shortener, suspicious TLD, failed authentication, and credential request remain clearly suspicious. |
 | `suspicious_cloud_document_share_lure.eml` | Suspicious | `MEDIUM`, non-critical | A shortener plus account-verification wording lands at `raw_score=40`, making the lure visible without treating it like a confirmed compromise on its own. |
+| `suspicious_html_only_credential_lure.eml` | Suspicious | `MEDIUM`, non-critical | An HTML-only credential lure still lands at `raw_score=40` through the current shortener and credential-request signals without requiring authentication failure. |
 | `suspicious_qr_login_lure.eml` | Suspicious | `MEDIUM`, non-critical | A QR-themed login lure remains visible through the current shortener plus account-verification signals without introducing QR-specific parsing. |
 | `suspicious_shortener_login_notice.eml` | Suspicious | `MEDIUM`, non-critical | Shortener plus explicit login confirmation wording currently lands at `raw_score=40`, which is visible without being over-escalated. |
 | `suspicious_account_support_lure.eml` | Suspicious | `HIGH`, non-critical | A support-themed lookalike domain plus account-verification wording lands at `raw_score=55`, which is appropriately elevated without relying on authentication failure. |
@@ -101,7 +104,9 @@ This keeps explicit phishing-style credential requests suspicious while allowing
 - Benign shipping and document-sharing notifications currently stay clean under the narrowed social-engineering phrases, which is a good sign for common business email traffic.
 - Benign billing receipts and HR policy notices also stay clean, which broadens confidence in ordinary operational email traffic.
 - Benign support-ticket and vendor-portal notifications also stay clean, which improves confidence in routine operational support flows.
+- HTML-only benign newsletters and support updates also stay clean, which reinforces trust in the current HTML-body fallback path.
 - A shortener plus account-verification wording remains a useful medium-risk lure baseline even when authentication passes.
+- HTML-only credential lures remain visible through the same shortener and credential-request signals used for plain-text lures.
 - QR-themed phishing can already be surfaced through existing shortener and credential-request signals, even before any QR-specific parsing exists.
 - Attachment-free invoice-payment lures remain visible at medium risk when they combine shortener and financial-pressure wording.
 - Support-themed account-verification lures currently behave similarly to other lookalike-plus-credential scenarios and provide another stable non-critical `HIGH` baseline.
@@ -117,7 +122,7 @@ This keeps explicit phishing-style credential requests suspicious while allowing
 The next scoring review should focus on these questions:
 
 1. Do we need QR-themed or invoice-link-specific text signals beyond the current shortener and credential/financial baselines?
-2. Are there legitimate billing, support, or account-help cases that still look too suspicious under the current terms?
+2. Are there legitimate billing, support, HTML-only, or account-help cases that still look too suspicious under the current terms?
 3. Should subtle suspicious cases move above `MEDIUM` only when an additional supporting signal appears?
 4. Are current critical indicators still reserved for the strongest combinations of evidence?
 

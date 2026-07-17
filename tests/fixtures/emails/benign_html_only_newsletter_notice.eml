@@ -1,0 +1,13 @@
+From: Product Updates <newsletter@updates.example.com>
+Subject: Product highlights for this week
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=updates.example.com; dkim=pass header.d=updates.example.com; dmarc=pass header.from=updates.example.com
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <body>
+    <p>Hello,</p>
+    <p>Here are this week's product highlights and release notes.</p>
+    <p>Read more at https://updates.example.com/blog/product-highlights.</p>
+    <p>You can manage your preferences from your account settings.</p>
+  </body>
+</html>
