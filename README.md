@@ -16,6 +16,15 @@ The current MVP provides a local `.eml` analysis flow with:
 - CI coverage for backend tests, frontend tests/build, and backend Docker smoke;
 - coverage reporting in observability mode for backend and frontend.
 
+This state now serves as the MVP v0.1 release-candidate baseline for local email triage.
+
+Current non-blocking follow-up areas after the MVP v0.1 baseline are:
+
+- parser and runtime polish;
+- richer HTML extraction behavior;
+- report/export improvements beyond the current Markdown download;
+- future v0.2 roadmap planning.
+
 ## Development
 
 ### Install
@@ -162,7 +171,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
 - Scoring calibration baseline: `doc/SCORING_CALIBRATION.md`
 
-The current recommended next group after Docker runtime validation and the frontend workbench redesign is parser/runtime polish or a future v0.2 planning step.
+The current recommended next group after establishing the MVP v0.1 release-candidate baseline is parser/runtime polish or a future v0.2 planning step.
 
 ### Health Check
 
