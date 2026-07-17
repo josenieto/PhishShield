@@ -6,7 +6,7 @@ This document defines the first usable frontend for PhishShield.
 
 Its purpose is to keep the initial React UI focused on the current backend contract while avoiding premature complexity before broader forensic modules or production packaging are introduced.
 
-The current frontend MVP is functionally complete enough to support upload and result inspection. The next frontend work should focus on UX polish or backend response enrichment when the UI needs additional evidence fields.
+The current frontend MVP is functionally complete enough to support upload and result inspection. It now uses a wider analyst-workbench layout that separates upload context from analysis output. The next frontend work should focus on UX polish or backend response enrichment when the UI needs additional evidence fields.
 
 ---
 
@@ -41,6 +41,7 @@ The current frontend MVP lets a user:
 - No backend CORS is required for the current development flow.
 - The backend remains runnable without Docker.
 - Docker remains optional for frontend and backend development.
+- The current UI uses an analyst-workbench layout with a dedicated input/context sidebar and a separate results panel.
 
 ---
 
@@ -73,6 +74,7 @@ Done:
 - explicit loading, empty, success, and error result states;
 - frontend-side Markdown report export based on the current API result;
 - extracted `AnalysisResults` component for result rendering;
+- wider workbench layout that separates input/context from analysis results;
 - Vitest + React Testing Library coverage for the current upload/results flow, organized under `frontend/tests/`;
 - frontend test/build job in GitHub Actions.
 
@@ -97,11 +99,11 @@ These items are intentionally out of scope for the current frontend MVP:
 
 ## Next Steps
 
-The next recommended frontend group after this Markdown export addition is realistic fixture-driven polish over the current evidence and explanation model.
+The next recommended frontend group after the workbench layout redesign is realistic fixture-driven polish over the current evidence and explanation model.
 
 Potential mini-steps:
 
-1. Improve result hierarchy and severity visual language.
+1. Improve result hierarchy and severity visual language inside the current workbench layout.
 2. Add dedicated `AnalysisResults` tests if the component grows in complexity.
 3. Revisit wording only when backend fixtures reveal confusing analyst-facing phrasing.
 4. Keep new frontend tests under `frontend/tests/` as a repository rule.
