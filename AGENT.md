@@ -228,6 +228,8 @@ For behavior changes, use the smallest useful increment and follow this workflow
 
 The refactor phase is mandatory as a review step, but code changes are optional. If no cleanup is useful, state `Refactor not needed.`
 
+The repository also maintains local `pre-commit` guardrails for hygiene, Domain/Application boundary protection, commit-message validation, and scoring-sensitive change checks. Keep `AGENT.md`, `.pre-commit-config.yaml`, and the guard scripts under `scripts/` aligned when workflow expectations change.
+
 Full-suite verification trigger policy:
 
 - run `python -m pytest` before marking work complete when a change touches shared value objects, Domain finding definitions, Application result models, API response schemas, parser adapters, or other contracts reused across multiple backend layers;

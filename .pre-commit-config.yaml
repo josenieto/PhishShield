@@ -1,0 +1,30 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+      - id: detect-private-key
+
+  - repo: local
+    hooks:
+      - id: architecture-boundaries
+        name: Check Domain/Application architecture boundaries
+        entry: python scripts/check_architecture_boundaries.py
+        language: system
+        files: ^src/(domain|application)/.*\.py$
+
+      - id: scoring-calibration-guard
+        name: Check scoring-sensitive changes include evidence
+        entry: python scripts/check_scoring_changes.py
+        language: system
+        files: ^(src/infrastructure/config/analysis_defaults\.py|src/domain/services/finding_analysis/.*\.py|src/domain/services/risk_scoring/.*\.py|src/domain/services/social_engineering/.*\.py|src/domain/value_objects/finding\.py|src/application/use_cases/calculate_risk_score\.py|src/application/use_cases/analyze_social_engineering_indicators\.py|tests/.*|doc/SCORING_CALIBRATION\.md)$
+
+      - id: commit-message-format
+        name: Check commit message format
+        entry: python scripts/check_commit_message.py
+        language: system
+        stages: [commit-msg]
