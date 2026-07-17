@@ -3789,3 +3789,44 @@ Upload limit: HTTP/1.1 413 Request Entity Too Large with {"detail":"Uploaded ema
 ### Next step
 
 Decide whether the next phase should focus on parser/runtime polish, richer HTML extraction, or formalizing the v0.2 roadmap.
+
+---
+
+## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
+
+Type: Release  
+Layer: Cross-cutting  
+Status: Done
+
+### Context
+
+The project had reached a stable local email-triage flow across backend analysis, frontend workbench rendering, Markdown export, realistic scoring calibration, CI coverage, and Docker runtime validation. At this point the main need was to mark the current state clearly as the MVP v0.1 baseline and distinguish it from future polish or v0.2 work.
+
+### Decision
+
+Declared the current validated local `.eml` triage flow as the MVP v0.1 release-candidate baseline.
+
+The remaining work was explicitly framed as non-blocking follow-up areas rather than requirements for the MVP baseline.
+
+### Files changed
+
+- `README.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```text
+No new automated tests run for this docs-only closure step.
+```
+
+Result:
+
+```text
+Baseline already validated by prior backend, frontend, and Docker runtime verification steps.
+```
+
+### Next step
+
+Focus the next phase on parser/runtime polish, richer HTML extraction, report/export improvements, or formal v0.2 roadmap planning without reopening the MVP v0.1 scope.
