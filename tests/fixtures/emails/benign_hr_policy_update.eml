@@ -1,0 +1,10 @@
+From: HR Team <hr@hr.example.com>
+Subject: Updated remote work policy
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=hr.example.com; dkim=pass header.d=hr.example.com; dmarc=pass header.from=hr.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+We updated the remote work policy for the next quarter.
+Please review the latest version at https://hr.example.com/policies/remote-work.
+If you have any questions, contact the HR team through the employee portal.
