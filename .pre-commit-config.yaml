@@ -21,6 +21,8 @@ repos:
         name: Check scoring-sensitive changes include evidence
         entry: python scripts/check_scoring_changes.py
         language: system
+        pass_filenames: false
+        stages: [pre-commit]
         files: ^(src/infrastructure/config/analysis_defaults\.py|src/domain/services/finding_analysis/.*\.py|src/domain/services/risk_scoring/.*\.py|src/domain/services/social_engineering/.*\.py|src/domain/value_objects/finding\.py|src/application/use_cases/calculate_risk_score\.py|src/application/use_cases/analyze_social_engineering_indicators\.py|tests/.*|doc/SCORING_CALIBRATION\.md)$
 
       - id: commit-message-format

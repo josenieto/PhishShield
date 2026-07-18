@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 import sys
 from pathlib import Path
 
@@ -29,8 +30,23 @@ def _is_scoring_sensitive(file_path: str) -> bool:
     )
 
 
+def _staged_paths() -> list[str]:
+    completed_process = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMR"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    return [
+        _normalized_path(file_path)
+        for file_path in completed_process.stdout.splitlines()
+        if file_path.strip()
+    ]
+
+
 def main() -> int:
-    changed_paths = [_normalized_path(file_path) for file_path in sys.argv[1:]]
+    changed_paths = _staged_paths()
     scoring_sensitive_paths = [file_path for file_path in changed_paths if _is_scoring_sensitive(file_path)]
 
     if not scoring_sensitive_paths:
