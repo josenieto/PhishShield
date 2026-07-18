@@ -3881,6 +3881,56 @@ Use the post-MVP roadmap to choose the next intentional work group, starting wit
 
 ---
 
+## 2026-07-06 - Add Markdown report copy action
+
+Type: Feature
+Layer: Frontend
+Status: Done
+
+### Context
+
+The frontend already supported Markdown download, but the first recommended `Report And Export v2` step was to make the report easier to reuse in analyst workflows that do not require saving a file first.
+
+### Decision
+
+Added a clipboard copy action for the generated Markdown report beside the existing download action.
+
+The UI now surfaces a small success or failure status after the copy attempt while reusing the same Markdown report generator used for downloads.
+
+### Files changed
+
+- `frontend/src/components/AnalysisResults.tsx`
+- `frontend/src/report/copyMarkdownReport.ts`
+- `frontend/src/styles.css`
+- `frontend/tests/App.test.tsx`
+- `frontend/tests/report/copyMarkdownReport.test.ts`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 22 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Continue `Report And Export v2` with either JSON export or a simple report preview, depending on which analyst workflow needs value first.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release
