@@ -46,7 +46,7 @@ Current local hooks cover:
 - basic repository hygiene checks;
 - `Domain` and `Application` import boundary checks;
 - commit-message format validation;
-- scoring-sensitive change checks that require both test evidence and `doc/SCORING_CALIBRATION.md` updates.
+- scoring-sensitive change checks that inspect staged files and require both test evidence and `doc/SCORING_CALIBRATION.md` updates.
 
 Run all configured hooks manually with:
 

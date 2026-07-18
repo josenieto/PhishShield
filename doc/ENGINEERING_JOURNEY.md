@@ -4,7 +4,7 @@
 
 This document records meaningful engineering steps in PhishShield.
 
-It is not a changelog and it should not duplicate every commit.  
+It is not a changelog and it should not duplicate every commit.
 Its goal is to preserve architectural reasoning, TDD cycles, layer progression, and key decisions so the project can be reviewed visually and reused as a learning reference for future projects.
 
 ---
@@ -34,8 +34,8 @@ Do not document every small code edit. Document meaningful engineering steps tha
 ```md
 ## YYYY-MM-DD - [Short title]
 
-Type: TDD | Architecture | Testing | Skill | Documentation | Refactor  
-Layer: Domain | Application | Infrastructure | Entrypoint | Cross-cutting  
+Type: TDD | Architecture | Testing | Skill | Documentation | Refactor
+Layer: Domain | Application | Infrastructure | Entrypoint | Cross-cutting
 Status: Proposed | Done | Rejected | Deferred
 
 ### Context
@@ -103,13 +103,13 @@ flowchart LR
 
 ## 2026-06-23 - Invisible character helpers TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
 
-The first production code snippet was intentionally kept small and pure.  
+The first production code snippet was intentionally kept small and pure.
 The selected domain group was `Text normalization`, starting with suspicious invisible Unicode characters.
 
 The goal was to establish the first TDD cycle before moving to additional domain functions or upper layers.
@@ -123,7 +123,7 @@ contains_invisible_chars(text: str) -> bool
 strip_invisible_chars(text: str) -> str
 ```
 
-No ports were created because the functions are pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the functions are pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because there is no higher-level workflow consuming the full text normalization group.
 
 ### Files changed
@@ -168,8 +168,8 @@ Start with RED tests before implementation.
 
 ## 2026-06-23 - Whitespace normalization TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -186,7 +186,7 @@ Implemented one pure domain helper:
 normalize_whitespace(text: str) -> str
 ```
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the text normalization group is still being completed inside the Domain layer.
 
 ### Files changed
@@ -230,8 +230,8 @@ Start with RED tests before implementation.
 
 ## 2026-06-23 - Unicode text normalization TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -250,7 +250,7 @@ normalize_unicode_text(text: str) -> str
 
 The function uses Python standard library Unicode NFKC compatibility normalization to normalize visually different but compatible text forms while preserving readable content.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because there is no higher-level workflow consuming the full text normalization group.
 
 ### Files changed
@@ -301,8 +301,8 @@ Continue the domain roadmap with the `Homoglyphs / suspicious Unicode` group, st
 
 ## 2026-06-23 - Unicode script detection TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -321,7 +321,7 @@ detect_unicode_scripts(text: str) -> set[str]
 
 The function detects Latin, Cyrillic, and Greek script ranges using internal Unicode codepoint checks. Numbers, punctuation, hyphens, dots, and other neutral characters do not add scripts.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the suspicious Unicode domain group is still being built from pure functions.
 
 ### Files changed
@@ -378,8 +378,8 @@ Start with RED tests and reuse `detect_unicode_scripts` internally if the contra
 
 ## 2026-06-23 - Mixed Unicode script detection TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -398,7 +398,7 @@ contains_mixed_scripts(text: str) -> bool
 
 The function reuses `detect_unicode_scripts` and returns `True` when more than one relevant script is present. Neutral characters such as digits, punctuation, dots, and hyphens do not cause mixed-script detection by themselves.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the suspicious Unicode domain group is still being completed inside the Domain layer.
 
 ### Files changed
@@ -455,8 +455,8 @@ Start with RED tests and a minimal internal table for phishing-relevant confusab
 
 ## 2026-06-23 - Confusable character detection TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -475,7 +475,7 @@ contains_confusable_characters(text: str) -> bool
 
 The function uses a minimal internal table for Cyrillic and Greek characters commonly used in homoglyph-style phishing attempts. The table is intentionally small and dependency-free at this stage.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the suspicious Unicode domain group is still being completed inside the Domain layer.
 
 ### Files changed
@@ -532,8 +532,8 @@ Start with RED tests and preserve discovery order in the returned list.
 
 ## 2026-06-23 - Confusable character discovery TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -554,7 +554,7 @@ The function returns phishing-relevant confusable characters in discovery order 
 
 `contains_confusable_characters` now reuses `find_confusable_characters` so the filtering logic has a single source of truth.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet; the next step is an architectural checkpoint to decide whether the suspicious Unicode group is stable enough to move upward.
 
 ### Files changed
@@ -605,8 +605,8 @@ Run an architectural checkpoint for the completed `Homoglyphs / suspicious Unico
 
 ## 2026-06-23 - Domain label splitting TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -625,7 +625,7 @@ split_domain_labels(domain: str) -> list[str]
 
 The function trims surrounding whitespace, removes leading and trailing dots, splits by `.`, and ignores empty labels caused by repeated dots. This keeps the function tolerant and useful for later forensic rules without performing DNS validation or IO.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the `Domain analysis` group is just starting and its contracts are not stable enough to move upward.
 
 ### Files changed
@@ -682,8 +682,8 @@ Start with RED tests and keep the implementation pure and dependency-free.
 
 ## 2026-06-25 - Punycode label detection TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -702,7 +702,7 @@ is_punycode_label(label: str) -> bool
 
 The function checks whether a single domain label starts with the Punycode prefix in a case-insensitive way. It does not decode IDNA, validate DNS, resolve domains, or perform IO.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the `Domain analysis` group is still being built from pure helpers.
 
 ### Files changed
@@ -759,8 +759,8 @@ Start with RED tests and reuse `split_domain_labels` and `is_punycode_label` int
 
 ## 2026-06-25 - Domain Punycode detection TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -779,7 +779,7 @@ contains_punycode(domain: str) -> bool
 
 The function reuses `split_domain_labels` and `is_punycode_label` so domain splitting and label-level Punycode detection remain single-purpose helpers. It does not decode IDNA, validate DNS, resolve domains, or perform IO.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the `Domain analysis` group is still being completed inside the Domain layer.
 
 ### Files changed
@@ -836,8 +836,8 @@ Start with RED tests and reuse `split_domain_labels` if the contract remains sui
 
 ## 2026-06-25 - Suspicious subdomain depth TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -856,7 +856,7 @@ has_suspicious_subdomain_depth(domain: str, max_depth: int = 4) -> bool
 
 The function reuses `split_domain_labels` and returns `True` when the number of meaningful labels is greater than `max_depth`. It intentionally does not use public suffix lists, DNS lookups, or external services.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the `Domain analysis` group still has host-shape and TLD helpers pending.
 
 ### Files changed
@@ -913,8 +913,8 @@ Start with RED tests and keep the implementation pure, using standard-library pa
 
 ## 2026-06-25 - IP address host detection TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -933,7 +933,7 @@ looks_like_ip_address_host(host: str) -> bool
 
 The function uses Python's standard-library `ipaddress` module to validate IPv4 and IPv6 host strings after trimming surrounding whitespace. It does not resolve DNS, call the network, parse URLs, or perform IO.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet because the `Domain analysis` group still has suspicious TLD analysis pending.
 
 ### Files changed
@@ -990,8 +990,8 @@ Start with RED tests and keep the suspicious TLD list supplied as an argument in
 
 ## 2026-06-25 - Suspicious TLD detection TDD cycle
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1010,7 +1010,7 @@ has_suspicious_tld(domain: str, suspicious_tlds: set[str]) -> bool
 
 The function reuses `split_domain_labels`, inspects the final domain label, and compares it against a caller-provided set of suspicious TLDs. TLD values are compared case-insensitively, and entries with or without a leading dot are accepted.
 
-No ports were created because the function is pure, deterministic, synchronous, and dependency-free.  
+No ports were created because the function is pure, deterministic, synchronous, and dependency-free.
 No Application use case was created yet; the next step is an architectural checkpoint for the completed `Domain analysis` group.
 
 ### Files changed
@@ -1061,8 +1061,8 @@ Run an architectural checkpoint for the completed `Domain analysis` group and de
 
 ## 2026-06-25 - Domain indicators application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -1148,8 +1148,8 @@ Decide whether to continue with the next pure domain group (`URL analysis`) or e
 
 ## 2026-06-28 - URL scheme analysis helpers
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1219,8 +1219,8 @@ Continue the `URL analysis` group with embedded credential detection in URLs.
 
 ## 2026-06-28 - Embedded URL credential detection
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1289,8 +1289,8 @@ Continue the `URL analysis` group with suspicious query density detection.
 
 ## 2026-06-28 - Suspicious URL query density detection
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1359,8 +1359,8 @@ Continue the `URL analysis` group with known shortener domain detection.
 
 ## 2026-06-28 - Known URL shortener domain detection
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1429,8 +1429,8 @@ Run an architectural checkpoint for the completed `URL analysis` group and decid
 
 ## 2026-06-28 - URL indicators application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -1522,8 +1522,8 @@ Decide whether to continue with another pure domain group, such as `Attachment a
 
 ## 2026-06-28 - Executable attachment extension detection
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1593,8 +1593,8 @@ Continue the `Attachment analysis` group with Office document extension detectio
 
 ## 2026-06-28 - Office attachment extension detection
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1666,8 +1666,8 @@ Continue the `Attachment analysis` group with PDF extension detection.
 
 ## 2026-06-28 - Attachment analysis domain group checkpoint
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -1751,8 +1751,8 @@ Run an architectural checkpoint for the completed `Attachment analysis` group an
 
 ## 2026-06-28 - Attachment indicators application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -1845,8 +1845,8 @@ Decide whether to continue with another pure domain group, such as `Authenticati
 
 ## 2026-06-28 - Authentication indicators domain and application analysis
 
-Type: TDD  
-Layer: Domain | Application  
+Type: TDD
+Layer: Domain | Application
 Status: Done
 
 ### Context
@@ -1939,8 +1939,8 @@ Decide whether to continue with `Risk scoring`, which can now consume findings f
 
 ## 2026-06-28 - Risk scoring domain helpers
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -2027,8 +2027,8 @@ Decide whether to add an Application use case for risk score orchestration or co
 
 ## 2026-06-28 - Risk score calculation application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2098,8 +2098,8 @@ Decide whether to continue with another pure signal group, such as `Social engin
 
 ## 2026-06-28 - Social engineering domain heuristics
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -2188,8 +2188,8 @@ Decide whether to add an Application use case for social engineering indicator a
 
 ## 2026-06-28 - Social engineering indicators application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2267,8 +2267,8 @@ Decide whether to start higher-level analysis composition across existing use ca
 
 ## 2026-06-29 - Finding analysis domain helpers
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -2369,8 +2369,8 @@ Decide whether to add an Application-level report composition use case or contin
 
 ## 2026-06-29 - Hash analysis domain helpers
 
-Type: TDD  
-Layer: Domain  
+Type: TDD
+Layer: Domain
 Status: Done
 
 ### Context
@@ -2446,8 +2446,8 @@ Decide whether hash string validation needs an Application use case now, or defe
 
 ## 2026-06-29 - Analysis findings summary application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2517,8 +2517,8 @@ Decide whether to introduce a finding code registry for mapping existing string 
 
 ## 2026-06-29 - Finding code summary application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2588,8 +2588,8 @@ Decide whether to expand the finding definition registry incrementally or start 
 
 ## 2026-06-29 - Extracted email technical indicator analysis
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2666,8 +2666,8 @@ Decide whether to extend extracted email analysis with social engineering text i
 
 ## 2026-06-29 - Extracted email text indicator analysis
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2735,8 +2735,8 @@ Compose technical and text extracted email analyses into a full extracted email 
 
 ## 2026-06-29 - Extracted email analysis composition
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2806,8 +2806,8 @@ Decide whether to introduce the first Application port for extracting `Extracted
 
 ## 2026-06-29 - Python email content extractor adapter
 
-Type: TDD  
-Layer: Infrastructure  
+Type: TDD
+Layer: Infrastructure
 Status: Done
 
 ### Context
@@ -2873,8 +2873,8 @@ Decide whether to add a thin Application use case that accepts raw email bytes t
 
 ## 2026-06-29 - Raw email analysis application use case
 
-Type: TDD  
-Layer: Application  
+Type: TDD
+Layer: Application
 Status: Done
 
 ### Context
@@ -2944,8 +2944,8 @@ Add an integration-style test that wires `AnalyzeRawEmailUseCase` with `PythonEm
 
 ## 2026-06-29 - Email parser authentication result extraction
 
-Type: TDD  
-Layer: Infrastructure  
+Type: TDD
+Layer: Infrastructure
 Status: Done
 
 ### Context
@@ -3017,8 +3017,8 @@ Add an integration-style test wiring `AnalyzeRawEmailUseCase` with `PythonEmailC
 
 ## 2026-07-03 - Frontend test structure cleanup
 
-Type: Refactor  
-Layer: Cross-cutting  
+Type: Refactor
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3076,8 +3076,8 @@ Continue with frontend UX hardening or enrich the backend API response model wit
 
 ## 2026-07-03 - Cost-aware testing distribution guideline
 
-Type: Testing  
-Layer: Cross-cutting  
+Type: Testing
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3139,8 +3139,8 @@ Use this snapshot as a future comparison point and continue favoring new low-cos
 
 ## 2026-07-03 - Coverage observability setup
 
-Type: Testing  
-Layer: Cross-cutting  
+Type: Testing
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3203,8 +3203,8 @@ Keep coverage in observability mode for now and revisit later whether reporting-
 
 ## 2026-07-04 - Full-suite verification trigger policy
 
-Type: Testing  
-Layer: Cross-cutting  
+Type: Testing
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3249,8 +3249,8 @@ Use the new verification trigger rule as the default workflow for future cross-l
 
 ## 2026-07-04 - Realistic fixture expansion baseline
 
-Type: Testing  
-Layer: Cross-cutting  
+Type: Testing
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3299,8 +3299,8 @@ Run the full backend suite, observe whether the new fixtures reveal false positi
 
 ## 2026-07-04 - Ambiguous fixture expansion baseline
 
-Type: Testing  
-Layer: Cross-cutting  
+Type: Testing
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3356,8 +3356,8 @@ Keep the current weights unchanged for now and continue adding fixture evidence 
 
 ## 2026-07-04 - Scoring calibration baseline document
 
-Type: Documentation  
-Layer: Cross-cutting  
+Type: Documentation
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3406,8 +3406,8 @@ Use the calibration baseline as the reference point before making any additional
 
 ## 2026-07-04 - MVP v0.1 release-candidate hardening
 
-Type: Testing  
-Layer: Cross-cutting  
+Type: Testing
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3453,8 +3453,8 @@ Use the current branch state as the MVP v0.1 release-candidate baseline and choo
 
 ## 2026-07-06 - Frontend Markdown report export
 
-Type: Feature  
-Layer: Frontend  
+Type: Feature
+Layer: Frontend
 Status: Done
 
 ### Context
@@ -3504,8 +3504,8 @@ Validate the frontend suite and build, then decide whether the next frontend-fac
 
 ## 2026-07-06 - Expand realistic scoring calibration fixtures
 
-Type: Testing  
-Layer: Backend  
+Type: Testing
+Layer: Backend
 Status: Done
 
 ### Context
@@ -3552,8 +3552,8 @@ Run the full backend suite, then decide whether the next calibration pass should
 
 ## 2026-07-06 - Add second realistic scoring calibration batch
 
-Type: Testing  
-Layer: Backend  
+Type: Testing
+Layer: Backend
 Status: Done
 
 ### Context
@@ -3600,8 +3600,8 @@ Run the full backend suite, then decide whether a future calibration pass should
 
 ## 2026-07-06 - Frontend analyst workbench layout redesign
 
-Type: Refactor  
-Layer: Frontend  
+Type: Refactor
+Layer: Frontend
 Status: Done
 
 ### Context
@@ -3647,8 +3647,8 @@ Polish the analyst-facing hierarchy inside the new workbench layout and adjust w
 
 ## 2026-07-06 - Add support and cloud-share calibration fixtures
 
-Type: Testing  
-Layer: Backend  
+Type: Testing
+Layer: Backend
 Status: Done
 
 ### Context
@@ -3695,8 +3695,8 @@ Run the full backend suite, then decide whether a future calibration pass should
 
 ## 2026-07-06 - Add HTML-only calibration fixtures
 
-Type: Testing  
-Layer: Backend  
+Type: Testing
+Layer: Backend
 Status: Done
 
 ### Context
@@ -3742,8 +3742,8 @@ Run the full backend suite, then decide whether a future calibration or parser p
 
 ## 2026-07-06 - Docker runtime validation
 
-Type: Validation  
-Layer: Infrastructure  
+Type: Validation
+Layer: Infrastructure
 Status: Done
 
 ### Context
@@ -3794,8 +3794,8 @@ Decide whether the next phase should focus on parser/runtime polish, richer HTML
 
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
-Type: Release  
-Layer: Cross-cutting  
+Type: Release
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3835,8 +3835,8 @@ Focus the next phase on parser/runtime polish, richer HTML extraction, report/ex
 
 ## 2026-07-06 - Add local pre-commit guardrails
 
-Type: Tooling  
-Layer: Cross-cutting  
+Type: Tooling
+Layer: Cross-cutting
 Status: Done
 
 ### Context
@@ -3848,6 +3848,8 @@ After establishing the MVP v0.1 release-candidate baseline, the next need was to
 Added local `pre-commit` guardrails for repository hygiene, Domain/Application import boundaries, commit-message format validation, and scoring-sensitive change checks.
 
 The goal is to keep the hooks lightweight and focused on architecture and workflow discipline rather than turning them into a full replacement for CI.
+
+After the first real `pre-commit run --all-files`, the scoring-sensitive guard was adjusted to inspect staged files through Git rather than the filename batches passed by `pre-commit`, which avoids false positives during full-hook runs while preserving the commit-time protection.
 
 ### Files changed
 
