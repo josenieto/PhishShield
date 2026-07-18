@@ -37,9 +37,12 @@ To install local development guardrails as well:
 
 ```bash
 python -m pip install -e ".[test,dev]"
-pre-commit install
-pre-commit install --hook-type commit-msg
+python -m pre_commit install
+python -m pre_commit install --hook-type commit-msg
 ```
+
+The hook configuration is versioned in the repository, but each clone must install the hooks locally.
+Skipping them with `git commit --no-verify` is still possible, so CI remains the shared enforcement layer for the repository.
 
 Current local hooks cover:
 
@@ -51,7 +54,7 @@ Current local hooks cover:
 Run all configured hooks manually with:
 
 ```bash
-pre-commit run --all-files
+python -m pre_commit run --all-files
 ```
 
 ### Run Tests
