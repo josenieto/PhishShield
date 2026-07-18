@@ -3792,6 +3792,53 @@ Decide whether the next phase should focus on parser/runtime polish, richer HTML
 
 ---
 
+## 2026-07-06 - Extract URLs from HTML anchor href values
+
+Type: Fix
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+The HTML-only calibration fixtures showed that the parser fallback handled visible text correctly, but a simple HTML message that stored its URL only inside an anchor `href` attribute did not surface that URL in extracted evidence.
+
+### Decision
+
+Updated the Python email parser adapter to collect HTTP and HTTPS URLs from HTML anchor `href` values in addition to visible text.
+
+The implementation preserves duplicate URLs already present in extracted plain text while deduplicating anchor-derived URLs that repeat visible URLs from the same HTML body.
+
+### Files changed
+
+- `src/infrastructure/adapters/email_parser/python_email_content_extractor.py`
+- `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_urls.py`
+- `tests/integration/test_email_parser_body_fixtures.py`
+- `tests/fixtures/emails/html_only_anchor_notice.eml`
+- `doc/BACKEND_EVOLUTION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_urls.py tests/integration/test_email_parser_body_fixtures.py
+python -m pytest
+```
+
+Result:
+
+```text
+Parser URL/body tests: 18 passed
+Full backend suite: 582 passed
+```
+
+### Next step
+
+Decide whether the next parser/runtime polish step should cover more complex HTML extraction, additional malformed HTML cases, or a formal post-MVP v0.2 roadmap group.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release

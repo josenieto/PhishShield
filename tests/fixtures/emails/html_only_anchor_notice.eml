@@ -1,0 +1,10 @@
+From: Support Team <support@example.com>
+Subject: HTML anchor notice
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <body>
+    <h1>Account notice</h1>
+    <p><a href="https://example.com/login">Verify your account</a></p>
+  </body>
+</html>
