@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file guides any AI agent working on this repository.  
+This file guides any AI agent working on this repository.
 Its role is to provide a concise operational guide: what this software project is, how it is structured, and which rules every change must follow.
 
 This document does **not** replace the official architectural design. The main source of truth is:
@@ -67,23 +67,23 @@ Before modifying code, read:
 
 - `doc/ADR.md`
 
-The project follows a **Hexagonal Architecture** inside a **modular monolith**.  
+The project follows a **Hexagonal Architecture** inside a **modular monolith**.
 Design decisions and boundaries between layers must respect that architecture.
 
 ### Expected layers
 
-- **Domain**  
+- **Domain**
   Pure models and business rules with no infrastructure dependencies.
 
-- **Application**  
+- **Application**
   Use cases and ports defining contracts.
 
-- **Infrastructure**  
+- **Infrastructure**
   Technical adapters, frameworks, parsers, integrations, and entrypoints.
 
 ### Main rule
 
-An AI agent **must not introduce infrastructure dependencies into the domain**.  
+An AI agent **must not introduce infrastructure dependencies into the domain**.
 Every external integration must be encapsulated behind ports and adapters.
 
 ---
@@ -158,7 +158,7 @@ If a change affects architecture, contracts, modules, or deployment, consult `do
 
 ### 3. Prioritize security and privacy
 
-PhishShield is a defensive security tool.  
+PhishShield is a defensive security tool.
 Every change must avoid unnecessary exposure of sensitive data and preserve the local/self-hosted approach.
 
 ### 4. Keep typing and validation explicit
@@ -404,19 +404,19 @@ Do not create skills without following this process.
 
 Initial folders are prepared, and skills are defined progressively with `skill-creator`.
 
-- `phishshield-architecture`  
+- `phishshield-architecture`
   Architecture decisions aligned with the ADR.
 
-- `phishshield-backend`  
+- `phishshield-backend`
   FastAPI, use cases, ports, and adapters.
 
-- `phishshield-frontend`  
+- `phishshield-frontend`
   React, TypeScript, Vite, and forensic dashboard UI.
 
-- `phishshield-security-analysis`  
+- `phishshield-security-analysis`
   Link analysis, attachment analysis, OCR, and forensic indicators.
 
-- `phishshield-testing`  
+- `phishshield-testing`
   Unit and integration testing with Pytest and mocks.
 
 > Until a skill exists, use this file, `.skills/README.md`, and `doc/ADR.md` as the main references.
