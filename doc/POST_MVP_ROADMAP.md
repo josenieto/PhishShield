@@ -50,7 +50,7 @@ This is the recommended next product-facing group.
 
 Candidate steps:
 
-- add copy-to-clipboard for the Markdown report;
+- add copy-to-clipboard for the Markdown report; Done after the first post-MVP roadmap planning step.
 - add report preview before download;
 - add JSON export for the raw structured analysis result;
 - add simple HTML export when the Markdown flow is stable;

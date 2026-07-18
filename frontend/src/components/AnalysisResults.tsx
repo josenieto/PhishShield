@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 import type { AnalyzeEmailResponse } from "../types/api";
+import { copyMarkdownReport } from "../report/copyMarkdownReport";
 import { ExtractedEvidence } from "./analysis-results/ExtractedEvidence";
 import { FindingsByCategory } from "./analysis-results/FindingsByCategory";
 import { IndicatorCodes } from "./analysis-results/IndicatorCodes";
@@ -14,6 +17,17 @@ type AnalysisResultsProps = {
 
 
 export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsProps) {
+  const [copyStatusMessage, setCopyStatusMessage] = useState("");
+
+  async function handleCopyReport(): Promise<void> {
+    try {
+      await copyMarkdownReport({ analysis, selectedFileName });
+      setCopyStatusMessage("Markdown report copied");
+    } catch {
+      setCopyStatusMessage("Markdown report could not be copied");
+    }
+  }
+
   return (
     <section className="analysis-panel" aria-label="Analysis results">
       <div className="success-banner">
@@ -26,12 +40,22 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
             type="button"
             className="secondary-action-button"
             onClick={() => {
+              void handleCopyReport();
+            }}
+          >
+            Copy Markdown report
+          </button>
+          <button
+            type="button"
+            className="secondary-action-button"
+            onClick={() => {
               downloadMarkdownReport({ analysis, selectedFileName });
             }}
           >
             Download Markdown report
           </button>
         </div>
+        {copyStatusMessage && <span className="copy-report-status">{copyStatusMessage}</span>}
       </div>
 
       <RiskSummary analysis={analysis} />
