@@ -3839,6 +3839,48 @@ Decide whether the next parser/runtime polish step should cover more complex HTM
 
 ---
 
+## 2026-07-06 - Plan post-MVP v0.2 work
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+After closing the MVP v0.1 release-candidate baseline and completing a first round of post-MVP guardrails and parser polish, the project needed a clearer separation between finished MVP scope and the next intentional work groups.
+
+### Decision
+
+Created a dedicated post-MVP roadmap that separates the validated MVP baseline from future parser/runtime polish, report/export improvements, frontend analyst polish, guardrail maturation, and inference planning.
+
+The roadmap explicitly keeps larger forensic or AI-oriented modules deferred until a dedicated roadmap group starts them.
+
+### Files changed
+
+- `doc/POST_MVP_ROADMAP.md`
+- `README.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files README.md doc/POST_MVP_ROADMAP.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Targeted documentation hook validation passed.
+```
+
+### Next step
+
+Use the post-MVP roadmap to choose the next intentional work group, starting with `Report And Export v2` unless a parser/runtime issue becomes more urgent.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release
