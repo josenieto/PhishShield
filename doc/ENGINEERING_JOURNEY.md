@@ -3851,6 +3851,8 @@ The goal is to keep the hooks lightweight and focused on architecture and workfl
 
 After the first real `pre-commit run --all-files`, the scoring-sensitive guard was adjusted to inspect staged files through Git rather than the filename batches passed by `pre-commit`, which avoids false positives during full-hook runs while preserving the commit-time protection.
 
+The setup was also documented explicitly as a per-clone installation step so contributors understand that the configuration is shared, while the actual Git hook installation remains local and CI continues to provide the shared enforcement layer.
+
 ### Files changed
 
 - `.pre-commit-config.yaml`
