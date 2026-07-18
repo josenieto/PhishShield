@@ -230,6 +230,8 @@ The refactor phase is mandatory as a review step, but code changes are optional.
 
 The repository also maintains local `pre-commit` guardrails for hygiene, Domain/Application boundary protection, commit-message validation, and scoring-sensitive change checks. Keep `AGENT.md`, `.pre-commit-config.yaml`, and the guard scripts under `scripts/` aligned when workflow expectations change.
 
+The `pre-commit` configuration is versioned, but hook installation is per clone. Treat `git commit --no-verify` as an intentional bypass of local protections; CI remains the shared enforcement layer.
+
 Full-suite verification trigger policy:
 
 - run `python -m pytest` before marking work complete when a change touches shared value objects, Domain finding definitions, Application result models, API response schemas, parser adapters, or other contracts reused across multiple backend layers;
