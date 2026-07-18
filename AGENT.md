@@ -342,6 +342,8 @@ Result:
 ...
 ```
 
+Do not use Markdown hard-break trailing spaces on the `Type`, `Layer`, or `Status` lines in `doc/ENGINEERING_JOURNEY.md`. The trailing-whitespace hook strips them and will abort the commit so the fixed file can be staged again.
+
 When a step changes architecture flow or layer progression, update the Mermaid diagrams in `doc/ENGINEERING_JOURNEY.md` if those diagrams exist and the change is still meaningful.
 
 Do not over-document every small code edit. Prefer milestone-oriented entries over per-helper noise.
