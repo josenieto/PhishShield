@@ -3931,6 +3931,58 @@ Continue `Report And Export v2` with either JSON export or a simple report previ
 
 ---
 
+## 2026-07-06 - Add JSON analysis export
+
+Type: Feature
+Layer: Frontend
+Status: Done
+
+### Context
+
+The first `Report And Export v2` step added clipboard copy for the Markdown report, but the next small analyst-facing improvement was to export the structured API result itself for debugging, sharing, or downstream tooling.
+
+### Decision
+
+Added a frontend JSON export action that downloads the current analysis result with the selected file name as a structured `.json` payload.
+
+The JSON download sits beside the Markdown actions and reuses the same report-oriented UI area without introducing backend changes.
+
+### Files changed
+
+- `frontend/src/components/AnalysisResults.tsx`
+- `frontend/src/report/downloadJsonReport.ts`
+- `frontend/src/report/reportFileName.ts`
+- `frontend/src/report/downloadMarkdownReport.ts`
+- `frontend/src/styles.css`
+- `frontend/tests/App.test.tsx`
+- `frontend/tests/report/downloadJsonReport.test.ts`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 24 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Continue `Report And Export v2` with a simple report preview or richer HTML export only when the current copy/download workflow proves useful in practice.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release

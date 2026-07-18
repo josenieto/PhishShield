@@ -25,6 +25,7 @@ The current frontend MVP lets a user:
 - inspect finding category counts;
 - inspect unique finding codes;
 - download or copy a Markdown report for the current analysis result;
+- download the structured analysis result as JSON;
 - see loading, empty, success, and error states.
 
 ---
@@ -74,6 +75,7 @@ Done:
 - explicit loading, empty, success, and error result states;
 - frontend-side Markdown report export based on the current API result;
 - clipboard copy action for the generated Markdown report;
+- frontend-side JSON export for the current API result;
 - extracted `AnalysisResults` component for result rendering;
 - wider workbench layout that separates input/context from analysis results;
 - Vitest + React Testing Library coverage for the current upload/results flow, organized under `frontend/tests/`;
