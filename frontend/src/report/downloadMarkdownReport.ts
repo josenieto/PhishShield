@@ -1,4 +1,5 @@
 import { createMarkdownReport } from "./createMarkdownReport";
+import { sanitizeReportFileName } from "./reportFileName";
 
 import type { AnalyzeEmailResponse } from "../types/api";
 
@@ -7,14 +8,6 @@ type DownloadMarkdownReportParams = {
   analysis: AnalyzeEmailResponse;
   selectedFileName: string;
 };
-
-
-function sanitizeReportFileName(selectedFileName: string): string {
-  const normalized = selectedFileName.trim().replace(/\.[^.]+$/, "");
-  const safeBaseName = normalized.replace(/[^a-zA-Z0-9-_]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-
-  return safeBaseName === "" ? "selected-email" : safeBaseName;
-}
 
 
 export function downloadMarkdownReport({ analysis, selectedFileName }: DownloadMarkdownReportParams): void {
