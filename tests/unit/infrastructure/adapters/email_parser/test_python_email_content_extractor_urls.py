@@ -173,6 +173,41 @@ def test_should_extract_urls_from_html_only_body() -> None:
     assert extracted_email.urls == ("https://example.com/login",)
 
 
+def test_should_extract_urls_from_html_anchor_href() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML anchor",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><a href=\"https://example.com/login\">Verify account</a></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == "Verify account"
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
+def test_should_deduplicate_visible_and_href_urls_in_html_only_body() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML links",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body>Visit https://example.com/login <a href=\"https://example.com/login\">now</a></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
 def test_should_not_extract_urls_after_body_size_limit() -> None:
     adapter = PythonEmailContentExtractorAdapter(max_body_chars=20)
     email_bytes = b"\r\n".join(

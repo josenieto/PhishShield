@@ -206,6 +206,7 @@ Remaining candidate steps:
 - additional unusual charset edge cases if real samples expose gaps;
 - deeply nested multipart structures;
 - parser failure behavior for malformed but safely handled emails.
+- richer HTML link extraction beyond visible text when real samples expose anchor-only URLs.
 
 ### 5. Integration Tests
 

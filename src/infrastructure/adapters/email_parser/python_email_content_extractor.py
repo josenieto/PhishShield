@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 
 from email import policy
 from email.header import decode_header, make_header
@@ -30,11 +31,12 @@ class PythonEmailContentExtractorAdapter:
         message = BytesParser(policy=policy.default).parsebytes(email_bytes)
 
         body_text = _limit_text(_extract_plain_text_body(message), self._max_body_chars)
+        html_urls = _extract_urls_from_html(message)
         spf_result, dkim_result, dmarc_result = _extract_authentication_results(message)
 
         return ExtractedEmailContent(
             sender_domain=_extract_sender_domain(message),
-            urls=_extract_urls_from_text(body_text),
+            urls=_merge_urls(_extract_urls_from_text(body_text), html_urls),
             attachment_filenames=_extract_attachment_filenames(message),
             subject=_decode_header_value(message.get("Subject", "")),
             body_text=body_text,
@@ -98,6 +100,44 @@ def _extract_urls_from_text(text: str) -> tuple[str, ...]:
         match.group(0).rstrip(_TRAILING_URL_PUNCTUATION)
         for match in _HTTP_URL_PATTERN.finditer(text)
     )
+
+
+def _extract_urls_from_html(message: Message) -> tuple[str, ...]:
+    html_parts = []
+
+    if message.is_multipart():
+        html_parts.extend(
+            _decode_text_part(part)
+            for part in message.walk()
+            if _is_html_body_part(part)
+        )
+    elif _is_html_body_part(message):
+        html_parts.append(_decode_text_part(message))
+
+    extracted_urls: list[str] = []
+    for html_part in html_parts:
+        parser = _LinkCollectingHtmlParser()
+        parser.feed(html_part)
+        parser.close()
+        extracted_urls.extend(parser.urls)
+
+    return tuple(extracted_urls)
+
+
+def _merge_urls(*url_groups: tuple[str, ...]) -> tuple[str, ...]:
+    if not url_groups:
+        return ()
+
+    merged_urls = list(url_groups[0])
+    seen_urls = OrderedDict.fromkeys(merged_urls)
+
+    for url_group in url_groups[1:]:
+        for url in url_group:
+            if url not in seen_urls:
+                seen_urls[url] = None
+                merged_urls.append(url)
+
+    return tuple(merged_urls)
 
 
 def _limit_text(text: str, max_chars: int) -> str:
@@ -194,6 +234,27 @@ class _VisibleTextHtmlParser(HTMLParser):
     def handle_data(self, data: str) -> None:
         if data.strip():
             self._text_parts.append(data.strip())
+
+
+class _LinkCollectingHtmlParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self._urls: list[str] = []
+
+    @property
+    def urls(self) -> tuple[str, ...]:
+        return tuple(self._urls)
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() != "a":
+            return
+
+        for attribute_name, attribute_value in attrs:
+            if attribute_name.lower() != "href" or not attribute_value:
+                continue
+
+            if attribute_value.lower().startswith(("http://", "https://")):
+                self._urls.append(attribute_value.rstrip(_TRAILING_URL_PUNCTUATION))
 
 
 def _decode_text_part(part: Message) -> str:
