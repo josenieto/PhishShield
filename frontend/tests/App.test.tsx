@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import * as analyzeEmailApi from "../src/api/analyzeEmail";
 import * as copyMarkdownReportModule from "../src/report/copyMarkdownReport";
+import * as downloadJsonReportModule from "../src/report/downloadJsonReport";
 import * as downloadMarkdownReportModule from "../src/report/downloadMarkdownReport";
 import App from "../src/App";
 
@@ -207,8 +208,38 @@ describe("App", () => {
     expect(screen.getByText(/The domain contains Punycode/i)).toBeInTheDocument();
     expect(screen.getAllByText("2")[0]).toBeInTheDocument();
     expect(screen.getAllByText("DOMAIN_CONTAINS_PUNYCODE")).toHaveLength(2);
+    expect(screen.getByRole("button", { name: "Download JSON" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy Markdown report" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download Markdown report" })).toBeInTheDocument();
+  });
+
+  it("should trigger JSON report download from the success state", async () => {
+    const user = userEvent.setup();
+    const downloadJsonReportSpy = vi.spyOn(
+      downloadJsonReportModule,
+      "downloadJsonReport",
+    ).mockImplementation(() => {
+      return;
+    });
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
+
+    render(<App />);
+
+    const input = emailFileInput();
+    const emailFile = new File(["sample"], "security-review.eml", {
+      type: "message/rfc822",
+    });
+
+    await user.upload(input, emailFile);
+    await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
+    await screen.findByText("Analysis completed");
+
+    await user.click(screen.getByRole("button", { name: "Download JSON" }));
+
+    expect(downloadJsonReportSpy).toHaveBeenCalledWith({
+      analysis: SAMPLE_ANALYSIS,
+      selectedFileName: "security-review.eml",
+    });
   });
 
   it("should trigger Markdown report copy from the success state", async () => {

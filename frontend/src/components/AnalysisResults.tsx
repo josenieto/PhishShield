@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import type { AnalyzeEmailResponse } from "../types/api";
 import { copyMarkdownReport } from "../report/copyMarkdownReport";
+import { downloadJsonReport } from "../report/downloadJsonReport";
 import { ExtractedEvidence } from "./analysis-results/ExtractedEvidence";
 import { FindingsByCategory } from "./analysis-results/FindingsByCategory";
 import { IndicatorCodes } from "./analysis-results/IndicatorCodes";
@@ -36,6 +37,15 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
           Review the local triage output for <code>{selectedFileName}</code>.
         </span>
         <div className="success-banner-actions">
+          <button
+            type="button"
+            className="secondary-action-button"
+            onClick={() => {
+              downloadJsonReport({ analysis, selectedFileName });
+            }}
+          >
+            Download JSON
+          </button>
           <button
             type="button"
             className="secondary-action-button"
