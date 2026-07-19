@@ -208,9 +208,36 @@ describe("App", () => {
     expect(screen.getByText(/The domain contains Punycode/i)).toBeInTheDocument();
     expect(screen.getAllByText("2")[0]).toBeInTheDocument();
     expect(screen.getAllByText("DOMAIN_CONTAINS_PUNYCODE")).toHaveLength(2);
+    expect(screen.getByRole("button", { name: "Preview Markdown report" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download JSON" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy Markdown report" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download Markdown report" })).toBeInTheDocument();
+  });
+
+  it("should show and hide the Markdown report preview from the success state", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
+
+    render(<App />);
+
+    const input = emailFileInput();
+    const emailFile = new File(["sample"], "security-review.eml", {
+      type: "message/rfc822",
+    });
+
+    await user.upload(input, emailFile);
+    await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
+    await screen.findByText("Analysis completed");
+
+    await user.click(screen.getByRole("button", { name: "Preview Markdown report" }));
+
+    expect(await screen.findByRole("heading", { name: "Markdown report preview" })).toBeInTheDocument();
+    expect(screen.getByText(/# PhishShield Analysis Report/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Hide Markdown preview" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Hide Markdown preview" }));
+
+    expect(screen.queryByRole("heading", { name: "Markdown report preview" })).not.toBeInTheDocument();
   });
 
   it("should trigger JSON report download from the success state", async () => {
