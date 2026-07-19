@@ -40,58 +40,71 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
         <span>
           Review the local triage output for <code>{selectedFileName}</code>.
         </span>
-        <div className="success-banner-actions">
-          <button
-            type="button"
-            className="secondary-action-button"
-            onClick={() => {
-              downloadHtmlReport({ analysis, selectedFileName });
-            }}
-          >
-            Download HTML
-          </button>
-          <button
-            type="button"
-            className="secondary-action-button"
-            onClick={() => {
-              setIsPreviewVisible((currentValue) => !currentValue);
-            }}
-          >
-            {isPreviewVisible ? "Hide Markdown preview" : "Preview Markdown report"}
-          </button>
-          <button
-            type="button"
-            className="secondary-action-button"
-            onClick={() => {
-              downloadJsonReport({ analysis, selectedFileName });
-            }}
-          >
-            Download JSON
-          </button>
-          <button
-            type="button"
-            className="secondary-action-button"
-            onClick={() => {
-              void handleCopyReport();
-            }}
-          >
-            Copy Markdown report
-          </button>
-          <button
-            type="button"
-            className="secondary-action-button"
-            onClick={() => {
-              downloadMarkdownReport({ analysis, selectedFileName });
-            }}
-          >
-            Download Markdown report
-          </button>
-        </div>
-        {copyStatusMessage && <span className="copy-report-status">{copyStatusMessage}</span>}
+      </div>
+
+      <div className="analysis-overview-grid">
+        <RiskSummary analysis={analysis} />
+
+        <section className="findings-panel report-actions-panel">
+          <div className="panel-heading">
+            <h2>Report actions</h2>
+            <p>Reuse the current analysis as Markdown, JSON, or HTML without rerunning the backend flow.</p>
+          </div>
+
+          <div className="report-actions-grid">
+            <button
+              type="button"
+              className="secondary-action-button"
+              onClick={() => {
+                setIsPreviewVisible((currentValue) => !currentValue);
+              }}
+            >
+              {isPreviewVisible ? "Hide Markdown preview" : "Preview Markdown report"}
+            </button>
+            <button
+              type="button"
+              className="secondary-action-button"
+              onClick={() => {
+                void handleCopyReport();
+              }}
+            >
+              Copy Markdown report
+            </button>
+            <button
+              type="button"
+              className="secondary-action-button"
+              onClick={() => {
+                downloadMarkdownReport({ analysis, selectedFileName });
+              }}
+            >
+              Download Markdown report
+            </button>
+            <button
+              type="button"
+              className="secondary-action-button"
+              onClick={() => {
+                downloadJsonReport({ analysis, selectedFileName });
+              }}
+            >
+              Download JSON
+            </button>
+            <button
+              type="button"
+              className="secondary-action-button"
+              onClick={() => {
+                downloadHtmlReport({ analysis, selectedFileName });
+              }}
+            >
+              Download HTML
+            </button>
+          </div>
+
+          {copyStatusMessage && <span className="copy-report-status">{copyStatusMessage}</span>}
+        </section>
       </div>
 
       {isPreviewVisible && (
-        <section className="findings-panel" aria-label="Markdown report preview">
+        <section className="findings-panel report-preview-section" aria-label="Markdown report preview">
           <div className="panel-heading">
             <h2>Markdown report preview</h2>
             <p>Preview the generated report content before copying or downloading it.</p>
@@ -100,7 +113,6 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
         </section>
       )}
 
-      <RiskSummary analysis={analysis} />
       <div className="analysis-secondary-grid">
         <ExtractedEvidence extractedEvidence={analysis.extracted_evidence} />
         <IndicatorDistribution analysis={analysis} />

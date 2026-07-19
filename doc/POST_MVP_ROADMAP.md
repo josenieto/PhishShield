@@ -84,6 +84,8 @@ Keep out of scope for this track:
 
 The frontend workbench is already usable, but still has room for UI polish.
 
+The first frontend analyst polish step should focus on grouping report actions more clearly and improving result scanability without changing product scope.
+
 Candidate steps:
 
 - improve result hierarchy and severity visual language inside the current workbench;

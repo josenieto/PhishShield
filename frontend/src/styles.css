@@ -272,6 +272,28 @@ button:disabled {
   font-size: 0.92rem;
 }
 
+.analysis-overview-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+  align-items: start;
+}
+
+.report-actions-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.report-actions-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.report-actions-grid .secondary-action-button {
+  width: 100%;
+  justify-content: center;
+}
+
 .report-preview-panel {
   margin: 0;
   padding: 1rem;
@@ -598,6 +620,7 @@ button:disabled {
 
   .workbench-hero,
   .workbench-grid,
+  .analysis-overview-grid,
   .analysis-secondary-grid {
     grid-template-columns: 1fr;
   }
