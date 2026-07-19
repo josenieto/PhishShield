@@ -4127,6 +4127,48 @@ Pause the initial `Report And Export v2` implementation block and only continue 
 
 ---
 
+## 2026-07-06 - Align post-export roadmap and next steps
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+After the initial `Report And Export v2` block was completed, several roadmap-oriented documents still described that track as the next recommended group, which no longer matched the current state of the project.
+
+### Decision
+
+Updated the roadmap and plan documents so they now treat the initial report/export block as complete and point the next product-facing work toward frontend analyst polish, while keeping parser/runtime polish as the main backend follow-up area.
+
+### Files changed
+
+- `README.md`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/BACKEND_EVOLUTION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files README.md doc/POST_MVP_ROADMAP.md doc/FRONTEND_MVP_PLAN.md doc/BACKEND_EVOLUTION_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after the updates.
+```
+
+### Next step
+
+Start the next intentional product-facing block with frontend analyst polish while treating parser/runtime work as a focused backend follow-up driven by real sample gaps.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release
