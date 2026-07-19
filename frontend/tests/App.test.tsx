@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import * as analyzeEmailApi from "../src/api/analyzeEmail";
 import * as copyMarkdownReportModule from "../src/report/copyMarkdownReport";
+import * as downloadHtmlReportModule from "../src/report/downloadHtmlReport";
 import * as downloadJsonReportModule from "../src/report/downloadJsonReport";
 import * as downloadMarkdownReportModule from "../src/report/downloadMarkdownReport";
 import App from "../src/App";
@@ -208,10 +209,40 @@ describe("App", () => {
     expect(screen.getByText(/The domain contains Punycode/i)).toBeInTheDocument();
     expect(screen.getAllByText("2")[0]).toBeInTheDocument();
     expect(screen.getAllByText("DOMAIN_CONTAINS_PUNYCODE")).toHaveLength(2);
+    expect(screen.getByRole("button", { name: "Download HTML" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Preview Markdown report" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download JSON" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy Markdown report" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download Markdown report" })).toBeInTheDocument();
+  });
+
+  it("should trigger HTML report download from the success state", async () => {
+    const user = userEvent.setup();
+    const downloadHtmlReportSpy = vi.spyOn(
+      downloadHtmlReportModule,
+      "downloadHtmlReport",
+    ).mockImplementation(() => {
+      return;
+    });
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
+
+    render(<App />);
+
+    const input = emailFileInput();
+    const emailFile = new File(["sample"], "security-review.eml", {
+      type: "message/rfc822",
+    });
+
+    await user.upload(input, emailFile);
+    await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
+    await screen.findByText("Analysis completed");
+
+    await user.click(screen.getByRole("button", { name: "Download HTML" }));
+
+    expect(downloadHtmlReportSpy).toHaveBeenCalledWith({
+      analysis: SAMPLE_ANALYSIS,
+      selectedFileName: "security-review.eml",
+    });
   });
 
   it("should show and hide the Markdown report preview from the success state", async () => {
