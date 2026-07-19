@@ -4031,6 +4031,58 @@ Continue `Report And Export v2` with a simple HTML export or other analyst-facin
 
 ---
 
+## 2026-07-06 - Add HTML report export
+
+Type: Feature
+Layer: Frontend
+Status: Done
+
+### Context
+
+The report/export flow already supported Markdown preview, copy, and download plus JSON export, but the next small user-facing step was to provide a shareable HTML report without introducing backend report generation.
+
+### Decision
+
+Added a frontend HTML report generator and download action for the current analysis result.
+
+The HTML export escapes dynamic values before rendering them into the generated document and reuses the same result data already shown in the UI.
+
+### Files changed
+
+- `frontend/src/components/AnalysisResults.tsx`
+- `frontend/src/report/createHtmlReport.ts`
+- `frontend/src/report/downloadHtmlReport.ts`
+- `frontend/src/styles.css`
+- `frontend/tests/App.test.tsx`
+- `frontend/tests/report/createHtmlReport.test.ts`
+- `frontend/tests/report/downloadHtmlReport.test.ts`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 29 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Pause the initial `Report And Export v2` implementation block and only continue with richer reporting if a concrete analyst workflow justifies it.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release
