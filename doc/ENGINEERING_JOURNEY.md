@@ -3983,6 +3983,54 @@ Continue `Report And Export v2` with a simple report preview or richer HTML expo
 
 ---
 
+## 2026-07-06 - Add Markdown report preview
+
+Type: Feature
+Layer: Frontend
+Status: Done
+
+### Context
+
+The report/export flow already supported Markdown download, clipboard copy, and JSON export, but analysts still had no inline way to inspect the generated Markdown before reusing it.
+
+### Decision
+
+Added a toggleable Markdown preview panel inside the analysis results area.
+
+The preview reuses the same Markdown generator as the copy and download actions so the visible preview stays aligned with the exported content.
+
+### Files changed
+
+- `frontend/src/components/AnalysisResults.tsx`
+- `frontend/src/styles.css`
+- `frontend/tests/App.test.tsx`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 25 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Continue `Report And Export v2` with a simple HTML export or other analyst-facing reporting improvements only if the current preview/copy/download flow proves useful in practice.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release

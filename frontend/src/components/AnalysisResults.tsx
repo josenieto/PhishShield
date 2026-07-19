@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import type { AnalyzeEmailResponse } from "../types/api";
 import { copyMarkdownReport } from "../report/copyMarkdownReport";
+import { createMarkdownReport } from "../report/createMarkdownReport";
 import { downloadJsonReport } from "../report/downloadJsonReport";
 import { ExtractedEvidence } from "./analysis-results/ExtractedEvidence";
 import { FindingsByCategory } from "./analysis-results/FindingsByCategory";
@@ -19,6 +20,8 @@ type AnalysisResultsProps = {
 
 export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsProps) {
   const [copyStatusMessage, setCopyStatusMessage] = useState("");
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+  const markdownPreview = createMarkdownReport({ analysis, selectedFileName });
 
   async function handleCopyReport(): Promise<void> {
     try {
@@ -37,6 +40,15 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
           Review the local triage output for <code>{selectedFileName}</code>.
         </span>
         <div className="success-banner-actions">
+          <button
+            type="button"
+            className="secondary-action-button"
+            onClick={() => {
+              setIsPreviewVisible((currentValue) => !currentValue);
+            }}
+          >
+            {isPreviewVisible ? "Hide Markdown preview" : "Preview Markdown report"}
+          </button>
           <button
             type="button"
             className="secondary-action-button"
@@ -67,6 +79,16 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
         </div>
         {copyStatusMessage && <span className="copy-report-status">{copyStatusMessage}</span>}
       </div>
+
+      {isPreviewVisible && (
+        <section className="findings-panel" aria-label="Markdown report preview">
+          <div className="panel-heading">
+            <h2>Markdown report preview</h2>
+            <p>Preview the generated report content before copying or downloading it.</p>
+          </div>
+          <pre className="report-preview-panel">{markdownPreview}</pre>
+        </section>
+      )}
 
       <RiskSummary analysis={analysis} />
       <div className="analysis-secondary-grid">
