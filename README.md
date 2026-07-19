@@ -196,7 +196,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - Scoring calibration baseline: `doc/SCORING_CALIBRATION.md`
 - Post-MVP roadmap: `doc/POST_MVP_ROADMAP.md`
 
-The current recommended next group after establishing the MVP v0.1 release-candidate baseline is `Report And Export v2`, with parser/runtime polish as a parallel follow-up area documented in `doc/POST_MVP_ROADMAP.md`.
+The current recommended next group after completing the initial `Report And Export v2` block is `Frontend Analyst Polish`, with parser/runtime polish as a parallel follow-up area documented in `doc/POST_MVP_ROADMAP.md`.
 
 ### Health Check
 

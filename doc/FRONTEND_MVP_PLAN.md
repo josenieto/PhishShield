@@ -6,7 +6,7 @@ This document defines the first usable frontend for PhishShield.
 
 Its purpose is to keep the initial React UI focused on the current backend contract while avoiding premature complexity before broader forensic modules or production packaging are introduced.
 
-The current frontend MVP is functionally complete enough to support upload and result inspection. It now uses a wider analyst-workbench layout that separates upload context from analysis output. The next frontend work should focus on UX polish or backend response enrichment when the UI needs additional evidence fields.
+The current frontend MVP is functionally complete enough to support upload, result inspection, and the initial report/export v2 actions. It now uses a wider analyst-workbench layout that separates upload context from analysis output. The next frontend work should focus on analyst polish or backend response enrichment when the UI needs additional evidence fields.
 
 ---
 
@@ -106,14 +106,15 @@ These items are intentionally out of scope for the current frontend MVP:
 
 ## Next Steps
 
-The next recommended frontend group after the workbench layout redesign is realistic fixture-driven polish over the current evidence and explanation model.
+The next recommended frontend group after the initial report/export v2 block is analyst polish over the current workbench, evidence hierarchy, and result scanability.
 
 Potential mini-steps:
 
 1. Improve result hierarchy and severity visual language inside the current workbench layout.
-2. Add dedicated `AnalysisResults` tests if the component grows in complexity.
-3. Revisit wording only when backend fixtures reveal confusing analyst-facing phrasing.
-4. Keep new frontend tests under `frontend/tests/` as a repository rule.
+2. Group report and export actions more clearly when the current action density starts to feel visually heavy.
+3. Add dedicated `AnalysisResults` tests if the component grows in complexity.
+4. Revisit wording only when backend fixtures reveal confusing analyst-facing phrasing.
+5. Keep new frontend tests under `frontend/tests/` as a repository rule.
 
 ---
 
