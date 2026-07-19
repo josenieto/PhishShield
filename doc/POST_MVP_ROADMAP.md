@@ -53,7 +53,7 @@ Candidate steps:
 - add copy-to-clipboard for the Markdown report; Done after the first post-MVP roadmap planning step.
 - add report preview before download; Done after the third Report And Export v2 step.
 - add JSON export for the raw structured analysis result; Done after the second Report And Export v2 step.
-- add simple HTML export when the Markdown flow is stable;
+- add simple HTML export when the Markdown flow is stable; Done after the fourth Report And Export v2 step.
 - add optional analyst notes or a case-summary section if a real workflow needs it.
 
 Keep out of scope for this track:

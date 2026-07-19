@@ -27,6 +27,7 @@ The current frontend MVP lets a user:
 - download or copy a Markdown report for the current analysis result;
 - preview the generated Markdown report before copying or downloading it;
 - download the structured analysis result as JSON;
+- download the generated report as HTML;
 - see loading, empty, success, and error states.
 
 ---
@@ -78,6 +79,7 @@ Done:
 - clipboard copy action for the generated Markdown report;
 - Markdown report preview inside the analysis results view;
 - frontend-side JSON export for the current API result;
+- frontend-side HTML export for the generated report;
 - extracted `AnalysisResults` component for result rendering;
 - wider workbench layout that separates input/context from analysis results;
 - Vitest + React Testing Library coverage for the current upload/results flow, organized under `frontend/tests/`;
