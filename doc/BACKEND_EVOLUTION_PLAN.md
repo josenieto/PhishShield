@@ -258,11 +258,11 @@ Coverage is currently available in observability mode only:
 
 The project does not enforce coverage thresholds in CI yet. The current goal is to make coverage visible before deciding whether any gates are useful.
 
-The current backend MVP is functionally complete for the local email analysis flow. The next backend-focused group should improve realism rather than breadth:
+The current backend MVP is functionally complete for the local email analysis flow. The next backend-focused group should improve parser/runtime polish when real samples expose gaps rather than opening new infrastructure families:
 
-- add more realistic benign and suspicious fixtures;
+- improve parser robustness when realistic samples expose HTML, charset, or multipart gaps;
 - tune scoring weights only when fixture evidence shows a need;
-- avoid opening new infrastructure families before the current flow is better calibrated.
+- avoid opening new infrastructure families before the current flow shows a concrete need.
 
 The current calibration baseline is documented in:
 
@@ -272,11 +272,11 @@ The current calibration baseline is documented in:
 
 ## Next Focus
 
-The next recommended group is realistic fixture expansion and scoring refinement.
+The next recommended backend group is parser/runtime polish driven by realistic sample gaps.
 
 Short-term goals:
 
-- expand the fixture corpus with more realistic benign and suspicious emails;
+- expand fixtures only when they answer a concrete parser or scoring question;
 - review whether current scoring weights still match the richer fixture set;
 - keep `doc/API.md` as the external API contract reference;
 - use `doc/SCORING_CALIBRATION.md` as the baseline before changing weights or critical indicators;

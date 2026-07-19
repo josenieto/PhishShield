@@ -46,7 +46,7 @@ Post-release-candidate hardening already completed after the tag includes:
 
 ### Track 1: Report And Export v2
 
-This is the recommended next product-facing group.
+This initial block is now complete.
 
 Candidate steps:
 
@@ -164,11 +164,11 @@ These areas remain deferred until a dedicated roadmap group starts them:
 The current recommended next group is:
 
 ```text
-Report And Export v2
+Frontend Analyst Polish
 ```
 
 Rationale:
 
-- the MVP parser and runtime flow are already validated and have received an initial post-MVP polish step;
-- the frontend workbench is already usable and benefits directly from richer analyst-facing outputs;
-- report/export v2 adds user-facing value without opening new infrastructure families or weakening architectural boundaries.
+- the initial Report And Export v2 block already delivered Markdown copy, preview, download, JSON export, and HTML export;
+- the frontend workbench is stable enough that the next user-facing value comes from improved hierarchy, scanability, and analyst ergonomics;
+- parser/runtime polish remains important, but it is better driven by real samples than by opening another broad product-facing block immediately.
