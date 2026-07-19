@@ -191,6 +191,7 @@ Covered steps:
 - decoded subject headers;
 - decoded attachment filenames;
 - HTML-only fallback extraction;
+- HTML anchor `href` extraction including quoted, unquoted, uppercase, repeated, and malformed anchor variants;
 - non-UTF-8 plain text body decoding;
 - non-UTF-8 encoded subject decoding;
 - URL extraction from extracted body text;
@@ -206,7 +207,7 @@ Remaining candidate steps:
 - additional unusual charset edge cases if real samples expose gaps;
 - deeply nested multipart structures;
 - parser failure behavior for malformed but safely handled emails.
-- richer HTML link extraction beyond visible text when real samples expose anchor-only URLs.
+- richer HTML link extraction beyond the current visible-text and anchor-`href` support when future samples expose additional gaps.
 
 ### 5. Integration Tests
 

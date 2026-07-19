@@ -3839,6 +3839,50 @@ Decide whether the next parser/runtime polish step should cover more complex HTM
 
 ---
 
+## 2026-07-06 - Cover additional HTML href parser variants
+
+Type: Testing
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+After adding HTML anchor `href` extraction, the next question was whether the current parser behavior remained stable across realistic HTML variants such as single-quoted `href` values, unquoted `href` values, uppercase tags and attributes, malformed HTML, and repeated anchor links.
+
+### Decision
+
+Added focused parser tests that lock the current behavior for those HTML `href` variants.
+
+The existing implementation already handled the tested variants correctly, including the chosen rule to deduplicate repeated HTML anchor destinations while preserving first-seen order.
+
+### Files changed
+
+- `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_urls.py`
+- `doc/BACKEND_EVOLUTION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_urls.py
+python -m pytest
+```
+
+Result:
+
+```text
+Parser URL tests: 20 passed
+Full backend suite: 589 passed
+```
+
+### Next step
+
+Treat HTML `href` extraction as stable for the current static parser scope and only expand it further when new real-world fixtures expose missing variants or malformed edge cases.
+
+---
+
 ## 2026-07-06 - Plan post-MVP v0.2 work
 
 Type: Documentation
