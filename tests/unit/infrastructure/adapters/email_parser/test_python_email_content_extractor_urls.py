@@ -191,6 +191,128 @@ def test_should_extract_urls_from_html_anchor_href() -> None:
     assert extracted_email.urls == ("https://example.com/login",)
 
 
+def test_should_extract_url_from_single_quoted_html_anchor_href() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML anchor",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><a href='https://example.com/login'>Verify account</a></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
+def test_should_extract_url_from_unquoted_html_anchor_href() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML anchor",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><a href=https://example.com/login>Verify account</a></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
+def test_should_extract_url_from_uppercase_html_anchor_href() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML anchor",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><A HREF=\"https://example.com/login\">Verify account</A></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
+def test_should_ignore_non_http_html_anchor_hrefs() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML links",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><a href=\"javascript:alert(1)\">Click</a><a href=\"mailto:user@example.com\">Mail</a><a href=\"data:text/plain,test\">Data</a></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ()
+
+
+def test_should_extract_multiple_html_anchor_hrefs_preserving_order() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML links",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><a href=\"https://first.example/login\">First</a><a href=\"https://second.example/reset\">Second</a></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == (
+        "https://first.example/login",
+        "https://second.example/reset",
+    )
+
+
+def test_should_deduplicate_repeated_html_anchor_hrefs() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML links",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><a href=\"https://example.com/login\">One</a><a href=\"https://example.com/login\">Two</a></body></html>",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
+def test_should_extract_url_from_malformed_html_anchor_href() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: HTML anchor",
+            b"Content-Type: text/html; charset=utf-8",
+            b"",
+            b"<html><body><a href=\"https://example.com/login\">Verify account",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
 def test_should_deduplicate_visible_and_href_urls_in_html_only_body() -> None:
     adapter = PythonEmailContentExtractorAdapter()
     email_bytes = b"\r\n".join(
