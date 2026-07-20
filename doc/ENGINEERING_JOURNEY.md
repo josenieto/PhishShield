@@ -4216,6 +4216,50 @@ Pause after this second frontend analyst polish step and only continue workbench
 
 ---
 
+## 2026-07-06 - Prevent selected filename overlap in the upload sidebar
+
+Type: Fix
+Layer: Frontend
+Status: Done
+
+### Context
+
+Manual frontend review showed that long selected `.eml` filenames in the upload sidebar could overlap the `Analyze email` action, which made the input area feel fragile even though the rest of the workbench hierarchy was stable.
+
+### Decision
+
+Adjusted the sidebar upload layout so the selected file card and the analyze action stack vertically inside the workbench sidebar.
+
+Long filenames now wrap inside the selected-file card instead of colliding with the action button.
+
+### Files changed
+
+- `frontend/src/styles.css`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 29 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Keep the current workbench stable and only continue frontend polish when a concrete scanability or responsiveness issue is observed during real usage.
+
+---
+
 ## 2026-07-06 - Add release notes for MVP v0.1 RC
 
 Type: Documentation
