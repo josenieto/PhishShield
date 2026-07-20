@@ -27,12 +27,14 @@ export function FindingsByCategory({ analysis }: FindingsByCategoryProps) {
             <ul className="finding-list">
               {findings.map((finding) => (
                 <li key={finding.code} className="finding-item">
-                  <div>
-                    <strong>{finding.code}</strong>
-                    <p>{finding.category} signal</p>
+                  <div className="finding-content">
+                    <div className="finding-header-row">
+                      <strong>{finding.code}</strong>
+                      <span className={severityClassName(finding.severity)}>{finding.severity}</span>
+                    </div>
+                    <p className="finding-category-copy">Backend category: {finding.category}</p>
                     <p className="finding-explanation">{finding.explanation}</p>
                   </div>
-                  <span className={severityClassName(finding.severity)}>{finding.severity}</span>
                 </li>
               ))}
             </ul>

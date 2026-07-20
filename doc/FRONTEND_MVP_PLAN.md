@@ -107,12 +107,12 @@ These items are intentionally out of scope for the current frontend MVP:
 
 ## Next Steps
 
-The next recommended frontend group after the initial report/export v2 block is analyst polish over the current workbench, evidence hierarchy, report actions, and result scanability.
+The next recommended frontend group after the initial report/export v2 block is analyst polish over the current workbench, evidence hierarchy, and result scanability.
 
 Potential mini-steps:
 
 1. Improve result hierarchy and severity visual language inside the current workbench layout.
-2. Group report and export actions more clearly when the current action density starts to feel visually heavy.
+2. Improve evidence density and scanability for sender, subject, findings, and authentication results.
 3. Add dedicated `AnalysisResults` tests if the component grows in complexity.
 4. Revisit wording only when backend fixtures reveal confusing analyst-facing phrasing.
 5. Keep new frontend tests under `frontend/tests/` as a repository rule.
