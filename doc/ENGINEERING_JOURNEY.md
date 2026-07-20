@@ -4216,6 +4216,48 @@ Pause after this second frontend analyst polish step and only continue workbench
 
 ---
 
+## 2026-07-06 - Add release notes for MVP v0.1 RC
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The project had already closed the MVP v0.1 release-candidate baseline and several post-RC hardening steps, but there was still no single release-oriented document that summarized the validated baseline, the post-RC additions, and the explicitly deferred areas.
+
+### Decision
+
+Added a changelog that records the validated `v0.1.0-rc.1` baseline and the main post-RC additions that followed it.
+
+This keeps the roadmap focused on future planning while giving the project a simple release-facing snapshot of what is already complete.
+
+### Files changed
+
+- `CHANGELOG.md`
+- `README.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files README.md CHANGELOG.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after the changelog update.
+```
+
+### Next step
+
+Use the changelog as the release-facing summary and continue only with intentional roadmap groups rather than reopening the closed MVP release-candidate scope.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor
