@@ -4260,6 +4260,51 @@ Keep the current workbench stable and only continue frontend polish when a concr
 
 ---
 
+## 2026-07-06 - Clear stale file input state after reload
+
+Type: Fix
+Layer: Frontend
+Status: Done
+
+### Context
+
+Manual frontend review showed that after a browser reload, the native file input could still display the previously selected filename even though the React state no longer held a `File` object. That left the upload area visually inconsistent and made the disabled analyze action look confusing.
+
+### Decision
+
+Cleared the native file input on frontend mount and on invalid or explicit file reset paths so the visible control stays aligned with the `selectedFile` React state.
+
+The frontend now resets back to `No file selected yet` whenever no real `File` object is available.
+
+### Files changed
+
+- `frontend/src/App.tsx`
+- `frontend/tests/App.test.tsx`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 30 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Keep frontend state and native input behavior aligned and only continue polish when another concrete workbench usability issue appears during manual usage.
+
+---
+
 ## 2026-07-06 - Add release notes for MVP v0.1 RC
 
 Type: Documentation
