@@ -115,6 +115,14 @@ h1 {
   grid-template-columns: 1fr;
 }
 
+.workbench-sidebar .upload-actions {
+  grid-template-columns: 1fr;
+}
+
+.workbench-sidebar .upload-actions button {
+  width: 100%;
+}
+
 .status-grid article {
   padding: 1rem 1.1rem;
   border-radius: 16px;
@@ -197,6 +205,12 @@ code {
   display: grid;
   gap: 0.3rem;
   padding: 0.95rem 1.1rem;
+  min-width: 0;
+}
+
+.selected-file-card strong {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 button {
