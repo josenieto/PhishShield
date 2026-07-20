@@ -4169,6 +4169,53 @@ Start the next intentional product-facing block with frontend analyst polish whi
 
 ---
 
+## 2026-07-06 - Improve risk and evidence hierarchy in the analyst workbench
+
+Type: Refactor
+Layer: Frontend
+Status: Done
+
+### Context
+
+After grouping the report actions into a dedicated panel, the next frontend analyst polish step was to make the risk posture, extracted evidence, and findings easier to scan without changing the current data model or report behavior.
+
+### Decision
+
+Improved the visual hierarchy of the risk summary, emphasized the most important evidence fields, and refined findings so severity and category context are easier to review quickly.
+
+The change keeps the existing backend/API contract intact and focuses only on frontend presentation and readability.
+
+### Files changed
+
+- `frontend/src/components/analysis-results/RiskSummary.tsx`
+- `frontend/src/components/analysis-results/ExtractedEvidence.tsx`
+- `frontend/src/components/analysis-results/FindingsByCategory.tsx`
+- `frontend/src/styles.css`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 29 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Pause after this second frontend analyst polish step and only continue workbench refinements when real use exposes a concrete scanability or presentation problem.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor

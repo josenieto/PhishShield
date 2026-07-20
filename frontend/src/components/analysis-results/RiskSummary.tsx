@@ -10,7 +10,7 @@ type RiskSummaryProps = {
 
 export function RiskSummary({ analysis }: RiskSummaryProps) {
   return (
-    <section className="findings-panel">
+    <section className="findings-panel findings-panel-spotlight">
       <div className="panel-heading panel-heading-inline">
         <div>
           <h2>Risk assessment</h2>
@@ -22,9 +22,9 @@ export function RiskSummary({ analysis }: RiskSummaryProps) {
       </div>
 
       <div className="analysis-summary-grid">
-        <article className="summary-card summary-card-accent">
+        <article className="summary-card summary-card-accent summary-card-priority">
           <span className="summary-label">Risk posture</span>
-          <strong>{analysis.risk_score.risk_level}</strong>
+          <strong className="summary-metric">{analysis.risk_score.risk_level}</strong>
           <span className="summary-subtext">
             Raw score {analysis.risk_score.raw_score}, capped at {analysis.risk_score.capped_score}.
           </span>
@@ -32,7 +32,7 @@ export function RiskSummary({ analysis }: RiskSummaryProps) {
 
         <article className="summary-card">
           <span className="summary-label">Critical indicators</span>
-          <strong>
+          <strong className="summary-metric-compact">
             {analysis.risk_score.has_critical_indicators ? "Present" : "Not observed"}
           </strong>
           <span className="summary-subtext">
@@ -42,7 +42,7 @@ export function RiskSummary({ analysis }: RiskSummaryProps) {
 
         <article className="summary-card">
           <span className="summary-label">Indicator volume</span>
-          <strong>{analysis.finding_summary.total_findings}</strong>
+          <strong className="summary-metric-compact">{analysis.finding_summary.total_findings}</strong>
           <span className="summary-subtext">
             {analysis.unique_finding_codes.length} unique codes across the analyzed message.
           </span>
