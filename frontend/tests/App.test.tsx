@@ -446,6 +446,19 @@ describe("App", () => {
     });
   });
 
+  it("should clear the native file input when an unsupported file is selected", async () => {
+    const user = userEvent.setup({ applyAccept: false });
+    render(<App />);
+
+    const input = emailFileInput();
+    const invalidFile = new File(["hello"], "notes.txt", { type: "text/plain" });
+
+    await user.upload(input, invalidFile);
+
+    expect(input.files).toHaveLength(0);
+    expect(screen.getByText("No file selected yet")).toBeInTheDocument();
+  });
+
   it("should render empty evidence states when extracted evidence is missing", async () => {
     const user = userEvent.setup();
     vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS_WITH_EMPTY_EVIDENCE);
