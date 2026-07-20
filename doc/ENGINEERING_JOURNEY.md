@@ -4169,6 +4169,54 @@ Start the next intentional product-facing block with frontend analyst polish whi
 
 ---
 
+## 2026-07-06 - Polish report actions in analyst workbench
+
+Type: Refactor
+Layer: Frontend
+Status: Done
+
+### Context
+
+The analysis workbench already supported multiple export and preview actions, but placing all report controls directly in the completion banner made the top of the results view feel visually heavy and less scanable than the rest of the analyst workflow.
+
+### Decision
+
+Moved the report and export controls into a dedicated `Report actions` panel beside the risk summary while keeping the completion banner focused on status and file context.
+
+The change preserves all existing report behavior while making the workbench header area easier to scan and separating result status from report reuse actions.
+
+### Files changed
+
+- `frontend/src/components/AnalysisResults.tsx`
+- `frontend/src/styles.css`
+- `frontend/tests/App.test.tsx`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 29 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Continue frontend analyst polish with visual hierarchy and evidence scanability improvements only when the current workbench still feels visually dense during real use.
+
+---
+
 ## 2026-07-06 - Finalize MVP v0.1 release-candidate baseline
 
 Type: Release

@@ -80,6 +80,7 @@ Done:
 - Markdown report preview inside the analysis results view;
 - frontend-side JSON export for the current API result;
 - frontend-side HTML export for the generated report;
+- grouped report and export actions in a dedicated analysis panel;
 - extracted `AnalysisResults` component for result rendering;
 - wider workbench layout that separates input/context from analysis results;
 - Vitest + React Testing Library coverage for the current upload/results flow, organized under `frontend/tests/`;
@@ -106,7 +107,7 @@ These items are intentionally out of scope for the current frontend MVP:
 
 ## Next Steps
 
-The next recommended frontend group after the initial report/export v2 block is analyst polish over the current workbench, evidence hierarchy, and result scanability.
+The next recommended frontend group after the initial report/export v2 block is analyst polish over the current workbench, evidence hierarchy, report actions, and result scanability.
 
 Potential mini-steps:
 
