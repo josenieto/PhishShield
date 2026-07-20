@@ -17,12 +17,12 @@ export function ExtractedEvidence({ extractedEvidence }: ExtractedEvidenceProps)
       </div>
 
       <div className="evidence-grid">
-        <article className="evidence-card">
+        <article className="evidence-card evidence-card-emphasis">
           <span className="summary-label">Sender domain</span>
           <strong>{displayValue(extractedEvidence.sender_domain)}</strong>
         </article>
 
-        <article className="evidence-card evidence-card-wide">
+        <article className="evidence-card evidence-card-wide evidence-card-emphasis">
           <span className="summary-label">Subject</span>
           <strong>{displayValue(extractedEvidence.subject)}</strong>
         </article>
@@ -57,7 +57,7 @@ export function ExtractedEvidence({ extractedEvidence }: ExtractedEvidenceProps)
           )}
         </article>
 
-        <article className="evidence-card evidence-card-wide">
+        <article className="evidence-card evidence-card-wide evidence-card-emphasis">
           <span className="summary-label">Authentication results</span>
           <dl className="auth-grid">
             <div className="auth-item">

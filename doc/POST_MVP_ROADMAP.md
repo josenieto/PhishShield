@@ -84,7 +84,7 @@ Keep out of scope for this track:
 
 The frontend workbench is already usable, but still has room for UI polish.
 
-The first frontend analyst polish step should focus on grouping report actions more clearly and improving result scanability without changing product scope.
+The first frontend analyst polish step already grouped report actions more clearly inside the analysis results view.
 
 Candidate steps:
 
@@ -172,5 +172,5 @@ Frontend Analyst Polish
 Rationale:
 
 - the initial Report And Export v2 block already delivered Markdown copy, preview, download, JSON export, and HTML export;
-- the frontend workbench is stable enough that the next user-facing value comes from improved hierarchy, scanability, and analyst ergonomics;
+- the report actions grouping step is already complete, so the next user-facing value comes from improved hierarchy, scanability, and analyst ergonomics;
 - parser/runtime polish remains important, but it is better driven by real samples than by opening another broad product-facing block immediately.
