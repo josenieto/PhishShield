@@ -190,6 +190,7 @@ describe("App", () => {
 
     expect(await screen.findByText("Analysis completed")).toBeInTheDocument();
     expect(screen.getByText(/review the local triage output for/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Report actions" })).toBeInTheDocument();
     expect(screen.getByText("Risk assessment")).toBeInTheDocument();
     expect(
       screen.getByText("No critical indicators were observed, but the returned findings still require analyst review."),
