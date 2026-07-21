@@ -4441,6 +4441,51 @@ Decide whether the next model-assisted analysis step should add an application u
 
 ---
 
+## 2026-07-06 - Add raw email model assessment use case
+
+Type: Architecture
+Layer: Application
+Status: Done
+
+### Context
+
+The model-assisted analysis plan already had an application contract, but there was still no application use case expressing how raw email model assessment should be delegated through the new port.
+
+### Decision
+
+Added a small application use case that accepts raw email bytes, filename, content type, and input size limits, then delegates the model assessment request through `ModelAssessmentPort`.
+
+This step keeps endpoint wiring, infrastructure adapters, and real inference runtimes deferred.
+
+### Files changed
+
+- `src/application/use_cases/assess_raw_email_with_model.py`
+- `tests/unit/application/test_assess_raw_email_with_model.py`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/models/test_model_assessment.py tests/unit/application/ports/test_model_assessment_port.py tests/unit/application/test_assess_raw_email_with_model.py
+python -m pytest
+```
+
+Result:
+
+```text
+Focused application tests: 10 passed
+Full backend suite: 599 passed
+```
+
+### Next step
+
+Choose whether the next model-assisted analysis increment should be a noop infrastructure adapter or a lightweight endpoint skeleton before any real inference backend is introduced.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor
