@@ -353,7 +353,7 @@ Potential future step:
 feat(frontend): Show model-assisted assessment.
 ```
 
-Only after the backend contract is stable enough.
+This frontend skeleton can be introduced before any real model runtime as long as it clearly presents `not_configured` as an advisory placeholder state.
 
 ---
 

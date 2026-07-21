@@ -42,3 +42,18 @@ export type AnalyzeEmailResponse = {
   risk_score: RiskScoreResponse;
   extracted_evidence: ExtractedEvidenceResponse;
 };
+
+export type ModelAssessmentResponse = {
+  status: string;
+  label: string;
+  confidence: number | null;
+  summary: string;
+  signals: string[];
+  model_name: string;
+  model_version: string;
+  error_message: string;
+};
+
+export type AnalyzeEmailModelAssessmentResponse = {
+  model_assessment: ModelAssessmentResponse;
+};
