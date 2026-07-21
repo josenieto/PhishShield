@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { analyzeEmail } from "./api/analyzeEmail";
+import { analyzeEmailModelAssessment } from "./api/analyzeEmailModelAssessment";
 import { AnalysisResults } from "./components/AnalysisResults";
-import type { AnalyzeEmailResponse } from "./types/api";
+import { ModelAssessmentPanel } from "./components/ModelAssessmentPanel";
+import type { AnalyzeEmailModelAssessmentResponse, AnalyzeEmailResponse } from "./types/api";
 
 
 const FILE_INPUT_ACCEPT = ".eml,message/rfc822";
@@ -18,9 +20,12 @@ export default function App() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [analysis, setAnalysis] = useState<AnalyzeEmailResponse | null>(null);
+  const [modelAssessment, setModelAssessment] = useState<AnalyzeEmailModelAssessmentResponse | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isAssessingModel, setIsAssessingModel] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [modelAssessmentErrorMessage, setModelAssessmentErrorMessage] = useState("");
 
   useEffect(() => {
     if (fileInputRef.current) {
@@ -38,6 +43,8 @@ export default function App() {
     if (file === null) {
       setSelectedFile(null);
       setErrorMessage("");
+      setModelAssessment(null);
+      setModelAssessmentErrorMessage("");
       clearFileInput();
       return;
     }
@@ -45,6 +52,8 @@ export default function App() {
     if (!isSupportedEmailFile(file)) {
       setSelectedFile(null);
       setAnalysis(null);
+      setModelAssessment(null);
+      setModelAssessmentErrorMessage("");
       setErrorMessage("Only .eml files are supported in the current frontend MVP.");
       clearFileInput();
       return;
@@ -52,6 +61,8 @@ export default function App() {
 
     setSelectedFile(file);
     setErrorMessage("");
+    setModelAssessment(null);
+    setModelAssessmentErrorMessage("");
   }
 
   async function handleAnalyzeSubmit(event: FormEvent<HTMLFormElement>) {
@@ -76,6 +87,28 @@ export default function App() {
       );
     } finally {
       setIsAnalyzing(false);
+    }
+  }
+
+  async function handleModelAssessment(): Promise<void> {
+    if (selectedFile === null) {
+      setModelAssessmentErrorMessage("Choose an .eml file before requesting model assessment.");
+      return;
+    }
+
+    setIsAssessingModel(true);
+    setModelAssessmentErrorMessage("");
+
+    try {
+      const result = await analyzeEmailModelAssessment(selectedFile);
+      setModelAssessment(result);
+    } catch (error) {
+      setModelAssessment(null);
+      setModelAssessmentErrorMessage(
+        error instanceof Error ? error.message : "Unexpected model assessment error.",
+      );
+    } finally {
+      setIsAssessingModel(false);
     }
   }
 
@@ -189,10 +222,21 @@ export default function App() {
             )}
 
             {analysis && (
-              <AnalysisResults
-                analysis={analysis}
-                selectedFileName={selectedFile?.name ?? "selected-email.eml"}
-              />
+              <>
+                <AnalysisResults
+                  analysis={analysis}
+                  selectedFileName={selectedFile?.name ?? "selected-email.eml"}
+                />
+                <ModelAssessmentPanel
+                  modelAssessment={modelAssessment}
+                  isAssessingModel={isAssessingModel}
+                  errorMessage={modelAssessmentErrorMessage}
+                  canAssess={selectedFile !== null}
+                  onAssess={() => {
+                    void handleModelAssessment();
+                  }}
+                />
+              </>
             )}
           </section>
         </div>
