@@ -4581,6 +4581,49 @@ Decide whether the next model-assisted analysis step should add a frontend advis
 
 ---
 
+## 2026-07-06 - Align model-assisted analysis with project-owned inference
+
+Type: Architecture
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The first model-assisted analysis skeleton blocks were already in place, but the architecture documents still implied that a future user-facing AI runtime such as Ollama could be the primary path. That no longer matched the intended product direction.
+
+### Decision
+
+Aligned the architecture and roadmap so future model-assisted analysis now explicitly targets a PhishShield-owned local inference model rather than requiring users to install an external AI runtime.
+
+The next ML-facing step is now dataset and training research rather than selecting an external inference service.
+
+### Files changed
+
+- `doc/ADR.md`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ADR.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/POST_MVP_ROADMAP.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after aligning the inference direction.
+```
+
+### Next step
+
+Research public phishing email datasets and define the first project-owned training and evaluation strategy before choosing a runtime format or implementing a real model adapter.
+
+---
+
 ## 2026-07-06 - Add model-assisted assessment frontend skeleton
 
 Type: Feature
