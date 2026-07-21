@@ -4624,6 +4624,48 @@ Research public phishing email datasets and define the first project-owned train
 
 ---
 
+## 2026-07-06 - Research public phishing email datasets
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+After aligning the model-assisted direction toward project-owned local inference, the next missing piece was a realistic data strategy. The project needed a documented view of which public email corpora might support benign, spam, fraud, and phishing training or evaluation before choosing a runtime format or a real model backend.
+
+### Decision
+
+Added an ML dataset research document that records candidate public corpora, their strengths, their risks, and a conservative baseline training direction.
+
+The documented recommendation is to start with simple text classification baselines and to treat dataset quality, licensing, privacy, and leakage as first-class concerns before training any project-owned model.
+
+### Files changed
+
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after the dataset research update.
+```
+
+### Next step
+
+Use the dataset research to decide whether the next ML-facing step should define a training/evaluation strategy in more detail or pause before choosing a concrete model artifact format.
+
+---
+
 ## 2026-07-06 - Add model-assisted assessment frontend skeleton
 
 Type: Feature
