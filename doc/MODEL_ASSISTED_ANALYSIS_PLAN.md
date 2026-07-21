@@ -306,17 +306,19 @@ Scope:
 
 ### Phase 4: Noop Adapter And Endpoint Skeleton
 
-Potential future step:
+Partially implemented step:
 
 ```text
-feat(api): Add model assessment endpoint skeleton.
+feat(infrastructure): Add noop model assessment adapter.
 ```
 
 Scope:
 
-- endpoint shape;
 - no-op or `not_configured` behavior;
-- no real model yet.
+- no real model yet;
+- no endpoint yet.
+
+The future endpoint skeleton still remains a separate follow-up step.
 
 ### Phase 5: Experimental Local Adapter
 

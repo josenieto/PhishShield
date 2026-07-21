@@ -4486,6 +4486,51 @@ Choose whether the next model-assisted analysis increment should be a noop infra
 
 ---
 
+## 2026-07-06 - Add noop model assessment adapter
+
+Type: Architecture
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+The model-assisted analysis flow already had a planning document, an application contract, and an application use case, but it still needed a concrete infrastructure implementation that could satisfy the port without introducing any real model runtime.
+
+### Decision
+
+Added a `NoopModelAssessmentAdapter` that implements `ModelAssessmentPort` and always returns a `not_configured` advisory result.
+
+This lets future endpoint work depend on a stable adapter boundary before choosing or integrating a real inference backend.
+
+### Files changed
+
+- `src/infrastructure/adapters/model_assessment/noop_model_assessment_adapter.py`
+- `tests/unit/infrastructure/adapters/model_assessment/test_noop_model_assessment_adapter.py`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/model_assessment/test_noop_model_assessment_adapter.py
+python -m pytest
+```
+
+Result:
+
+```text
+Focused infrastructure tests: 2 passed
+Full backend suite: 601 passed
+```
+
+### Next step
+
+Use the noop adapter to add a lightweight endpoint skeleton before any real model runtime or frontend model panel is introduced.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor
