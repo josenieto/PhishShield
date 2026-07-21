@@ -4666,6 +4666,50 @@ Use the dataset research to decide whether the next ML-facing step should define
 
 ---
 
+## 2026-07-06 - Define ML data preparation pipeline
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The dataset research identified candidate public corpora, but those corpora are heterogeneous and not directly suitable for model training. The project needed a preparation plan before any ingestion script, training script, or model artifact could be justified.
+
+### Decision
+
+Defined a data preparation pipeline for future model training and evaluation, including a canonical sample schema, label taxonomy, ingestion rules, normalization, deduplication, leakage prevention, privacy handling, split strategy, feature sets, and evaluation metrics.
+
+This keeps dataset preparation separate from model training and preserves PhishShield fixtures as holdout evidence rather than training data.
+
+### Files changed
+
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `README.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files README.md doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after defining the ML data preparation plan.
+```
+
+### Next step
+
+Use the preparation plan to choose a first small ingestion proof of concept only after deciding which dataset source is safe and useful to process first.
+
+---
+
 ## 2026-07-06 - Add model-assisted assessment frontend skeleton
 
 Type: Feature
