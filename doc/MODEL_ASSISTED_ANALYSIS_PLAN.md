@@ -312,6 +312,10 @@ Scope:
 - define a realistic training and evaluation strategy;
 - avoid committing to a runtime backend before the dataset strategy is understood.
 
+This phase is now documented in:
+
+- `doc/ML_DATASET_RESEARCH.md`
+
 ### Phase 2: Application Contract
 
 Implemented step:
