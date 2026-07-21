@@ -4390,6 +4390,57 @@ Stop at planning for now and only open implementation when the project explicitl
 
 ---
 
+## 2026-07-06 - Add model assessment application contract
+
+Type: Architecture
+Layer: Application
+Status: Done
+
+### Context
+
+The architecture plan for raw-email model-assisted analysis was already documented, but the project still needed an application-level contract before any endpoint, adapter, or real model runtime could be introduced safely.
+
+### Decision
+
+Added the first application contract for future model-assisted analysis:
+
+- `ModelAssessment` as an application result model;
+- `AssessRawEmailWithModelCommand` as the raw-email input command;
+- `ModelAssessmentPort` as the future adapter boundary.
+
+This step intentionally stops before any real model, endpoint, adapter, or frontend integration.
+
+### Files changed
+
+- `src/application/models/model_assessment.py`
+- `src/application/ports/outbound/model_assessment.py`
+- `tests/unit/application/models/test_model_assessment.py`
+- `tests/unit/application/ports/test_model_assessment_port.py`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/application/models/test_model_assessment.py tests/unit/application/ports/test_model_assessment_port.py
+python -m pytest
+```
+
+Result:
+
+```text
+Focused application tests: 8 passed
+Full backend suite: 597 passed
+```
+
+### Next step
+
+Decide whether the next model-assisted analysis step should add an application use case or a noop adapter and endpoint skeleton before any real inference backend is chosen.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor
