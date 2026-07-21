@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 
 import { analyzeEmail } from "./api/analyzeEmail";
 import { AnalysisResults } from "./components/AnalysisResults";
@@ -15,16 +15,30 @@ function isSupportedEmailFile(file: File): boolean {
 
 
 export default function App() {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [analysis, setAnalysis] = useState<AnalyzeEmailResponse | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  useEffect(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }, []);
+
+  function clearFileInput(): void {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }
+
   function handleSelectedFile(file: File | null): void {
     if (file === null) {
       setSelectedFile(null);
       setErrorMessage("");
+      clearFileInput();
       return;
     }
 
@@ -32,6 +46,7 @@ export default function App() {
       setSelectedFile(null);
       setAnalysis(null);
       setErrorMessage("Only .eml files are supported in the current frontend MVP.");
+      clearFileInput();
       return;
     }
 
@@ -109,6 +124,7 @@ export default function App() {
                     Choose or drag a <code>.eml</code> message to send to <code>/api/analyze-email</code>.
                   </span>
                   <input
+                    ref={fileInputRef}
                     id="email-file"
                     type="file"
                     accept={FILE_INPUT_ACCEPT}
