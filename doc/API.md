@@ -4,6 +4,7 @@
 
 - `GET /health`
 - `POST /analyze-email`
+- `POST /analyze-email-model-assessment`
 
 ---
 
@@ -165,3 +166,62 @@ Current response model fields:
 - malformed but parseable upload -> `200` with controlled fallback findings;
 - oversized upload -> `413` with stable error payload;
 - unexpected analyzer failure -> `422` with stable error payload.
+
+---
+
+## `POST /analyze-email-model-assessment`
+
+Assesses an uploaded `.eml` email message through the future model-assisted analysis path.
+
+This endpoint is intentionally separate from `POST /analyze-email` so deterministic findings and model-assisted assessment stay isolated.
+
+### Request
+
+Expected multipart field:
+
+- field name: `file`
+- expected content type: `message/rfc822`
+- default upload limit: `1_000_000` bytes, configurable with `PHISHSHIELD_MAX_UPLOAD_BYTES`
+
+Example:
+
+```bash
+curl -X POST http://127.0.0.1:8000/analyze-email-model-assessment -F "file=@sample.eml;type=message/rfc822"
+```
+
+### Response Shape
+
+Successful responses return a JSON body with:
+
+- `model_assessment.status: str`
+- `model_assessment.label: str`
+- `model_assessment.confidence: float | null`
+- `model_assessment.summary: str`
+- `model_assessment.signals: list[str]`
+- `model_assessment.model_name: str`
+- `model_assessment.model_version: str`
+- `model_assessment.error_message: str`
+
+### Current Skeleton Behavior
+
+The current implementation uses a noop adapter and returns:
+
+```json
+{
+  "model_assessment": {
+    "status": "not_configured",
+    "label": "unknown",
+    "confidence": null,
+    "summary": "",
+    "signals": [],
+    "model_name": "",
+    "model_version": "",
+    "error_message": ""
+  }
+}
+```
+
+### Error Behavior
+
+- oversized uploads return `413` with `{"detail": "Uploaded email exceeds maximum allowed size."}`;
+- unexpected model-assessment failures return `422` with `{"detail": "Uploaded email could not be assessed by the model."}`.

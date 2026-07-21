@@ -26,6 +26,13 @@ def test_should_include_health_route() -> None:
     assert "/health" in route_paths
 
 
+def test_should_include_model_assessment_route() -> None:
+    app = create_app()
+    route_paths = set(app.openapi()["paths"])
+
+    assert "/analyze-email-model-assessment" in route_paths
+
+
 def test_should_analyze_email_through_created_app() -> None:
     client = TestClient(create_app())
     email_bytes = b"\r\n".join(

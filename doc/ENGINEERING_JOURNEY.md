@@ -4531,6 +4531,56 @@ Use the noop adapter to add a lightweight endpoint skeleton before any real mode
 
 ---
 
+## 2026-07-06 - Add model assessment endpoint skeleton
+
+Type: Architecture
+Layer: Entrypoint
+Status: Done
+
+### Context
+
+The model-assisted analysis flow already had a plan, an application contract, an application use case, and a noop adapter, but it still lacked a concrete API surface that could expose the advisory analysis path without requiring a real model runtime.
+
+### Decision
+
+Added a separate `POST /analyze-email-model-assessment` endpoint skeleton.
+
+The endpoint uses the application use case plus the noop adapter and returns a stable `not_configured` response while preserving separate error behavior from the deterministic analysis endpoint.
+
+### Files changed
+
+- `src/infrastructure/entrypoints/api/routers/model_assessment.py`
+- `src/infrastructure/entrypoints/api/schemas/model_assessment.py`
+- `src/infrastructure/entrypoints/api/app.py`
+- `tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py`
+- `tests/unit/infrastructure/entrypoints/api/schemas/test_model_assessment_schemas.py`
+- `tests/unit/infrastructure/entrypoints/api/test_app.py`
+- `doc/API.md`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py tests/unit/infrastructure/entrypoints/api/schemas/test_model_assessment_schemas.py tests/unit/infrastructure/entrypoints/api/test_app.py
+python -m pytest
+```
+
+Result:
+
+```text
+Focused API tests: 14 passed
+Full backend suite: 608 passed
+```
+
+### Next step
+
+Decide whether the next model-assisted analysis step should add a frontend advisory panel or real backend configuration before any model runtime is integrated.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor
