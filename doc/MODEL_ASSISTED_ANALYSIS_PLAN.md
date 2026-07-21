@@ -4,7 +4,7 @@
 
 This document defines the planned architecture for future model-assisted email analysis in PhishShield.
 
-Its goal is to describe how a local model can assess the original email in parallel with the deterministic engine without weakening the current explainable analysis flow.
+Its goal is to describe how a project-owned local model can assess the original email in parallel with the deterministic engine without weakening the current explainable analysis flow.
 
 This is still mostly a planning document. It now also records the application-level contract introduced before any real model runtime or endpoint exists.
 
@@ -19,7 +19,30 @@ Future model-assisted analysis should:
 - analyze the original raw `.eml` email in parallel with the deterministic branch;
 - be exposed through a separate API endpoint;
 - remain optional and advisory;
+- use a model artifact selected, trained, and packaged by the project rather than requiring a user-installed AI runtime;
 - never replace deterministic findings, extracted evidence, or deterministic risk scoring in its first version.
+
+---
+
+## Project-Owned Inference Direction
+
+PhishShield should own the future inference path end to end:
+
+- dataset selection and evaluation;
+- training or fine-tuning decisions;
+- model artifact packaging;
+- backend inference integration;
+- release and versioning of the model artifact.
+
+The project should not assume that users will install or operate a separate runtime such as Ollama for the first useful model-assisted analysis flow.
+
+The preferred direction is:
+
+```text
+project-owned model artifact
+    -> embedded local inference inside PhishShield
+    -> no external AI runtime required for users
+```
 
 ---
 
@@ -148,11 +171,10 @@ Concrete implementations belong in `Infrastructure` adapters.
 Possible future adapters include:
 
 - `NoopModelAssessmentAdapter`
-- `OllamaModelAssessmentAdapter`
-- `OnnxModelAssessmentAdapter`
-- `LocalClassifierModelAssessmentAdapter`
+- `EmbeddedClassifierModelAssessmentAdapter`
+- `EmbeddedOnnxModelAssessmentAdapter`
 
-This planning step intentionally stays backend-agnostic. No model backend is selected yet.
+This planning step intentionally stays model-backend-agnostic. No concrete runtime format is selected yet.
 
 The adapter is responsible for:
 
@@ -230,6 +252,7 @@ The future model branch must respect these constraints:
 
 - local/self-hosted by default;
 - no third-party cloud analysis by default;
+- no external user-installed AI runtime required for the initial useful model-assisted flow;
 - raw email content treated as untrusted input;
 - explicit size limits for model input;
 - no execution of links, attachments, scripts, or embedded content;
@@ -261,8 +284,8 @@ This planning block does not implement:
 - a real application port;
 - combined deterministic + model scoring;
 - frontend UI for model output;
-- Ollama integration;
-- ONNX integration;
+- model training pipeline;
+- packaged model artifacts;
 - prompt engineering;
 - cloud-hosted inference.
 
@@ -273,6 +296,21 @@ This planning block does not implement:
 ### Phase 1: Architecture Planning
 
 This document and supporting roadmap/ADR updates.
+
+### Phase 1.5: Dataset And Training Research
+
+Potential future step:
+
+```text
+docs(ml): Research public phishing email datasets.
+```
+
+Scope:
+
+- identify public benign, phishing, and related fraud email corpora;
+- review dataset license, quality, and age;
+- define a realistic training and evaluation strategy;
+- avoid committing to a runtime backend before the dataset strategy is understood.
 
 ### Phase 2: Application Contract
 
@@ -359,7 +397,7 @@ This frontend skeleton can be introduced before any real model runtime as long a
 
 ## Open Questions
 
-1. Should the first real backend target be a local LLM, a local classifier, or another model runtime?
+1. Which public datasets are reliable enough to support a first project-owned phishing-email model?
 2. What maximum raw email size should the model branch accept independently of the deterministic upload limit?
 3. Should attachments be ignored, summarized, or partially represented in the first model input format?
 4. What confidence representation is understandable enough for analysts without overstating certainty?
