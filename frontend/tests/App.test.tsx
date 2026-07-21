@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import * as analyzeEmailApi from "../src/api/analyzeEmail";
+import * as analyzeEmailModelAssessmentApi from "../src/api/analyzeEmailModelAssessment";
 import * as copyMarkdownReportModule from "../src/report/copyMarkdownReport";
 import * as downloadHtmlReportModule from "../src/report/downloadHtmlReport";
 import * as downloadJsonReportModule from "../src/report/downloadJsonReport";
@@ -215,6 +216,65 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Download JSON" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy Markdown report" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download Markdown report" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Model-assisted assessment" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Assess with model" })).toBeInTheDocument();
+  });
+
+  it("should show a not configured model assessment after requesting the model view", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
+    vi.spyOn(analyzeEmailModelAssessmentApi, "analyzeEmailModelAssessment").mockResolvedValue({
+      model_assessment: {
+        status: "not_configured",
+        label: "unknown",
+        confidence: null,
+        summary: "",
+        signals: [],
+        model_name: "",
+        model_version: "",
+        error_message: "",
+      },
+    });
+
+    render(<App />);
+
+    const input = emailFileInput();
+    const emailFile = new File(["sample"], "sample.eml", {
+      type: "message/rfc822",
+    });
+
+    await user.upload(input, emailFile);
+    await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
+    await screen.findByText("Analysis completed");
+
+    await user.click(screen.getByRole("button", { name: "Assess with model" }));
+
+    expect(await screen.findByText("Model assessment is not configured yet.")).toBeInTheDocument();
+    expect(screen.getByText(/does not replace deterministic findings/i)).toBeInTheDocument();
+  });
+
+  it("should surface model assessment failures separately from deterministic analysis", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
+    vi.spyOn(analyzeEmailModelAssessmentApi, "analyzeEmailModelAssessment").mockRejectedValue(
+      new Error("Uploaded email could not be assessed by the model."),
+    );
+
+    render(<App />);
+
+    const input = emailFileInput();
+    const emailFile = new File(["sample"], "sample.eml", {
+      type: "message/rfc822",
+    });
+
+    await user.upload(input, emailFile);
+    await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
+    await screen.findByText("Analysis completed");
+
+    await user.click(screen.getByRole("button", { name: "Assess with model" }));
+
+    expect(await screen.findByText("Uploaded email could not be assessed by the model.")).toBeInTheDocument();
+    expect(screen.getByText("Risk assessment")).toBeInTheDocument();
   });
 
   it("should trigger HTML report download from the success state", async () => {
