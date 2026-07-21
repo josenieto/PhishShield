@@ -6,7 +6,7 @@ This document defines the planned architecture for future model-assisted email a
 
 Its goal is to describe how a local model can assess the original email in parallel with the deterministic engine without weakening the current explainable analysis flow.
 
-This is a planning document only. It does not imply that model inference is implemented yet.
+This is still mostly a planning document. It now also records the application-level contract introduced before any real model runtime or endpoint exists.
 
 ---
 
@@ -99,17 +99,17 @@ This endpoint should accept the same multipart upload style as the current endpo
 
 ---
 
-## Future Application Boundary
+## Application Boundary
 
-The future model branch should be introduced through an `Application` port.
+The model branch is introduced through an `Application` port.
 
-Proposed future port name:
+Introduced port name:
 
 ```text
 ModelAssessmentPort
 ```
 
-The port should accept a command-like input that represents the original uploaded email, for example:
+The port accepts a command-like input that represents the original uploaded email:
 
 ```text
 raw_email: bytes
@@ -118,13 +118,13 @@ content_type: str
 max_input_bytes: int
 ```
 
-The `Application` layer should define a future return model such as:
+The `Application` layer also defines:
 
 ```text
 ModelAssessment
 ```
 
-with fields conceptually similar to:
+The current contract fields are:
 
 ```text
 status
@@ -276,16 +276,17 @@ This document and supporting roadmap/ADR updates.
 
 ### Phase 2: Application Contract
 
-Potential future step:
+Implemented step:
 
 ```text
 feat(application): Add model assessment port contract.
 ```
 
-Scope:
+Completed scope:
 
-- future `ModelAssessmentPort`;
-- future `ModelAssessment` result model;
+- `ModelAssessmentPort`;
+- `AssessRawEmailWithModelCommand`;
+- `ModelAssessment` result model;
 - unit tests for the contract shape.
 
 ### Phase 3: Noop Adapter And Endpoint Skeleton
