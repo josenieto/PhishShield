@@ -4347,6 +4347,49 @@ Use the changelog as the release-facing summary and continue only with intention
 
 ---
 
+## 2026-07-06 - Plan raw-email model-assisted analysis
+
+Type: Architecture
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The project is not ready to implement model inference yet, but future work needs a clear architecture that preserves the deterministic engine as the authoritative analysis path while allowing a local model to provide a second, optional view of the same raw email.
+
+### Decision
+
+Planned a future model-assisted branch that analyzes the original raw `.eml` email in parallel with the deterministic branch and is exposed through a separate endpoint.
+
+The plan keeps deterministic findings, evidence, and risk scoring authoritative while model output remains advisory until a later, explicitly calibrated phase says otherwise.
+
+### Files changed
+
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/ADR.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/POST_MVP_ROADMAP.md doc/ADR.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after the model-assisted analysis planning update.
+```
+
+### Next step
+
+Stop at planning for now and only open implementation when the project explicitly decides to add the application contract for model-assisted assessment.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor
