@@ -289,7 +289,22 @@ Completed scope:
 - `ModelAssessment` result model;
 - unit tests for the contract shape.
 
-### Phase 3: Noop Adapter And Endpoint Skeleton
+### Phase 3: Application Use Case
+
+Potential future step:
+
+```text
+feat(application): Add raw email model assessment use case.
+```
+
+Scope:
+
+- application use case that delegates raw email assessment through `ModelAssessmentPort`;
+- no endpoint yet;
+- no adapter yet;
+- no real model runtime.
+
+### Phase 4: Noop Adapter And Endpoint Skeleton
 
 Potential future step:
 
@@ -303,7 +318,7 @@ Scope:
 - no-op or `not_configured` behavior;
 - no real model yet.
 
-### Phase 4: Experimental Local Adapter
+### Phase 5: Experimental Local Adapter
 
 Potential future step:
 
@@ -313,7 +328,7 @@ feat(infrastructure): Add local model assessment adapter.
 
 Scope depends on the selected backend and should be decided separately.
 
-### Phase 5: Frontend Presentation
+### Phase 6: Frontend Presentation
 
 Potential future step:
 
