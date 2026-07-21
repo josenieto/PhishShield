@@ -88,11 +88,13 @@ This section describes a deferred target capability. It is not part of the curre
 
 ### 4.1 Current Approach: Ollama in Docker
 
-- **Implementation:** integrates the official `ollama/ollama` image in `docker-compose.yml`. The Python backend connects through the official `ollama` library.
+- **Implementation target:** a future local model backend may integrate the official `ollama/ollama` image in Docker Compose, but the concrete runtime remains deferred until a dedicated implementation phase starts.
 - **Environment-based control:** AI analysis is optional and controlled by `USE_AI_ANALYSIS=true/false` in `.env`. If disabled, the system skips the step cleanly through ports.
 - **AI tasks using lightweight models such as Phi-3 or Llama-3:**
   1. **Social engineering analysis:** evaluates text for persuasion, emotional manipulation, or induced urgency.
   2. **Human-readable explanations:** translates raw technical findings, such as SPF failures or detected macros, into a clear paragraph that non-expert users can understand.
+
+- **Planned endpoint strategy:** future model-assisted analysis should be exposed through a separate endpoint and should assess the original raw email in parallel with the deterministic branch instead of replacing the existing `/analyze-email` flow.
 
 ### 4.2 Future Lifecycle Evolution
 
