@@ -318,9 +318,24 @@ Scope:
 - no real model yet;
 - no endpoint yet.
 
-The future endpoint skeleton still remains a separate follow-up step.
+The future endpoint skeleton now becomes the next implementation step once the noop adapter exists.
 
-### Phase 5: Experimental Local Adapter
+### Phase 5: Endpoint Skeleton
+
+Potential future step:
+
+```text
+feat(api): Add model assessment endpoint skeleton.
+```
+
+Scope:
+
+- `POST /analyze-email-model-assessment`;
+- use the application use case and noop adapter;
+- return a stable `not_configured` response;
+- keep real model runtime deferred.
+
+### Phase 6: Experimental Local Adapter
 
 Potential future step:
 
@@ -330,7 +345,7 @@ feat(infrastructure): Add local model assessment adapter.
 
 Scope depends on the selected backend and should be decided separately.
 
-### Phase 6: Frontend Presentation
+### Phase 7: Frontend Presentation
 
 Potential future step:
 
