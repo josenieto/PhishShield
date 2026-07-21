@@ -4581,6 +4581,57 @@ Decide whether the next model-assisted analysis step should add a frontend advis
 
 ---
 
+## 2026-07-06 - Add model-assisted assessment frontend skeleton
+
+Type: Feature
+Layer: Frontend
+Status: Done
+
+### Context
+
+The model-assisted analysis flow already had a planning document, application contract, use case, noop adapter, and API endpoint skeleton, but the frontend still had no way to request or display the second advisory view of the same email.
+
+### Decision
+
+Added a frontend client and panel skeleton for the separate model-assessment endpoint.
+
+The panel clearly marks model assessment as advisory, supports loading and failure states, and currently surfaces the noop backend behavior as a stable `not_configured` result.
+
+### Files changed
+
+- `frontend/src/api/analyzeEmailModelAssessment.ts`
+- `frontend/src/components/ModelAssessmentPanel.tsx`
+- `frontend/src/App.tsx`
+- `frontend/src/types/api.ts`
+- `frontend/src/styles.css`
+- `frontend/tests/api/analyzeEmailModelAssessment.test.ts`
+- `frontend/tests/App.test.tsx`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+```
+
+Result:
+
+```text
+Frontend: 36 passed
+Frontend build: vite build OK
+```
+
+### Next step
+
+Pause before choosing between backend model configuration, a real adapter, or richer frontend presentation, and only continue when the project is ready to move beyond the noop advisory state.
+
+---
+
 ## 2026-07-06 - Polish report actions in analyst workbench
 
 Type: Refactor
