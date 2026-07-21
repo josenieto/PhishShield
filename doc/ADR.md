@@ -82,24 +82,21 @@ The current implemented MVP scope is tracked separately in:
 
 ---
 
-## 4. Private Local AI Engine
+## 4. Future Model-Assisted Analysis
 
 This section describes a deferred target capability. It is not part of the current implemented MVP.
 
-### 4.1 Current Approach: Ollama in Docker
+### 4.1 Project-Owned Local Inference Direction
 
-- **Implementation target:** a future local model backend may integrate the official `ollama/ollama` image in Docker Compose, but the concrete runtime remains deferred until a dedicated implementation phase starts.
-- **Environment-based control:** AI analysis is optional and controlled by `USE_AI_ANALYSIS=true/false` in `.env`. If disabled, the system skips the step cleanly through ports.
-- **AI tasks using lightweight models such as Phi-3 or Llama-3:**
-  1. **Social engineering analysis:** evaluates text for persuasion, emotional manipulation, or induced urgency.
-  2. **Human-readable explanations:** translates raw technical findings, such as SPF failures or detected macros, into a clear paragraph that non-expert users can understand.
-
+- **Decision direction:** future model-assisted analysis should use a PhishShield-owned model artifact executed inside the project runtime rather than requiring users to install an external AI runtime such as Ollama.
+- **User expectation:** the user should not need to install or operate a separate local AI service to obtain the first useful model-assisted assessment flow.
 - **Planned endpoint strategy:** future model-assisted analysis should be exposed through a separate endpoint and should assess the original raw email in parallel with the deterministic branch instead of replacing the existing `/analyze-email` flow.
 
-### 4.2 Future Lifecycle Evolution
+### 4.2 Candidate Implementation Evolution
 
-- **Migration to native inference with ONNX:** for version `v2.0.0`, the plan is to fine-tune a lightweight classifier model such as **DistilBERT** or **RoBERTa-tiny** using a public phishing email dataset.
-- **Advantage:** the model will be exported to **ONNX** and executed locally with `onnxruntime` in the backend. This removes the need for a heavy Ollama container and allows AI to run in milliseconds on most PCs without GPU requirements or extra gigabytes of RAM.
+- **Training and evaluation phase:** the project should first identify acceptable public phishing-email datasets, evaluate their licenses and quality, and define a training/evaluation strategy before choosing a runtime format.
+- **Embedded local inference target:** a later version may export a selected classifier model, for example an ONNX artifact derived from a lightweight encoder or classifier, and execute it directly in the backend runtime.
+- **Advantage:** this keeps inference self-contained inside PhishShield, avoids external runtime installation requirements, and preserves local privacy guarantees.
 
 ---
 

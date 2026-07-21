@@ -129,19 +129,21 @@ This track is planning-only at first.
 
 The first step in this track is to define a separate model-assessment endpoint that analyzes the original raw email in parallel with the deterministic branch.
 
+The intended direction for this track is project-owned local inference rather than a user-installed AI runtime.
+
 Candidate steps:
 
 - define an `Application` port for model-assisted assessment;
 - define an `Infrastructure` adapter boundary for local model execution;
 - define a separate `/analyze-email-model-assessment` strategy instead of changing the current deterministic endpoint;
+- research public phishing email datasets and define the training/evaluation path before choosing a runtime format;
 - separate deterministic evidence from model assessment in the UI and API contract;
 - define what confidence, explanation, and analyst override should mean before implementation begins.
 
 Keep out of scope for this track:
 
 - real model integration;
-- Ollama-specific implementation work;
-- ONNX runtime integration;
+- forcing users to install an external AI runtime;
 - prompt chains or agent workflows.
 
 ---
