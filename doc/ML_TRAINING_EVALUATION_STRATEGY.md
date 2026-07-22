@@ -238,7 +238,7 @@ This strategy does not implement:
 
 ## Next Implementation Step
 
-The next technical step, after this strategy is accepted, should be a small ingestion proof of concept for one low-risk corpus.
+The first technical ingestion proof of concept is a small SpamAssassin preparation module under `tools/ml_data_preparation/`.
 
 Recommended first candidate:
 
@@ -251,3 +251,5 @@ Reason:
 - it is simple to access;
 - it contains ham and spam groups;
 - it is useful for validating ingestion, parsing, normalization, and deduplication mechanics before using more sensitive corpora such as Enron.
+
+The next step after the synthetic POC should be a local dry run against a manually downloaded SpamAssassin subset stored outside Git.
