@@ -4710,6 +4710,49 @@ Use the preparation plan to choose a first small ingestion proof of concept only
 
 ---
 
+## 2026-07-06 - Define first ML training and evaluation strategy
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The dataset research and preparation plan defined candidate corpora and data-cleaning rules, but the project still needed a concrete first experiment strategy before adding ingestion scripts, training code, or model artifacts.
+
+### Decision
+
+Defined the first model training and evaluation strategy around a binary `benign` versus `suspicious` baseline using classical text classification before heavier model families are considered.
+
+The strategy keeps PhishShield fixtures as holdout evidence, defines source-aware evaluation expectations, and sets acceptance criteria before moving from planning to ingestion or model artifacts.
+
+### Files changed
+
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `README.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files README.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after defining the ML training and evaluation strategy.
+```
+
+### Next step
+
+Start a small SpamAssassin ingestion proof of concept only after confirming where generated datasets will live outside the Git repository.
+
+---
+
 ## 2026-07-06 - Align model-assisted implementation phases
 
 Type: Documentation

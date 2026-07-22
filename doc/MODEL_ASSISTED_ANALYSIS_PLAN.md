@@ -399,7 +399,7 @@ Completed scope:
 
 ### Phase 7: Training And Evaluation Strategy
 
-Recommended next step:
+Implemented planning step:
 
 ```text
 docs(ml): Define first training and evaluation strategy.
@@ -412,6 +412,10 @@ Scope:
 - define dataset split and holdout policy in more detail;
 - define metrics and acceptance criteria for moving beyond the noop adapter;
 - still no training implementation.
+
+This phase is documented in:
+
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
 
 ### Phase 8: Experimental Embedded Local Adapter
 
