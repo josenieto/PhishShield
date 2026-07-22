@@ -223,6 +223,10 @@ Recommended sequence:
 
 The deterministic engine should remain the main evidence source regardless of model quality.
 
+Detailed preparation rules are defined in:
+
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+
 ---
 
 ## Data Handling Rules

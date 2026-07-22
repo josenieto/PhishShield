@@ -315,6 +315,7 @@ Scope:
 This phase is now documented in:
 
 - `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
 
 ### Phase 2: Application Contract
 
