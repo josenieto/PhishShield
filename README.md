@@ -197,6 +197,7 @@ python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --relo
 - Post-MVP roadmap: `doc/POST_MVP_ROADMAP.md`
 - Model-assisted analysis plan: `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
 - ML dataset research: `doc/ML_DATASET_RESEARCH.md`
+- ML data preparation plan: `doc/ML_DATA_PREPARATION_PLAN.md`
 - Changelog: `CHANGELOG.md`
 
 The current recommended next group after completing the initial `Report And Export v2` block is `Frontend Analyst Polish`, with parser/runtime polish as a parallel follow-up area documented in `doc/POST_MVP_ROADMAP.md`.
