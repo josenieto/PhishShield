@@ -4753,6 +4753,55 @@ Start a small SpamAssassin ingestion proof of concept only after confirming wher
 
 ---
 
+## 2026-07-06 - Add SpamAssassin ingestion prototype
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+The ML dataset research and preparation plan identified SpamAssassin as the safest first corpus for validating ingestion mechanics because it has simple ham/spam groups and avoids the privacy complexity of Enron for the first proof of concept.
+
+### Decision
+
+Added a small ML data-preparation tooling package under `tools/ml_data_preparation/` for SpamAssassin-style email samples.
+
+The prototype normalizes SpamAssassin ham/spam labels into the initial PhishShield training taxonomy, reuses the existing email parser adapter, and builds canonical prepared email samples without adding any raw corpora to the repository.
+
+### Files changed
+
+- `tools/__init__.py`
+- `tools/ml_data_preparation/__init__.py`
+- `tools/ml_data_preparation/prepared_email_sample.py`
+- `tools/ml_data_preparation/spamassassin.py`
+- `tests/unit/tools/ml_data_preparation/test_spamassassin.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_spamassassin.py
+python -m pytest
+```
+
+Result:
+
+```text
+SpamAssassin ingestion tests: 7 passed
+Full backend suite: 615 passed
+```
+
+### Next step
+
+Run the synthetic ingestion tests and full backend suite, then decide whether to perform a local dry run with a manually downloaded SpamAssassin subset outside Git.
+
+---
+
 ## 2026-07-06 - Align model-assisted implementation phases
 
 Type: Documentation

@@ -23,6 +23,20 @@ The data preparation pipeline should:
 
 ---
 
+## Tooling Location
+
+Dataset preparation tooling lives under:
+
+```text
+tools/ml_data_preparation/
+```
+
+This tooling is not part of the runtime application layers. It may reuse stable parser adapters from `src/infrastructure/` when that avoids duplicating `.eml` parsing behavior, but runtime application code must not depend on tooling modules.
+
+Generated datasets, downloaded corpora, and intermediate preparation outputs must stay outside the Git repository unless a future decision explicitly allows a small, sanitized fixture.
+
+---
+
 ## Canonical Email Sample Schema
 
 Every prepared sample should be normalized to a shape conceptually equivalent to:
@@ -284,7 +298,7 @@ This preparation plan does not implement:
 
 ## Next Implementation Questions
 
-1. Which dataset should be ingested first for a small proof-of-concept preparation script?
+1. Which real SpamAssassin subset should be used for the first local ingestion dry run outside Git?
 2. Should the first normalized label target be binary or multi-class?
 3. Which fields should be mandatory for a valid prepared sample?
 4. What exact truncation limits should apply to subject, body, URL list, and attachment filenames?
