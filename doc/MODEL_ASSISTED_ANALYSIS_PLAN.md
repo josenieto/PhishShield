@@ -295,21 +295,30 @@ This planning block does not implement:
 
 ### Phase 1: Architecture Planning
 
-This document and supporting roadmap/ADR updates.
-
-### Phase 1.5: Dataset And Training Research
-
-Potential future step:
-
-```text
-docs(ml): Research public phishing email datasets.
-```
+Completed.
 
 Scope:
 
+- raw-email parallel model branch;
+- deterministic-first principle;
+- separate endpoint strategy;
+- project-owned local inference direction;
+- supporting roadmap and ADR updates.
+
+### Phase 1.5: Dataset And Training Research
+
+Completed.
+
+```text
+docs(ml): Research public phishing email datasets.
+docs(ml): Define dataset preparation pipeline.
+```
+
+Completed scope:
+
 - identify public benign, phishing, and related fraud email corpora;
 - review dataset license, quality, and age;
-- define a realistic training and evaluation strategy;
+- define preparation rules for canonical samples, labels, normalization, deduplication, leakage prevention, and evaluation splits;
 - avoid committing to a runtime backend before the dataset strategy is understood.
 
 This phase is now documented in:
@@ -334,51 +343,77 @@ Completed scope:
 
 ### Phase 3: Application Use Case
 
-Potential future step:
+Implemented step:
 
 ```text
 feat(application): Add raw email model assessment use case.
 ```
 
-Scope:
+Completed scope:
 
 - application use case that delegates raw email assessment through `ModelAssessmentPort`;
-- no endpoint yet;
-- no adapter yet;
 - no real model runtime.
 
-### Phase 4: Noop Adapter And Endpoint Skeleton
+### Phase 4: Noop Adapter
 
-Partially implemented step:
+Implemented step:
 
 ```text
 feat(infrastructure): Add noop model assessment adapter.
 ```
 
-Scope:
+Completed scope:
 
 - no-op or `not_configured` behavior;
-- no real model yet;
-- no endpoint yet.
-
-The future endpoint skeleton now becomes the next implementation step once the noop adapter exists.
+- no real model runtime.
 
 ### Phase 5: Endpoint Skeleton
 
-Potential future step:
+Implemented step:
 
 ```text
 feat(api): Add model assessment endpoint skeleton.
 ```
 
-Scope:
+Completed scope:
 
 - `POST /analyze-email-model-assessment`;
 - use the application use case and noop adapter;
 - return a stable `not_configured` response;
 - keep real model runtime deferred.
 
-### Phase 6: Experimental Local Adapter
+### Phase 6: Frontend Presentation Skeleton
+
+Implemented step:
+
+```text
+feat(frontend): Add model-assisted assessment skeleton.
+```
+
+Completed scope:
+
+- frontend client for the separate model-assessment endpoint;
+- advisory model-assessment panel;
+- loading, failure, and `not_configured` states;
+- no real model runtime.
+
+### Phase 7: Training And Evaluation Strategy
+
+Recommended next step:
+
+```text
+docs(ml): Define first training and evaluation strategy.
+```
+
+Scope:
+
+- choose binary vs multi-class baseline target;
+- define first feature set;
+- define dataset split and holdout policy in more detail;
+- define metrics and acceptance criteria for moving beyond the noop adapter;
+- still no training implementation.
+
+### Phase 8: Experimental Embedded Local Adapter
 
 Potential future step:
 
@@ -386,17 +421,7 @@ Potential future step:
 feat(infrastructure): Add local model assessment adapter.
 ```
 
-Scope depends on the selected backend and should be decided separately.
-
-### Phase 7: Frontend Presentation
-
-Potential future step:
-
-```text
-feat(frontend): Show model-assisted assessment.
-```
-
-This frontend skeleton can be introduced before any real model runtime as long as it clearly presents `not_configured` as an advisory placeholder state.
+Scope depends on the selected model artifact format and should be decided only after the training and evaluation strategy is validated.
 
 ---
 

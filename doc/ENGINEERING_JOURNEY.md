@@ -4710,6 +4710,45 @@ Use the preparation plan to choose a first small ingestion proof of concept only
 
 ---
 
+## 2026-07-06 - Align model-assisted implementation phases
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The model-assisted analysis plan still described several phases as future work even though the application contract, use case, noop adapter, endpoint skeleton, frontend skeleton, dataset research, and data preparation plan had already been completed.
+
+### Decision
+
+Updated the phased implementation plan so completed model-assisted milestones are marked as implemented and the next recommended step is training and evaluation strategy, not additional runtime or adapter work.
+
+### Files changed
+
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending targeted documentation hook verification after aligning the implementation phases.
+```
+
+### Next step
+
+Define the first model training and evaluation strategy before adding ingestion scripts, training code, model artifacts, or real inference adapters.
+
+---
+
 ## 2026-07-06 - Add model-assisted assessment frontend skeleton
 
 Type: Feature
