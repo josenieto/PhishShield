@@ -304,10 +304,37 @@ This preparation plan does not implement:
 
 ---
 
+## First Local Dry Run Result
+
+The first local dry run used a manually downloaded SpamAssassin subset stored outside the repository:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw
+```
+
+The preparation command was executed with `--limit 20` for both `easy_ham` and `spam`.
+
+Results:
+
+| Label | Processed | Failed | Empty subject | Empty body | URLs found |
+|---|---:|---:|---:|---:|---:|
+| `easy_ham` | 20 | 0 | 0 | 0 | 41 |
+| `spam` | 20 | 0 | 0 | 0 | 53 |
+
+Generated JSONL outputs were written outside the repository under:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared
+```
+
+The dry run confirms that the current preparation command can process a small real SpamAssassin sample and produce canonical JSONL rows without adding raw corpora or generated datasets to Git.
+
+---
+
 ## Next Implementation Questions
 
-1. Which real SpamAssassin subset should be used for the first local ingestion dry run outside Git?
-2. Should the first normalized label target be binary or multi-class?
+1. Should the next dry run process the full `easy_ham` and `spam` subsets or a larger capped sample first?
+2. Should the first normalized label target remain binary for the initial training baseline?
 3. Which fields should be mandatory for a valid prepared sample?
 4. What exact truncation limits should apply to subject, body, URL list, and attachment filenames?
-5. Where should generated prepared datasets live outside the Git repository?
+5. Where should generated prepared datasets live outside the Git repository for repeatable experiments?
