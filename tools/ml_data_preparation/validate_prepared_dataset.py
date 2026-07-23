@@ -78,7 +78,7 @@ def validate_prepared_datasets(input_paths: Sequence[Path]) -> ValidationSummary
             summary.errors.append(f"{input_path}: file does not exist")
             continue
 
-        for line_number, line in enumerate(input_path.read_text(encoding="utf-8").splitlines(), start=1):
+        for line_number, line in enumerate(input_path.read_text(encoding="utf-8").split("\n"), start=1):
             if not line.strip():
                 continue
 
