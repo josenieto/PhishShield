@@ -4894,6 +4894,51 @@ Decide whether to process larger SpamAssassin samples, add validation for prepar
 
 ---
 
+## 2026-07-06 - Add prepared dataset validation command
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+The SpamAssassin preparation CLI could generate JSONL samples, but the project still needed a lightweight validation command before any prepared data could be trusted as input for future training experiments.
+
+### Decision
+
+Added a prepared dataset validation command for JSONL outputs.
+
+The command checks required fields, labels, duplicate sample IDs, JSON parse errors, and basic summary counts so prepared datasets can be reviewed before model training scripts exist.
+
+### Files changed
+
+- `tools/ml_data_preparation/validate_prepared_dataset.py`
+- `tests/unit/tools/ml_data_preparation/test_validate_prepared_dataset.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_validate_prepared_dataset.py
+python -m pytest
+```
+
+Result:
+
+```text
+Pending local verification after adding the dataset validation command.
+```
+
+### Next step
+
+Validate the locally generated SpamAssassin JSONL outputs, then decide whether to process larger samples or start a first baseline training script.
+
+---
+
 ## 2026-07-06 - Align model-assisted implementation phases
 
 Type: Documentation
