@@ -43,6 +43,12 @@ python -m tools.ml_data_preparation.prepare_spamassassin
 
 It prepares a local SpamAssassin email directory into JSONL and does not download corpora or train models.
 
+Prepared JSONL outputs can be validated with:
+
+```text
+python -m tools.ml_data_preparation.validate_prepared_dataset
+```
+
 ---
 
 ## Canonical Email Sample Schema
@@ -301,6 +307,30 @@ This preparation plan does not implement:
 - model runtime dependencies;
 - API or frontend changes;
 - automatic dataset redistribution.
+
+---
+
+## Prepared Dataset Validation
+
+The validation command checks prepared JSONL files before any training step.
+
+Current validation covers:
+
+- required fields;
+- JSON parse errors;
+- duplicate `sample_id` values;
+- allowed normalized labels;
+- list-shaped URL and attachment fields;
+- object-shaped metadata;
+- label distribution;
+- empty subject and body counts;
+- total extracted URL counts.
+
+Example:
+
+```text
+python -m tools.ml_data_preparation.validate_prepared_dataset --input prepared/easy_ham.jsonl --input prepared/spam.jsonl
+```
 
 ---
 
