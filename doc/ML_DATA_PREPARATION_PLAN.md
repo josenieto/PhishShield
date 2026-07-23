@@ -395,9 +395,56 @@ The validation confirms that the first prepared sample has valid JSONL shape, no
 
 ---
 
+## Larger SpamAssassin Dry Run Result
+
+A larger local dry run was executed against the manually downloaded SpamAssassin `easy_ham` and `spam` subsets outside the repository.
+
+Preparation results:
+
+| Output | Processed | Failed | Empty subject | Empty body | URLs found |
+|---|---:|---:|---:|---:|---:|
+| `easy_ham_full.jsonl` | 2501 | 0 | 1 | 0 | 4276 |
+| `spam_full.jsonl` | 501 | 0 | 3 | 3 | 1123 |
+| `easy_ham_1000.jsonl` | 1000 | 0 | 0 | 0 | 1384 |
+| `spam_1000.jsonl` | 501 | 0 | 3 | 3 | 1123 |
+
+Validation results for the full prepared outputs:
+
+```text
+files: 2
+rows: 3002
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels:
+  benign: 2501
+  suspicious: 501
+empty_subject: 4
+empty_body: 3
+urls_found: 5399
+```
+
+Validation results for the capped prepared outputs:
+
+```text
+files: 2
+rows: 1501
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels:
+  benign: 1000
+  suspicious: 501
+empty_subject: 3
+empty_body: 3
+urls_found: 2507
+```
+
+The larger dry run confirms that the current SpamAssassin preparation and validation tooling can process the available local subset without invalid rows or duplicate sample IDs. The class distribution is imbalanced in the full subset, so the first training baseline should either use a balanced subset or explicit class balancing.
+
+---
+
 ## Next Implementation Questions
 
-1. Should the next dry run process the full `easy_ham` and `spam` subsets or a larger capped sample first?
+1. Should the first training baseline use a balanced subset or the full imbalanced SpamAssassin subset with class weighting?
 2. What threshold should trigger investigation for invalid rows, duplicate sample IDs, empty subjects, or empty bodies?
 3. Should the first normalized label target remain binary for the initial training baseline?
 4. What exact truncation limits should apply to subject, body, URL list, and attachment filenames?

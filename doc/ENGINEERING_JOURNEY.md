@@ -4894,6 +4894,54 @@ Decide whether to process larger SpamAssassin samples, add validation for prepar
 
 ---
 
+## 2026-07-06 - Record larger SpamAssassin preparation dry run
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+After validating a 40-row prepared SpamAssassin sample, the project needed to know whether the preparation and validation tooling would hold up against a larger local subset before introducing any training code.
+
+### Decision
+
+Recorded the larger SpamAssassin preparation and validation dry run.
+
+The full local subset produced 3002 valid rows, zero invalid rows, and zero duplicate sample IDs. The result also exposed the expected class imbalance between `easy_ham` and `spam`, which should influence the first training baseline strategy.
+
+### Files changed
+
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\easy_ham" --label easy_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl"
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\spam" --label spam --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl"
+python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+easy_ham_full: processed=2501, failed=0, empty_subject=1, empty_body=0, urls_found=4276
+spam_full: processed=501, failed=0, empty_subject=3, empty_body=3, urls_found=1123
+validation: files=2, rows=3002, invalid_rows=0, duplicate_sample_ids=0, benign=2501, suspicious=501
+Documentation hooks: pending targeted verification after recording the larger dry run.
+```
+
+### Next step
+
+Define the first baseline training script around a balanced SpamAssassin subset before comparing against the full imbalanced subset with class weighting.
+
+---
+
 ## 2026-07-06 - Add prepared dataset validation command
 
 Type: Feature
