@@ -4939,6 +4939,50 @@ Validate the locally generated SpamAssassin JSONL outputs, then decide whether t
 
 ---
 
+## 2026-07-06 - Record prepared SpamAssassin dataset validation
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+After adding the prepared dataset validation command, the next step was to run it against the JSONL files generated from the first local SpamAssassin dry run and confirm that the prepared output was structurally usable before any training work begins.
+
+### Decision
+
+Recorded the validation result for the prepared `easy_ham` and `spam` JSONL files stored outside the repository.
+
+The validation confirmed 40 rows, zero invalid rows, zero duplicate sample IDs, balanced `benign` and `suspicious` labels, no empty subjects, no empty bodies, and 94 extracted URLs.
+
+### Files changed
+
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl"
+python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Prepared JSONL validation: files=2, rows=40, invalid_rows=0, duplicate_sample_ids=0, benign=20, suspicious=20, empty_subject=0, empty_body=0, urls_found=94
+Documentation hooks: pending targeted verification after recording the validation result.
+```
+
+### Next step
+
+Run a larger capped SpamAssassin preparation and validation pass before introducing any baseline training script.
+
+---
+
 ## 2026-07-06 - Align model-assisted implementation phases
 
 Type: Documentation
