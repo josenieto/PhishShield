@@ -35,6 +35,14 @@ This tooling is not part of the runtime application layers. It may reuse stable 
 
 Generated datasets, downloaded corpora, and intermediate preparation outputs must stay outside the Git repository unless a future decision explicitly allows a small, sanitized fixture.
 
+The first implemented tooling command is:
+
+```text
+python -m tools.ml_data_preparation.prepare_spamassassin
+```
+
+It prepares a local SpamAssassin email directory into JSONL and does not download corpora or train models.
+
 ---
 
 ## Canonical Email Sample Schema
@@ -287,7 +295,7 @@ Recommended reporting slices:
 This preparation plan does not implement:
 
 - dataset download scripts;
-- parsing scripts;
+- general parsing scripts beyond the initial SpamAssassin preparation command;
 - training scripts;
 - model artifacts;
 - model runtime dependencies;

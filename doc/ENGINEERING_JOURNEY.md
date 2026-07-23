@@ -4802,6 +4802,52 @@ Run the synthetic ingestion tests and full backend suite, then decide whether to
 
 ---
 
+## 2026-07-06 - Add SpamAssassin preparation CLI
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+The SpamAssassin ingestion prototype worked with synthetic tests and a manual dry run against a small local subset, but preparing more than a few files still required ad hoc Python snippets.
+
+### Decision
+
+Added a minimal tooling command that prepares a local SpamAssassin email directory into JSONL samples while keeping raw corpora and generated datasets outside the repository.
+
+The command reuses the existing SpamAssassin preparation functions and reports basic processing counters for local dry runs.
+
+### Files changed
+
+- `tools/ml_data_preparation/prepare_spamassassin.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_spamassassin.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_prepare_spamassassin.py
+python -m pytest
+```
+
+Result:
+
+```text
+SpamAssassin preparation CLI tests: 5 passed
+Full backend suite: 620 passed
+```
+
+### Next step
+
+Run the CLI against a manually downloaded SpamAssassin subset outside Git and inspect the generated JSONL summary before adding any model training code.
+
+---
+
 ## 2026-07-06 - Align model-assisted implementation phases
 
 Type: Documentation
