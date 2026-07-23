@@ -48,6 +48,26 @@ def test_should_report_invalid_json_rows(tmp_path: Path) -> None:
     assert "invalid JSON" in summary.errors[0]
 
 
+def test_should_not_split_json_rows_on_unicode_line_separators(tmp_path: Path) -> None:
+    input_path = tmp_path / "prepared.jsonl"
+    input_path.write_text(
+        _jsonl_row(
+            sample_id="sample-1",
+            normalized_label="benign",
+            body_text="Line one\u2028Line two",
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    summary = validate_prepared_datasets([input_path])
+
+    assert summary.is_valid is True
+    assert summary.rows == 1
+    assert summary.invalid_rows == 0
+    assert summary.labels == {"benign": 1}
+
+
 def test_should_report_duplicate_sample_ids(tmp_path: Path) -> None:
     input_path = tmp_path / "prepared.jsonl"
     input_path.write_text(
@@ -104,6 +124,8 @@ def _jsonl_row(
     sample_id: str,
     normalized_label: str,
     urls: list[str] | None = None,
+    body_text: str = "Body",
+    ensure_ascii: bool = True,
 ) -> str:
     return json.dumps(
         {
@@ -114,12 +136,13 @@ def _jsonl_row(
             "original_label": normalized_label,
             "normalized_label": normalized_label,
             "subject": "Subject",
-            "body_text": "Body",
+            "body_text": body_text,
             "sender_domain": "example.com",
             "urls": [] if urls is None else urls,
             "attachment_filenames": [],
             "raw_available": True,
             "metadata": {"original_label": normalized_label},
         },
+        ensure_ascii=ensure_ascii,
         sort_keys=True,
     ) + "\n"
