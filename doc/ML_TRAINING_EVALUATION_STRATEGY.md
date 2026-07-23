@@ -281,3 +281,7 @@ urls_found: 94
 ```
 
 The next practical validation step should use a larger capped SpamAssassin sample before any baseline training script is introduced.
+
+That larger dry run has now been completed. The full local SpamAssassin subset produced 2501 `benign` rows and 501 `suspicious` rows with zero invalid rows and zero duplicate sample IDs after validation.
+
+Because the full subset is imbalanced, the first training baseline should start with a balanced subset before comparing against a full-data run with class weighting.
