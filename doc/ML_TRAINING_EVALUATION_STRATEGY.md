@@ -267,3 +267,17 @@ Prepared JSONL outputs should be validated before any training experiment with:
 ```text
 python -m tools.ml_data_preparation.validate_prepared_dataset
 ```
+
+The first validation dry run has been completed over those prepared JSONL files:
+
+```text
+rows: 40
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=20, suspicious=20
+empty_subject: 0
+empty_body: 0
+urls_found: 94
+```
+
+The next practical validation step should use a larger capped SpamAssassin sample before any baseline training script is introduced.
