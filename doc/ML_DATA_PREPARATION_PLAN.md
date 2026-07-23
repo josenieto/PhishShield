@@ -361,10 +361,44 @@ The dry run confirms that the current preparation command can process a small re
 
 ---
 
+## First Prepared Dataset Validation Result
+
+The first prepared JSONL validation used the outputs from the local SpamAssassin dry run:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl
+```
+
+Command:
+
+```text
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl"
+```
+
+Result:
+
+```text
+files: 2
+rows: 40
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels:
+  benign: 20
+  suspicious: 20
+empty_subject: 0
+empty_body: 0
+urls_found: 94
+```
+
+The validation confirms that the first prepared sample has valid JSONL shape, no duplicate sample IDs, no invalid rows, and balanced labels for the small dry-run subset.
+
+---
+
 ## Next Implementation Questions
 
 1. Should the next dry run process the full `easy_ham` and `spam` subsets or a larger capped sample first?
-2. Should the first normalized label target remain binary for the initial training baseline?
-3. Which fields should be mandatory for a valid prepared sample?
+2. What threshold should trigger investigation for invalid rows, duplicate sample IDs, empty subjects, or empty bodies?
+3. Should the first normalized label target remain binary for the initial training baseline?
 4. What exact truncation limits should apply to subject, body, URL list, and attachment filenames?
 5. Where should generated prepared datasets live outside the Git repository for repeatable experiments?
