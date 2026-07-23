@@ -84,7 +84,7 @@ def prepare_spamassassin_directory(
             summary.empty_subject += int(sample.subject == "")
             summary.empty_body += int(sample.body_text == "")
             summary.urls_found += len(sample.urls)
-            output_file.write(json.dumps(_sample_to_json_dict(sample), ensure_ascii=False, sort_keys=True))
+            output_file.write(json.dumps(_sample_to_json_dict(sample), ensure_ascii=True, sort_keys=True))
             output_file.write("\n")
 
     return summary
