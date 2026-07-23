@@ -261,3 +261,9 @@ Reason:
 The next step after the synthetic POC should be a local dry run with this command against a manually downloaded SpamAssassin subset stored outside Git.
 
 The first dry run has been completed with 20 `easy_ham` and 20 `spam` messages. Both subsets processed without failures and produced JSONL outputs outside the repository.
+
+Prepared JSONL outputs should be validated before any training experiment with:
+
+```text
+python -m tools.ml_data_preparation.validate_prepared_dataset
+```
