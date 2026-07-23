@@ -4848,6 +4848,52 @@ Run the CLI against a manually downloaded SpamAssassin subset outside Git and in
 
 ---
 
+## 2026-07-06 - Record SpamAssassin preparation dry run
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+After adding the SpamAssassin preparation CLI, the next validation step was to run it against a small manually downloaded subset outside Git and confirm that it produced useful JSONL without committing any raw or generated data.
+
+### Decision
+
+Recorded the first local dry run against 20 `easy_ham` messages and 20 `spam` messages from the SpamAssassin public corpus.
+
+Both subsets processed with zero failures, zero empty subjects, and zero empty bodies. The generated JSONL files stayed outside the repository under the local temporary dataset directory.
+
+### Files changed
+
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\easy_ham" --label easy_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl" --limit 20
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\spam" --label spam --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl" --limit 20
+python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+easy_ham: processed=20, failed=0, empty_subject=0, empty_body=0, urls_found=41
+spam: processed=20, failed=0, empty_subject=0, empty_body=0, urls_found=53
+Documentation hooks: pending targeted verification after recording the dry run.
+```
+
+### Next step
+
+Decide whether to process larger SpamAssassin samples, add validation for prepared JSONL outputs, or pause before introducing any model training code.
+
+---
+
 ## 2026-07-06 - Align model-assisted implementation phases
 
 Type: Documentation
