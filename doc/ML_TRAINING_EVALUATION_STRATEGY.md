@@ -240,6 +240,12 @@ This strategy does not implement:
 
 The first technical ingestion proof of concept is a small SpamAssassin preparation module under `tools/ml_data_preparation/`.
 
+The first reusable command is:
+
+```text
+python -m tools.ml_data_preparation.prepare_spamassassin
+```
+
 Recommended first candidate:
 
 ```text
@@ -252,4 +258,4 @@ Reason:
 - it contains ham and spam groups;
 - it is useful for validating ingestion, parsing, normalization, and deduplication mechanics before using more sensitive corpora such as Enron.
 
-The next step after the synthetic POC should be a local dry run against a manually downloaded SpamAssassin subset stored outside Git.
+The next step after the synthetic POC should be a local dry run with this command against a manually downloaded SpamAssassin subset stored outside Git.
