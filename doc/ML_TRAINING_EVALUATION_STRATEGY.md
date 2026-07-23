@@ -259,3 +259,5 @@ Reason:
 - it is useful for validating ingestion, parsing, normalization, and deduplication mechanics before using more sensitive corpora such as Enron.
 
 The next step after the synthetic POC should be a local dry run with this command against a manually downloaded SpamAssassin subset stored outside Git.
+
+The first dry run has been completed with 20 `easy_ham` and 20 `spam` messages. Both subsets processed without failures and produced JSONL outputs outside the repository.
