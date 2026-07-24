@@ -370,3 +370,57 @@ The lightweight metadata feature set improved suspicious recall and F1 on this S
 These results validate that the prepared-data to training-metrics pipeline works, but they do not prove phishing detection quality because SpamAssassin is a ham/spam corpus rather than a phishing-specific benchmark.
 
 No model artifacts were written to the repository.
+
+---
+
+## First Metrics JSON Output Result
+
+The first metrics JSON dry run used the same prepared SpamAssassin JSONL files as the first baseline training run:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl
+```
+
+Metrics were written outside the repository under:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\metrics
+```
+
+Generated files:
+
+- `baseline_text.json`
+- `baseline_text_metadata.json`
+
+### Text-only metrics JSON
+
+```text
+feature_set: text
+samples: 1002
+train_samples: 801
+validation_samples: 201
+labels: benign=501, suspicious=501
+accuracy: 0.9701492537
+precision_suspicious: 0.9895833333
+recall_suspicious: 0.9500
+f1_suspicious: 0.9693877551
+confusion_matrix: [[100, 1], [5, 95]]
+```
+
+### Text plus lightweight metadata metrics JSON
+
+```text
+feature_set: text_with_light_metadata
+samples: 1002
+train_samples: 801
+validation_samples: 201
+labels: benign=501, suspicious=501
+accuracy: 0.9800995025
+precision_suspicious: 0.9897959184
+recall_suspicious: 0.9700
+f1_suspicious: 0.9797979798
+confusion_matrix: [[100, 1], [3, 97]]
+```
+
+The metrics JSON output confirms that baseline runs can now be compared without copying terminal output manually and without writing model artifacts to the repository.
