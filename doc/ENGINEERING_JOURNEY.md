@@ -4989,6 +4989,51 @@ Run the baseline training command against the prepared SpamAssassin JSONL files 
 
 ---
 
+## 2026-07-06 - Record baseline ML training results
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+After adding the baseline training command, the project needed to record the first real metrics from prepared SpamAssassin JSONL files before deciding whether to add model artifacts, inference adapters, or additional experiment tracking.
+
+### Decision
+
+Recorded the first balanced TF-IDF logistic regression results for both the text-only feature set and the text plus lightweight metadata feature set.
+
+The lightweight metadata feature set improved suspicious recall and F1 on the SpamAssassin ham/spam baseline, but the result is explicitly treated as training-pipeline validation rather than proof of phishing detection quality.
+
+### Files changed
+
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42
+python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Text-only baseline: accuracy=0.9701, precision_suspicious=0.9896, recall_suspicious=0.9500, f1_suspicious=0.9694, confusion_matrix=[[100, 1], [5, 95]]
+Text plus lightweight metadata baseline: accuracy=0.9801, precision_suspicious=0.9898, recall_suspicious=0.9700, f1_suspicious=0.9798, confusion_matrix=[[100, 1], [3, 97]]
+Documentation hooks: pending targeted verification after recording the baseline results.
+```
+
+### Next step
+
+Add machine-readable metrics output for baseline training runs before running more experiments or comparing additional feature sets.
+
+---
+
 ## 2026-07-06 - Add prepared dataset validation command
 
 Type: Feature
