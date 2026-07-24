@@ -19,6 +19,10 @@ STRATEGY_BALANCED = "balanced"
 class TrainingResult:
     def __init__(
         self,
+        strategy: str,
+        feature_set: str,
+        validation_ratio: float,
+        random_seed: int,
         total_samples: int,
         train_samples: int,
         validation_samples: int,
@@ -29,6 +33,10 @@ class TrainingResult:
         f1_suspicious: float,
         confusion_matrix_values: list[list[int]],
     ) -> None:
+        self.strategy = strategy
+        self.feature_set = feature_set
+        self.validation_ratio = validation_ratio
+        self.random_seed = random_seed
         self.total_samples = total_samples
         self.train_samples = train_samples
         self.validation_samples = validation_samples
@@ -53,6 +61,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     parser.add_argument("--validation-ratio", type=float, default=0.2)
     parser.add_argument("--random-seed", type=int, default=42)
+    parser.add_argument(
+        "--metrics-output",
+        default=None,
+        help="Optional JSON file path for writing training metrics. Keep this outside the repository.",
+    )
 
     args = parser.parse_args(argv)
     result = train_baseline(
@@ -63,6 +76,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         random_seed=args.random_seed,
     )
     print_training_result(result)
+
+    if args.metrics_output is not None:
+        write_training_metrics(result, Path(args.metrics_output))
 
     return 0
 
@@ -112,6 +128,10 @@ def train_baseline(
     )
 
     return TrainingResult(
+        strategy=strategy,
+        feature_set=feature_set,
+        validation_ratio=validation_ratio,
+        random_seed=random_seed,
         total_samples=len(balanced_samples),
         train_samples=len(train_texts),
         validation_samples=len(validation_texts),
@@ -141,6 +161,35 @@ def print_training_result(result: TrainingResult) -> None:
     print(f"f1_suspicious: {result.f1_suspicious:.4f}")
     print("confusion_matrix_labels: benign,suspicious")
     print(f"confusion_matrix: {result.confusion_matrix_values}")
+
+
+def write_training_metrics(result: TrainingResult, output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
+        json.dumps(_training_result_to_dict(result), indent=2, sort_keys=True),
+        encoding="utf-8",
+    )
+
+
+def _training_result_to_dict(result: TrainingResult) -> dict[str, object]:
+    return {
+        "strategy": result.strategy,
+        "feature_set": result.feature_set,
+        "validation_ratio": result.validation_ratio,
+        "random_seed": result.random_seed,
+        "samples": result.total_samples,
+        "train_samples": result.train_samples,
+        "validation_samples": result.validation_samples,
+        "label_distribution": dict(sorted(result.label_distribution.items())),
+        "metrics": {
+            "accuracy": result.accuracy,
+            "precision_suspicious": result.precision_suspicious,
+            "recall_suspicious": result.recall_suspicious,
+            "f1_suspicious": result.f1_suspicious,
+        },
+        "confusion_matrix_labels": ["benign", "suspicious"],
+        "confusion_matrix": result.confusion_matrix_values,
+    }
 
 
 def _load_samples(input_paths: Sequence[Path]) -> list[dict[str, object]]:
