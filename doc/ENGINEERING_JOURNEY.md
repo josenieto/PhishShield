@@ -5034,6 +5034,50 @@ Add machine-readable metrics output for baseline training runs before running mo
 
 ---
 
+## 2026-07-10 - Add baseline training metrics JSON output
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+The baseline training command printed useful metrics to stdout, but comparing experiments by copying terminal output would not be reliable once more feature sets, splits, or datasets are tested.
+
+### Decision
+
+Added optional JSON metrics output to the baseline training command.
+
+The output records model configuration, sample counts, label distribution, validation metrics, and confusion matrix while keeping model artifacts and per-sample predictions out of scope.
+
+### Files changed
+
+- `tools/ml_training/train_baseline.py`
+- `tests/unit/tools/ml_training/test_train_baseline.py`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_training/test_train_baseline.py
+python -m pytest
+```
+
+Result:
+
+```text
+Pending local verification after adding metrics JSON output.
+```
+
+### Next step
+
+Use metrics JSON output for future experiment comparisons before deciding whether to save model artifacts or add inference adapters.
+
+---
+
 ## 2026-07-06 - Add prepared dataset validation command
 
 Type: Feature
