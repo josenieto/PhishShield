@@ -5078,6 +5078,51 @@ Use metrics JSON output for future experiment comparisons before deciding whethe
 
 ---
 
+## 2026-07-10 - Record baseline metrics JSON output
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+After adding JSON metrics output to the baseline training command, the next validation step was to run both baseline feature sets against the prepared SpamAssassin data and confirm that comparable metrics files were generated outside the repository.
+
+### Decision
+
+Recorded the first generated metrics JSON outputs for the text-only and text plus lightweight metadata baselines.
+
+The results confirm that the training command can now produce machine-readable experiment summaries without writing model artifacts or predictions into Git.
+
+### Files changed
+
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\metrics\baseline_text.json"
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\metrics\baseline_text_metadata.json"
+python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Text-only metrics JSON: accuracy=0.9701492537, precision_suspicious=0.9895833333, recall_suspicious=0.9500, f1_suspicious=0.9693877551, confusion_matrix=[[100, 1], [5, 95]]
+Text plus lightweight metadata metrics JSON: accuracy=0.9800995025, precision_suspicious=0.9897959184, recall_suspicious=0.9700, f1_suspicious=0.9797979798, confusion_matrix=[[100, 1], [3, 97]]
+Documentation hooks: pending targeted verification after recording metrics JSON output.
+```
+
+### Next step
+
+Use the metrics JSON output to compare future experiments, then decide whether the next ML step should evaluate a fixture holdout or add controlled model artifact output outside Git.
+
+---
+
 ## 2026-07-06 - Add prepared dataset validation command
 
 Type: Feature
