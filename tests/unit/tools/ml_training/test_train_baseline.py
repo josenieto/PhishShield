@@ -6,6 +6,7 @@ from tools.ml_training.train_baseline import (
     FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
     main,
     train_baseline,
+    write_training_metrics,
 )
 
 
@@ -30,6 +31,32 @@ def test_should_train_balanced_text_baseline(tmp_path: Path) -> None:
     assert len(result.confusion_matrix_values) == 2
 
 
+def test_should_write_training_metrics_to_json(tmp_path: Path) -> None:
+    input_path = _write_dataset(tmp_path)
+    output_path = tmp_path / "metrics" / "baseline.json"
+    result = train_baseline(
+        input_paths=[input_path],
+        feature_set=FEATURE_SET_TEXT,
+        validation_ratio=0.25,
+        random_seed=7,
+    )
+
+    write_training_metrics(result, output_path)
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["strategy"] == "balanced"
+    assert payload["feature_set"] == FEATURE_SET_TEXT
+    assert payload["validation_ratio"] == 0.25
+    assert payload["random_seed"] == 7
+    assert payload["samples"] == 8
+    assert payload["train_samples"] == 6
+    assert payload["validation_samples"] == 2
+    assert payload["label_distribution"] == {"benign": 4, "suspicious": 4}
+    assert "accuracy" in payload["metrics"]
+    assert payload["confusion_matrix_labels"] == ["benign", "suspicious"]
+    assert len(payload["confusion_matrix"]) == 2
+
+
 def test_should_train_lightweight_metadata_baseline(tmp_path: Path) -> None:
     input_path = _write_dataset(tmp_path)
 
@@ -46,6 +73,7 @@ def test_should_train_lightweight_metadata_baseline(tmp_path: Path) -> None:
 
 def test_should_return_zero_exit_code_from_cli(tmp_path: Path) -> None:
     input_path = _write_dataset(tmp_path)
+    output_path = tmp_path / "metrics" / "baseline.json"
 
     exit_code = main([
         "--input",
@@ -56,9 +84,12 @@ def test_should_return_zero_exit_code_from_cli(tmp_path: Path) -> None:
         "0.25",
         "--random-seed",
         "7",
+        "--metrics-output",
+        str(output_path),
     ])
 
     assert exit_code == 0
+    assert output_path.exists()
 
 
 def _write_dataset(tmp_path: Path) -> Path:
