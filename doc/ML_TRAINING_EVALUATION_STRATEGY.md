@@ -294,6 +294,14 @@ python -m tools.ml_training.train_baseline
 
 It trains a balanced TF-IDF logistic regression baseline from prepared JSONL inputs and reports validation metrics without writing model artifacts to the repository.
 
+Training metrics can also be written to JSON with:
+
+```text
+python -m tools.ml_training.train_baseline --metrics-output path/to/metrics.json
+```
+
+The metrics output is intended for experiment comparison and should be written outside the repository with prepared datasets.
+
 ---
 
 ## First Baseline Training Result
