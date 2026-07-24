@@ -19,8 +19,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install backend with test dependencies
-        run: python -m pip install -e ".[test]"
+      - name: Install backend with test and ML dependencies
+        run: python -m pip install -e ".[test,ml]"
 
       - name: Run test suite
         run: python -m pytest
