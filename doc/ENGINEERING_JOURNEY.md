@@ -4942,6 +4942,53 @@ Define the first baseline training script around a balanced SpamAssassin subset 
 
 ---
 
+## 2026-07-06 - Add baseline ML training script
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+After validating prepared SpamAssassin JSONL outputs at a larger scale, the project was ready for a first small training experiment that validates the end-to-end prepared-data to model-metrics path without writing model artifacts.
+
+### Decision
+
+Added a baseline training command that trains a balanced TF-IDF logistic regression classifier from prepared JSONL files.
+
+The command supports text-only and lightweight-metadata feature sets, reports validation metrics, and keeps model artifact writing out of scope.
+
+### Files changed
+
+- `pyproject.toml`
+- `tools/ml_training/__init__.py`
+- `tools/ml_training/train_baseline.py`
+- `tests/unit/tools/ml_training/test_train_baseline.py`
+- `README.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_training/test_train_baseline.py
+python -m pytest
+```
+
+Result:
+
+```text
+Pending local verification after adding the baseline training command.
+```
+
+### Next step
+
+Run the baseline training command against the prepared SpamAssassin JSONL files outside Git and record the first validation metrics before deciding on model artifacts or real inference integration.
+
+---
+
 ## 2026-07-06 - Add prepared dataset validation command
 
 Type: Feature

@@ -10,7 +10,7 @@ It builds on:
 - `doc/ML_DATA_PREPARATION_PLAN.md`
 - `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
 
-This document does not introduce training scripts, model artifacts, runtime dependencies, or inference adapters.
+This document also records the first baseline training command once it is introduced. It still does not introduce model artifacts, runtime dependencies, or inference adapters.
 
 ---
 
@@ -285,3 +285,11 @@ The next practical validation step should use a larger capped SpamAssassin sampl
 That larger dry run has now been completed. The full local SpamAssassin subset produced 2501 `benign` rows and 501 `suspicious` rows with zero invalid rows and zero duplicate sample IDs after validation.
 
 Because the full subset is imbalanced, the first training baseline should start with a balanced subset before comparing against a full-data run with class weighting.
+
+The first baseline training command is:
+
+```text
+python -m tools.ml_training.train_baseline
+```
+
+It trains a balanced TF-IDF logistic regression baseline from prepared JSONL inputs and reports validation metrics without writing model artifacts to the repository.
