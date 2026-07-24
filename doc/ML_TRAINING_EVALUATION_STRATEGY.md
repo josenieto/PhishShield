@@ -293,3 +293,72 @@ python -m tools.ml_training.train_baseline
 ```
 
 It trains a balanced TF-IDF logistic regression baseline from prepared JSONL inputs and reports validation metrics without writing model artifacts to the repository.
+
+---
+
+## First Baseline Training Result
+
+The first baseline training run used the prepared SpamAssassin JSONL outputs stored outside the repository:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl
+```
+
+Common settings:
+
+```text
+strategy: balanced
+validation_ratio: 0.2
+random_seed: 42
+samples: 1002
+train_samples: 801
+validation_samples: 201
+labels: benign=501, suspicious=501
+```
+
+### Text-only baseline
+
+Feature set:
+
+```text
+subject + body_text
+```
+
+Result:
+
+```text
+accuracy: 0.9701
+precision_suspicious: 0.9896
+recall_suspicious: 0.9500
+f1_suspicious: 0.9694
+confusion_matrix_labels: benign,suspicious
+confusion_matrix: [[100, 1], [5, 95]]
+```
+
+### Text plus lightweight metadata baseline
+
+Feature set:
+
+```text
+subject + body_text + urls + attachment_filenames
+```
+
+Result:
+
+```text
+accuracy: 0.9801
+precision_suspicious: 0.9898
+recall_suspicious: 0.9700
+f1_suspicious: 0.9798
+confusion_matrix_labels: benign,suspicious
+confusion_matrix: [[100, 1], [3, 97]]
+```
+
+### Interpretation
+
+The lightweight metadata feature set improved suspicious recall and F1 on this SpamAssassin ham/spam baseline.
+
+These results validate that the prepared-data to training-metrics pipeline works, but they do not prove phishing detection quality because SpamAssassin is a ham/spam corpus rather than a phishing-specific benchmark.
+
+No model artifacts were written to the repository.
