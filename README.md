@@ -41,6 +41,12 @@ python -m pre_commit install
 python -m pre_commit install --hook-type commit-msg
 ```
 
+To install optional ML training dependencies for local experiments:
+
+```bash
+python -m pip install -e ".[test,dev,ml]"
+```
+
 The hook configuration is versioned in the repository, but each clone must install the hooks locally.
 Skipping them with `git commit --no-verify` is still possible, so CI remains the shared enforcement layer for the repository.
 
