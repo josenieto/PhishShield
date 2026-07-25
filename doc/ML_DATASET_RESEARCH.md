@@ -257,3 +257,11 @@ These questions remain open until the project explicitly starts model training:
 2. Should the first model be binary (`benign` vs `phishing`) or multi-class (`benign`, `spam`, `phishing`)?
 3. Should attachments and structured headers contribute to the first model input, or should it remain text-first?
 4. What artifact format should the project own and package later: plain Python model files, ONNX, or another embedded format?
+
+---
+
+## Fixture Holdout Implication
+
+The first holdout evaluation against PhishShield fixtures showed that a SpamAssassin-only ham/spam baseline is not sufficient for phishing model quality.
+
+The next dataset step should prioritize phishing-specific corpora and benign business-email sources before any model artifact or inference adapter work.
