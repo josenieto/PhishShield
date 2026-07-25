@@ -375,6 +375,8 @@ The Fraudulent E-mail Corpus is expected to add fraud and social-engineering lan
 
 Preparation tooling for this corpus should be developed with synthetic tests only. The real corpus should be processed in Kaggle or another isolated environment, and generated JSONL outputs should remain outside the repository.
 
+A Kaggle structural inspection found `3906` detected messages, `3839` subjects, `52` empty bodies, and `2781` body URLs. A naive whole-file UTF-8 decode produced `10524` replacement characters, so preparation should preserve raw bytes and let the email parser handle per-message charset and MIME decoding.
+
 ---
 
 ## First Baseline Training Result

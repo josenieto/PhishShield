@@ -5600,6 +5600,8 @@ Added Fraudulent E-mail Corpus preparation tooling using synthetic unit tests.
 
 The command prepares the upstream single text file into the existing PhishShield ML JSONL shape, labels messages as `suspicious`, and preserves source metadata for later experiment tracking.
 
+After Kaggle structural inspection showed `3906` detected messages and `10524` replacement characters from a naive whole-file UTF-8 decode, the preparer was adjusted to read the corpus as bytes, split on ASCII message boundaries, and pass each raw message to the email parser.
+
 Real corpus execution should happen outside the repository, preferably in Kaggle or another isolated environment. Raw corpus content and generated JSONL outputs must remain outside Git.
 
 ### Files changed

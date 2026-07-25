@@ -5,7 +5,7 @@ from typing import Sequence
 
 from tools.ml_data_preparation.fraudulent_email_corpus import (
     prepare_fraudulent_email_corpus_message,
-    split_fraudulent_email_corpus_messages,
+    split_fraudulent_email_corpus_message_bytes,
 )
 from tools.ml_data_preparation.prepared_email_sample import PreparedEmailSample
 
@@ -57,8 +57,8 @@ def prepare_fraudulent_email_corpus_file(
     if not input_file.is_file():
         raise ValueError(f"input file does not exist: {input_file}")
 
-    corpus_text = input_file.read_text(encoding="utf-8", errors="replace")
-    messages = split_fraudulent_email_corpus_messages(corpus_text)
+    corpus_bytes = input_file.read_bytes()
+    messages = split_fraudulent_email_corpus_message_bytes(corpus_bytes)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     summary = PreparationSummary()
     summary.discovered = len(messages)
