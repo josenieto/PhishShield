@@ -334,6 +334,28 @@ python -m tools.ml_data_preparation.validate_prepared_dataset --input prepared/e
 
 ---
 
+## PhishShield Fixture Holdout Samples
+
+PhishShield fixtures can be prepared as holdout samples with `tools/ml_data_preparation/phishshield_fixtures.py`.
+
+These samples are for evaluation only. They must not be mixed into training, validation, or test splits for the SpamAssassin baseline.
+
+The fixture preparation tooling uses:
+
+```text
+source: phishshield-fixtures
+source_uri: tests/fixtures/emails
+```
+
+Supported holdout labels:
+
+```text
+benign
+suspicious
+```
+
+---
+
 ## First Local Dry Run Result
 
 The first local dry run used a manually downloaded SpamAssassin subset stored outside the repository:

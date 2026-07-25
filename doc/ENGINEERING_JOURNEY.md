@@ -5123,6 +5123,53 @@ Use the metrics JSON output to compare future experiments, then decide whether t
 
 ---
 
+## 2026-07-10 - Add fixture holdout evaluation
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+The baseline classifier had only been evaluated on SpamAssassin ham/spam validation data. Before considering model artifacts or inference adapters, the project needed a way to check whether that baseline transfers any useful signal to realistic PhishShield fixtures that are never used for training.
+
+### Decision
+
+Added tooling to prepare PhishShield fixture emails as holdout samples and evaluate the temporary baseline classifier against them.
+
+The command reports per-fixture predictions and aggregate holdout accuracy while keeping model artifacts and inference integration deferred.
+
+### Files changed
+
+- `tools/ml_data_preparation/phishshield_fixtures.py`
+- `tools/ml_training/evaluate_fixture_holdout.py`
+- `tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py`
+- `tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py
+python -m pytest
+```
+
+Result:
+
+```text
+Pending local verification after adding fixture holdout evaluation.
+```
+
+### Next step
+
+Run the fixture holdout evaluation against the prepared SpamAssassin JSONL files outside Git and use the result to decide whether the baseline needs phishing-specific data before model artifact work.
+
+---
+
 ## 2026-07-06 - Add prepared dataset validation command
 
 Type: Feature

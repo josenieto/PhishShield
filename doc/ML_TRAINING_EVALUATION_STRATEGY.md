@@ -304,6 +304,22 @@ The metrics output is intended for experiment comparison and should be written o
 
 ---
 
+## Fixture Holdout Evaluation
+
+PhishShield fixture emails should be used only as holdout evidence, not training data.
+
+The fixture holdout command is:
+
+```text
+python -m tools.ml_training.evaluate_fixture_holdout
+```
+
+It trains a temporary baseline from prepared JSONL inputs, prepares a fixed set of benign and suspicious PhishShield fixtures, and reports per-fixture predictions plus aggregate holdout metrics.
+
+The first fixture holdout is intended to evaluate whether a SpamAssassin-trained ham/spam baseline transfers any useful signal to realistic PhishShield examples. It is not a production phishing-quality benchmark.
+
+---
+
 ## First Baseline Training Result
 
 The first baseline training run used the prepared SpamAssassin JSONL outputs stored outside the repository:
