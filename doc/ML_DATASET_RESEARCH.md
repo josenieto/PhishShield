@@ -158,8 +158,26 @@ Preparation status:
 
 - ingestion support exists as project tooling under `tools/ml_data_preparation/`;
 - tests use synthetic messages that mimic the corpus shape and do not include raw corpus content;
+- preparation preserves raw message bytes before handing each message to the email parser, which avoids a whole-corpus UTF-8 decode pass;
 - real corpus preparation should run in Kaggle or another isolated environment;
 - generated JSONL outputs must remain outside the repository.
+
+Structural inspection in Kaggle found:
+
+```text
+bytes: 17344435
+messages_detected: 3906
+replacement_chars_from_naive_utf8_decode: 10524
+subjects: 3839
+empty_subjects: 21
+unique_subjects: 2503
+empty_bodies: 52
+http_urls_in_bodies: 2781
+email_like_tokens_total: 20059
+largest_body_chars: 608258
+```
+
+The inspection confirms that the dataset is large enough and structurally parseable for controlled fraud/social-engineering experiments. It also confirms that whole-file UTF-8 decoding is not appropriate because the corpus contains mixed encodings.
 
 Potential use:
 

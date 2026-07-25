@@ -35,6 +35,23 @@ def test_should_prepare_fraudulent_email_corpus_file_to_jsonl(tmp_path: Path) ->
     assert rows[0]["metadata"] == {"original_label": "fraud"}
 
 
+def test_should_prepare_corpus_file_without_utf8_replacement_decoding(tmp_path: Path) -> None:
+    input_file = tmp_path / "fradulent_emails.txt"
+    output_path = tmp_path / "prepared" / "fraudulent.jsonl"
+    input_file.write_bytes(_latin1_sample_message_bytes())
+
+    summary = prepare_fraudulent_email_corpus_file(
+        input_file=input_file,
+        output_path=output_path,
+    )
+    rows = [json.loads(line) for line in output_path.read_text(encoding="utf-8").splitlines()]
+
+    assert summary.discovered == 1
+    assert summary.processed == 1
+    assert rows[0]["subject"] == "Oferta especial"
+    assert rows[0]["body_text"] == "Transferencia especial para caf\u00e9."
+
+
 def test_should_respect_processing_limit(tmp_path: Path) -> None:
     input_file = tmp_path / "fradulent_emails.txt"
     output_path = tmp_path / "prepared" / "fraudulent.jsonl"
@@ -103,5 +120,18 @@ def _sample_message(subject: str, url: str) -> str:
             "Content-Type: text/plain; charset=utf-8",
             "",
             f"Please reply at {url}.",
+        ]
+    )
+
+
+def _latin1_sample_message_bytes() -> bytes:
+    return b"\n".join(
+        [
+            b"Return-Path: <sender@example.net>",
+            b"From: Sender <sender@example.net>",
+            b"Subject: Oferta especial",
+            b"Content-Type: text/plain; charset=iso-8859-1",
+            b"",
+            b"Transferencia especial para caf\xe9.",
         ]
     )

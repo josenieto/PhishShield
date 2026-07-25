@@ -4,6 +4,7 @@ from tools.ml_data_preparation.fraudulent_email_corpus import (
     FRAUDULENT_EMAIL_CORPUS_SOURCE_URI,
     NORMALIZED_LABEL_SUSPICIOUS,
     prepare_fraudulent_email_corpus_message,
+    split_fraudulent_email_corpus_message_bytes,
     split_fraudulent_email_corpus_messages,
 )
 
@@ -20,6 +21,20 @@ def test_should_split_corpus_text_into_messages() -> None:
 
 def test_should_return_empty_tuple_when_no_message_boundary_exists() -> None:
     assert split_fraudulent_email_corpus_messages("plain text without email headers") == ()
+
+
+def test_should_split_corpus_bytes_into_messages() -> None:
+    messages = split_fraudulent_email_corpus_message_bytes(_sample_corpus_text().encode("utf-8"))
+
+    assert len(messages) == 2
+    assert messages[0].startswith(b"Return-Path:")
+    assert b"Subject: First proposal" in messages[0]
+    assert messages[1].startswith(b"Return-Path:")
+    assert b"Subject: Second proposal" in messages[1]
+
+
+def test_should_return_empty_tuple_when_no_byte_message_boundary_exists() -> None:
+    assert split_fraudulent_email_corpus_message_bytes(b"plain text without email headers") == ()
 
 
 def test_should_prepare_fraudulent_corpus_message_sample() -> None:
@@ -55,6 +70,16 @@ def test_should_build_stable_sample_id_for_same_input() -> None:
     assert first_sample.sample_id == second_sample.sample_id
 
 
+def test_should_prepare_non_utf8_message_without_replacement_decoding() -> None:
+    sample = prepare_fraudulent_email_corpus_message(
+        raw_message=_latin1_sample_message_bytes(),
+        source_id="message-00002",
+    )
+
+    assert sample.subject == "Oferta especial"
+    assert sample.body_text == "Transferencia especial para caf\u00e9."
+
+
 def _sample_corpus_text() -> str:
     return "\n".join(
         [
@@ -78,5 +103,18 @@ def _sample_message(subject: str, url: str) -> str:
             "Content-Type: text/plain; charset=utf-8",
             "",
             f"Please reply at {url}.",
+        ]
+    )
+
+
+def _latin1_sample_message_bytes() -> bytes:
+    return b"\n".join(
+        [
+            b"Return-Path: <sender@example.net>",
+            b"From: Sender <sender@example.net>",
+            b"Subject: Oferta especial",
+            b"Content-Type: text/plain; charset=iso-8859-1",
+            b"",
+            b"Transferencia especial para caf\xe9.",
         ]
     )
