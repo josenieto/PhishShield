@@ -372,6 +372,8 @@ python -m tools.ml_data_preparation.prepare_fraudulent_email_corpus --input-file
 
 The command expects the upstream single text file and writes canonical PhishShield ML JSONL rows.
 
+The implementation reads the corpus as bytes, splits messages on ASCII email boundaries, and passes each raw message to the email parser without first decoding the whole file as UTF-8. This preserves mixed-encoding messages better than a whole-corpus text conversion.
+
 Preparation mapping:
 
 ```text

@@ -14,6 +14,7 @@ FRAUDULENT_EMAIL_CORPUS_ORIGINAL_LABEL = "fraud"
 NORMALIZED_LABEL_SUSPICIOUS = "suspicious"
 
 _MESSAGE_BOUNDARY_PATTERN = re.compile(r"(?m)^(?:From r\s+.*\n)?Return-Path:")
+_MESSAGE_BOUNDARY_BYTES_PATTERN = re.compile(rb"(?m)^(?:From r\s+.*\n)?Return-Path:")
 
 
 def split_fraudulent_email_corpus_messages(corpus_text: str) -> tuple[str, ...]:
@@ -33,12 +34,29 @@ def split_fraudulent_email_corpus_messages(corpus_text: str) -> tuple[str, ...]:
     return tuple(messages)
 
 
+def split_fraudulent_email_corpus_message_bytes(corpus_bytes: bytes) -> tuple[bytes, ...]:
+    normalized_bytes = corpus_bytes.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    starts = [match.start() for match in _MESSAGE_BOUNDARY_BYTES_PATTERN.finditer(normalized_bytes)]
+
+    if not starts:
+        return ()
+
+    messages: list[bytes] = []
+    for index, start in enumerate(starts):
+        end = starts[index + 1] if index + 1 < len(starts) else len(normalized_bytes)
+        message = normalized_bytes[start:end].strip()
+        if message:
+            messages.append(_remove_mbox_from_line_bytes(message))
+
+    return tuple(messages)
+
+
 def prepare_fraudulent_email_corpus_message(
-    raw_message: str,
+    raw_message: bytes | str,
     source_id: str,
     source_uri: str = FRAUDULENT_EMAIL_CORPUS_SOURCE_URI,
 ) -> PreparedEmailSample:
-    message_bytes = raw_message.encode("utf-8", errors="replace")
+    message_bytes = raw_message if isinstance(raw_message, bytes) else raw_message.encode("utf-8", errors="replace")
     extracted_email = PythonEmailContentExtractorAdapter().extract(message_bytes)
     sample_id = _build_sample_id(
         source=FRAUDULENT_EMAIL_CORPUS_SOURCE,
@@ -71,6 +89,14 @@ def _remove_mbox_from_line(message: str) -> str:
     lines = message.split("\n")
     if lines and lines[0].startswith("From r "):
         return "\n".join(lines[1:]).strip()
+
+    return message
+
+
+def _remove_mbox_from_line_bytes(message: bytes) -> bytes:
+    lines = message.split(b"\n")
+    if lines and lines[0].startswith(b"From r "):
+        return b"\n".join(lines[1:]).strip()
 
     return message
 
