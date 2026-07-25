@@ -128,6 +128,39 @@ Important caveats:
 
 ### Fraudulent E-mail Corpus
 
+Reference:
+
+```text
+https://www.kaggle.com/datasets/rtatman/fraudulent-email-corpus
+```
+
+Observed Kaggle metadata during research:
+
+- Kaggle ref: `rtatman/fraudulent-email-corpus`;
+- owner: `rtatman`;
+- title: `Fraudulent E-mail Corpus`;
+- license: `CC BY-SA 4.0`;
+- size: approximately 17.3 MB;
+- described source: CLAIR collection of fraud email;
+- citation requested by dataset notes: `Radev, D. (2008), CLAIR collection of fraud email, ACL Data and Code Repository, ADCR2008T001`;
+- described content: more than 2,500 Nigerian or 419 fraud letters from 1998 to 2007;
+- described format: a single text file containing messages with email-like headers.
+
+Local download observation:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\fradulent_emails.txt
+```
+
+The downloaded file exists outside the repository and matches the expected approximate size. The filename uses the upstream spelling `fradulent_emails.txt`.
+
+Preparation status:
+
+- ingestion support exists as project tooling under `tools/ml_data_preparation/`;
+- tests use synthetic messages that mimic the corpus shape and do not include raw corpus content;
+- real corpus preparation should run in Kaggle or another isolated environment;
+- generated JSONL outputs must remain outside the repository.
+
 Potential use:
 
 - complementary fraud and social-engineering language;
@@ -137,6 +170,12 @@ Important caveats:
 
 - may not represent modern credential phishing or account-verification lures well;
 - should not be treated as a direct substitute for phishing email corpora.
+
+Current decision:
+
+- approved for controlled preparation experiments outside the repository;
+- acceptable for suspicious fraud/social-engineering training experiments if license and attribution requirements are followed;
+- not yet approved for committed raw data, generated artifacts, or runtime inference integration.
 
 ### Kaggle Phishing Email Datasets
 

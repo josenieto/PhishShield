@@ -5581,3 +5581,55 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Verify Fraudulent E-mail Corpus access, licensing, raw format, label structure, and privacy risk before adding any ingestion prototype.
+
+---
+
+## 2026-07-11 - Add fraudulent email corpus preparation tooling
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+After selecting the Fraudulent E-mail Corpus as the next phishing-adjacent dataset candidate, the project needed preparation tooling that could learn from the real corpus without committing raw fraudulent emails or placing real samples in tests.
+
+### Decision
+
+Added Fraudulent E-mail Corpus preparation tooling using synthetic unit tests.
+
+The command prepares the upstream single text file into the existing PhishShield ML JSONL shape, labels messages as `suspicious`, and preserves source metadata for later experiment tracking.
+
+Real corpus execution should happen outside the repository, preferably in Kaggle or another isolated environment. Raw corpus content and generated JSONL outputs must remain outside Git.
+
+### Files changed
+
+- `tools/ml_data_preparation/fraudulent_email_corpus.py`
+- `tools/ml_data_preparation/prepare_fraudulent_email_corpus.py`
+- `tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py`
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py
+python -m pytest tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_validate_prepared_dataset.py
+python -m pytest
+python -m pre_commit run --files tools/ml_data_preparation/fraudulent_email_corpus.py tools/ml_data_preparation/prepare_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATA_PREPARATION_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests passed. Full backend suite passed. Final pre-commit checks passed.
+```
+
+### Next step
+
+Run the preparation command against the real corpus in Kaggle or another isolated environment, then validate the generated JSONL output and compare baseline metrics against the SpamAssassin-only baseline.
