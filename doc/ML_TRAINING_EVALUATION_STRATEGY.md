@@ -357,6 +357,22 @@ Interpretation:
 
 This result blocks model artifact work until the training dataset is expanded beyond SpamAssassin ham/spam.
 
+### Next dataset candidate
+
+The next candidate to investigate is the Fraudulent E-mail Corpus.
+
+This follows from the fixture holdout result: the current SpamAssassin-trained baseline exercises the training and evaluation tooling, but it does not model phishing or benign business-email behavior well enough for artifact work.
+
+The next step is limited to dataset research:
+
+- verify access and source stability;
+- record license and redistribution constraints;
+- inspect raw message format and labels;
+- review PII and sensitive-content handling needs;
+- decide whether a focused ingestion prototype is justified.
+
+The Fraudulent E-mail Corpus is expected to add fraud and social-engineering language coverage. It is not expected to fully replace a modern credential-phishing corpus, so Nazario or another trustworthy phishing-specific source should remain a later target if access and licensing can be confirmed.
+
 ---
 
 ## First Baseline Training Result
