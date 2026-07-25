@@ -301,12 +301,18 @@ Recommended reporting slices:
 This preparation plan does not implement:
 
 - dataset download scripts;
-- general parsing scripts beyond the initial SpamAssassin preparation command;
 - training scripts;
 - model artifacts;
 - model runtime dependencies;
 - API or frontend changes;
 - automatic dataset redistribution.
+
+Implemented preparation commands currently cover:
+
+- SpamAssassin directory preparation;
+- Fraudulent E-mail Corpus single-file preparation.
+
+The Fraudulent E-mail Corpus command must be exercised against real corpus content outside the repository, preferably in Kaggle or another isolated environment. Unit tests for that command use synthetic messages only.
 
 ---
 
@@ -353,6 +359,43 @@ Supported holdout labels:
 benign
 suspicious
 ```
+
+---
+
+## Fraudulent E-mail Corpus Preparation
+
+The Fraudulent E-mail Corpus can be prepared with:
+
+```text
+python -m tools.ml_data_preparation.prepare_fraudulent_email_corpus --input-file path/to/fradulent_emails.txt --output path/to/fraudulent_email_corpus.jsonl
+```
+
+The command expects the upstream single text file and writes canonical PhishShield ML JSONL rows.
+
+Preparation mapping:
+
+```text
+source: fraudulent_email_corpus
+source_uri: https://www.kaggle.com/datasets/rtatman/fraudulent-email-corpus
+original_label: fraud
+normalized_label: suspicious
+```
+
+Operational rules:
+
+- keep the raw corpus outside the repository;
+- keep generated JSONL outputs outside the repository;
+- run real-corpus preparation in Kaggle or another isolated environment when local handling is unsuitable;
+- use synthetic messages only for committed unit tests;
+- validate generated JSONL with `tools.ml_data_preparation.validate_prepared_dataset` before training.
+
+The upstream filename observed in the Kaggle download is:
+
+```text
+fradulent_emails.txt
+```
+
+The misspelling is preserved by the upstream dataset and should be handled as the real input filename.
 
 ---
 
