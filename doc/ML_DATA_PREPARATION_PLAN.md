@@ -374,6 +374,8 @@ The command expects the upstream single text file and writes canonical PhishShie
 
 The implementation reads the corpus as bytes, splits messages on ASCII email boundaries, and passes each raw message to the email parser without first decoding the whole file as UTF-8. This preserves mixed-encoding messages better than a whole-corpus text conversion.
 
+The email parser also applies conservative fallbacks for non-standard charsets observed in the corpus, including `ansi`, `default`, `unknown-8bit`, `windows-125`, `x-user-defined`, and invalid charset names.
+
 Preparation mapping:
 
 ```text
@@ -398,6 +400,21 @@ fradulent_emails.txt
 ```
 
 The misspelling is preserved by the upstream dataset and should be handled as the real input filename.
+
+A Kaggle preparation test with charset fallback produced:
+
+```text
+discovered: 3906
+processed: 3906
+failed: 0
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: suspicious=3906
+empty_subject: 88
+empty_body: 85
+urls_found: 2161
+output_bytes: 12984691
+```
 
 ---
 

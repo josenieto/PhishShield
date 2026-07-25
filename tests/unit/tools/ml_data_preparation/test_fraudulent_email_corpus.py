@@ -80,6 +80,26 @@ def test_should_prepare_non_utf8_message_without_replacement_decoding() -> None:
     assert sample.body_text == "Transferencia especial para caf\u00e9."
 
 
+def test_should_prepare_message_with_non_standard_charset() -> None:
+    sample = prepare_fraudulent_email_corpus_message(
+        raw_message=_non_standard_charset_message_bytes(b"ansi"),
+        source_id="message-00003",
+    )
+
+    assert sample.subject == "Oferta especial"
+    assert sample.body_text == "Transferencia especial para caf\u00e9."
+
+
+def test_should_prepare_message_with_invalid_charset() -> None:
+    sample = prepare_fraudulent_email_corpus_message(
+        raw_message=_non_standard_charset_message_bytes(b"iso-4470lgm1879-728jaagth"),
+        source_id="message-00004",
+    )
+
+    assert sample.subject == "Oferta especial"
+    assert sample.body_text == "Transferencia especial para caf\u00e9."
+
+
 def _sample_corpus_text() -> str:
     return "\n".join(
         [
@@ -114,6 +134,19 @@ def _latin1_sample_message_bytes() -> bytes:
             b"From: Sender <sender@example.net>",
             b"Subject: Oferta especial",
             b"Content-Type: text/plain; charset=iso-8859-1",
+            b"",
+            b"Transferencia especial para caf\xe9.",
+        ]
+    )
+
+
+def _non_standard_charset_message_bytes(charset: bytes) -> bytes:
+    return b"\n".join(
+        [
+            b"Return-Path: <sender@example.net>",
+            b"From: Sender <sender@example.net>",
+            b"Subject: Oferta especial",
+            b"Content-Type: text/plain; charset=" + charset,
             b"",
             b"Transferencia especial para caf\xe9.",
         ]
