@@ -318,6 +318,45 @@ It trains a temporary baseline from prepared JSONL inputs, prepares a fixed set 
 
 The first fixture holdout is intended to evaluate whether a SpamAssassin-trained ham/spam baseline transfers any useful signal to realistic PhishShield examples. It is not a production phishing-quality benchmark.
 
+### First fixture holdout result
+
+The first fixture holdout used the SpamAssassin-trained balanced baseline with the `text_with_light_metadata` feature set.
+
+Result:
+
+```text
+total: 10
+correct: 4
+accuracy: 0.4000
+false_positive_benign: 5
+false_negative_suspicious: 1
+```
+
+Per-fixture outcome:
+
+| Fixture | Expected | Predicted | Result |
+|---|---|---|---|
+| `benign_account_summary.eml` | `benign` | `suspicious` | False positive |
+| `benign_invoice_with_pdf.eml` | `benign` | `suspicious` | False positive |
+| `benign_security_alert_login_notice.eml` | `benign` | `suspicious` | False positive |
+| `benign_html_only_newsletter_notice.eml` | `benign` | `suspicious` | False positive |
+| `benign_support_ticket_update.eml` | `benign` | `suspicious` | False positive |
+| `suspicious_html_notice.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_shortener_login_notice.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_html_only_credential_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_qr_login_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_cloud_share_auth_failure.eml` | `suspicious` | `benign` | False negative |
+
+Interpretation:
+
+- the SpamAssassin-only baseline validates the mechanics of the ML pipeline;
+- it is not acceptable as a phishing model;
+- it over-flags benign business/security/support fixtures;
+- it misses at least one strong suspicious fixture;
+- phishing-specific and benign business-email datasets are required before model artifacts or inference adapters should be considered.
+
+This result blocks model artifact work until the training dataset is expanded beyond SpamAssassin ham/spam.
+
 ---
 
 ## First Baseline Training Result
