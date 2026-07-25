@@ -5535,3 +5535,49 @@ Targeted guard-script validation passed.
 ### Next step
 
 Observe the hook ergonomics during normal development and only extend them further if a repeated workflow failure or architectural drift pattern appears.
+
+---
+
+## 2026-07-11 - Select next ML dataset candidate
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+The first PhishShield fixture holdout showed that a SpamAssassin-only ham/spam baseline validates the ML tooling but does not transfer well to realistic phishing and benign business-email fixtures.
+
+Before adding model artifacts or real inference adapters, the next ML step needed a documented phishing-adjacent dataset candidate and explicit constraints around access, licensing, format, and privacy review.
+
+### Decision
+
+Selected the Fraudulent E-mail Corpus as the next dataset candidate to investigate.
+
+This is a research selection only. It does not approve training, redistribution, ingestion tooling, model artifact generation, or inference integration yet.
+
+Nazario remains blocked until a trustworthy access path and license are confirmed. Kaggle datasets remain deferred until provenance, license, duplicates, synthetic rows, and label quality can be manually audited.
+
+### Files changed
+
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Verify Fraudulent E-mail Corpus access, licensing, raw format, label structure, and privacy risk before adding any ingestion prototype.
