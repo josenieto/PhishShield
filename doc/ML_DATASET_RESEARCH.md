@@ -180,6 +180,31 @@ This mix supports a future classifier that distinguishes:
 
 ---
 
+## Next Dataset Candidate Decision
+
+The next dataset candidate to investigate is the Fraudulent E-mail Corpus.
+
+This is a research selection, not approval to train on or redistribute the corpus. Access, licensing, format, and privacy risk still need to be confirmed before any ingestion prototype is added.
+
+Reasons for selecting it next:
+
+- the SpamAssassin-only baseline already validated the ML pipeline mechanics but did not transfer well to PhishShield phishing fixtures;
+- the corpus is more aligned with fraud and social-engineering language than generic spam corpora;
+- the currently known Nazario access path returned `403 Forbidden`, so it is blocked until a trustworthy source and license are confirmed;
+- Kaggle datasets remain deferred because provenance, license, duplicates, synthetic rows, and label quality vary widely.
+
+Expected investigation outcome:
+
+- confirm whether the corpus can be accessed from a stable source;
+- record license and redistribution constraints;
+- inspect message format and label structure;
+- identify PII or sensitive-content handling requirements;
+- decide whether a small ingestion prototype is justified.
+
+The corpus should be treated as a phishing-adjacent fraud and social-engineering source. It should not be treated as a complete substitute for modern credential-phishing data.
+
+---
+
 ## Baseline Model Recommendation
 
 The first useful model should be simple and cheap before any heavier model is attempted.
