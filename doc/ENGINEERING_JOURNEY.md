@@ -5170,6 +5170,52 @@ Run the fixture holdout evaluation against the prepared SpamAssassin JSONL files
 
 ---
 
+## 2026-07-10 - Record fixture holdout evaluation results
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+The fixture holdout evaluator had been added, but the first real holdout result needed to be recorded before deciding whether to continue toward model artifacts or expand the training data.
+
+### Decision
+
+Recorded the first PhishShield fixture holdout result for the SpamAssassin-trained baseline.
+
+The result showed `accuracy=0.4000`, five benign false positives, and one suspicious false negative. This confirms that the SpamAssassin-only baseline validates the mechanics of the ML pipeline but is not acceptable as a phishing model.
+
+The next ML data step should prioritize phishing-specific and benign business-email datasets before any artifact or inference adapter work.
+
+### Files changed
+
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATASET_RESEARCH.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Fixture holdout: total=10, correct=4, accuracy=0.4000, false_positive_benign=5, false_negative_suspicious=1
+Documentation hooks: pending targeted verification after recording fixture holdout results.
+```
+
+### Next step
+
+Research or select the next phishing-specific dataset candidate before adding model artifacts or real inference adapters.
+
+---
+
 ## 2026-07-06 - Add prepared dataset validation command
 
 Type: Feature
