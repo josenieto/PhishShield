@@ -373,6 +373,8 @@ The next step is limited to dataset research:
 
 The Fraudulent E-mail Corpus is expected to add fraud and social-engineering language coverage. It is not expected to fully replace a modern credential-phishing corpus, so Nazario or another trustworthy phishing-specific source should remain a later target if access and licensing can be confirmed.
 
+Preparation tooling for this corpus should be developed with synthetic tests only. The real corpus should be processed in Kaggle or another isolated environment, and generated JSONL outputs should remain outside the repository.
+
 ---
 
 ## First Baseline Training Result
