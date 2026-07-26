@@ -1,3 +1,4 @@
+import codecs
 import re
 from collections import OrderedDict
 
@@ -20,6 +21,13 @@ _RECEIVED_SPF_RESULT_PATTERN = re.compile(
 )
 _TRAILING_URL_PUNCTUATION = ".,;:!?) ]"
 _DEFAULT_MAX_BODY_CHARS = 100_000
+_NON_STANDARD_CHARSET_FALLBACKS = {
+    "ansi": "windows-1252",
+    "default": "windows-1252",
+    "unknown-8bit": "windows-1252",
+    "windows-125": "windows-1252",
+    "x-user-defined": "windows-1252",
+}
 
 
 class PythonEmailContentExtractorAdapter:
@@ -271,9 +279,21 @@ def _decode_text_part(part: Message) -> str:
     if not isinstance(payload, bytes):
         return ""
 
-    charset = part.get_content_charset() or "utf-8"
+    charset = _normalize_charset(part.get_content_charset())
+
+    return payload.decode(charset, errors="replace").strip()
+
+
+def _normalize_charset(charset: str | None) -> str:
+    if not charset:
+        return "utf-8"
+
+    normalized_charset = charset.strip().strip("\"'").lower()
+    fallback_charset = _NON_STANDARD_CHARSET_FALLBACKS.get(normalized_charset, normalized_charset)
 
     try:
-        return payload.decode(charset, errors="replace").strip()
+        codecs.lookup(fallback_charset)
     except LookupError:
-        return payload.decode("utf-8", errors="replace").strip()
+        return "windows-1252"
+
+    return fallback_charset

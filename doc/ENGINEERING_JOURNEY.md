@@ -5635,3 +5635,67 @@ Focused tests passed. Full backend suite passed. Final pre-commit checks passed.
 ### Next step
 
 Run the preparation command against the real corpus in Kaggle or another isolated environment, then validate the generated JSONL output and compare baseline metrics against the SpamAssassin-only baseline.
+
+---
+
+## 2026-07-12 - Handle non-standard fraudulent corpus charsets
+
+Type: Fix
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+The Kaggle preparation dry run for the Fraudulent E-mail Corpus discovered `3906` messages but failed on `63` messages due to non-standard or invalid charset labels such as `ansi`, `default`, `unknown-8bit`, `windows-125`, and `x-user-defined`.
+
+### Decision
+
+Added conservative charset fallback handling in the Python email parser adapter.
+
+The fallback maps known non-standard charset labels to `windows-1252` and falls back to `windows-1252` for invalid charset names. The ML preparation tooling continues to preserve raw message bytes and delegates per-message decoding to the email parser.
+
+A follow-up Kaggle preparation test with charset fallback processed all detected corpus messages:
+
+```text
+discovered: 3906
+processed: 3906
+failed: 0
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: suspicious=3906
+empty_subject: 88
+empty_body: 85
+urls_found: 2161
+output_bytes: 12984691
+```
+
+### Files changed
+
+- `src/infrastructure/adapters/email_parser/python_email_content_extractor.py`
+- `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_body.py`
+- `tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py`
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_body.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py
+python -m pytest
+python -m pre_commit run --files src/infrastructure/adapters/email_parser/python_email_content_extractor.py tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_body.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests passed. Full backend suite passed. Final pre-commit checks passed.
+```
+
+### Next step
+
+Use the prepared Fraudulent E-mail Corpus JSONL outside Git to train a fraud/social-engineering baseline and compare fixture holdout behavior against the SpamAssassin-only baseline.
