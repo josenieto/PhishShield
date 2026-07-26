@@ -5699,3 +5699,74 @@ Focused tests passed. Full backend suite passed. Final pre-commit checks passed.
 ### Next step
 
 Use the prepared Fraudulent E-mail Corpus JSONL outside Git to train a fraud/social-engineering baseline and compare fixture holdout behavior against the SpamAssassin-only baseline.
+
+---
+
+## 2026-07-12 - Evaluate fraud corpus baseline
+
+Type: Experiment
+Layer: Tooling
+Status: Done
+
+### Context
+
+After preparing the Fraudulent E-mail Corpus with byte-preserving parsing and non-standard charset fallback, the next question was whether fraud/social-engineering training data improved the ML baseline compared with the SpamAssassin-only suspicious class.
+
+### Decision
+
+Trained a balanced baseline using SpamAssassin `easy_ham_full.jsonl` as benign data and the prepared Fraudulent E-mail Corpus JSONL as suspicious data.
+
+The validation metrics were strong inside the selected sources:
+
+```text
+samples: 5002
+train_samples: 4001
+validation_samples: 1001
+labels: benign=2501, suspicious=2501
+accuracy: 0.9860
+precision_suspicious: 1.0000
+recall_suspicious: 0.9720
+f1_suspicious: 0.9858
+confusion_matrix: [[501, 0], [14, 486]]
+```
+
+The PhishShield fixture holdout did not improve overall accuracy:
+
+```text
+total: 10
+correct: 4
+accuracy: 0.4000
+false_positive_benign: 1
+false_negative_suspicious: 5
+```
+
+Compared with the SpamAssassin-only holdout, the fraud corpus baseline reduced benign false positives from `5` to `1`, but increased suspicious false negatives from `1` to `5`.
+
+This confirms that the Fraudulent E-mail Corpus helps with fraud/social-engineering separation from benign mail, but it is not sufficient for modern phishing fixture recall. Model artifact and inference adapter work remain deferred.
+
+### Files changed
+
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl"
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\metrics\baseline_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATA_PREPARATION_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Validation, training, fixture holdout, and documentation pre-commit checks passed.
+```
+
+### Next step
+
+Investigate a modern phishing-specific dataset or add a benign business-email source before any model artifact or inference adapter work.

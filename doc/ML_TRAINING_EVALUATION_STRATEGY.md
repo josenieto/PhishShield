@@ -379,6 +379,93 @@ A Kaggle structural inspection found `3906` detected messages, `3839` subjects, 
 
 A follow-up Kaggle preparation test with non-standard charset fallback processed all `3906` detected messages with `0` failures, `0` invalid rows, `0` duplicate sample IDs, `88` empty subjects, `85` empty bodies, and `2161` extracted URLs. This makes the corpus usable for the next fraud/social-engineering baseline experiment, while keeping raw and generated data outside Git.
 
+### Fraud corpus baseline result
+
+The first fraud/social-engineering baseline used SpamAssassin `easy_ham_full.jsonl` as the benign source and the prepared Fraudulent E-mail Corpus JSONL as the suspicious source.
+
+Input files were stored outside the repository:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl
+```
+
+Prepared Fraudulent E-mail Corpus validation result:
+
+```text
+files: 1
+rows: 3906
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: suspicious=3906
+empty_subject: 88
+empty_body: 85
+urls_found: 2161
+```
+
+Training settings:
+
+```text
+strategy: balanced
+feature_set: text_with_light_metadata
+validation_ratio: 0.2
+random_seed: 42
+samples: 5002
+train_samples: 4001
+validation_samples: 1001
+labels: benign=2501, suspicious=2501
+```
+
+Validation result:
+
+```text
+accuracy: 0.9860
+precision_suspicious: 1.0000
+recall_suspicious: 0.9720
+f1_suspicious: 0.9858
+confusion_matrix_labels: benign,suspicious
+confusion_matrix: [[501, 0], [14, 486]]
+```
+
+PhishShield fixture holdout result:
+
+```text
+total: 10
+correct: 4
+accuracy: 0.4000
+false_positive_benign: 1
+false_negative_suspicious: 5
+```
+
+Per-fixture outcome:
+
+| Fixture | Expected | Predicted | Result |
+|---|---|---|---|
+| `benign_account_summary.eml` | `benign` | `benign` | Correct |
+| `benign_invoice_with_pdf.eml` | `benign` | `suspicious` | False positive |
+| `benign_security_alert_login_notice.eml` | `benign` | `benign` | Correct |
+| `benign_html_only_newsletter_notice.eml` | `benign` | `benign` | Correct |
+| `benign_support_ticket_update.eml` | `benign` | `benign` | Correct |
+| `suspicious_html_notice.eml` | `suspicious` | `benign` | False negative |
+| `suspicious_shortener_login_notice.eml` | `suspicious` | `benign` | False negative |
+| `suspicious_html_only_credential_lure.eml` | `suspicious` | `benign` | False negative |
+| `suspicious_qr_login_lure.eml` | `suspicious` | `benign` | False negative |
+| `suspicious_cloud_share_auth_failure.eml` | `suspicious` | `benign` | False negative |
+
+Comparison with the SpamAssassin-only holdout:
+
+```text
+SpamAssassin-only: accuracy=0.4000, false_positive_benign=5, false_negative_suspicious=1
+Fraud corpus baseline: accuracy=0.4000, false_positive_benign=1, false_negative_suspicious=5
+```
+
+Interpretation:
+
+- the Fraudulent E-mail Corpus improves benign fixture behavior by reducing false positives;
+- it does not improve phishing fixture recall and misses all suspicious holdout fixtures;
+- validation metrics inside the training sources remain high, but the fixture holdout confirms that 419 fraud language is not enough for modern phishing behavior;
+- model artifact and inference adapter work remain blocked until modern phishing-specific data is added.
+
 ---
 
 ## First Baseline Training Result
