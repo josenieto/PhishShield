@@ -500,6 +500,29 @@ Required verification before training:
 - keep generated JSONL outside Git;
 - evaluate against the same PhishShield fixture holdout before any model artifact decision.
 
+Schema and quality verification result:
+
+```text
+bytes: 52034604
+columns: '', Email Text, Email Type
+rows: 18650
+parse_errors: 0
+labels: Safe Email=11322, Phishing Email=7328
+empty_text: 19
+duplicate_text: 1127
+duplicate_text_ratio: 0.0604
+short_rows_lt_30: 584
+long_rows_gt_10000: 397
+url_only_rows: 1
+```
+
+Decision:
+
+- approve a controlled preparation POC;
+- require quality counters and cleaning for empty, duplicate, short, long, URL-only, and spam-like rows;
+- do not treat the source as a clean modern phishing corpus;
+- keep model artifact and inference adapter work deferred until fixture holdout improves.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.

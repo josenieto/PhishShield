@@ -465,6 +465,55 @@ urls_found: 2161
 
 ---
 
+## Phishing Email Detection Preparation Candidate
+
+The `Phishing Email Detection` CSV candidate was downloaded outside Git for schema and quality inspection:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\raw\Phishing_Email.csv
+```
+
+Observed schema:
+
+```text
+columns: '', Email Text, Email Type
+labels: Safe Email, Phishing Email
+```
+
+Planned label mapping for a controlled preparation POC:
+
+```text
+Safe Email -> benign
+Phishing Email -> suspicious
+```
+
+Inspection summary:
+
+```text
+rows: 18650
+parse_errors: 0
+labels: Safe Email=11322, Phishing Email=7328
+empty_text: 19
+duplicate_text: 1127
+short_rows_lt_30: 584
+long_rows_gt_10000: 397
+url_only_rows: 1
+```
+
+Required preparation behavior:
+
+- keep the raw CSV and generated JSONL outside the repository;
+- reject or report empty text rows;
+- report duplicate text rows;
+- report very short, very long, URL-only, and no-alpha rows;
+- preserve the original label in metadata;
+- map labels into `benign` and `suspicious` only after validating exact label strings;
+- emit aggregate quality counters for spam-like and phishing-like keyword groups.
+
+The dataset is approved for a controlled ingestion POC, but not as a clean phishing source. The first experiment must interpret results cautiously because the `Phishing Email` class contains noticeable spam-like marketing, adult, pharma, mortgage, stock, and investment language.
+
+---
+
 ## First Local Dry Run Result
 
 The first local dry run used a manually downloaded SpamAssassin subset stored outside the repository:

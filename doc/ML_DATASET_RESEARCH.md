@@ -281,8 +281,41 @@ Important caveats:
 Current decision:
 
 - selected as the next modern phishing email dataset candidate for access, license, format, and quality verification;
-- approved only for a controlled ingestion POC after local or Kaggle inspection confirms usable columns and labels;
+- approved for a controlled ingestion POC with mandatory cleaning after local inspection confirmed parseable CSV structure and usable labels;
 - not approved for model artifacts or inference integration.
+
+Local schema and quality inspection used the manually downloaded CSV stored outside the repository:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\raw\Phishing_Email.csv
+```
+
+Inspection result:
+
+```text
+bytes: 52034604
+columns: '', Email Text, Email Type
+rows: 18650
+parse_errors: 0
+labels: Safe Email=11322, Phishing Email=7328
+null_text: 0
+empty_text: 19
+duplicate_text: 1127
+duplicate_text_ratio: 0.0604
+short_rows_lt_30: 584
+long_rows_gt_10000: 397
+url_only_rows: 1
+no_alpha_rows: 1
+```
+
+Per-label quality notes:
+
+```text
+Phishing Email: rows=7328, empty_text=19, duplicate_text=783, short_rows_lt_30=374, long_rows_gt_10000=137, url_only_rows=0
+Safe Email: rows=11322, empty_text=0, duplicate_text=344, short_rows_lt_30=210, long_rows_gt_10000=260, url_only_rows=1
+```
+
+The dataset is usable for a preparation prototype, but it is not a clean modern phishing corpus. The `Phishing Email` class includes many spam-like and marketing/adult/pharma/stock terms, so the first ingestion must include filtering or at least explicit quality counters for empty, duplicate, very short, very long, URL-only, and spam-like rows.
 
 ### PhishingEmailDetectionv2.0
 
@@ -402,6 +435,8 @@ Expected investigation outcome:
 - inspect duplicate, empty, null, URL-only, and spam-like rows;
 - decide whether the source is good enough for a controlled ingestion POC;
 - keep the PhishShield fixture holdout outside training.
+
+Inspection completed and confirmed a controlled ingestion POC is justified, with mandatory cleaning and quality reporting. The POC must not treat the dataset as a clean phishing source.
 
 Secondary candidates remain `PhishingEmailDetectionv2.0` for a later email-row-only experiment and `Phishing Email Curated Cleaned` for source-aware benchmarking after leakage controls are designed.
 

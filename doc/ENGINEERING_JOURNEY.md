@@ -5870,3 +5870,67 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Apply the isolated workflow to future raw email corpora when local raw inspection is unsuitable, including the next `Phishing Email Detection` schema and quality verification if needed.
+
+---
+
+## 2026-07-12 - Verify phishing email detection schema
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+After selecting `Phishing Email Detection` as the next modern phishing email dataset candidate, the project needed to verify the downloaded CSV schema and quality before adding ingestion tooling.
+
+### Decision
+
+Inspected the manually downloaded `Phishing_Email.csv` outside Git and approved a controlled ingestion POC with mandatory cleaning and quality reporting.
+
+The CSV is parseable and has usable labels:
+
+```text
+bytes: 52034604
+columns: '', Email Text, Email Type
+rows: 18650
+parse_errors: 0
+labels: Safe Email=11322, Phishing Email=7328
+```
+
+Quality checks found issues that must be handled by the preparation command:
+
+```text
+empty_text: 19
+duplicate_text: 1127
+duplicate_text_ratio: 0.0604
+short_rows_lt_30: 584
+long_rows_gt_10000: 397
+url_only_rows: 1
+```
+
+The `Phishing Email` class contains enough phishing-like language to justify a POC, but also noticeable spam-like marketing, adult, pharma, stock, mortgage, and investment language. The dataset must therefore be treated as a noisy phishing/spam email-text source, not a clean modern credential-phishing corpus.
+
+### Files changed
+
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Add preparation tooling for `Phishing Email Detection` that maps labels to `benign` and `suspicious`, rejects or reports empty rows, and emits quality counters before any training experiment.
