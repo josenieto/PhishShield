@@ -466,6 +466,45 @@ Interpretation:
 - validation metrics inside the training sources remain high, but the fixture holdout confirms that 419 fraud language is not enough for modern phishing behavior;
 - model artifact and inference adapter work remain blocked until modern phishing-specific data is added.
 
+### Next modern phishing dataset candidate
+
+The next selected candidate is `Phishing Email Detection`:
+
+```text
+Kaggle: https://www.kaggle.com/datasets/subhajournal/phishingemails
+Hugging Face mirror: https://huggingface.co/datasets/zefang-liu/phishing-email-dataset
+```
+
+Observed metadata:
+
+```text
+license: LGPL-3.0
+format: CSV
+rows: approximately 18.7k in the Hugging Face mirror
+columns: Email Text, Email Type
+labels: Safe Email, Phishing Email
+```
+
+Reason for selecting it:
+
+- it contains labeled email text rather than only phishing URLs;
+- it is more directly aligned with phishing email classification than SpamAssassin spam or 419 fraud;
+- it has enough rows for a controlled baseline experiment;
+- it is smaller and simpler than mixed URL/email or aggregated benchmark corpora.
+
+Required verification before training:
+
+- confirm downloaded schema and label values;
+- inspect null, empty, duplicate, and URL-only rows;
+- map labels into `benign` and `suspicious` consistently;
+- keep generated JSONL outside Git;
+- evaluate against the same PhishShield fixture holdout before any model artifact decision.
+
+Secondary candidates:
+
+- `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
+- `it4lia/PhishingEmailCuratedDatasets_Cleaned`: large cleaned aggregation; defer until source overlap, leakage, and benchmark split controls are designed.
+
 ---
 
 ## First Baseline Training Result
