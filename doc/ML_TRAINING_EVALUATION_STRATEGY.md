@@ -377,6 +377,8 @@ Preparation tooling for this corpus should be developed with synthetic tests onl
 
 A Kaggle structural inspection found `3906` detected messages, `3839` subjects, `52` empty bodies, and `2781` body URLs. A naive whole-file UTF-8 decode produced `10524` replacement characters, so preparation should preserve raw bytes and let the email parser handle per-message charset and MIME decoding.
 
+A follow-up Kaggle preparation test with non-standard charset fallback processed all `3906` detected messages with `0` failures, `0` invalid rows, `0` duplicate sample IDs, `88` empty subjects, `85` empty bodies, and `2161` extracted URLs. This makes the corpus usable for the next fraud/social-engineering baseline experiment, while keeping raw and generated data outside Git.
+
 ---
 
 ## First Baseline Training Result
