@@ -316,6 +316,40 @@ The Fraudulent E-mail Corpus command must be exercised against real corpus conte
 
 ---
 
+## Isolated Kaggle Preparation Workflow
+
+Some raw email corpora contain suspicious links, malware-themed attachment names, exploit-like text, scam content, or other indicators that can make direct local inspection unsuitable. The project should not disable local security protections to inspect those corpora.
+
+When local raw inspection is unsuitable, use Kaggle Notebook or another isolated research environment to prepare the dataset.
+
+The isolated workflow is:
+
+1. Attach or download the raw dataset inside the isolated environment.
+2. Read raw corpus bytes inside that environment.
+3. Print only aggregate structural metrics, such as message counts, header counts, empty body counts, URL counts, charset issues, and output row counts.
+4. Generate canonical PhishShield ML JSONL inside the isolated environment.
+5. Validate the generated JSONL shape inside the isolated environment when practical.
+6. Download only the generated JSONL to the approved local temporary dataset directory outside Git if local training is needed.
+7. Run local validation again before training.
+
+Do not copy raw email bodies, raw corpus excerpts, or real phishing/fraudulent samples into:
+
+- the repository;
+- unit tests;
+- documentation;
+- chat transcripts;
+- issue descriptions.
+
+Approved local storage pattern for generated datasets remains outside Git:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\<dataset-name>\prepared\
+```
+
+The Fraudulent E-mail Corpus used this workflow: raw corpus inspection and JSONL generation were performed in Kaggle Notebook, then the prepared JSONL was downloaded outside Git for local validation, training, and fixture holdout evaluation.
+
+---
+
 ## Prepared Dataset Validation
 
 The validation command checks prepared JSONL files before any training step.
