@@ -52,6 +52,24 @@ def test_should_prepare_corpus_file_without_utf8_replacement_decoding(tmp_path: 
     assert rows[0]["body_text"] == "Transferencia especial para caf\u00e9."
 
 
+def test_should_prepare_corpus_file_with_non_standard_charset(tmp_path: Path) -> None:
+    input_file = tmp_path / "fradulent_emails.txt"
+    output_path = tmp_path / "prepared" / "fraudulent.jsonl"
+    input_file.write_bytes(_non_standard_charset_message_bytes(b"default"))
+
+    summary = prepare_fraudulent_email_corpus_file(
+        input_file=input_file,
+        output_path=output_path,
+    )
+    rows = [json.loads(line) for line in output_path.read_text(encoding="utf-8").splitlines()]
+
+    assert summary.discovered == 1
+    assert summary.processed == 1
+    assert summary.failed == 0
+    assert rows[0]["subject"] == "Oferta especial"
+    assert rows[0]["body_text"] == "Transferencia especial para caf\u00e9."
+
+
 def test_should_respect_processing_limit(tmp_path: Path) -> None:
     input_file = tmp_path / "fradulent_emails.txt"
     output_path = tmp_path / "prepared" / "fraudulent.jsonl"
@@ -131,6 +149,19 @@ def _latin1_sample_message_bytes() -> bytes:
             b"From: Sender <sender@example.net>",
             b"Subject: Oferta especial",
             b"Content-Type: text/plain; charset=iso-8859-1",
+            b"",
+            b"Transferencia especial para caf\xe9.",
+        ]
+    )
+
+
+def _non_standard_charset_message_bytes(charset: bytes) -> bytes:
+    return b"\n".join(
+        [
+            b"Return-Path: <sender@example.net>",
+            b"From: Sender <sender@example.net>",
+            b"Subject: Oferta especial",
+            b"Content-Type: text/plain; charset=" + charset,
             b"",
             b"Transferencia especial para caf\xe9.",
         ]

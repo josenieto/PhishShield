@@ -175,3 +175,54 @@ def test_should_preserve_normal_body_with_default_body_size_limit() -> None:
     extracted_email = adapter.extract(email_bytes)
 
     assert extracted_email.body_text == "Short body."
+
+
+def test_should_decode_body_with_non_standard_ansi_charset() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Non-standard charset",
+            b"Content-Type: text/plain; charset=ansi",
+            b"",
+            b"Transferencia especial para caf\xe9.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == "Transferencia especial para caf\u00e9."
+
+
+def test_should_decode_body_with_unknown_8bit_charset() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Unknown 8bit charset",
+            b"Content-Type: text/plain; charset=unknown-8bit",
+            b"",
+            b"Transferencia especial para caf\xe9.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == "Transferencia especial para caf\u00e9."
+
+
+def test_should_decode_body_with_invalid_charset_using_fallback() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Alice <alice@example.com>",
+            b"Subject: Invalid charset",
+            b"Content-Type: text/plain; charset=iso-4470lgm1879-728jaagth",
+            b"",
+            b"Transferencia especial para caf\xe9.",
+        ]
+    )
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == "Transferencia especial para caf\u00e9."

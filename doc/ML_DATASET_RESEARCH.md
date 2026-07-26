@@ -159,6 +159,7 @@ Preparation status:
 - ingestion support exists as project tooling under `tools/ml_data_preparation/`;
 - tests use synthetic messages that mimic the corpus shape and do not include raw corpus content;
 - preparation preserves raw message bytes before handing each message to the email parser, which avoids a whole-corpus UTF-8 decode pass;
+- non-standard message charsets observed in the corpus are handled with a conservative Windows-1252 fallback;
 - real corpus preparation should run in Kaggle or another isolated environment;
 - generated JSONL outputs must remain outside the repository.
 
@@ -178,6 +179,23 @@ largest_body_chars: 608258
 ```
 
 The inspection confirms that the dataset is large enough and structurally parseable for controlled fraud/social-engineering experiments. It also confirms that whole-file UTF-8 decoding is not appropriate because the corpus contains mixed encodings.
+
+A follow-up Kaggle preparation test with charset fallback produced:
+
+```text
+discovered: 3906
+processed: 3906
+failed: 0
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: suspicious=3906
+empty_subject: 88
+empty_body: 85
+urls_found: 2161
+output_bytes: 12984691
+```
+
+This confirms that non-standard charsets such as `ansi`, `default`, `unknown-8bit`, `windows-125`, `x-user-defined`, and malformed charset names should not block preparation.
 
 Potential use:
 
