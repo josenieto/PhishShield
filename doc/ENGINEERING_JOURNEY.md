@@ -5826,3 +5826,47 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Verify access, schema, labels, empty rows, duplicates, URL-only rows, and license constraints for `Phishing Email Detection` before adding ingestion tooling.
+
+---
+
+## 2026-07-12 - Document isolated Kaggle preparation workflow
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+The Fraudulent E-mail Corpus work required handling raw email content containing suspicious links, scam text, malware-themed attachment names, and other security-relevant indicators. Direct local raw corpus inspection was unsuitable for that content type, but the project still needed a reproducible way to inspect structure, generate prepared JSONL, and keep raw content out of Git.
+
+### Decision
+
+Documented an isolated preparation workflow using Kaggle Notebook or another isolated research environment.
+
+The workflow keeps raw corpus inspection and JSONL generation inside the isolated environment, records only aggregate metrics in project documentation, and allows only generated JSONL artifacts to be downloaded to the approved temporary dataset directory outside Git for validation and training.
+
+The documentation explicitly avoids relying on disabling local security protections and reinforces that raw email bodies, real phishing/fraudulent samples, and generated datasets must not be committed.
+
+### Files changed
+
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_DATASET_RESEARCH.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Apply the isolated workflow to future raw email corpora when local raw inspection is unsuitable, including the next `Phishing Email Detection` schema and quality verification if needed.
