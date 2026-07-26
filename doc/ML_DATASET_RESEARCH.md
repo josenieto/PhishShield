@@ -33,6 +33,9 @@ Candidate datasets should be evaluated against these questions:
 | TREC Spam Track corpora | spam/ham evaluation | Established academic benchmark for email classification. | Availability and licensing need verification; spam is not phishing. |
 | Nazario Phishing Corpus | phishing examples | Historically phishing-specific and directly relevant. | Current access, licensing, and age require validation. |
 | Fraudulent E-mail Corpus | fraud and social engineering | Useful for persuasion and fraud-style language patterns. | Not necessarily modern credential-phishing behavior. |
+| Phishing Email Detection | phishing and safe email text | Public labeled email-text dataset with phishing and safe email classes. | Not raw `.eml`; provenance and content quality need inspection before training. |
+| PhishingEmailDetectionv2.0 | email and URL phishing classification | Large modern text dataset with explicit email and URL classes. | Mixed email/URL corpus; email rows must be isolated before use. |
+| Phishing Email Curated Cleaned | aggregated phishing/spam/legitimate corpus | Large cleaned benchmark aggregating public corpora across 1995-2022. | Aggregated and transformed; source overlap, leakage, and license compatibility need careful review. |
 | Kaggle phishing email datasets | candidate phishing/fraud data | Easy discovery and potential variety. | Provenance, license, deduplication, and label quality vary widely. |
 
 ---
@@ -227,6 +230,122 @@ Important caveats:
 - labels may be inconsistent;
 - they should be manually audited before inclusion in any training plan.
 
+### Phishing Email Detection
+
+Primary reference:
+
+```text
+https://www.kaggle.com/datasets/subhajournal/phishingemails
+```
+
+Hugging Face mirror inspected during research:
+
+```text
+https://huggingface.co/datasets/zefang-liu/phishing-email-dataset
+```
+
+Observed metadata:
+
+- Kaggle ref: `subhajournal/phishingemails`;
+- Kaggle owner: `subhajournal` / `Cyber Cop`;
+- Hugging Face mirror: `zefang-liu/phishing-email-dataset`;
+- license: `GNU Lesser General Public License 3.0`;
+- size: approximately 52 MB on Kaggle;
+- Hugging Face mirror format: CSV;
+- Hugging Face mirror rows: approximately 18.7k;
+- mirror file: `Phishing_Email.csv`;
+- visible columns: `Email Text` and `Email Type`;
+- visible labels: `Safe Email` and `Phishing Email`.
+
+Potential use:
+
+- next phishing-specific suspicious source for baseline experiments;
+- text-only or text-plus-light-metadata preparation once columns and labels are validated;
+- candidate replacement for generic spam or 419 fraud as the suspicious class.
+
+Important caveats:
+
+- not raw `.eml`, so it cannot exercise parser behavior, MIME handling, or original headers;
+- sender, receiver, attachment, and authentication metadata appear unavailable in the visible mirror;
+- visible preview includes phishing, spam-like marketing, URL-heavy messages, and safe operational/business email, so class quality must be audited;
+- license compatibility and attribution requirements must be reviewed before any packaging or artifact decisions;
+- source overlap with existing public corpora and PhishShield holdout leakage risk must be checked.
+
+Current decision:
+
+- selected as the next modern phishing email dataset candidate for access, license, format, and quality verification;
+- approved only for a controlled ingestion POC after local or Kaggle inspection confirms usable columns and labels;
+- not approved for model artifacts or inference integration.
+
+### PhishingEmailDetectionv2.0
+
+Reference:
+
+```text
+https://huggingface.co/datasets/cybersectony/PhishingEmailDetectionv2.0
+```
+
+Observed metadata:
+
+- owner: `cybersectony`;
+- format: Parquet;
+- total samples: 200,000;
+- described split: 22,644 email samples and 177,356 URL samples;
+- visible columns: `content` and `label`;
+- labels described as `legitimate_email`, `phishing_email`, `legitimate_url`, and `phishing_url`;
+- license was not visible in the inspected metadata response.
+
+Potential use:
+
+- auxiliary source if email rows can be isolated reliably;
+- useful for checking whether a larger mixed email/URL dataset improves phishing recall.
+
+Important caveats:
+
+- most rows are URLs rather than emails;
+- email and URL rows must not be mixed for the first email-text baseline;
+- license and provenance must be clarified before use;
+- several Hugging Face copies exist, so source identity and duplication need review.
+
+Current decision:
+
+- keep as secondary candidate;
+- do not use before the `Phishing Email Detection` CSV candidate is inspected.
+
+### Phishing Email Curated Cleaned
+
+Reference:
+
+```text
+https://huggingface.co/datasets/it4lia/PhishingEmailCuratedDatasets_Cleaned
+```
+
+Observed metadata:
+
+- license: `cc-by-4.0`;
+- format: Parquet plus NumPy artifacts;
+- rows: approximately 182k;
+- described as a cleaned AI-ready version of the original Phishing Email Curated Datasets aggregation;
+- source coverage described as 11 heterogeneous public email corpora spanning 1995-2022;
+- visible fields include `label_int`, `label_str`, source identifiers, sender, receiver, date, subject, URL flags, deduplication fields, and content-derived hashes.
+
+Potential use:
+
+- future benchmark or source-aware experiment after stronger provenance review;
+- useful for deduplication and source-group split research.
+
+Important caveats:
+
+- aggregated and transformed dataset, so leakage and duplicate-source handling are central risks;
+- appears to include older corpora already considered, such as Nazario, Nigerian Fraud, SpamAssassin, Enron, Ling-Spam, and CEAS-08;
+- content visibility and exact text fields need inspection before any ingestion decision;
+- because it aggregates multiple corpora, it should not be the first next POC unless simpler sources fail.
+
+Current decision:
+
+- keep as later benchmark candidate;
+- defer ingestion until source overlap and leakage controls are designed.
+
 ---
 
 ## Recommended Initial Dataset Mix
@@ -257,26 +376,27 @@ This mix supports a future classifier that distinguishes:
 
 ## Next Dataset Candidate Decision
 
-The next dataset candidate to investigate is the Fraudulent E-mail Corpus.
+The next dataset candidate to investigate is `Phishing Email Detection` (`subhajournal/phishingemails`) and its Hugging Face mirror `zefang-liu/phishing-email-dataset`.
 
-This is a research selection, not approval to train on or redistribute the corpus. Access, licensing, format, and privacy risk still need to be confirmed before any ingestion prototype is added.
+This is a research selection after the SpamAssassin-only and Fraudulent E-mail Corpus baselines both failed to improve PhishShield fixture holdout accuracy. It is not approval to train on, redistribute, package, or create model artifacts from the dataset.
 
 Reasons for selecting it next:
 
-- the SpamAssassin-only baseline already validated the ML pipeline mechanics but did not transfer well to PhishShield phishing fixtures;
-- the corpus is more aligned with fraud and social-engineering language than generic spam corpora;
-- the currently known Nazario access path returned `403 Forbidden`, so it is blocked until a trustworthy source and license are confirmed;
-- Kaggle datasets remain deferred because provenance, license, duplicates, synthetic rows, and label quality vary widely.
+- it contains labeled email text rather than only URLs or webpage features;
+- it has explicit safe and phishing email labels;
+- it is closer to credential and email-text phishing than generic spam or 419 fraud;
+- it has a visible license (`LGPL-3.0`) and a public Kaggle source plus Hugging Face mirror;
+- it is small enough for a controlled preparation POC before considering larger mixed corpora.
 
 Expected investigation outcome:
 
-- confirm whether the corpus can be accessed from a stable source;
-- record license and redistribution constraints;
-- inspect message format and label structure;
-- identify PII or sensitive-content handling requirements;
-- decide whether a small ingestion prototype is justified.
+- confirm the downloaded file name and schema;
+- map `Safe Email` and `Phishing Email` into PhishShield normalized labels;
+- inspect duplicate, empty, null, URL-only, and spam-like rows;
+- decide whether the source is good enough for a controlled ingestion POC;
+- keep the PhishShield fixture holdout outside training.
 
-The corpus should be treated as a phishing-adjacent fraud and social-engineering source. It should not be treated as a complete substitute for modern credential-phishing data.
+Secondary candidates remain `PhishingEmailDetectionv2.0` for a later email-row-only experiment and `Phishing Email Curated Cleaned` for source-aware benchmarking after leakage controls are designed.
 
 ---
 

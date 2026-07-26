@@ -5770,3 +5770,59 @@ Validation, training, fixture holdout, and documentation pre-commit checks passe
 ### Next step
 
 Investigate a modern phishing-specific dataset or add a benign business-email source before any model artifact or inference adapter work.
+
+---
+
+## 2026-07-12 - Select modern phishing email dataset candidate
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+The SpamAssassin-only and Fraudulent E-mail Corpus baselines both achieved only `0.4000` accuracy on the PhishShield fixture holdout. The fraud corpus reduced benign false positives, but it missed all suspicious fixture emails, confirming that generic spam and 419 fraud are not enough for modern phishing recall.
+
+### Decision
+
+Selected `Phishing Email Detection` as the next modern phishing email dataset candidate.
+
+References:
+
+```text
+https://www.kaggle.com/datasets/subhajournal/phishingemails
+https://huggingface.co/datasets/zefang-liu/phishing-email-dataset
+```
+
+The dataset is a labeled email-text corpus with visible `Email Text` and `Email Type` columns, `Safe Email` and `Phishing Email` labels, approximately 18.7k rows in the Hugging Face mirror, and LGPL-3.0 licensing metadata.
+
+This selection is only for access, schema, license, and quality verification. It does not approve model artifacts, inference adapters, committed raw data, or generated dataset files.
+
+Secondary candidates were recorded but deferred:
+
+- `cybersectony/PhishingEmailDetectionv2.0`, because it mixes email and URL rows and needs email-row isolation plus license clarification.
+- `it4lia/PhishingEmailCuratedDatasets_Cleaned`, because it aggregates many older corpora and requires source-overlap and leakage controls before ingestion.
+
+### Files changed
+
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Verify access, schema, labels, empty rows, duplicates, URL-only rows, and license constraints for `Phishing Email Detection` before adding ingestion tooling.
