@@ -163,8 +163,15 @@ Preparation status:
 - tests use synthetic messages that mimic the corpus shape and do not include raw corpus content;
 - preparation preserves raw message bytes before handing each message to the email parser, which avoids a whole-corpus UTF-8 decode pass;
 - non-standard message charsets observed in the corpus are handled with a conservative Windows-1252 fallback;
-- real corpus preparation should run in Kaggle or another isolated environment;
+- real corpus preparation was performed through the isolated Kaggle Notebook workflow because direct local raw corpus inspection was unsuitable for this content type;
 - generated JSONL outputs must remain outside the repository.
+
+Workflow note:
+
+- raw corpus bytes were inspected only in Kaggle Notebook;
+- only aggregate structure and validation metrics were recorded in project documentation;
+- the prepared JSONL was downloaded to the approved temporary dataset directory outside Git;
+- raw email bodies and real fraudulent samples were not copied into tests, docs, or repository files.
 
 Structural inspection in Kaggle found:
 
