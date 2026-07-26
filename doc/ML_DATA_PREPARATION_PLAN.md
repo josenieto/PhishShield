@@ -416,6 +416,19 @@ urls_found: 2161
 output_bytes: 12984691
 ```
 
+Local validation of the prepared JSONL after downloading it outside Git produced:
+
+```text
+files: 1
+rows: 3906
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: suspicious=3906
+empty_subject: 88
+empty_body: 85
+urls_found: 2161
+```
+
 ---
 
 ## First Local Dry Run Result
