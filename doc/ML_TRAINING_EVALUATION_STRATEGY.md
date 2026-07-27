@@ -754,6 +754,42 @@ accuracy > 0.6250
 
 If `hard_ham` does not improve benign calibration, the next research target should be Enron or another business-email source with explicit PII and cleanup controls.
 
+### Hard ham calibration result
+
+Three calibration variants were evaluated against the expanded PhishShield fixture holdout:
+
+```text
+baseline: Phishing Email Detection only
+A: Phishing Email Detection + hard_ham_20021010
+B: Phishing Email Detection + hard_ham_20030228
+C: Phishing Email Detection + both hard_ham subsets
+```
+
+Training validation metrics:
+
+| Variant | Accuracy | Precision suspicious | Recall suspicious | F1 suspicious | Confusion matrix |
+|---|---:|---:|---:|---:|---|
+| Baseline | `0.9661` | `0.9522` | `0.9815` | `0.9667` | `[[1390, 72], [27, 1435]]` |
+| A | `0.9658` | `0.9540` | `0.9788` | `0.9662` | `[[1393, 69], [31, 1431]]` |
+| B | `0.9682` | `0.9585` | `0.9788` | `0.9685` | `[[1400, 62], [31, 1431]]` |
+| C | `0.9679` | `0.9572` | `0.9795` | `0.9682` | `[[1398, 64], [30, 1432]]` |
+
+Expanded holdout metrics:
+
+| Variant | Accuracy | False positive benign | False negative suspicious |
+|---|---:|---:|---:|
+| Baseline | `0.6250` | `6` | `0` |
+| A | `0.6250` | `6` | `0` |
+| B | `0.6250` | `6` | `0` |
+| C | `0.6250` | `6` | `0` |
+
+Interpretation:
+
+- adding SpamAssassin `hard_ham` does not improve the expanded holdout;
+- validation metrics move slightly, but fixture behavior is unchanged;
+- `hard_ham` is not sufficient for benign account, MFA/security, and newsletter calibration;
+- the next benign source should be Enron or another business-email corpus with explicit privacy and cleanup controls.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.

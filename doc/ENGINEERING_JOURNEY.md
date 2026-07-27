@@ -6271,3 +6271,74 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Prepare or locate a local SpamAssassin `hard_ham` subset outside Git, generate JSONL with the existing SpamAssassin preparation tooling, then train a calibrated baseline with `Phishing Email Detection` plus `hard_ham`.
+
+---
+
+## 2026-07-12 - Evaluate hard ham benign calibration
+
+Type: Experiment
+Layer: Tooling
+Status: Done
+
+### Context
+
+The expanded fixture holdout showed persistent false positives on benign account, MFA/security, and newsletter messages. SpamAssassin `hard_ham` was selected as the lowest-friction benign calibration source to test before moving to higher-risk business-email corpora.
+
+### Decision
+
+Prepared both SpamAssassin `hard_ham` archives outside Git and evaluated three calibration variants.
+
+Preparation results:
+
+```text
+hard_ham_20021010.jsonl: processed=250, failed=0, empty_subject=1, empty_body=0, urls_found=10206
+hard_ham_20030228.jsonl: processed=251, failed=0, empty_subject=2, empty_body=0, urls_found=10167
+```
+
+Validation results:
+
+```text
+hard_ham_20021010.jsonl: rows=250, invalid_rows=0, duplicate_sample_ids=0, labels=benign=250
+hard_ham_20030228.jsonl: rows=251, invalid_rows=0, duplicate_sample_ids=0, labels=benign=251
+```
+
+Expanded holdout results:
+
+```text
+baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+hard_ham_20021010: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+hard_ham_20030228: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+both hard_ham subsets: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+```
+
+`hard_ham` did not improve benign calibration. The next calibration source should be Enron or another business-email corpus, but only after privacy, PII, cleanup, deduplication, and source-integrity handling are planned.
+
+### Files changed
+
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20021010\hard_ham" --label hard_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20021010.jsonl"
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20030228\hard_ham" --label hard_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20030228.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20021010.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20030228.jsonl"
+python -m tools.ml_training.train_baseline ...
+python -m tools.ml_training.evaluate_fixture_holdout ...
+python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Preparation, validation, A/B/C holdout evaluations, and documentation pre-commit checks passed.
+```
+
+### Next step
+
+Plan Enron or another business-email benign source with explicit privacy and cleanup controls before further calibration experiments.
