@@ -6225,3 +6225,49 @@ Focused tests, threshold sweep, full backend suite, and final pre-commit checks 
 ### Next step
 
 Investigate additional benign business-email data or source-aware calibration instead of relying on threshold-only tuning.
+
+---
+
+## 2026-07-12 - Select benign calibration source
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+The expanded fixture holdout and threshold sweep showed that the current phishing baseline catches suspicious fixtures but over-flags benign account, MFA/security, and newsletter-style messages. Thresholding did not improve the expanded holdout, so the next issue is benign training coverage rather than decision threshold tuning.
+
+### Decision
+
+Selected SpamAssassin `hard_ham` as the next benign calibration source to investigate.
+
+This is the lowest-friction next experiment because the project already has SpamAssassin preparation tooling and `hard_ham` should provide more difficult benign examples than `easy_ham`.
+
+Enron remains the richer follow-up candidate for business email realism, but it is deferred until privacy, PII, cleanup, deduplication, and source-integrity handling are explicitly planned.
+
+The next experiment should combine `Phishing Email Detection` with SpamAssassin `hard_ham` and evaluate against the expanded fixture holdout.
+
+### Files changed
+
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Prepare or locate a local SpamAssassin `hard_ham` subset outside Git, generate JSONL with the existing SpamAssassin preparation tooling, then train a calibrated baseline with `Phishing Email Detection` plus `hard_ham`.
