@@ -790,6 +790,53 @@ Interpretation:
 - `hard_ham` is not sufficient for benign account, MFA/security, and newsletter calibration;
 - the next benign source should be Enron or another business-email corpus with explicit privacy and cleanup controls.
 
+### Enron benign calibration plan
+
+The next benign calibration workflow candidate is the Enron Email Dataset.
+
+Reference:
+
+```text
+https://www.cs.cmu.edu/~enron/
+https://www.cs.cmu.edu/~enron/enron_mail_20150507.tar.gz
+```
+
+Reason:
+
+- SpamAssassin `hard_ham` did not change expanded holdout behavior;
+- false positives are concentrated in benign account, MFA/security, and newsletter-like messages;
+- Enron provides realistic business-email language, which is closer to the false-positive class than SpamAssassin ham.
+
+Constraints before ingestion:
+
+- plan privacy and PII handling;
+- keep raw and prepared Enron data outside Git;
+- use synthetic unit tests only;
+- report aggregate metrics only;
+- start with a capped preparation POC;
+- track mailbox/folder distribution to avoid source leakage;
+- do not use mailbox owner, folder path, or source metadata as model text features.
+
+Planned first Enron calibration experiment:
+
+```text
+benign: Phishing Email Detection benign rows + capped Enron benign rows
+suspicious: Phishing Email Detection suspicious rows
+feature_set: text_with_light_metadata
+strategy: balanced
+evaluation: expanded PhishShield fixture holdout
+```
+
+Success criteria remain:
+
+```text
+false_positive_benign < 6
+false_negative_suspicious <= 1
+accuracy > 0.6250
+```
+
+Model artifact and inference adapter work remain blocked until the expanded holdout improves and the data-handling risks are addressed.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
