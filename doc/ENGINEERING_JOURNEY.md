@@ -5934,3 +5934,82 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Add preparation tooling for `Phishing Email Detection` that maps labels to `benign` and `suspicious`, rejects or reports empty rows, and emits quality counters before any training experiment.
+
+---
+
+## 2026-07-12 - Add phishing email detection preparation tooling
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+The `Phishing Email Detection` CSV schema and quality inspection approved a controlled ingestion POC, but required cleaning and quality counters because the dataset contains empty rows, duplicates, short rows, long rows, one URL-only row, and noticeable spam-like language.
+
+### Decision
+
+Added preparation tooling for the `Phishing Email Detection` CSV.
+
+The tool maps `Safe Email` to `benign`, maps `Phishing Email` to `suspicious`, skips empty text rows, preserves original label and CSV row metadata, extracts URLs from `Email Text`, and reports duplicate, short, long, URL-only, no-alpha, phishing-keyword, and spam-keyword counters.
+
+The real dry run against the manually downloaded CSV outside Git produced:
+
+```text
+rows_read: 18650
+processed: 18631
+failed: 0
+skipped_empty_text: 19
+unsupported_label: 0
+duplicate_text: 1109
+short_rows_lt_30: 584
+long_rows_gt_10000: 397
+url_only_rows: 1
+no_alpha_rows: 1
+urls_found: 13291
+labels: benign=11322, suspicious=7309
+```
+
+Prepared JSONL validation passed:
+
+```text
+rows: 18631
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=11322, suspicious=7309
+empty_subject: 18631
+empty_body: 0
+urls_found: 13291
+```
+
+### Files changed
+
+- `tools/ml_data_preparation/phishing_email_detection.py`
+- `tools/ml_data_preparation/prepare_phishing_email_detection.py`
+- `tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py
+python -m tools.ml_data_preparation.prepare_phishing_email_detection --input-file "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\raw\Phishing_Email.csv" --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl"
+python -m pytest
+python -m pre_commit run --files tools/ml_data_preparation/phishing_email_detection.py tools/ml_data_preparation/prepare_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests, real dry run, full backend suite, and final pre-commit checks passed.
+```
+
+### Next step
+
+Train a baseline using the prepared `Phishing Email Detection` JSONL and compare PhishShield fixture holdout behavior against the SpamAssassin-only and fraud-corpus baselines.
