@@ -1,0 +1,11 @@
+From: Billing Documents <billing@invoice-review.example.net>
+Subject: Shared invoice requires QR verification
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=invoice-review.example.net; dkim=pass header.d=invoice-review.example.net; dmarc=pass header.from=invoice-review.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+An invoice document was shared with your account and requires QR verification before payment release.
+Open the verification portal at https://invoice-review.example.net/qr/verify-account and confirm your payment profile.
+
+The invoice will be locked after 24 hours.

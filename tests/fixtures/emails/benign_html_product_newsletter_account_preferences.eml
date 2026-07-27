@@ -1,0 +1,13 @@
+From: Product Updates <newsletter@updates.example.com>
+Subject: New account preferences and product updates
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=updates.example.com; dkim=pass header.d=updates.example.com; dmarc=pass header.from=updates.example.com
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <body>
+    <p>Hello,</p>
+    <p>We added new account preferences for notification frequency and dashboard layout.</p>
+    <p>Read the release notes at https://updates.example.com/releases/account-preferences.</p>
+    <p>You can change newsletter settings from your profile when convenient.</p>
+  </body>
+</html>
