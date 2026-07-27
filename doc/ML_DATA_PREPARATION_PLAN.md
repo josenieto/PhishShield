@@ -512,6 +512,44 @@ Required preparation behavior:
 
 The dataset is approved for a controlled ingestion POC, but not as a clean phishing source. The first experiment must interpret results cautiously because the `Phishing Email` class contains noticeable spam-like marketing, adult, pharma, mortgage, stock, and investment language.
 
+Preparation command:
+
+```text
+python -m tools.ml_data_preparation.prepare_phishing_email_detection --input-file path/to/Phishing_Email.csv --output path/to/phishing_email_detection.jsonl
+```
+
+The command maps labels as planned, skips empty text rows, preserves the original label and CSV row number in metadata, extracts URLs from `Email Text`, and emits quality counters for duplicate, short, long, URL-only, no-alpha, phishing-keyword, and spam-keyword rows.
+
+Real dry run result against the manually downloaded CSV outside Git:
+
+```text
+rows_read: 18650
+processed: 18631
+failed: 0
+skipped_empty_text: 19
+unsupported_label: 0
+duplicate_text: 1109
+short_rows_lt_30: 584
+long_rows_gt_10000: 397
+url_only_rows: 1
+no_alpha_rows: 1
+urls_found: 13291
+labels: benign=11322, suspicious=7309
+```
+
+Prepared JSONL validation result:
+
+```text
+files: 1
+rows: 18631
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=11322, suspicious=7309
+empty_subject: 18631
+empty_body: 0
+urls_found: 13291
+```
+
 ---
 
 ## First Local Dry Run Result
