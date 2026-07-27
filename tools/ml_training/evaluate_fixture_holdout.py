@@ -45,6 +45,7 @@ class HoldoutPrediction:
     fixture_name: str
     expected_label: str
     predicted_label: str
+    suspicious_probability: float | None = None
 
     @property
     def is_correct(self) -> bool:
@@ -98,6 +99,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         choices=[FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA],
     )
     parser.add_argument("--random-seed", type=int, default=42)
+    parser.add_argument(
+        "--suspicious-threshold",
+        type=float,
+        default=None,
+        help="Optional probability threshold for predicting suspicious fixtures.",
+    )
 
     args = parser.parse_args(argv)
     result = evaluate_fixture_holdout(
@@ -105,6 +112,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         fixtures_dir=Path(args.fixtures_dir),
         feature_set=args.feature_set,
         random_seed=args.random_seed,
+        suspicious_threshold=args.suspicious_threshold,
     )
     print_holdout_evaluation_result(result)
 
@@ -117,9 +125,13 @@ def evaluate_fixture_holdout(
     feature_set: str = FEATURE_SET_TEXT,
     random_seed: int = 42,
     fixture_labels: dict[str, str] | None = None,
+    suspicious_threshold: float | None = None,
 ) -> HoldoutEvaluationResult:
     if feature_set not in {FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA}:
         raise ValueError(f"Unsupported feature set: {feature_set}")
+
+    if suspicious_threshold is not None and not 0.0 <= suspicious_threshold <= 1.0:
+        raise ValueError("suspicious_threshold must be between 0.0 and 1.0")
 
     labels_by_fixture = DEFAULT_FIXTURE_LABELS if fixture_labels is None else fixture_labels
     training_samples = _balanced_samples(_load_samples(input_paths), random_seed=random_seed)
@@ -136,12 +148,18 @@ def evaluate_fixture_holdout(
             source_id=fixture_name,
             normalized_label=expected_label,
         )
-        predicted_label = str(model.predict([_sample_to_text(_sample_to_dict(sample), feature_set=feature_set)])[0])
+        fixture_text = _sample_to_text(_sample_to_dict(sample), feature_set=feature_set)
+        predicted_label, suspicious_probability = _predict_label(
+            model=model,
+            fixture_text=fixture_text,
+            suspicious_threshold=suspicious_threshold,
+        )
         predictions.append(
             HoldoutPrediction(
                 fixture_name=fixture_name,
                 expected_label=expected_label,
                 predicted_label=predicted_label,
+                suspicious_probability=suspicious_probability,
             )
         )
 
@@ -153,6 +171,8 @@ def print_holdout_evaluation_result(result: HoldoutEvaluationResult) -> None:
         print(f"fixture: {prediction.fixture_name}")
         print(f"expected: {prediction.expected_label}")
         print(f"predicted: {prediction.predicted_label}")
+        if prediction.suspicious_probability is not None:
+            print(f"suspicious_probability: {prediction.suspicious_probability:.4f}")
         print(f"correct: {str(prediction.is_correct).lower()}")
         print()
 
@@ -162,6 +182,32 @@ def print_holdout_evaluation_result(result: HoldoutEvaluationResult) -> None:
     print(f"accuracy: {result.accuracy:.4f}")
     print(f"false_positive_benign: {result.false_positive_benign}")
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
+
+
+def _predict_label(
+    model: Pipeline,
+    fixture_text: str,
+    suspicious_threshold: float | None,
+) -> tuple[str, float | None]:
+    if suspicious_threshold is None:
+        return str(model.predict([fixture_text])[0]), None
+
+    suspicious_probability = _predict_suspicious_probability(model, fixture_text)
+    predicted_label = (
+        NORMALIZED_LABEL_SUSPICIOUS
+        if suspicious_probability >= suspicious_threshold
+        else NORMALIZED_LABEL_BENIGN
+    )
+
+    return predicted_label, suspicious_probability
+
+
+def _predict_suspicious_probability(model: Pipeline, fixture_text: str) -> float:
+    classifier = model.named_steps["classifier"]
+    classes = list(classifier.classes_)
+    suspicious_index = classes.index(NORMALIZED_LABEL_SUSPICIOUS)
+
+    return float(model.predict_proba([fixture_text])[0][suspicious_index])
 
 
 def _train_model(samples: list[dict[str, object]], feature_set: str) -> Pipeline:

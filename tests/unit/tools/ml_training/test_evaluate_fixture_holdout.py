@@ -37,6 +37,31 @@ def test_should_evaluate_fixture_holdout(tmp_path: Path) -> None:
         "benign_sample.eml",
         "suspicious_sample.eml",
     }
+    assert all(prediction.suspicious_probability is None for prediction in result.predictions)
+
+
+def test_should_evaluate_fixture_holdout_with_suspicious_threshold(tmp_path: Path) -> None:
+    training_path = _write_training_dataset(tmp_path)
+    fixtures_dir = _write_fixture_dataset(tmp_path)
+
+    result = evaluate_fixture_holdout(
+        input_paths=[training_path],
+        fixtures_dir=fixtures_dir,
+        feature_set=FEATURE_SET_TEXT,
+        random_seed=7,
+        fixture_labels={
+            "benign_sample.eml": NORMALIZED_LABEL_BENIGN,
+            "suspicious_sample.eml": NORMALIZED_LABEL_SUSPICIOUS,
+        },
+        suspicious_threshold=0.7,
+    )
+
+    assert result.total == 2
+    assert all(
+        prediction.suspicious_probability is not None
+        and 0.0 <= prediction.suspicious_probability <= 1.0
+        for prediction in result.predictions
+    )
 
 
 def test_should_return_zero_exit_code_from_cli(tmp_path: Path) -> None:
@@ -52,6 +77,26 @@ def test_should_return_zero_exit_code_from_cli(tmp_path: Path) -> None:
         FEATURE_SET_TEXT,
         "--random-seed",
         "7",
+    ])
+
+    assert exit_code == 0
+
+
+def test_should_return_zero_exit_code_from_cli_with_threshold(tmp_path: Path) -> None:
+    training_path = _write_training_dataset(tmp_path)
+    fixtures_dir = _write_default_fixture_dataset(tmp_path)
+
+    exit_code = main([
+        "--input",
+        str(training_path),
+        "--fixtures-dir",
+        str(fixtures_dir),
+        "--feature-set",
+        FEATURE_SET_TEXT,
+        "--random-seed",
+        "7",
+        "--suspicious-threshold",
+        "0.7",
     ])
 
     assert exit_code == 0
