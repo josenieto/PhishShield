@@ -1,0 +1,12 @@
+From: Account Team <account-notices@example.com>
+Subject: Monthly account usage digest
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=example.com; dkim=pass header.d=example.com; dmarc=pass header.from=example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your monthly account usage digest is ready.
+You used 72% of your included workspace storage and signed in from 3 trusted devices this month.
+Review usage details from your normal dashboard at https://account.example.com/usage.
+
+No action is required.

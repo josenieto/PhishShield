@@ -1,0 +1,11 @@
+From: Cloud Storage Alerts <alerts@storage-quota.example.net>
+Subject: Cloud storage quota locked
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=storage-quota.example.net; dkim=pass header.d=storage-quota.example.net; dmarc=pass header.from=storage-quota.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your cloud storage quota is locked after a failed billing verification.
+Confirm your login and payment details at https://storage-quota.example.net/account/confirm to restore shared document access.
+
+Files will remain unavailable until verification is complete.

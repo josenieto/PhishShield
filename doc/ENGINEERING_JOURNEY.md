@@ -6088,3 +6088,80 @@ Training, fixture holdout, and documentation pre-commit checks passed.
 ### Next step
 
 Expand benign and suspicious holdout coverage, then investigate calibration or thresholding before any model artifact or inference adapter work.
+
+---
+
+## 2026-07-12 - Expand ML fixture holdout coverage
+
+Type: Test
+Layer: Tooling
+Status: Done
+
+### Context
+
+The first `Phishing Email Detection` baseline improved the 10-fixture holdout to `0.7000` accuracy and eliminated suspicious false negatives, but it still over-flagged benign account, security, and newsletter messages. The holdout needed more examples around those borderline benign themes before considering model artifact work.
+
+### Decision
+
+Expanded the PhishShield fixture holdout from 10 to 16 examples.
+
+Added benign fixtures:
+
+```text
+benign_account_usage_digest.eml
+benign_mfa_enabled_notice.eml
+benign_html_product_newsletter_account_preferences.eml
+```
+
+Added suspicious fixtures:
+
+```text
+suspicious_mfa_push_approval_lure.eml
+suspicious_shared_invoice_qr_lure.eml
+suspicious_cloud_storage_quota_lure.eml
+```
+
+The expanded holdout result for the `Phishing Email Detection` baseline was:
+
+```text
+total: 16
+correct: 10
+accuracy: 0.6250
+false_positive_benign: 6
+false_negative_suspicious: 0
+```
+
+Suspicious recall remained strong, but benign account, MFA/security, and newsletter-style false positives increased. This confirms that the next ML bottleneck is benign calibration and threshold strategy rather than suspicious recall on the current fixture set.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_account_usage_digest.eml`
+- `tests/fixtures/emails/benign_mfa_enabled_notice.eml`
+- `tests/fixtures/emails/benign_html_product_newsletter_account_preferences.eml`
+- `tests/fixtures/emails/suspicious_mfa_push_approval_lure.eml`
+- `tests/fixtures/emails/suspicious_shared_invoice_qr_lure.eml`
+- `tests/fixtures/emails/suspicious_cloud_storage_quota_lure.eml`
+- `tools/ml_training/evaluate_fixture_holdout.py`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pytest
+python -m pre_commit run --files tests/fixtures/emails/benign_account_usage_digest.eml tests/fixtures/emails/benign_mfa_enabled_notice.eml tests/fixtures/emails/benign_html_product_newsletter_account_preferences.eml tests/fixtures/emails/suspicious_mfa_push_approval_lure.eml tests/fixtures/emails/suspicious_shared_invoice_qr_lure.eml tests/fixtures/emails/suspicious_cloud_storage_quota_lure.eml tools/ml_training/evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests, expanded holdout, full backend suite, and final pre-commit checks passed.
+```
+
+### Next step
+
+Investigate benign calibration, thresholds, or probability output for the baseline before considering model artifact or inference adapter work.

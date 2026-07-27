@@ -628,6 +628,64 @@ Interpretation:
 - it still over-flags three benign fixtures, so benign business-email quality remains a concern;
 - model artifact and inference adapter work remain deferred until additional validation, calibration, and a larger holdout strategy are in place.
 
+### Expanded fixture holdout result
+
+The fixture holdout was expanded from 10 to 16 examples by adding account, MFA, newsletter, QR invoice, and cloud storage cases.
+
+Added benign fixtures:
+
+```text
+benign_account_usage_digest.eml
+benign_mfa_enabled_notice.eml
+benign_html_product_newsletter_account_preferences.eml
+```
+
+Added suspicious fixtures:
+
+```text
+suspicious_mfa_push_approval_lure.eml
+suspicious_shared_invoice_qr_lure.eml
+suspicious_cloud_storage_quota_lure.eml
+```
+
+Expanded holdout result for the `Phishing Email Detection` baseline:
+
+```text
+total: 16
+correct: 10
+accuracy: 0.6250
+false_positive_benign: 6
+false_negative_suspicious: 0
+```
+
+Per-fixture outcome:
+
+| Fixture | Expected | Predicted | Result |
+|---|---|---|---|
+| `benign_account_summary.eml` | `benign` | `suspicious` | False positive |
+| `benign_account_usage_digest.eml` | `benign` | `suspicious` | False positive |
+| `benign_invoice_with_pdf.eml` | `benign` | `benign` | Correct |
+| `benign_security_alert_login_notice.eml` | `benign` | `suspicious` | False positive |
+| `benign_mfa_enabled_notice.eml` | `benign` | `suspicious` | False positive |
+| `benign_html_only_newsletter_notice.eml` | `benign` | `suspicious` | False positive |
+| `benign_html_product_newsletter_account_preferences.eml` | `benign` | `suspicious` | False positive |
+| `benign_support_ticket_update.eml` | `benign` | `benign` | Correct |
+| `suspicious_html_notice.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_shortener_login_notice.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_html_only_credential_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_qr_login_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_cloud_share_auth_failure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_mfa_push_approval_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_shared_invoice_qr_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_cloud_storage_quota_lure.eml` | `suspicious` | `suspicious` | Correct |
+
+Expanded holdout interpretation:
+
+- suspicious fixture recall remains strong with zero false negatives;
+- benign false positives increased from `3` of `5` benign fixtures to `6` of `8` benign fixtures;
+- benign account, MFA/security, and newsletter-style messages are the main calibration gap;
+- model artifact and inference adapter work remain blocked until benign calibration improves.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
