@@ -660,6 +660,39 @@ The larger dry run confirms that the current SpamAssassin preparation and valida
 
 ---
 
+## SpamAssassin Hard Ham Calibration Preparation
+
+The SpamAssassin `hard_ham` archives were downloaded and extracted outside Git into separate directories:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20021010\hard_ham
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20030228\hard_ham
+```
+
+Preparation results:
+
+| Output | Processed | Failed | Empty subject | Empty body | URLs found |
+|---|---:|---:|---:|---:|---:|
+| `hard_ham_20021010.jsonl` | 250 | 0 | 1 | 0 | 10206 |
+| `hard_ham_20030228.jsonl` | 251 | 0 | 2 | 0 | 10167 |
+
+Validation results:
+
+| Output | Rows | Invalid rows | Duplicate sample IDs | Labels | Empty subject | Empty body | URLs found |
+|---|---:|---:|---:|---|---:|---:|---:|
+| `hard_ham_20021010.jsonl` | 250 | 0 | 0 | `benign=250` | 1 | 0 | 10206 |
+| `hard_ham_20030228.jsonl` | 251 | 0 | 0 | `benign=251` | 2 | 0 | 10167 |
+
+Generated JSONL outputs were written outside the repository under:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\
+```
+
+The high URL counts confirm that `hard_ham` is a difficult benign source, but later fixture holdout evaluation showed it does not improve the current benign account/MFA/newsletter false-positive problem.
+
+---
+
 ## Next Implementation Questions
 
 1. Should the first training baseline use a balanced subset or the full imbalanced SpamAssassin subset with class weighting?
