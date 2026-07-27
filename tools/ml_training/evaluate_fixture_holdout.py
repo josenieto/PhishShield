@@ -22,15 +22,21 @@ from tools.ml_training.train_baseline import (
 
 DEFAULT_FIXTURE_LABELS = {
     "benign_account_summary.eml": NORMALIZED_LABEL_BENIGN,
+    "benign_account_usage_digest.eml": NORMALIZED_LABEL_BENIGN,
     "benign_invoice_with_pdf.eml": NORMALIZED_LABEL_BENIGN,
     "benign_security_alert_login_notice.eml": NORMALIZED_LABEL_BENIGN,
+    "benign_mfa_enabled_notice.eml": NORMALIZED_LABEL_BENIGN,
     "benign_html_only_newsletter_notice.eml": NORMALIZED_LABEL_BENIGN,
+    "benign_html_product_newsletter_account_preferences.eml": NORMALIZED_LABEL_BENIGN,
     "benign_support_ticket_update.eml": NORMALIZED_LABEL_BENIGN,
     "suspicious_html_notice.eml": NORMALIZED_LABEL_SUSPICIOUS,
     "suspicious_shortener_login_notice.eml": NORMALIZED_LABEL_SUSPICIOUS,
     "suspicious_html_only_credential_lure.eml": NORMALIZED_LABEL_SUSPICIOUS,
     "suspicious_qr_login_lure.eml": NORMALIZED_LABEL_SUSPICIOUS,
     "suspicious_cloud_share_auth_failure.eml": NORMALIZED_LABEL_SUSPICIOUS,
+    "suspicious_mfa_push_approval_lure.eml": NORMALIZED_LABEL_SUSPICIOUS,
+    "suspicious_shared_invoice_qr_lure.eml": NORMALIZED_LABEL_SUSPICIOUS,
+    "suspicious_cloud_storage_quota_lure.eml": NORMALIZED_LABEL_SUSPICIOUS,
 }
 
 
