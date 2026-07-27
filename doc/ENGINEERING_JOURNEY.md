@@ -6165,3 +6165,63 @@ Focused tests, expanded holdout, full backend suite, and final pre-commit checks
 ### Next step
 
 Investigate benign calibration, thresholds, or probability output for the baseline before considering model artifact or inference adapter work.
+
+---
+
+## 2026-07-12 - Evaluate phishing baseline thresholds
+
+Type: Experiment
+Layer: Tooling
+Status: Done
+
+### Context
+
+The expanded fixture holdout showed that the `Phishing Email Detection` baseline caught all suspicious fixtures but over-flagged account, MFA/security, and newsletter-style benign fixtures. Before adding more datasets or considering artifacts, the project needed to check whether a simple suspicious probability threshold could reduce false positives without losing phishing recall.
+
+### Decision
+
+Added optional suspicious probability threshold support to fixture holdout evaluation and ran a threshold sweep from `0.50` through `0.90`.
+
+Threshold sweep result:
+
+```text
+threshold=0.50 accuracy=0.6250 false_positive_benign=6 false_negative_suspicious=0
+threshold=0.55 accuracy=0.5625 false_positive_benign=6 false_negative_suspicious=1
+threshold=0.60 accuracy=0.5625 false_positive_benign=6 false_negative_suspicious=1
+threshold=0.65 accuracy=0.5625 false_positive_benign=6 false_negative_suspicious=1
+threshold=0.70 accuracy=0.3750 false_positive_benign=6 false_negative_suspicious=4
+threshold=0.75 accuracy=0.3125 false_positive_benign=6 false_negative_suspicious=5
+threshold=0.80 accuracy=0.3125 false_positive_benign=5 false_negative_suspicious=6
+threshold=0.85 accuracy=0.3750 false_positive_benign=3 false_negative_suspicious=7
+threshold=0.90 accuracy=0.5000 false_positive_benign=0 false_negative_suspicious=8
+```
+
+No tested threshold improved the expanded holdout. Several benign account/security/newsletter fixtures scored above weaker suspicious fixtures, so the calibration gap cannot be fixed with a simple threshold change.
+
+### Files changed
+
+- `tools/ml_training/evaluate_fixture_holdout.py`
+- `tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42 --suspicious-threshold 0.50
+python -m pytest
+python -m pre_commit run --files tools/ml_training/evaluate_fixture_holdout.py tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests, threshold sweep, full backend suite, and final pre-commit checks passed.
+```
+
+### Next step
+
+Investigate additional benign business-email data or source-aware calibration instead of relying on threshold-only tuning.
