@@ -523,6 +523,37 @@ Decision:
 - do not treat the source as a clean modern phishing corpus;
 - keep model artifact and inference adapter work deferred until fixture holdout improves.
 
+Preparation POC result:
+
+```text
+rows_read: 18650
+processed: 18631
+failed: 0
+skipped_empty_text: 19
+unsupported_label: 0
+duplicate_text: 1109
+short_rows_lt_30: 584
+long_rows_gt_10000: 397
+url_only_rows: 1
+no_alpha_rows: 1
+urls_found: 13291
+labels: benign=11322, suspicious=7309
+```
+
+Prepared JSONL validation result:
+
+```text
+rows: 18631
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=11322, suspicious=7309
+empty_subject: 18631
+empty_body: 0
+urls_found: 13291
+```
+
+The next experiment should train a baseline from this prepared JSONL and evaluate the same PhishShield fixture holdout before deciding whether this noisy phishing/spam text source improves suspicious recall.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
