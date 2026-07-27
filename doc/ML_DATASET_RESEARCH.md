@@ -78,6 +78,23 @@ Reference:
 https://www.cs.cmu.edu/~enron/
 ```
 
+Recommended upstream version:
+
+```text
+https://www.cs.cmu.edu/~enron/enron_mail_20150507.tar.gz
+```
+
+Observed source notes:
+
+- the corpus contains about `0.5M` messages;
+- messages are organized into folders for about `150` users, mostly senior Enron management;
+- the current upstream page recommends the May 7, 2015 version and states that prior versions are no longer distributed;
+- the distributed CMU version does not include attachments;
+- some messages were deleted as part of a redaction effort;
+- invalid email addresses were normalized where possible;
+- the page explicitly asks researchers to be sensitive to the privacy of the people involved;
+- the page also documents later concerns about authenticity and integrity for some parts of the corpus.
+
 Potential use:
 
 - benign corporate email language;
@@ -90,6 +107,12 @@ Important caveats:
 - attachments are not included in the main published version;
 - the host site itself warns about sensitivity and documents later concerns about authenticity and integrity in some parts of the corpus;
 - careful filtering, deduplication, and ethical handling are required.
+
+Current decision:
+
+- selected as the next benign business-email calibration candidate after SpamAssassin `hard_ham` failed to improve the expanded holdout;
+- approved only for workflow planning and a capped preparation POC after privacy and cleanup controls are documented;
+- not approved for broad ingestion, committed raw data, committed prepared data, model artifacts, or inference integration.
 
 ### TREC Spam Track Corpora
 
@@ -445,13 +468,15 @@ Secondary benign candidate:
 
 - Enron Email Dataset, because it offers realistic business email language.
 
-Enron remains deferred until a privacy, PII, cleanup, deduplication, and source-integrity review is planned. It should not be the next implementation step unless `hard_ham` fails to improve benign calibration or proves too mismatched.
+Enron was deferred until a privacy, PII, cleanup, deduplication, and source-integrity review was planned. After `hard_ham` failed to improve benign calibration, Enron is now the next benign calibration workflow candidate.
 
 Current decision:
 
 - use SpamAssassin `hard_ham` as the first benign calibration candidate;
-- keep Enron as the richer but higher-risk follow-up candidate;
+- plan Enron as the richer but higher-risk follow-up candidate;
 - keep model artifact and inference adapter work blocked until benign false positives improve on the expanded holdout.
+
+The first Enron step should be a capped POC, not broad ingestion.
 
 ---
 

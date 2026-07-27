@@ -6342,3 +6342,56 @@ Preparation, validation, A/B/C holdout evaluations, and documentation pre-commit
 ### Next step
 
 Plan Enron or another business-email benign source with explicit privacy and cleanup controls before further calibration experiments.
+
+---
+
+## 2026-07-12 - Plan Enron benign calibration workflow
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+SpamAssassin `hard_ham` did not reduce benign false positives on the expanded PhishShield fixture holdout. The remaining false positives are concentrated in account, MFA/security, and newsletter-like benign messages, so the next benign calibration source needs more realistic business-email language.
+
+### Decision
+
+Selected Enron as the next benign calibration workflow candidate, but only for a capped and privacy-aware preparation POC.
+
+The upstream source documents about `0.5M` messages across about `150` users, no attachments in the CMU version, redaction of some messages, normalized invalid addresses, and explicit privacy and integrity caveats.
+
+The workflow requires:
+
+- raw and prepared Enron data outside Git;
+- no real Enron message bodies in tests, docs, issues, or chat;
+- synthetic unit tests only;
+- aggregate metrics only in documentation;
+- capped first preparation run;
+- duplicate, empty body, very short, very long, mailbox/folder, and sender-domain aggregate reporting;
+- source-aware leakage controls before train/validation splitting.
+
+### Files changed
+
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Download the recommended Enron 2015 archive outside Git, inspect archive structure, and add a capped Enron preparation prototype with synthetic tests.
