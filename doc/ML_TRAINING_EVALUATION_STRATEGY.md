@@ -554,6 +554,80 @@ urls_found: 13291
 
 The next experiment should train a baseline from this prepared JSONL and evaluate the same PhishShield fixture holdout before deciding whether this noisy phishing/spam text source improves suspicious recall.
 
+### Phishing Email Detection baseline result
+
+The first `Phishing Email Detection` baseline used only the prepared JSONL from this dataset because it already contains both `benign` and `suspicious` labels.
+
+Input file stored outside the repository:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl
+```
+
+Training settings:
+
+```text
+strategy: balanced
+feature_set: text_with_light_metadata
+validation_ratio: 0.2
+random_seed: 42
+samples: 14618
+train_samples: 11694
+validation_samples: 2924
+labels: benign=7309, suspicious=7309
+```
+
+Validation result:
+
+```text
+accuracy: 0.9661
+precision_suspicious: 0.9522
+recall_suspicious: 0.9815
+f1_suspicious: 0.9667
+confusion_matrix_labels: benign,suspicious
+confusion_matrix: [[1390, 72], [27, 1435]]
+```
+
+PhishShield fixture holdout result:
+
+```text
+total: 10
+correct: 7
+accuracy: 0.7000
+false_positive_benign: 3
+false_negative_suspicious: 0
+```
+
+Per-fixture outcome:
+
+| Fixture | Expected | Predicted | Result |
+|---|---|---|---|
+| `benign_account_summary.eml` | `benign` | `suspicious` | False positive |
+| `benign_invoice_with_pdf.eml` | `benign` | `benign` | Correct |
+| `benign_security_alert_login_notice.eml` | `benign` | `suspicious` | False positive |
+| `benign_html_only_newsletter_notice.eml` | `benign` | `suspicious` | False positive |
+| `benign_support_ticket_update.eml` | `benign` | `benign` | Correct |
+| `suspicious_html_notice.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_shortener_login_notice.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_html_only_credential_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_qr_login_lure.eml` | `suspicious` | `suspicious` | Correct |
+| `suspicious_cloud_share_auth_failure.eml` | `suspicious` | `suspicious` | Correct |
+
+Comparison with previous fixture holdouts:
+
+```text
+SpamAssassin-only: accuracy=0.4000, false_positive_benign=5, false_negative_suspicious=1
+Fraud corpus baseline: accuracy=0.4000, false_positive_benign=1, false_negative_suspicious=5
+Phishing Email Detection baseline: accuracy=0.7000, false_positive_benign=3, false_negative_suspicious=0
+```
+
+Interpretation:
+
+- this is the first baseline that improves PhishShield fixture holdout accuracy;
+- it eliminates suspicious fixture false negatives in the current 10-fixture holdout;
+- it still over-flags three benign fixtures, so benign business-email quality remains a concern;
+- model artifact and inference adapter work remain deferred until additional validation, calibration, and a larger holdout strategy are in place.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
