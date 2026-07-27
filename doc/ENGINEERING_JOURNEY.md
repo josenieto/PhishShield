@@ -6013,3 +6013,78 @@ Focused tests, real dry run, full backend suite, and final pre-commit checks pas
 ### Next step
 
 Train a baseline using the prepared `Phishing Email Detection` JSONL and compare PhishShield fixture holdout behavior against the SpamAssassin-only and fraud-corpus baselines.
+
+---
+
+## 2026-07-12 - Evaluate phishing email detection baseline
+
+Type: Experiment
+Layer: Tooling
+Status: Done
+
+### Context
+
+The `Phishing Email Detection` preparation tooling produced a valid JSONL with `11322` benign rows and `7309` suspicious rows. The next question was whether this phishing-specific text dataset improved the PhishShield fixture holdout compared with the SpamAssassin-only and fraud-corpus baselines.
+
+### Decision
+
+Trained a balanced `TF-IDF + Logistic Regression` baseline using the prepared `Phishing Email Detection` JSONL.
+
+Validation metrics inside the selected dataset were strong:
+
+```text
+samples: 14618
+train_samples: 11694
+validation_samples: 2924
+labels: benign=7309, suspicious=7309
+accuracy: 0.9661
+precision_suspicious: 0.9522
+recall_suspicious: 0.9815
+f1_suspicious: 0.9667
+confusion_matrix: [[1390, 72], [27, 1435]]
+```
+
+The PhishShield fixture holdout improved over previous baselines:
+
+```text
+total: 10
+correct: 7
+accuracy: 0.7000
+false_positive_benign: 3
+false_negative_suspicious: 0
+```
+
+Comparison:
+
+```text
+SpamAssassin-only: accuracy=0.4000, false_positive_benign=5, false_negative_suspicious=1
+Fraud corpus baseline: accuracy=0.4000, false_positive_benign=1, false_negative_suspicious=5
+Phishing Email Detection baseline: accuracy=0.7000, false_positive_benign=3, false_negative_suspicious=0
+```
+
+This is the first ML baseline that improves fixture holdout accuracy and fully catches the current suspicious fixture set. It still over-flags benign account, security, and newsletter fixtures, so model artifact work remains deferred until benign calibration, larger holdout coverage, and threshold strategy are addressed.
+
+### Files changed
+
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\metrics\baseline_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Training, fixture holdout, and documentation pre-commit checks passed.
+```
+
+### Next step
+
+Expand benign and suspicious holdout coverage, then investigate calibration or thresholding before any model artifact or inference adapter work.
