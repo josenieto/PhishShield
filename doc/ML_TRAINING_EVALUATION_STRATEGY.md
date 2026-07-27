@@ -722,6 +722,38 @@ Interpretation:
 - the next ML issue is training data/calibration quality, not a simple decision threshold;
 - model artifact and inference adapter work remain blocked.
 
+### Next benign calibration source
+
+The next selected benign calibration source is SpamAssassin `hard_ham`.
+
+Reason:
+
+- the expanded holdout failure mode is false positives on benign account, MFA/security, and newsletter-like messages;
+- thresholding alone did not improve the holdout;
+- `hard_ham` is the lowest-friction source of more difficult benign email examples because the project already has SpamAssassin preparation tooling;
+- Enron is likely more business-realistic, but it has higher privacy, cleanup, deduplication, and source-integrity risk.
+
+Planned experiment:
+
+```text
+benign: Phishing Email Detection benign rows + SpamAssassin hard_ham rows
+suspicious: Phishing Email Detection suspicious rows
+feature_set: text_with_light_metadata
+strategy: balanced
+random_seed: 42
+evaluation: expanded PhishShield fixture holdout
+```
+
+Success criteria:
+
+```text
+false_positive_benign < 6
+false_negative_suspicious <= 1
+accuracy > 0.6250
+```
+
+If `hard_ham` does not improve benign calibration, the next research target should be Enron or another business-email source with explicit PII and cleanup controls.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.

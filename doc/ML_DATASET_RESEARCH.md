@@ -59,6 +59,7 @@ Observed structure includes:
 Potential use:
 
 - ham baseline;
+- first low-friction benign calibration source through `hard_ham`;
 - spam and noise baseline;
 - stress-testing whether a future classifier collapses phishing into generic spam.
 
@@ -66,6 +67,7 @@ Important caveats:
 
 - the corpus is old;
 - it is better suited to generic spam filtering than phishing-specific detection;
+- `hard_ham` may improve difficult benign calibration but is still not a substitute for realistic business/account/security notifications;
 - dataset cleaning and feature strategy should avoid learning only era-specific artifacts.
 
 ### Enron Email Dataset
@@ -411,6 +413,45 @@ This mix supports a future classifier that distinguishes:
 - benign operational email;
 - generic spam and noise;
 - phishing and phishing-like fraud.
+
+---
+
+## Benign Calibration Source Decision
+
+The next benign calibration source to investigate is SpamAssassin `hard_ham`.
+
+This follows the expanded fixture holdout and threshold sweep for the `Phishing Email Detection` baseline:
+
+```text
+expanded holdout: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+threshold sweep: no tested threshold improved the expanded holdout
+```
+
+Reason for selecting `hard_ham` first:
+
+- it is available from the same public SpamAssassin corpus family already used by the project;
+- existing SpamAssassin preparation tooling can likely process it with minimal code changes;
+- it provides harder benign examples than `easy_ham`, which is useful for reducing false positives;
+- it is a lower-friction calibration experiment than starting with Enron cleanup.
+
+Expected limitations:
+
+- it is old;
+- it may still lack modern account, MFA, cloud-share, invoice, and newsletter notification patterns;
+- it may include mailing-list or spam-adjacent benign content rather than business SaaS notifications;
+- any improvement must be validated against the expanded PhishShield fixture holdout.
+
+Secondary benign candidate:
+
+- Enron Email Dataset, because it offers realistic business email language.
+
+Enron remains deferred until a privacy, PII, cleanup, deduplication, and source-integrity review is planned. It should not be the next implementation step unless `hard_ham` fails to improve benign calibration or proves too mismatched.
+
+Current decision:
+
+- use SpamAssassin `hard_ham` as the first benign calibration candidate;
+- keep Enron as the richer but higher-risk follow-up candidate;
+- keep model artifact and inference adapter work blocked until benign false positives improve on the expanded holdout.
 
 ---
 
