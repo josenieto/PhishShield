@@ -1,0 +1,11 @@
+From: Access Desk <support@secure-mfa-review.example.net>
+Subject: MFA approval required to keep access
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=secure-mfa-review.example.net; dkim=pass header.d=secure-mfa-review.example.net; dmarc=pass header.from=secure-mfa-review.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your multi-factor authentication approval is pending after a new device enrollment.
+Approve the request immediately to keep your account active: https://secure-mfa-review.example.net/approve/login.
+
+Access will be suspended if the approval is not completed today.
