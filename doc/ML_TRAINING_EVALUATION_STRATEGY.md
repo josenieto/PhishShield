@@ -686,6 +686,42 @@ Expanded holdout interpretation:
 - benign account, MFA/security, and newsletter-style messages are the main calibration gap;
 - model artifact and inference adapter work remain blocked until benign calibration improves.
 
+### Threshold sweep result
+
+The holdout evaluator was extended to support an optional suspicious probability threshold so the phishing baseline could be checked for a simple calibration improvement.
+
+Threshold sweep against the expanded 16-fixture holdout:
+
+| Suspicious threshold | Accuracy | False positive benign | False negative suspicious |
+|---:|---:|---:|---:|
+| `0.50` | `0.6250` | `6` | `0` |
+| `0.55` | `0.5625` | `6` | `1` |
+| `0.60` | `0.5625` | `6` | `1` |
+| `0.65` | `0.5625` | `6` | `1` |
+| `0.70` | `0.3750` | `6` | `4` |
+| `0.75` | `0.3125` | `6` | `5` |
+| `0.80` | `0.3125` | `5` | `6` |
+| `0.85` | `0.3750` | `3` | `7` |
+| `0.90` | `0.5000` | `0` | `8` |
+
+Per-fixture suspicious probabilities at threshold `0.50` showed strong overlap between benign account/security/newsletter fixtures and suspicious fixtures. Examples:
+
+```text
+benign_account_usage_digest.eml: 0.8943
+benign_mfa_enabled_notice.eml: 0.8989
+benign_security_alert_login_notice.eml: 0.8473
+suspicious_mfa_push_approval_lure.eml: 0.5468
+suspicious_qr_login_lure.eml: 0.6585
+suspicious_cloud_storage_quota_lure.eml: 0.6938
+```
+
+Interpretation:
+
+- thresholding alone does not improve the expanded holdout;
+- several benign fixtures score more suspicious than weaker suspicious fixtures;
+- the next ML issue is training data/calibration quality, not a simple decision threshold;
+- model artifact and inference adapter work remain blocked.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
