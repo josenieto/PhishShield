@@ -954,6 +954,89 @@ Interpretation:
 - the persistent false positives are still account, MFA/security, and newsletter-style fixtures;
 - the next calibration direction should target notification-like benign data or introduce feature/source-aware calibration rather than adding generic business email alone.
 
+### Synthetic benign notification calibration result
+
+Synthetic benign notification templates were generated for account, MFA/security, newsletter, cloud-share, billing, support, HR, and vendor notification families.
+
+The first generated dataset used `10` samples per category:
+
+```text
+rows: 120
+labels: benign=120
+urls_found: 120
+```
+
+Training validation metrics with `Phishing Email Detection + synthetic benign notifications 120`:
+
+```text
+samples: 14618
+train_samples: 11694
+validation_samples: 2924
+labels: benign=7309, suspicious=7309
+accuracy: 0.9651
+precision_suspicious: 0.9552
+recall_suspicious: 0.9761
+f1_suspicious: 0.9655
+confusion_matrix: [[1395, 67], [35, 1427]]
+```
+
+Expanded holdout result:
+
+```text
+total: 16
+correct: 10
+accuracy: 0.6250
+false_positive_benign: 2
+false_negative_suspicious: 4
+```
+
+A larger generated dataset used `50` samples per category:
+
+```text
+rows: 600
+labels: benign=600
+urls_found: 600
+```
+
+Training validation metrics with `Phishing Email Detection + synthetic benign notifications 600`:
+
+```text
+samples: 14618
+train_samples: 11694
+validation_samples: 2924
+labels: benign=7309, suspicious=7309
+accuracy: 0.9655
+precision_suspicious: 0.9510
+recall_suspicious: 0.9815
+f1_suspicious: 0.9660
+confusion_matrix: [[1388, 74], [27, 1435]]
+```
+
+Expanded holdout result:
+
+```text
+total: 16
+correct: 9
+accuracy: 0.5625
+false_positive_benign: 1
+false_negative_suspicious: 6
+```
+
+Comparison:
+
+```text
+Phishing Email Detection baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+Synthetic benign notifications 120: accuracy=0.6250, false_positive_benign=2, false_negative_suspicious=4
+Synthetic benign notifications 600: accuracy=0.5625, false_positive_benign=1, false_negative_suspicious=6
+```
+
+Interpretation:
+
+- synthetic benign notification data directly reduces the targeted benign false positives;
+- increasing synthetic benign volume over-calibrates toward benign and creates too many suspicious false negatives;
+- the useful next direction is not simply adding more synthetic benign data, but balancing synthetic benign notifications with additional suspicious notification-style lures or source-aware calibration;
+- model artifact and inference adapter work remain blocked.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
