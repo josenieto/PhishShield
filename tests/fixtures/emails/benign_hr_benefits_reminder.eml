@@ -1,0 +1,10 @@
+From: HR Benefits <benefits@hr.example.com>
+Subject: Benefits enrollment reminder
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=hr.example.com; dkim=pass header.d=hr.example.com; dmarc=pass header.from=hr.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Open enrollment begins next week.
+Review benefit plan dates and policy updates in the employee portal at https://hr.example.com/benefits/enrollment.
+This reminder does not require password confirmation.

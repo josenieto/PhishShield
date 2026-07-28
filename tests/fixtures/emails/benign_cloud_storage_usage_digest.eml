@@ -1,0 +1,12 @@
+From: Storage Reports <reports@storage.example.com>
+Subject: Cloud storage usage digest
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=storage.example.com; dkim=pass header.d=storage.example.com; dmarc=pass header.from=storage.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your cloud storage usage digest is ready.
+You are using 64% of your current plan and shared folder access remains active.
+View details at https://storage.example.com/reports/usage-digest.
+
+No action is required.

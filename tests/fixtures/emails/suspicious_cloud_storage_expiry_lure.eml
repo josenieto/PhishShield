@@ -1,0 +1,10 @@
+From: Cloud Storage <alerts@storage-expiry-review.example.net>
+Subject: Cloud storage access expires today
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=storage-expiry-review.example.net; dkim=pass header.d=storage-expiry-review.example.net; dmarc=pass header.from=storage-expiry-review.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your cloud storage access expires today due to an account verification issue.
+Restore shared file access at https://storage-expiry-review.example.net/restore/account.
+Files will be unavailable after the access window closes.

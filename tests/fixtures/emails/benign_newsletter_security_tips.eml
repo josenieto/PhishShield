@@ -1,0 +1,13 @@
+From: Security Newsletter <newsletter@updates.example.com>
+Subject: Security tips for safer account access
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=updates.example.com; dkim=pass header.d=updates.example.com; dmarc=pass header.from=updates.example.com
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <body>
+    <p>Hello,</p>
+    <p>This month's newsletter includes security tips for safer account access.</p>
+    <p>Topics include MFA recovery codes, device login history, and password reset confirmations.</p>
+    <p>Read the article at https://updates.example.com/newsletter/security-tips.</p>
+  </body>
+</html>
