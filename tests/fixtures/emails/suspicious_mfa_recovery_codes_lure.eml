@@ -1,0 +1,9 @@
+From: MFA Recovery <recovery@mfa-codes-review.example.net>
+Subject: MFA recovery codes require confirmation
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=mfa-codes-review.example.net; dkim=pass header.d=mfa-codes-review.example.net; dmarc=pass header.from=mfa-codes-review.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your MFA recovery codes will expire unless you confirm your account.
+Enter your login details at https://mfa-codes-review.example.net/recovery/confirm to keep recovery access active.

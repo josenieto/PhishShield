@@ -6730,3 +6730,85 @@ Focused tests, synthetic suspicious generation, validation, calibration variants
 ### Next step
 
 Expand the holdout before artifact work: variant B is promising, but it is still validated on a small synthetic-influenced fixture set.
+
+---
+
+## 2026-07-12 - Expand notification calibration holdout
+
+Type: Test
+Layer: Tooling
+Status: Done
+
+### Context
+
+Variant B, combining `Phishing Email Detection` with synthetic benign and suspicious notification calibration data, improved the 16-fixture holdout. The project needed a larger holdout to check whether that improvement persisted outside the first notification fixture set.
+
+### Decision
+
+Expanded the PhishShield fixture holdout from 16 to 32 examples by adding account billing, device login history, MFA recovery, security newsletter, cloud storage usage, vendor invoice, HR benefits, support case, and matching suspicious notification-style lures.
+
+Baseline 32-fixture result:
+
+```text
+total: 32
+correct: 20
+accuracy: 0.6250
+false_positive_benign: 11
+false_negative_suspicious: 1
+```
+
+Variant B 32-fixture result:
+
+```text
+total: 32
+correct: 28
+accuracy: 0.8750
+false_positive_benign: 3
+false_negative_suspicious: 1
+```
+
+The improvement persisted on the larger holdout. Variant B reduced benign false positives substantially without increasing suspicious false negatives compared with the baseline 32-fixture result.
+
+### Files changed
+
+- `tests/fixtures/emails/benign_account_billing_summary.eml`
+- `tests/fixtures/emails/benign_device_login_history.eml`
+- `tests/fixtures/emails/benign_mfa_recovery_codes_notice.eml`
+- `tests/fixtures/emails/benign_newsletter_security_tips.eml`
+- `tests/fixtures/emails/benign_cloud_storage_usage_digest.eml`
+- `tests/fixtures/emails/benign_vendor_invoice_status_update.eml`
+- `tests/fixtures/emails/benign_hr_benefits_reminder.eml`
+- `tests/fixtures/emails/benign_support_case_waiting_customer.eml`
+- `tests/fixtures/emails/suspicious_device_login_verification_lure.eml`
+- `tests/fixtures/emails/suspicious_mfa_recovery_codes_lure.eml`
+- `tests/fixtures/emails/suspicious_billing_profile_reauth_lure.eml`
+- `tests/fixtures/emails/suspicious_cloud_storage_expiry_lure.eml`
+- `tests/fixtures/emails/suspicious_vendor_invoice_portal_lure.eml`
+- `tests/fixtures/emails/suspicious_hr_benefits_login_lure.eml`
+- `tests/fixtures/emails/suspicious_support_case_auth_lure.eml`
+- `tests/fixtures/emails/suspicious_newsletter_preferences_credential_lure.eml`
+- `tools/ml_training/evaluate_fixture_holdout.py`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pytest
+python -m pre_commit run --files tests/fixtures/emails/benign_account_billing_summary.eml tests/fixtures/emails/benign_device_login_history.eml tests/fixtures/emails/benign_mfa_recovery_codes_notice.eml tests/fixtures/emails/benign_newsletter_security_tips.eml tests/fixtures/emails/benign_cloud_storage_usage_digest.eml tests/fixtures/emails/benign_vendor_invoice_status_update.eml tests/fixtures/emails/benign_hr_benefits_reminder.eml tests/fixtures/emails/benign_support_case_waiting_customer.eml tests/fixtures/emails/suspicious_device_login_verification_lure.eml tests/fixtures/emails/suspicious_mfa_recovery_codes_lure.eml tests/fixtures/emails/suspicious_billing_profile_reauth_lure.eml tests/fixtures/emails/suspicious_cloud_storage_expiry_lure.eml tests/fixtures/emails/suspicious_vendor_invoice_portal_lure.eml tests/fixtures/emails/suspicious_hr_benefits_login_lure.eml tests/fixtures/emails/suspicious_support_case_auth_lure.eml tests/fixtures/emails/suspicious_newsletter_preferences_credential_lure.eml tools/ml_training/evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests and 32-fixture holdout comparisons completed. Pending full backend and final pre-commit verification.
+```
+
+### Next step
+
+Do not move to model artifact yet. Add at least one more non-synthetic or adversarial holdout expansion, then consider freezing Variant B as the first experimental model candidate.

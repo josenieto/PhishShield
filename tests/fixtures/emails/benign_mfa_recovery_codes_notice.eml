@@ -1,0 +1,10 @@
+From: Identity Notifications <identity@example.com>
+Subject: MFA recovery codes generated
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=example.com; dkim=pass header.d=example.com; dmarc=pass header.from=example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+New MFA recovery codes were generated from your account security settings.
+Store them safely and do not share them with anyone.
+You can review recovery options at https://identity.example.com/security/recovery-codes.

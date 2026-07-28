@@ -1,0 +1,12 @@
+From: Billing Summary <billing@accounts.example.com>
+Subject: Account billing summary for this month
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=accounts.example.com; dkim=pass header.d=accounts.example.com; dmarc=pass header.from=accounts.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your account billing summary for this month is now available.
+The summary includes plan usage, payment receipt references, and current billing preferences.
+You can review it from your billing dashboard at https://accounts.example.com/billing/summary.
+
+No payment action is required.
