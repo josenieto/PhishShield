@@ -820,6 +820,45 @@ urls_found: 703
 
 The first capped sample came only from `allen-p`, so it is useful for proving mechanics but not broad enough for a calibration conclusion across Enron users.
 
+Source-diverse capped POC result:
+
+```text
+input_dir: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir
+output: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl
+limit: 2000
+max_per_user: 50
+max_per_folder: 20
+discovered_files: 291261
+processed: 2000
+failed: 0
+skipped_empty_body: 0
+skipped_user_limit: 119161
+skipped_folder_limit: 170100
+duplicate_body: 26
+duplicate_subject_body: 23
+empty_subject: 55
+short_rows_lt_30: 78
+long_rows_gt_10000: 39
+urls_found: 1472
+users_seen: 58
+folders_seen: 244
+```
+
+Prepared JSONL validation result:
+
+```text
+files: 1
+rows: 2000
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=2000
+empty_subject: 55
+empty_body: 0
+urls_found: 1472
+```
+
+The source-diverse sample covers more users and folders than the first capped sample, but later fixture holdout evaluation still showed no improvement over the `Phishing Email Detection` baseline.
+
 ---
 
 ## Next Implementation Questions

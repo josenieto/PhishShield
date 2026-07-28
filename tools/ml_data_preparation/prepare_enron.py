@@ -16,12 +16,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--input-dir", required=True, help="Path to the extracted Enron maildir directory.")
     parser.add_argument("--output", required=True, help="Output JSONL path. Keep this outside the repository.")
     parser.add_argument("--limit", type=int, default=1_000, help="Maximum number of prepared messages to write.")
+    parser.add_argument("--max-per-user", type=int, default=None, help="Optional maximum prepared messages per mailbox user.")
+    parser.add_argument("--max-per-folder", type=int, default=None, help="Optional maximum prepared messages per folder path.")
 
     args = parser.parse_args(argv)
     summary = prepare_enron_directory(
         input_dir=Path(args.input_dir),
         output_path=Path(args.output),
         limit=args.limit,
+        max_per_user=args.max_per_user,
+        max_per_folder=args.max_per_folder,
     )
     print_preparation_summary(summary)
 
@@ -34,6 +38,8 @@ class PreparationSummary:
         self.processed = 0
         self.failed = 0
         self.skipped_empty_body = 0
+        self.skipped_user_limit = 0
+        self.skipped_folder_limit = 0
         self.duplicate_body = 0
         self.duplicate_subject_body = 0
         self.empty_subject = 0
@@ -49,9 +55,17 @@ def prepare_enron_directory(
     input_dir: Path,
     output_path: Path,
     limit: int | None = 1_000,
+    max_per_user: int | None = None,
+    max_per_folder: int | None = None,
 ) -> PreparationSummary:
     if limit is not None and limit < 0:
         raise ValueError("limit must be greater than or equal to zero")
+
+    if max_per_user is not None and max_per_user < 0:
+        raise ValueError("max_per_user must be greater than or equal to zero")
+
+    if max_per_folder is not None and max_per_folder < 0:
+        raise ValueError("max_per_folder must be greater than or equal to zero")
 
     if not input_dir.is_dir():
         raise ValueError(f"input directory does not exist: {input_dir}")
@@ -68,6 +82,15 @@ def prepare_enron_directory(
 
             summary.discovered_files += 1
             source_id = enron_source_id_from_path(input_dir=input_dir, email_path=email_path)
+            mailbox_user, folder = _parse_source_id(source_id)
+
+            if max_per_user is not None and summary.users[mailbox_user] >= max_per_user:
+                summary.skipped_user_limit += 1
+                continue
+
+            if max_per_folder is not None and summary.folders[folder] >= max_per_folder:
+                summary.skipped_folder_limit += 1
+                continue
 
             try:
                 sample = prepare_enron_email(
@@ -98,7 +121,8 @@ def prepare_enron_directory(
 
 
 def _iter_email_paths(input_dir: Path):
-    for root, _, filenames in os.walk(input_dir):
+    for root, dirnames, filenames in os.walk(input_dir):
+        dirnames.sort()
         for filename in sorted(filenames):
             yield Path(root) / filename
 
@@ -120,6 +144,8 @@ def print_preparation_summary(summary: PreparationSummary) -> None:
     print(f"processed: {summary.processed}")
     print(f"failed: {summary.failed}")
     print(f"skipped_empty_body: {summary.skipped_empty_body}")
+    print(f"skipped_user_limit: {summary.skipped_user_limit}")
+    print(f"skipped_folder_limit: {summary.skipped_folder_limit}")
     print(f"duplicate_body: {summary.duplicate_body}")
     print(f"duplicate_subject_body: {summary.duplicate_subject_body}")
     print(f"empty_subject: {summary.empty_subject}")
@@ -137,6 +163,14 @@ def print_preparation_summary(summary: PreparationSummary) -> None:
     print("top_sender_domains:")
     for sender_domain, count in summary.sender_domains.most_common(10):
         print(f"  {sender_domain}: {count}")
+
+
+def _parse_source_id(source_id: str) -> tuple[str, str]:
+    parts = source_id.replace("\\", "/").split("/")
+    if len(parts) < 3:
+        return "", ""
+
+    return parts[0], "/".join(parts[1:-1])
 
 
 def _record_quality_counters(

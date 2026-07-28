@@ -73,6 +73,34 @@ def test_should_skip_empty_body_and_report_duplicates(tmp_path: Path) -> None:
     assert len(rows) == 2
 
 
+def test_should_limit_prepared_messages_per_user_and_folder(tmp_path: Path) -> None:
+    input_dir = tmp_path / "maildir"
+    output_path = tmp_path / "prepared" / "enron.jsonl"
+    _write_maildir(
+        input_dir,
+        {
+            "user-a/inbox/001": _sample_email_bytes("First", "First body."),
+            "user-a/inbox/002": _sample_email_bytes("Second", "Second body."),
+            "user-b/inbox/001": _sample_email_bytes("Third", "Third body."),
+            "user-b/sent/002": _sample_email_bytes("Fourth", "Fourth body."),
+        },
+    )
+
+    summary = prepare_enron_directory(
+        input_dir=input_dir,
+        output_path=output_path,
+        limit=None,
+        max_per_user=1,
+        max_per_folder=1,
+    )
+    rows = [json.loads(line) for line in output_path.read_text(encoding="utf-8").splitlines()]
+
+    assert summary.processed == 2
+    assert summary.skipped_user_limit == 1
+    assert summary.skipped_folder_limit == 1
+    assert {row["source_id"] for row in rows} == {"user-a/inbox/001", "user-b/sent/002"}
+
+
 def test_should_reject_negative_limit(tmp_path: Path) -> None:
     input_dir = tmp_path / "maildir"
     _write_maildir(input_dir, {"user-a/inbox/001": _sample_email_bytes("Subject", "Body")})
@@ -82,6 +110,30 @@ def test_should_reject_negative_limit(tmp_path: Path) -> None:
             input_dir=input_dir,
             output_path=tmp_path / "output.jsonl",
             limit=-1,
+        )
+
+
+def test_should_reject_negative_per_user_limit(tmp_path: Path) -> None:
+    input_dir = tmp_path / "maildir"
+    _write_maildir(input_dir, {"user-a/inbox/001": _sample_email_bytes("Subject", "Body")})
+
+    with pytest.raises(ValueError, match="max_per_user must be greater than or equal to zero"):
+        prepare_enron_directory(
+            input_dir=input_dir,
+            output_path=tmp_path / "output.jsonl",
+            max_per_user=-1,
+        )
+
+
+def test_should_reject_negative_per_folder_limit(tmp_path: Path) -> None:
+    input_dir = tmp_path / "maildir"
+    _write_maildir(input_dir, {"user-a/inbox/001": _sample_email_bytes("Subject", "Body")})
+
+    with pytest.raises(ValueError, match="max_per_folder must be greater than or equal to zero"):
+        prepare_enron_directory(
+            input_dir=input_dir,
+            output_path=tmp_path / "output.jsonl",
+            max_per_folder=-1,
         )
 
 
@@ -96,6 +148,10 @@ def test_should_return_zero_from_cli_when_preparation_succeeds(tmp_path: Path) -
         "--output",
         str(output_path),
         "--limit",
+        "1",
+        "--max-per-user",
+        "1",
+        "--max-per-folder",
         "1",
     ])
 
