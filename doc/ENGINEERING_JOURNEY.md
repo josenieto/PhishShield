@@ -6395,3 +6395,82 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Download the recommended Enron 2015 archive outside Git, inspect archive structure, and add a capped Enron preparation prototype with synthetic tests.
+
+---
+
+## 2026-07-12 - Add Enron directory preparation prototype
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+The Enron archive had been downloaded and extracted outside Git. The project needed a capped preparation prototype that works against the extracted `maildir` directory rather than the compressed archive, while preserving the privacy rules documented for Enron-derived data.
+
+### Decision
+
+Added Enron directory preparation tooling with synthetic tests.
+
+The tool reads from the extracted `maildir`, prepares a capped sample into canonical JSONL, preserves aggregate metadata such as mailbox user and folder, skips empty bodies, and reports duplicate, short, long, URL, user, folder, and sender-domain counters. The tooling includes Windows-safe file reading for Enron filenames that end with a trailing dot.
+
+The first capped POC prepared and validated `1000` rows outside Git:
+
+```text
+discovered_files: 1000
+processed: 1000
+failed: 0
+skipped_empty_body: 0
+duplicate_body: 9
+duplicate_subject_body: 9
+empty_subject: 196
+short_rows_lt_30: 35
+long_rows_gt_10000: 12
+urls_found: 703
+users_seen: 1
+folders_seen: 4
+validation: rows=1000, invalid_rows=0, duplicate_sample_ids=0, labels=benign=1000
+```
+
+The calibration experiment did not improve the expanded holdout:
+
+```text
+Phishing Email Detection baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+Phishing Email Detection + Enron 1000: accuracy=0.5625, false_positive_benign=6, false_negative_suspicious=1
+```
+
+Because the capped sample came from one user, this validates mechanics but does not close Enron calibration research. A source-diverse Enron sample is needed before deciding whether Enron helps.
+
+### Files changed
+
+- `tools/ml_data_preparation/enron.py`
+- `tools/ml_data_preparation/prepare_enron.py`
+- `tests/unit/tools/ml_data_preparation/test_enron.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_enron.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py
+python -m tools.ml_data_preparation.prepare_enron --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir" --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl" --limit 1000
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl"
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\metrics\phishing_plus_enron_1000_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pytest
+python -m pre_commit run --files tools/ml_data_preparation/enron.py tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests, Enron POC, validation, calibration experiment, full backend suite, and final pre-commit checks passed.
+```
+
+### Next step
+
+Improve Enron sampling to cover multiple users and folders before another calibration experiment.
