@@ -6570,3 +6570,86 @@ Focused tests, source-diverse Enron POC, validation, calibration experiment, ful
 ### Next step
 
 Investigate notification-like benign data or feature/source-aware calibration; do not continue adding generic Enron samples without a more targeted hypothesis.
+
+---
+
+## 2026-07-12 - Add synthetic benign notification calibration data
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+Thresholding, SpamAssassin `hard_ham`, and Enron calibration did not reduce the persistent false positives on benign account, MFA/security, and newsletter-style fixtures. The next hypothesis was that the model needed explicit benign notification-like examples rather than more generic benign email.
+
+### Decision
+
+Added synthetic benign notification templates and a preparation command that generates canonical JSONL outside Git.
+
+The synthetic source covers account summaries, account usage, MFA enabled notices, security login notices, password reset confirmations, newsletters, account preferences, cloud document shares, billing receipts, support tickets, HR policy updates, and vendor portal notices.
+
+The first generated dataset used `10` samples per category:
+
+```text
+processed: 120
+urls_found: 120
+validation: rows=120, invalid_rows=0, duplicate_sample_ids=0, labels=benign=120
+```
+
+Expanded holdout result:
+
+```text
+Phishing Email Detection baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+Synthetic benign notifications 120: accuracy=0.6250, false_positive_benign=2, false_negative_suspicious=4
+```
+
+A larger `50` samples per category variant produced:
+
+```text
+processed: 600
+urls_found: 600
+validation: rows=600, invalid_rows=0, duplicate_sample_ids=0, labels=benign=600
+```
+
+Expanded holdout result:
+
+```text
+Synthetic benign notifications 600: accuracy=0.5625, false_positive_benign=1, false_negative_suspicious=6
+```
+
+The experiment confirms that targeted benign notification data affects the desired false-positive family, but too much synthetic benign calibration suppresses suspicious recall. The next step should balance this with suspicious notification-style lures or use source-aware calibration rather than adding more benign templates alone.
+
+### Files changed
+
+- `tools/ml_data_preparation/synthetic_benign_notifications.py`
+- `tools/ml_data_preparation/prepare_synthetic_benign_notifications.py`
+- `tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py
+python -m tools.ml_data_preparation.prepare_synthetic_benign_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --samples-per-category 10
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl"
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\metrics\phishing_plus_synthetic_benign_notifications_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pytest
+python -m pre_commit run --files tools/ml_data_preparation/synthetic_benign_notifications.py tools/ml_data_preparation/prepare_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests, synthetic data generation, validation, and calibration experiments completed. Pending full backend and final pre-commit verification.
+```
+
+### Next step
+
+Add matching suspicious notification-style synthetic lures or source-aware calibration before further benign-only synthetic expansion.
