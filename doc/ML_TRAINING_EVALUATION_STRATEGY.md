@@ -1037,6 +1037,45 @@ Interpretation:
 - the useful next direction is not simply adding more synthetic benign data, but balancing synthetic benign notifications with additional suspicious notification-style lures or source-aware calibration;
 - model artifact and inference adapter work remain blocked.
 
+### Synthetic balanced notification calibration result
+
+Synthetic suspicious notification-style lures were added to balance the synthetic benign notification calibration set.
+
+Evaluated variants:
+
+```text
+A: Phishing Email Detection + synthetic benign 120 + synthetic suspicious 120
+B: Phishing Email Detection + synthetic benign 600 + synthetic suspicious 600
+C: Phishing Email Detection + synthetic benign 120 + synthetic suspicious 240
+```
+
+Training validation metrics:
+
+| Variant | Accuracy | Precision suspicious | Recall suspicious | F1 suspicious | Confusion matrix |
+|---|---:|---:|---:|---:|---|
+| A 120/120 | `0.9680` | `0.9549` | `0.9825` | `0.9685` | `[[1417, 69], [26, 1460]]` |
+| B 600/600 | `0.9681` | `0.9535` | `0.9842` | `0.9686` | `[[1506, 76], [25, 1557]]` |
+| C 120/240 | `0.9652` | `0.9524` | `0.9795` | `0.9657` | `[[1436, 74], [31, 1479]]` |
+
+Expanded holdout metrics:
+
+| Variant | Accuracy | False positive benign | False negative suspicious |
+|---|---:|---:|---:|
+| Baseline | `0.6250` | `6` | `0` |
+| Synthetic benign 120 | `0.6250` | `2` | `4` |
+| Synthetic benign 600 | `0.5625` | `1` | `6` |
+| A 120/120 | `0.5625` | `6` | `1` |
+| B 600/600 | `0.8125` | `2` | `1` |
+| C 120/240 | `0.6250` | `6` | `0` |
+
+Interpretation:
+
+- balanced synthetic notification calibration is the first variant that improves both accuracy and benign false positives while keeping suspicious false negatives low;
+- variant B meets the current success criteria with `accuracy=0.8125`, `false_positive_benign=2`, and `false_negative_suspicious=1`;
+- variant A over-emphasizes suspicious notification lures relative to benign coverage and reintroduces benign false positives;
+- variant C behaves like the original baseline on the expanded holdout;
+- model artifact and inference adapter work remain deferred until this calibration approach is validated on a larger holdout and with non-synthetic benign notification data.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
