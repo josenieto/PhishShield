@@ -1,0 +1,10 @@
+From: Vendor Portal <vendor@portal.example.com>
+Subject: Vendor invoice status update
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=portal.example.com; dkim=pass header.d=portal.example.com; dmarc=pass header.from=portal.example.com
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Invoice INV-2048 has moved to approved status in the vendor portal.
+You can view status history at https://portal.example.com/vendor/invoices/status.
+This is a status notification only.

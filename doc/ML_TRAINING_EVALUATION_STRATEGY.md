@@ -1076,6 +1076,70 @@ Interpretation:
 - variant C behaves like the original baseline on the expanded holdout;
 - model artifact and inference adapter work remain deferred until this calibration approach is validated on a larger holdout and with non-synthetic benign notification data.
 
+### 32-fixture notification holdout result
+
+The holdout was expanded from 16 to 32 fixtures to stress whether synthetic notification calibration generalizes beyond the first fixture set.
+
+Added benign fixtures:
+
+```text
+benign_account_billing_summary.eml
+benign_device_login_history.eml
+benign_mfa_recovery_codes_notice.eml
+benign_newsletter_security_tips.eml
+benign_cloud_storage_usage_digest.eml
+benign_vendor_invoice_status_update.eml
+benign_hr_benefits_reminder.eml
+benign_support_case_waiting_customer.eml
+```
+
+Added suspicious fixtures:
+
+```text
+suspicious_device_login_verification_lure.eml
+suspicious_mfa_recovery_codes_lure.eml
+suspicious_billing_profile_reauth_lure.eml
+suspicious_cloud_storage_expiry_lure.eml
+suspicious_vendor_invoice_portal_lure.eml
+suspicious_hr_benefits_login_lure.eml
+suspicious_support_case_auth_lure.eml
+suspicious_newsletter_preferences_credential_lure.eml
+```
+
+32-fixture comparison:
+
+| Variant | Accuracy | False positive benign | False negative suspicious |
+|---|---:|---:|---:|
+| Baseline | `0.6250` | `11` | `1` |
+| Variant B 600/600 | `0.8750` | `3` | `1` |
+
+Baseline 32-fixture result:
+
+```text
+total: 32
+correct: 20
+accuracy: 0.6250
+false_positive_benign: 11
+false_negative_suspicious: 1
+```
+
+Variant B 32-fixture result:
+
+```text
+total: 32
+correct: 28
+accuracy: 0.8750
+false_positive_benign: 3
+false_negative_suspicious: 1
+```
+
+Interpretation:
+
+- Variant B remains the strongest current calibration direction on the larger holdout;
+- the balanced synthetic notification calibration reduced benign false positives from `11` to `3` without increasing suspicious false negatives;
+- remaining benign false positives are still concentrated around account, MFA recovery, and newsletter-like language;
+- model artifact and inference adapter work remain deferred until the holdout expands further and a non-synthetic validation source confirms the calibration behavior.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.

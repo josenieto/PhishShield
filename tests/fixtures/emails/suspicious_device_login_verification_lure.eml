@@ -1,0 +1,10 @@
+From: Device Security <alerts@device-login-review.example.net>
+Subject: Device login verification required
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=device-login-review.example.net; dkim=pass header.d=device-login-review.example.net; dmarc=pass header.from=device-login-review.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+A new device login is pending verification.
+Confirm your login at https://device-login-review.example.net/verify/device-access to prevent account suspension.
+Verification must be completed today.

@@ -1,0 +1,10 @@
+From: Billing Profile <notice@billing-profile-auth.example.net>
+Subject: Billing profile reauthentication required
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=billing-profile-auth.example.net; dkim=pass header.d=billing-profile-auth.example.net; dmarc=pass header.from=billing-profile-auth.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your billing profile requires reauthentication before the next invoice can be released.
+Confirm your login and payment profile at https://billing-profile-auth.example.net/reauth/profile.
+The invoice will remain locked until verification is complete.
