@@ -6653,3 +6653,80 @@ Focused tests, synthetic data generation, validation, and calibration experiment
 ### Next step
 
 Add matching suspicious notification-style synthetic lures or source-aware calibration before further benign-only synthetic expansion.
+
+---
+
+## 2026-07-12 - Add synthetic suspicious notification calibration data
+
+Type: Feature
+Layer: Tooling
+Status: Done
+
+### Context
+
+Synthetic benign notification data reduced targeted benign false positives but introduced too many suspicious false negatives. The next hypothesis was that matching synthetic suspicious notification-style lures would restore suspicious recall while preserving benign calibration gains.
+
+### Decision
+
+Added synthetic suspicious notification templates and a preparation command that generates canonical JSONL outside Git.
+
+The source covers account verification, account usage suspension, MFA approval, security login verification, password reset portal, newsletter/account-preferences lures, cloud document review, billing/payment confirmation, support credential, HR acknowledgement, vendor reauthentication, and storage quota lures.
+
+Three variants were evaluated:
+
+```text
+A: synthetic benign 120 + synthetic suspicious 120
+B: synthetic benign 600 + synthetic suspicious 600
+C: synthetic benign 120 + synthetic suspicious 240
+```
+
+Expanded holdout results:
+
+```text
+Baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+Synthetic benign 120: accuracy=0.6250, false_positive_benign=2, false_negative_suspicious=4
+Synthetic benign 600: accuracy=0.5625, false_positive_benign=1, false_negative_suspicious=6
+A 120/120: accuracy=0.5625, false_positive_benign=6, false_negative_suspicious=1
+B 600/600: accuracy=0.8125, false_positive_benign=2, false_negative_suspicious=1
+C 120/240: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+```
+
+Variant B is the first calibration experiment to improve expanded holdout accuracy and reduce benign false positives while keeping suspicious false negatives low.
+
+### Files changed
+
+- `tools/ml_data_preparation/synthetic_suspicious_notifications.py`
+- `tools/ml_data_preparation/prepare_synthetic_suspicious_notifications.py`
+- `tests/unit/tools/ml_data_preparation/test_synthetic_suspicious_notifications.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_synthetic_suspicious_notifications.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_suspicious_notifications.py
+python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications.jsonl" --samples-per-category 10
+python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_240.jsonl" --samples-per-category 20
+python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --samples-per-category 50
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_240.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl"
+python -m tools.ml_training.train_baseline ...
+python -m tools.ml_training.evaluate_fixture_holdout ...
+python -m pytest
+python -m pre_commit run --files tools/ml_data_preparation/synthetic_suspicious_notifications.py tools/ml_data_preparation/prepare_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_suspicious_notifications.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests, synthetic suspicious generation, validation, calibration variants, full backend suite, and final pre-commit checks passed.
+```
+
+### Next step
+
+Expand the holdout before artifact work: variant B is promising, but it is still validated on a small synthetic-influenced fixture set.
