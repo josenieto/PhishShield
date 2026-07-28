@@ -1,0 +1,9 @@
+From: Benefits Portal <hr@benefits-login-review.example.net>
+Subject: Benefits enrollment login required
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=benefits-login-review.example.net; dkim=pass header.d=benefits-login-review.example.net; dmarc=pass header.from=benefits-login-review.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your benefits enrollment profile requires login confirmation.
+Confirm your employee account at https://benefits-login-review.example.net/enrollment/login to keep coverage selections active.

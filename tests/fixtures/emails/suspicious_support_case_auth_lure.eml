@@ -1,0 +1,9 @@
+From: Help Desk <case@support-auth-review.example.net>
+Subject: Support case authentication required
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=support-auth-review.example.net; dkim=pass header.d=support-auth-review.example.net; dmarc=pass header.from=support-auth-review.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+Your support case will close unless you authenticate your account.
+Confirm your login at https://support-auth-review.example.net/case/auth to keep the case open.

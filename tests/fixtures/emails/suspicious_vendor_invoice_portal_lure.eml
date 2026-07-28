@@ -1,0 +1,9 @@
+From: Vendor Billing <billing@vendor-invoice-portal.example.net>
+Subject: Vendor invoice portal authentication required
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=vendor-invoice-portal.example.net; dkim=pass header.d=vendor-invoice-portal.example.net; dmarc=pass header.from=vendor-invoice-portal.example.net
+Content-Type: text/plain; charset=utf-8
+
+Hello,
+
+A vendor invoice is waiting in the portal and requires authentication.
+Confirm your vendor portal login at https://vendor-invoice-portal.example.net/auth/invoice before payment release.
