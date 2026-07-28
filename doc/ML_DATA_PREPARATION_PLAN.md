@@ -861,6 +861,85 @@ The source-diverse sample covers more users and folders than the first capped sa
 
 ---
 
+## Synthetic Benign Notification Calibration Data
+
+Synthetic benign notification templates were added to target the persistent false-positive family in the expanded holdout:
+
+```text
+account activity summaries
+account usage digests
+MFA enabled notices
+security login notices
+password reset confirmations
+newsletter/product updates
+account preference updates
+cloud document share notices
+billing receipts
+support ticket updates
+HR policy updates
+vendor portal notices
+```
+
+The source is synthetic and versioned as code/templates. Generated JSONL outputs remain outside Git:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\
+```
+
+Preparation command:
+
+```text
+python -m tools.ml_data_preparation.prepare_synthetic_benign_notifications --output path/to/synthetic_benign_notifications.jsonl --samples-per-category 10
+```
+
+Initial generation result:
+
+```text
+samples_per_category: 10
+processed: 120
+urls_found: 120
+categories: 12 categories x 10 rows
+```
+
+Prepared JSONL validation result:
+
+```text
+files: 1
+rows: 120
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=120
+empty_subject: 0
+empty_body: 0
+urls_found: 120
+```
+
+A larger generated variant was also evaluated outside Git:
+
+```text
+samples_per_category: 50
+processed: 600
+urls_found: 600
+categories: 12 categories x 50 rows
+```
+
+Prepared JSONL validation result:
+
+```text
+files: 1
+rows: 600
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=600
+empty_subject: 0
+empty_body: 0
+urls_found: 600
+```
+
+The synthetic data is intended for calibration experiments and regression analysis. It is not a substitute for real benign notification corpora.
+
+---
+
 ## Next Implementation Questions
 
 1. Should the first training baseline use a balanced subset or the full imbalanced SpamAssassin subset with class weighting?
