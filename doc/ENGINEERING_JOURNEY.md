@@ -6812,3 +6812,59 @@ Focused tests and 32-fixture holdout comparisons completed. Pending full backend
 ### Next step
 
 Do not move to model artifact yet. Add at least one more non-synthetic or adversarial holdout expansion, then consider freezing Variant B as the first experimental model candidate.
+
+---
+
+## 2026-07-12 - Close ML baseline selection phase
+
+Type: Documentation
+Layer: Tooling
+Status: Done
+
+### Context
+
+The ML exploration produced a reproducible preparation, validation, training, metrics, threshold, and holdout workflow. Multiple public and synthetic data combinations were evaluated. The strongest result came from balancing `Phishing Email Detection` with synthetic benign and suspicious notification calibration data.
+
+### Decision
+
+Closed the baseline selection phase with the following current experimental candidate:
+
+```text
+TF-IDF + Logistic Regression
+training data: Phishing Email Detection + synthetic benign notifications 600 + synthetic suspicious notifications 600
+feature_set: text_with_light_metadata
+```
+
+Candidate evidence on the expanded `32` fixture holdout:
+
+```text
+accuracy: 0.8750
+false_positive_benign: 3
+false_negative_suspicious: 1
+```
+
+The ADR now records the candidate, the rejected/deferred alternatives, and the architectural consequence: model artifact and inference integration remain deferred. The next ML phase is experimental artifact planning plus stronger non-synthetic validation, not production inference.
+
+### Files changed
+
+- `doc/ADR.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/ADR.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Plan experimental artifact export outside Git only after confirming what metadata, model card fields, and validation gates are required.

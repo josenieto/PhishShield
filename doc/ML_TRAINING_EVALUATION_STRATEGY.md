@@ -1140,6 +1140,58 @@ Interpretation:
 - remaining benign false positives are still concentrated around account, MFA recovery, and newsletter-like language;
 - model artifact and inference adapter work remain deferred until the holdout expands further and a non-synthetic validation source confirms the calibration behavior.
 
+### Baseline selection phase conclusion
+
+The current experimental ML baseline candidate is:
+
+```text
+TF-IDF + Logistic Regression
+training data: Phishing Email Detection + synthetic benign notifications 600 + synthetic suspicious notifications 600
+feature_set: text_with_light_metadata
+```
+
+Selection evidence:
+
+```text
+expanded holdout size: 32 fixtures
+accuracy: 0.8750
+false_positive_benign: 3
+false_negative_suspicious: 1
+```
+
+Experiment summary:
+
+| Experiment | Holdout size | Accuracy | False positive benign | False negative suspicious | Decision |
+|---|---:|---:|---:|---:|---|
+| SpamAssassin-only baseline | `10` | `0.4000` | `5` | `1` | Reject |
+| Fraudulent E-mail Corpus baseline | `10` | `0.4000` | `1` | `5` | Reject |
+| Phishing Email Detection baseline | `16` | `0.6250` | `6` | `0` | Partial |
+| Threshold sweep | `16` | no improvement | - | - | Reject |
+| SpamAssassin `hard_ham` calibration | `16` | `0.6250` | `6` | `0` | Reject |
+| Enron capped sample | `16` | `0.5625` | `6` | `1` | Reject |
+| Enron source-diverse sample | `16` | `0.6250` | `6` | `0` | Defer |
+| Synthetic benign notifications `120` | `16` | `0.6250` | `2` | `4` | Partial |
+| Synthetic benign notifications `600` | `16` | `0.5625` | `1` | `6` | Reject |
+| Balanced synthetic notifications A `120/120` | `16` | `0.5625` | `6` | `1` | Reject |
+| Balanced synthetic notifications B `600/600` | `16` | `0.8125` | `2` | `1` | Promising |
+| Balanced synthetic notifications C `120/240` | `16` | `0.6250` | `6` | `0` | Reject |
+| Phishing Email Detection baseline | `32` | `0.6250` | `11` | `1` | Baseline |
+| Balanced synthetic notifications B `600/600` | `32` | `0.8750` | `3` | `1` | Candidate |
+
+Decision:
+
+- close the baseline selection phase with Variant B as the current experimental candidate;
+- keep generated datasets and metrics outside Git;
+- do not export or wire a production model artifact yet;
+- require at least one more non-synthetic notification-style validation source or a larger independent holdout before treating the candidate as product-ready.
+
+Next ML phase:
+
+- define an experimental artifact export contract outside Git;
+- add model-card metadata for the selected candidate;
+- validate against additional non-synthetic notification-like benign and suspicious examples;
+- keep deterministic analysis authoritative even if a model-assisted path is later enabled.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
