@@ -6474,3 +6474,99 @@ Focused tests, Enron POC, validation, calibration experiment, full backend suite
 ### Next step
 
 Improve Enron sampling to cover multiple users and folders before another calibration experiment.
+
+---
+
+## 2026-07-12 - Evaluate source-diverse Enron sampling
+
+Type: Experiment
+Layer: Tooling
+Status: Done
+
+### Context
+
+The first capped Enron POC validated preparation mechanics, but sampled only one mailbox user. The next step was to add source-diverse sampling controls and test whether broader Enron coverage improves benign calibration on the expanded PhishShield fixture holdout.
+
+### Decision
+
+Added source-diverse Enron sampling controls and evaluated a capped `2000` row sample.
+
+Sampling settings:
+
+```text
+limit: 2000
+max_per_user: 50
+max_per_folder: 20
+```
+
+Preparation result:
+
+```text
+discovered_files: 291261
+processed: 2000
+failed: 0
+skipped_empty_body: 0
+skipped_user_limit: 119161
+skipped_folder_limit: 170100
+duplicate_body: 26
+duplicate_subject_body: 23
+empty_subject: 55
+short_rows_lt_30: 78
+long_rows_gt_10000: 39
+urls_found: 1472
+users_seen: 58
+folders_seen: 244
+```
+
+Validation result:
+
+```text
+rows: 2000
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=2000
+empty_subject: 55
+empty_body: 0
+urls_found: 1472
+```
+
+Expanded holdout result:
+
+```text
+Phishing Email Detection baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+Phishing Email Detection + Enron diverse 2000: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+```
+
+Source-diverse Enron sampling did not reduce benign false positives. This suggests that generic business email alone is not enough for the current calibration gap; the model needs notification-like benign examples or a different feature/calibration strategy.
+
+### Files changed
+
+- `tools/ml_data_preparation/prepare_enron.py`
+- `tests/unit/tools/ml_data_preparation/test_prepare_enron.py`
+- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py
+python -m tools.ml_data_preparation.prepare_enron --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir" --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl" --limit 2000 --max-per-user 50 --max-per-folder 20
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl"
+python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\metrics\phishing_plus_enron_diverse_2000_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m pytest
+python -m pre_commit run --files tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests, source-diverse Enron POC, validation, calibration experiment, full backend suite, and final pre-commit checks passed.
+```
+
+### Next step
+
+Investigate notification-like benign data or feature/source-aware calibration; do not continue adding generic Enron samples without a more targeted hypothesis.
