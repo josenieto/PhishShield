@@ -693,6 +693,94 @@ The high URL counts confirm that `hard_ham` is a difficult benign source, but la
 
 ---
 
+## Enron Benign Calibration Workflow
+
+The Enron Email Dataset is the next benign calibration candidate after SpamAssassin `hard_ham` failed to improve the expanded PhishShield fixture holdout.
+
+Reference:
+
+```text
+https://www.cs.cmu.edu/~enron/
+```
+
+Recommended source archive:
+
+```text
+https://www.cs.cmu.edu/~enron/enron_mail_20150507.tar.gz
+```
+
+Expected local storage outside Git:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\
+```
+
+Purpose:
+
+- add realistic benign business-email language;
+- improve calibration for account, security, MFA, newsletter, cloud-share, HR, support, billing, and operational messages;
+- reduce false positives on benign PhishShield fixtures without losing suspicious recall.
+
+Privacy and handling rules:
+
+- do not commit raw Enron data;
+- do not commit prepared Enron samples;
+- do not copy real Enron message bodies into tests, docs, issues, or chat;
+- use synthetic fixtures for unit tests;
+- keep generated JSONL outside Git;
+- document only aggregate metrics and commands;
+- treat names, email addresses, bodies, folders, and mailbox structure as sensitive even though the corpus is public.
+
+Preparation POC scope:
+
+- start with a capped sample before broad ingestion;
+- record sampled user/mailbox/folder counts without exposing message content;
+- skip attachments because the CMU version does not include attachments and the first baseline remains text-first;
+- skip empty bodies;
+- report duplicate body and duplicate `subject + body_text` counts;
+- report very short and very long rows;
+- report folder distribution;
+- report sender-domain distribution only in aggregate;
+- preserve source metadata needed for leakage control without using it as a model feature.
+
+Initial exclusion candidates:
+
+- deleted/trash folders if they are noisy;
+- folders dominated by automated list traffic if they distort business-email calibration;
+- exact duplicate messages;
+- messages with empty extracted body;
+- messages that fail safe parsing.
+
+Leakage controls:
+
+- do not randomly split Enron rows across train and validation without source awareness;
+- prefer mailbox/user-aware or folder-aware reporting;
+- keep PhishShield fixtures out of all training and validation data;
+- avoid using local path, mailbox owner, folder name, or source dataset name as model text features.
+
+Planned first experiment after a POC:
+
+```text
+benign: Phishing Email Detection benign rows + capped Enron benign rows
+suspicious: Phishing Email Detection suspicious rows
+feature_set: text_with_light_metadata
+strategy: balanced
+evaluation: expanded PhishShield fixture holdout
+```
+
+Success criteria:
+
+```text
+false_positive_benign < 6
+false_negative_suspicious <= 1
+accuracy > 0.6250
+```
+
+The Enron workflow must be revisited before model artifact work. A useful calibration experiment does not imply that Enron-derived artifacts are ready for packaging.
+
+---
+
 ## Next Implementation Questions
 
 1. Should the first training baseline use a balanced subset or the full imbalanced SpamAssassin subset with class weighting?
