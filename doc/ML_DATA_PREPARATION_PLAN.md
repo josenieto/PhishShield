@@ -716,6 +716,12 @@ C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\
 C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\
 ```
 
+The first preparation prototype uses the extracted `maildir` directory rather than reading the compressed archive directly:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir
+```
+
 Purpose:
 
 - add realistic benign business-email language;
@@ -778,6 +784,41 @@ accuracy > 0.6250
 ```
 
 The Enron workflow must be revisited before model artifact work. A useful calibration experiment does not imply that Enron-derived artifacts are ready for packaging.
+
+First capped directory POC result:
+
+```text
+input_dir: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir
+output: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl
+limit: 1000
+discovered_files: 1000
+processed: 1000
+failed: 0
+skipped_empty_body: 0
+duplicate_body: 9
+duplicate_subject_body: 9
+empty_subject: 196
+short_rows_lt_30: 35
+long_rows_gt_10000: 12
+urls_found: 703
+users_seen: 1
+folders_seen: 4
+```
+
+Prepared JSONL validation result:
+
+```text
+files: 1
+rows: 1000
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=1000
+empty_subject: 196
+empty_body: 0
+urls_found: 703
+```
+
+The first capped sample came only from `allen-p`, so it is useful for proving mechanics but not broad enough for a calibration conclusion across Enron users.
 
 ---
 

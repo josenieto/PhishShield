@@ -837,6 +837,60 @@ accuracy > 0.6250
 
 Model artifact and inference adapter work remain blocked until the expanded holdout improves and the data-handling risks are addressed.
 
+### Enron capped POC result
+
+The first Enron POC used a capped `1000` message sample from the extracted `maildir` directory and combined it with the prepared `Phishing Email Detection` JSONL.
+
+Prepared Enron validation result:
+
+```text
+rows: 1000
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=1000
+empty_subject: 196
+empty_body: 0
+urls_found: 703
+```
+
+Training validation metrics:
+
+```text
+samples: 14618
+train_samples: 11694
+validation_samples: 2924
+labels: benign=7309, suspicious=7309
+accuracy: 0.9634
+precision_suspicious: 0.9520
+recall_suspicious: 0.9761
+f1_suspicious: 0.9639
+confusion_matrix: [[1390, 72], [35, 1427]]
+```
+
+Expanded holdout result:
+
+```text
+total: 16
+correct: 9
+accuracy: 0.5625
+false_positive_benign: 6
+false_negative_suspicious: 1
+```
+
+Comparison:
+
+```text
+Phishing Email Detection baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+Phishing Email Detection + Enron 1000: accuracy=0.5625, false_positive_benign=6, false_negative_suspicious=1
+```
+
+Interpretation:
+
+- the first capped Enron sample validates preparation mechanics but does not improve benign calibration;
+- the sample is source-narrow (`users_seen=1`), so it should not be treated as a representative Enron calibration result;
+- adding this sample introduced one suspicious false negative without reducing benign false positives;
+- the next Enron experiment should sample across multiple users/folders or deliberately target benign account/security/newsletter-like folders before drawing stronger conclusions.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
