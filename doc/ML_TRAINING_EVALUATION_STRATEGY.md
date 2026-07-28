@@ -891,6 +891,69 @@ Interpretation:
 - adding this sample introduced one suspicious false negative without reducing benign false positives;
 - the next Enron experiment should sample across multiple users/folders or deliberately target benign account/security/newsletter-like folders before drawing stronger conclusions.
 
+### Enron source-diverse POC result
+
+The second Enron POC used the same extracted `maildir` directory but applied source-diverse caps:
+
+```text
+limit: 2000
+max_per_user: 50
+max_per_folder: 20
+```
+
+Prepared Enron validation result:
+
+```text
+rows: 2000
+invalid_rows: 0
+duplicate_sample_ids: 0
+labels: benign=2000
+empty_subject: 55
+empty_body: 0
+urls_found: 1472
+users_seen: 58
+folders_seen: 244
+```
+
+Training validation metrics:
+
+```text
+samples: 14618
+train_samples: 11694
+validation_samples: 2924
+labels: benign=7309, suspicious=7309
+accuracy: 0.9651
+precision_suspicious: 0.9474
+recall_suspicious: 0.9850
+f1_suspicious: 0.9658
+confusion_matrix: [[1382, 80], [22, 1440]]
+```
+
+Expanded holdout result:
+
+```text
+total: 16
+correct: 10
+accuracy: 0.6250
+false_positive_benign: 6
+false_negative_suspicious: 0
+```
+
+Comparison:
+
+```text
+Phishing Email Detection baseline: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+Phishing Email Detection + Enron 1000: accuracy=0.5625, false_positive_benign=6, false_negative_suspicious=1
+Phishing Email Detection + Enron diverse 2000: accuracy=0.6250, false_positive_benign=6, false_negative_suspicious=0
+```
+
+Interpretation:
+
+- source-diverse Enron sampling improves over the first narrow Enron sample, but only returns to the original `Phishing Email Detection` baseline;
+- Enron does not reduce benign false positives on the expanded holdout in this configuration;
+- the persistent false positives are still account, MFA/security, and newsletter-style fixtures;
+- the next calibration direction should target notification-like benign data or introduce feature/source-aware calibration rather than adding generic business email alone.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
