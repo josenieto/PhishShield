@@ -938,6 +938,49 @@ urls_found: 600
 
 The synthetic data is intended for calibration experiments and regression analysis. It is not a substitute for real benign notification corpora.
 
+## Synthetic Suspicious Notification Calibration Data
+
+Synthetic suspicious notification-style lures were added to balance the benign notification calibration set and recover suspicious recall.
+
+The source is synthetic and versioned as code/templates. Generated JSONL outputs remain outside Git:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\
+```
+
+Categories:
+
+```text
+account_activity_verification_lure
+account_usage_suspension_lure
+MFA push approval lure
+security login verification lure
+password reset portal lure
+newsletter account preferences lure
+cloud document review lure
+billing payment confirmation lure
+support ticket credential lure
+HR policy acknowledgement lure
+vendor portal reauthentication lure
+storage quota verification lure
+```
+
+Preparation command:
+
+```text
+python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output path/to/synthetic_suspicious_notifications.jsonl --samples-per-category 10
+```
+
+Generated variants evaluated outside Git:
+
+| Output | Samples per category | Rows | Label | URLs found |
+|---|---:|---:|---|---:|
+| `synthetic_suspicious_notifications.jsonl` | 10 | 120 | `suspicious=120` | 120 |
+| `synthetic_suspicious_notifications_240.jsonl` | 20 | 240 | `suspicious=240` | 240 |
+| `synthetic_suspicious_notifications_600.jsonl` | 50 | 600 | `suspicious=600` | 600 |
+
+The synthetic suspicious source is intended for calibration experiments and regression analysis. It is not a replacement for real phishing corpora.
+
 ---
 
 ## Next Implementation Questions
