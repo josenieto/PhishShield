@@ -98,6 +98,47 @@ This section describes a deferred target capability. It is not part of the curre
 - **Embedded local inference target:** a later version may export a selected classifier model, for example an ONNX artifact derived from a lightweight encoder or classifier, and execute it directly in the backend runtime.
 - **Advantage:** this keeps inference self-contained inside PhishShield, avoids external runtime installation requirements, and preserves local privacy guarantees.
 
+### 4.3 Experimental ML Baseline Candidate
+
+- **Decision:** the current experimental ML baseline candidate is a `TF-IDF + Logistic Regression` classifier trained with:
+  - the prepared `Phishing Email Detection` dataset;
+  - synthetic benign notification calibration data with `600` generated samples;
+  - synthetic suspicious notification-style lure calibration data with `600` generated samples.
+- **Status:** this is an experimental baseline candidate, not a production model and not yet an inference artifact.
+- **Evidence:** on the expanded `32` fixture PhishShield holdout, this candidate produced:
+
+```text
+accuracy: 0.8750
+false_positive_benign: 3
+false_negative_suspicious: 1
+```
+
+- **Rationale:** this is the first evaluated candidate that improves overall holdout accuracy and reduces benign false positives while keeping suspicious false negatives low.
+- **Rejected or deferred alternatives:**
+
+| Experiment | Holdout size | Accuracy | False positive benign | False negative suspicious | Decision |
+|---|---:|---:|---:|---:|---|
+| SpamAssassin-only baseline | `10` | `0.4000` | `5` | `1` | Rejected: generic spam signal did not transfer to phishing quality. |
+| Fraudulent E-mail Corpus baseline | `10` | `0.4000` | `1` | `5` | Rejected: 419 fraud language reduced benign false positives but lost phishing recall. |
+| Phishing Email Detection baseline | `16` | `0.6250` | `6` | `0` | Partial: good suspicious recall, poor benign calibration. |
+| Threshold sweep | `16` | no improvement | - | - | Rejected: simple thresholding did not solve benign false positives. |
+| SpamAssassin `hard_ham` calibration | `16` | `0.6250` | `6` | `0` | Rejected: difficult ham did not improve notification-like benign calibration. |
+| Enron capped sample | `16` | `0.5625` | `6` | `1` | Rejected: narrow sample worsened holdout. |
+| Enron source-diverse sample | `16` | `0.6250` | `6` | `0` | Deferred: generic business email did not improve the current false-positive family. |
+| Synthetic benign notifications `120` | `16` | `0.6250` | `2` | `4` | Partial: reduced benign false positives but over-calibrated toward benign. |
+| Synthetic benign notifications `600` | `16` | `0.5625` | `1` | `6` | Rejected: over-calibrated toward benign. |
+| Balanced synthetic notifications `600/600` | `16` | `0.8125` | `2` | `1` | Promising. |
+| Balanced synthetic notifications `600/600` | `32` | `0.8750` | `3` | `1` | Current experimental candidate. |
+
+- **Limitations:**
+  - the holdout is still small;
+  - the candidate depends partly on synthetic calibration data;
+  - no non-synthetic notification-style validation source has confirmed the result yet;
+  - no model artifact has been exported;
+  - no runtime inference adapter is enabled;
+  - deterministic analysis remains the authoritative result path.
+- **Architectural consequence:** model artifact export, model-card metadata, and local inference adapter work may proceed only as explicitly experimental follow-up work. Product-facing inference remains deferred until additional non-synthetic validation and larger holdout coverage support the candidate.
+
 ---
 
 ## 5. Quality Strategy and Repository Lifecycle
