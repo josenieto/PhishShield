@@ -7094,3 +7094,48 @@ Pending full verification.
 ### Next step
 
 Run the configured endpoint against the exported artifact outside Git and document the local experimental setup.
+
+---
+
+## 2026-07-12 - Declare joblib ML dependency
+
+Type: Fix
+Layer: Tooling
+Status: Done
+
+### Context
+
+The experimental sklearn adapter and baseline artifact export tooling import `joblib` directly for model persistence and loading.
+
+Although `joblib` is commonly installed as a transitive dependency of scikit-learn, direct project imports should be declared explicitly so CI and future environments do not depend on transitive dependency behavior.
+
+### Decision
+
+Added `joblib` to the optional `ml` dependency group.
+
+This keeps the CI install path `.[test,ml]` aligned with the model artifact export and loading code.
+
+### Files changed
+
+- `pyproject.toml`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py tests/unit/tools/ml_training/test_export_baseline_artifact.py
+python -m pytest
+python -m pre_commit run --files pyproject.toml doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending verification.
+```
+
+### Next step
+
+Re-run CI after committing the dependency fix.
