@@ -6981,3 +6981,59 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Implement the experimental sklearn model assessment adapter with configured, not-configured, and failed-load test coverage before changing API wiring.
+
+---
+
+## 2026-07-12 - Add experimental sklearn model assessment adapter
+
+Type: Feature
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+The experimental baseline candidate had an exported local `joblib` artifact and metadata, and the adapter boundary had been documented. The next step was to prove that Infrastructure can load the artifact and return advisory `ModelAssessment` output without changing API wiring or deterministic analysis.
+
+### Decision
+
+Added `SklearnModelAssessmentAdapter` as an isolated Infrastructure adapter.
+
+The adapter loads a configured sklearn `joblib` pipeline and metadata, parses raw email with the existing Python email parser, builds the same `text_with_light_metadata` feature representation used during training, and maps prediction output into the application-level `ModelAssessment` contract.
+
+The adapter remains experimental and is not wired into runtime configuration yet.
+
+Behavior covered:
+
+```text
+missing artifact or metadata -> not_configured
+configured tiny artifact -> completed
+invalid artifact -> failed
+unsupported metadata feature_set -> failed
+```
+
+### Files changed
+
+- `src/infrastructure/adapters/model_assessment/sklearn_model_assessment_adapter.py`
+- `tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py
+python -m pytest
+python -m pre_commit run --files src/infrastructure/adapters/model_assessment/sklearn_model_assessment_adapter.py tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests passed. Pending full backend and final pre-commit verification.
+```
+
+### Next step
+
+Wire the experimental adapter through runtime configuration while preserving the noop adapter as the default.
