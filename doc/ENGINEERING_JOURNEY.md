@@ -7139,3 +7139,69 @@ Pending verification.
 ### Next step
 
 Re-run CI after committing the dependency fix.
+
+---
+
+## 2026-07-12 - Validate configured experimental model endpoint
+
+Type: Test
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+The experimental sklearn adapter had been wired through runtime configuration and the baseline candidate artifact existed outside Git. The next step was to verify the actual configured endpoint path with the exported artifact while confirming the fallback and deterministic endpoint behavior.
+
+### Decision
+
+Validated `POST /analyze-email-model-assessment` with the exported experimental artifact using `TestClient` and runtime environment variables.
+
+Configuration used:
+
+```text
+PHISHSHIELD_MODEL_ASSESSMENT_ENABLED=true
+PHISHSHIELD_MODEL_ARTIFACT_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
+PHISHSHIELD_MODEL_METADATA_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+```
+
+Configured endpoint results:
+
+```text
+suspicious_mfa_push_approval_lure.eml: 200 completed suspicious confidence=0.8332
+benign_mfa_enabled_notice.eml: 200 completed benign confidence=0.6228
+suspicious_cloud_storage_quota_lure.eml: 200 completed suspicious confidence=0.9604
+benign_account_billing_summary.eml: 200 completed benign confidence=0.6769
+```
+
+Fallback without model configuration returned:
+
+```text
+status=not_configured
+label=unknown
+confidence=None
+```
+
+The deterministic `/analyze-email` endpoint was checked with model environment variables enabled and continued to respond independently with deterministic findings.
+
+### Files changed
+
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Start tomorrow with automated configured app-factory coverage or local setup documentation for the experimental model endpoint.
