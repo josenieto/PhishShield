@@ -9,9 +9,6 @@ from application.use_cases.assess_raw_email_with_model import (
 from infrastructure.adapters.model_assessment.noop_model_assessment_adapter import (
     NoopModelAssessmentAdapter,
 )
-from infrastructure.adapters.model_assessment.sklearn_model_assessment_adapter import (
-    SklearnModelAssessmentAdapter,
-)
 from infrastructure.config.api_defaults import DEFAULT_API_SETTINGS, ApiSettings
 from infrastructure.entrypoints.api.routers.analyze_email import _read_upload_file_with_limit
 from infrastructure.entrypoints.api.schemas.model_assessment import (
@@ -57,6 +54,10 @@ async def analyze_email_model_assessment(
 
 def _build_assess_raw_email_with_model_use_case(api_settings: ApiSettings) -> AssessRawEmailWithModelUseCase:
     if api_settings.model_assessment_enabled:
+        from infrastructure.adapters.model_assessment.sklearn_model_assessment_adapter import (
+            SklearnModelAssessmentAdapter,
+        )
+
         return AssessRawEmailWithModelUseCase(
             model_assessment_port=SklearnModelAssessmentAdapter(
                 model_artifact_path=Path(api_settings.model_artifact_path),
