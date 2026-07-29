@@ -542,13 +542,13 @@ Out of scope for this phase:
 
 ### Phase 9: Runtime Configuration Wiring
 
-Planned next implementation step:
+Implemented step:
 
 ```text
 feat(api): Wire experimental model assessment adapter through config.
 ```
 
-Planned scope:
+Completed scope:
 
 - add runtime settings for enabling model assessment;
 - read artifact and metadata paths from configuration;
@@ -556,11 +556,42 @@ Planned scope:
 - use `SklearnModelAssessmentAdapter` only when explicitly enabled and paths are configured;
 - add API tests for configured, not-configured, and failed adapter behavior.
 
+Runtime settings:
+
+```text
+PHISHSHIELD_MODEL_ASSESSMENT_ENABLED=true
+PHISHSHIELD_MODEL_ARTIFACT_PATH=path/to/phishshield_baseline_candidate.joblib
+PHISHSHIELD_MODEL_METADATA_PATH=path/to/phishshield_baseline_candidate.metadata.json
+```
+
+Current behavior:
+
+- model assessment remains disabled by default;
+- missing or disabled config returns the existing `not_configured` response;
+- configured local artifact paths enable the experimental sklearn adapter;
+- the endpoint remains separate from `/analyze-email`;
+- deterministic analysis is not affected by model configuration.
+
 Out of scope:
 
 - frontend changes beyond existing model panel behavior;
 - production artifact release;
 - deterministic/model score merging.
+
+### Phase 10: Runtime Validation And UI Copy
+
+Planned next implementation step:
+
+```text
+test(ml): Validate configured experimental model endpoint.
+```
+
+Planned scope:
+
+- run the configured endpoint against the exported artifact outside Git;
+- verify response shape and advisory copy from the existing frontend panel;
+- document local configuration steps;
+- keep the feature experimental and disabled by default.
 
 ---
 
