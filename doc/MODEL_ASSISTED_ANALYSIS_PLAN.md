@@ -580,18 +580,53 @@ Out of scope:
 
 ### Phase 10: Runtime Validation And UI Copy
 
-Planned next implementation step:
+Completed validation step:
 
 ```text
 test(ml): Validate configured experimental model endpoint.
 ```
 
-Planned scope:
+Completed scope:
 
 - run the configured endpoint against the exported artifact outside Git;
-- verify response shape and advisory copy from the existing frontend panel;
+- verify response shape from the configured model-assessment endpoint;
+- verify fallback behavior without model configuration;
+- verify deterministic `/analyze-email` remains unaffected while model configuration is enabled;
 - document local configuration steps;
 - keep the feature experimental and disabled by default.
+
+Runtime validation used:
+
+```text
+PHISHSHIELD_MODEL_ASSESSMENT_ENABLED=true
+PHISHSHIELD_MODEL_ARTIFACT_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
+PHISHSHIELD_MODEL_METADATA_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+```
+
+Configured endpoint checks with `TestClient` returned `completed` model assessments:
+
+| Fixture | Status | Label | Confidence |
+|---|---|---|---:|
+| `suspicious_mfa_push_approval_lure.eml` | `completed` | `suspicious` | `0.8332` |
+| `benign_mfa_enabled_notice.eml` | `completed` | `benign` | `0.6228` |
+| `suspicious_cloud_storage_quota_lure.eml` | `completed` | `suspicious` | `0.9604` |
+| `benign_account_billing_summary.eml` | `completed` | `benign` | `0.6769` |
+
+Fallback without model environment variables returned:
+
+```text
+status: not_configured
+label: unknown
+confidence: None
+```
+
+The deterministic endpoint was also checked with model environment variables enabled and continued to return deterministic findings independently of the model branch.
+
+Remaining validation before product-facing inference:
+
+- add an automated app-factory integration test for configured model assessment using a temporary artifact;
+- document local developer setup in `doc/API.md` or README when the feature is ready for broader use;
+- review frontend copy for explicit experimental/advisory language.
 
 ---
 
