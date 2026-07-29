@@ -7031,9 +7031,111 @@ python -m pre_commit run --files src/infrastructure/adapters/model_assessment/sk
 Result:
 
 ```text
-Focused tests passed. Pending full backend and final pre-commit verification.
+Focused tests, full backend suite, and final pre-commit checks passed.
 ```
 
 ### Next step
 
 Wire the experimental adapter through runtime configuration while preserving the noop adapter as the default.
+
+---
+
+## 2026-07-12 - Wire experimental model assessment adapter through config
+
+Type: Feature
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+`SklearnModelAssessmentAdapter` existed as an isolated Infrastructure adapter, but the API still always used the noop adapter. The next step was to expose runtime configuration that keeps model assessment disabled by default and uses the sklearn adapter only when explicit local artifact paths are configured.
+
+### Decision
+
+Added model assessment runtime settings and wired the model-assessment endpoint to select the adapter from `ApiSettings`.
+
+The default remains `NoopModelAssessmentAdapter`. The experimental sklearn adapter is used only when model assessment is enabled and artifact/metadata paths are supplied.
+
+Runtime settings:
+
+```text
+PHISHSHIELD_MODEL_ASSESSMENT_ENABLED
+PHISHSHIELD_MODEL_ARTIFACT_PATH
+PHISHSHIELD_MODEL_METADATA_PATH
+```
+
+The endpoint remains separate from deterministic analysis, and the model output remains advisory.
+
+### Files changed
+
+- `src/infrastructure/config/api_defaults.py`
+- `src/infrastructure/entrypoints/api/routers/model_assessment.py`
+- `tests/unit/infrastructure/config/test_api_defaults.py`
+- `tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/config/test_api_defaults.py tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py
+python -m pytest
+python -m pre_commit run --files src/infrastructure/config/api_defaults.py src/infrastructure/entrypoints/api/routers/model_assessment.py tests/unit/infrastructure/config/test_api_defaults.py tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending full verification.
+```
+
+### Next step
+
+Run the configured endpoint against the exported artifact outside Git and document the local experimental setup.
+
+---
+
+## 2026-07-12 - Declare joblib ML dependency
+
+Type: Fix
+Layer: Tooling
+Status: Done
+
+### Context
+
+The experimental sklearn adapter and baseline artifact export tooling import `joblib` directly for model persistence and loading.
+
+Although `joblib` is commonly installed as a transitive dependency of scikit-learn, direct project imports should be declared explicitly so CI and future environments do not depend on transitive dependency behavior.
+
+### Decision
+
+Added `joblib` to the optional `ml` dependency group.
+
+This keeps the CI install path `.[test,ml]` aligned with the model artifact export and loading code.
+
+### Files changed
+
+- `pyproject.toml`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py tests/unit/tools/ml_training/test_export_baseline_artifact.py
+python -m pytest
+python -m pre_commit run --files pyproject.toml doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Pending verification.
+```
+
+### Next step
+
+Re-run CI after committing the dependency fix.

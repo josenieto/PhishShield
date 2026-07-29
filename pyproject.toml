@@ -26,6 +26,7 @@ dev = [
 ]
 ml = [
     "scikit-learn>=1.5,<2.0",
+    "joblib>=1.4,<2.0",
 ]
 
 [tool.setuptools.packages.find]
