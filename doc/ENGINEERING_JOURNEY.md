@@ -6937,3 +6937,47 @@ Focused tests and artifact export completed. Pending full backend and final pre-
 ### Next step
 
 Design an experimental local model assessment adapter and config path for loading this artifact, while keeping model-assisted output advisory and disabled unless explicitly configured.
+
+---
+
+## 2026-07-12 - Plan experimental sklearn inference adapter
+
+Type: Documentation
+Layer: Infrastructure
+Status: Done
+
+### Context
+
+The selected experimental baseline candidate had been exported as a local `joblib` artifact with metadata outside Git. Before wiring any runtime behavior, the project needed to define the adapter boundary, configuration rules, failure modes, and advisory-only semantics.
+
+### Decision
+
+Planned an experimental `SklearnModelAssessmentAdapter` that is disabled by default and only enabled through explicit local artifact configuration.
+
+The adapter will load the exported artifact and metadata from configured paths, parse raw email with the existing parser, build the same `text_with_light_metadata` feature representation used during training, and map the prediction into `ModelAssessment`.
+
+The model branch remains advisory. Deterministic analysis remains authoritative. Missing configuration returns `not_configured`, and adapter failures must not break deterministic analysis.
+
+### Files changed
+
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ADR.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ADR.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Documentation pre-commit checks passed.
+```
+
+### Next step
+
+Implement the experimental sklearn model assessment adapter with configured, not-configured, and failed-load test coverage before changing API wiring.
