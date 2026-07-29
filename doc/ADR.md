@@ -139,6 +139,16 @@ false_negative_suspicious: 1
   - deterministic analysis remains the authoritative result path.
 - **Architectural consequence:** model artifact export, model-card metadata, and local inference adapter work may proceed only as explicitly experimental follow-up work. Product-facing inference remains deferred until additional non-synthetic validation and larger holdout coverage support the candidate.
 
+### 4.4 Experimental Local Inference Adapter Boundary
+
+- **Decision:** the first runtime integration step for the selected candidate is an experimental sklearn adapter, disabled by default and enabled only through explicit local artifact configuration.
+- **Planned adapter:** `SklearnModelAssessmentAdapter` in Infrastructure.
+- **Configuration direction:** use environment-driven paths such as `PHISHSHIELD_MODEL_ASSESSMENT_ENABLED`, `PHISHSHIELD_MODEL_ARTIFACT_PATH`, and `PHISHSHIELD_MODEL_METADATA_PATH`.
+- **Artifact policy:** model artifacts and metadata remain outside Git. The current exported candidate artifact is experimental and must not be treated as a release asset.
+- **Runtime behavior:** when not configured, the model branch returns `not_configured`; when configured, it returns advisory `ModelAssessment` output through the existing separate model-assessment endpoint.
+- **Architectural constraint:** deterministic findings, evidence, explanations, and risk scoring remain authoritative. Model output must not alter deterministic results in this phase.
+- **Failure policy:** artifact load, metadata parse, preprocessing, and prediction failures must return a model-branch failure without breaking deterministic analysis.
+
 ---
 
 ## 5. Quality Strategy and Repository Lifecycle

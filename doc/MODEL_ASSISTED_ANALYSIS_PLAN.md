@@ -184,6 +184,69 @@ The adapter is responsible for:
 - timeouts and failure handling;
 - mapping model output into the application-level `ModelAssessment` contract.
 
+### Experimental sklearn adapter plan
+
+The first real model adapter should be explicitly experimental and disabled unless runtime configuration points to a local artifact.
+
+Planned adapter name:
+
+```text
+SklearnModelAssessmentAdapter
+```
+
+Runtime configuration:
+
+```text
+PHISHSHIELD_MODEL_ASSESSMENT_ENABLED=true
+PHISHSHIELD_MODEL_ARTIFACT_PATH=path/to/phishshield_baseline_candidate.joblib
+PHISHSHIELD_MODEL_METADATA_PATH=path/to/phishshield_baseline_candidate.metadata.json
+```
+
+The current experimental artifact is stored outside Git:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+```
+
+Adapter behavior:
+
+- return `not_configured` when model assessment is disabled or paths are missing;
+- load the `joblib` pipeline and metadata only from configured local paths;
+- parse the raw email with the existing email parser adapter;
+- build the same `text_with_light_metadata` representation used during training;
+- compute label and suspicious probability with the loaded model;
+- map the result into `ModelAssessment` without changing deterministic findings or risk score;
+- return `failed` with a safe error message if loading, parsing, feature conversion, or prediction fails.
+
+Feature construction must match the selected baseline:
+
+```text
+subject + body_text + urls + attachment_filenames
+```
+
+Initial response mapping:
+
+```text
+status: completed
+label: benign | suspicious
+confidence: suspicious probability when label is suspicious, otherwise benign probability
+summary: short advisory text derived from label and confidence
+signals: model metadata and top-level feature-family notes, not deterministic finding codes
+model_name: metadata.model_name
+model_version: metadata.git_commit or metadata.created_at until explicit versions exist
+```
+
+The adapter must not:
+
+- write artifacts;
+- train models;
+- fetch remote resources;
+- open URLs;
+- execute attachments;
+- require any external AI runtime;
+- make deterministic analysis depend on model success.
+
 ---
 
 ## Response Contract Draft
@@ -271,6 +334,18 @@ The architecture should handle these cases explicitly:
 - input too large for the configured model limit;
 - adapter preprocessing failure.
 
+Experimental sklearn adapter failure mapping:
+
+| Condition | Expected status | Notes |
+|---|---|---|
+| model assessment disabled | `not_configured` | Default behavior. |
+| artifact path missing | `not_configured` | Do not treat as server failure. |
+| metadata path missing | `not_configured` | Metadata is required for safe advisory output. |
+| artifact load error | `failed` | Include safe error text, no stack trace. |
+| metadata parse error | `failed` | Include safe error text, no raw metadata dump. |
+| email parser failure | `failed` | Deterministic endpoint remains unaffected. |
+| prediction failure | `failed` | Deterministic endpoint remains unaffected. |
+
 Failure in the model branch must not break deterministic analysis.
 
 ---
@@ -288,6 +363,14 @@ This planning block does not implement:
 - packaged model artifacts;
 - prompt engineering;
 - cloud-hosted inference.
+
+For the experimental sklearn adapter planning step, these are also non-goals:
+
+- enabling the model by default;
+- committing model artifacts;
+- defining a production model release process;
+- combining model output into deterministic scoring;
+- changing frontend risk semantics.
 
 ---
 
@@ -419,13 +502,28 @@ This phase is documented in:
 
 ### Phase 8: Experimental Embedded Local Adapter
 
-Potential future step:
+Planned next implementation step:
 
 ```text
-feat(infrastructure): Add local model assessment adapter.
+feat(ml): Add experimental sklearn model assessment adapter.
 ```
 
-Scope depends on the selected model artifact format and should be decided only after the training and evaluation strategy is validated.
+Planned scope:
+
+- load the exported experimental `joblib` artifact and metadata from explicit configuration;
+- keep the adapter disabled by default;
+- convert raw emails into the selected `text_with_light_metadata` feature representation;
+- return advisory `ModelAssessment` output;
+- preserve `not_configured` behavior when config is absent;
+- cover configured, not-configured, and failed-load cases with unit tests;
+- avoid API/frontend behavior changes until the adapter is proven in isolation.
+
+Out of scope for this phase:
+
+- production artifact packaging;
+- frontend copy or design changes;
+- combined deterministic/model scoring;
+- automatic model download.
 
 ---
 
