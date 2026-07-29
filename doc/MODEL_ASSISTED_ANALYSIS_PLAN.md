@@ -502,13 +502,13 @@ This phase is documented in:
 
 ### Phase 8: Experimental Embedded Local Adapter
 
-Planned next implementation step:
+Implemented step:
 
 ```text
 feat(ml): Add experimental sklearn model assessment adapter.
 ```
 
-Planned scope:
+Completed scope:
 
 - load the exported experimental `joblib` artifact and metadata from explicit configuration;
 - keep the adapter disabled by default;
@@ -518,12 +518,49 @@ Planned scope:
 - cover configured, not-configured, and failed-load cases with unit tests;
 - avoid API/frontend behavior changes until the adapter is proven in isolation.
 
+Implemented adapter:
+
+```text
+SklearnModelAssessmentAdapter
+```
+
+The adapter is intentionally isolated in Infrastructure. It is not wired into API configuration yet.
+
+Observed behavior:
+
+- missing artifact or metadata path returns `not_configured`;
+- configured artifact and metadata return `completed` with label, confidence, model metadata, and advisory signals;
+- artifact load errors and unsupported metadata feature sets return `failed`;
+- deterministic analysis remains unaffected.
+
 Out of scope for this phase:
 
 - production artifact packaging;
 - frontend copy or design changes;
 - combined deterministic/model scoring;
 - automatic model download.
+
+### Phase 9: Runtime Configuration Wiring
+
+Planned next implementation step:
+
+```text
+feat(api): Wire experimental model assessment adapter through config.
+```
+
+Planned scope:
+
+- add runtime settings for enabling model assessment;
+- read artifact and metadata paths from configuration;
+- keep `NoopModelAssessmentAdapter` as the default;
+- use `SklearnModelAssessmentAdapter` only when explicitly enabled and paths are configured;
+- add API tests for configured, not-configured, and failed adapter behavior.
+
+Out of scope:
+
+- frontend changes beyond existing model panel behavior;
+- production artifact release;
+- deterministic/model score merging.
 
 ---
 
