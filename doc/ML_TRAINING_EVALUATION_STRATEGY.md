@@ -1192,6 +1192,54 @@ Next ML phase:
 - validate against additional non-synthetic notification-like benign and suspicious examples;
 - keep deterministic analysis authoritative even if a model-assisted path is later enabled.
 
+### Experimental artifact export result
+
+The selected experimental baseline candidate was exported outside Git as a scikit-learn `joblib` artifact with metadata.
+
+Export command:
+
+```text
+python -m tools.ml_training.export_baseline_artifact --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --model-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib" --metadata-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json" --holdout-accuracy 0.875 --holdout-false-positive-benign 3 --holdout-false-negative-suspicious 1
+```
+
+Output files:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+```
+
+Exported training metrics:
+
+```text
+samples: 15818
+train_samples: 12654
+validation_samples: 3164
+labels: benign=7909, suspicious=7909
+accuracy: 0.9681
+precision_suspicious: 0.9535
+recall_suspicious: 0.9842
+f1_suspicious: 0.9686
+```
+
+Metadata summary:
+
+```text
+model_name: phishshield_baseline_candidate
+model_type: tfidf_logistic_regression
+status: experimental
+feature_set: text_with_light_metadata
+holdout_reference: PhishShield 32-fixture notification holdout, accuracy=0.8750, false_positive_benign=3, false_negative_suspicious=1
+```
+
+Decision:
+
+- the artifact is exported only for experimental follow-up work;
+- the artifact and metadata stay outside Git;
+- no runtime inference adapter is enabled by this step;
+- deterministic analysis remains authoritative;
+- product-facing model-assisted inference remains deferred.
+
 Secondary candidates:
 
 - `cybersectony/PhishingEmailDetectionv2.0`: large mixed email/URL dataset; use only after isolating email rows and clarifying license.
