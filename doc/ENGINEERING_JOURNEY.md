@@ -6868,3 +6868,72 @@ Documentation pre-commit checks passed.
 ### Next step
 
 Plan experimental artifact export outside Git only after confirming what metadata, model card fields, and validation gates are required.
+
+---
+
+## 2026-07-12 - Export experimental ML baseline artifact
+
+Type: Experiment
+Layer: Tooling
+Status: Done
+
+### Context
+
+The baseline selection phase identified `Phishing Email Detection + synthetic benign notifications 600 + synthetic suspicious notifications 600` as the current experimental candidate. The next step was to prove that the candidate can be exported reproducibly outside Git with metadata, without enabling runtime inference.
+
+### Decision
+
+Added an artifact export command for the selected experimental baseline.
+
+The command trains the same `TF-IDF + Logistic Regression` pipeline used by the baseline tooling, writes a `joblib` model artifact, and writes metadata with training metrics, input paths, git commit, holdout reference, experimental status, and limitations.
+
+Generated files outside Git:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+```
+
+Exported metrics:
+
+```text
+samples: 15818
+train_samples: 12654
+validation_samples: 3164
+labels: benign=7909, suspicious=7909
+accuracy: 0.9681
+precision_suspicious: 0.9535
+recall_suspicious: 0.9842
+f1_suspicious: 0.9686
+holdout_reference: accuracy=0.8750, false_positive_benign=3, false_negative_suspicious=1
+```
+
+This export does not enable product inference. The artifact is experimental, remains outside Git, and requires a separate adapter/config/API step before it can be used by PhishShield runtime.
+
+### Files changed
+
+- `tools/ml_training/export_baseline_artifact.py`
+- `tests/unit/tools/ml_training/test_export_baseline_artifact.py`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest tests/unit/tools/ml_training/test_export_baseline_artifact.py
+python -m tools.ml_training.export_baseline_artifact --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --model-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib" --metadata-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json" --holdout-accuracy 0.875 --holdout-false-positive-benign 3 --holdout-false-negative-suspicious 1
+python -m pytest
+python -m pre_commit run --files tools/ml_training/export_baseline_artifact.py tests/unit/tools/ml_training/test_export_baseline_artifact.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+```
+
+Result:
+
+```text
+Focused tests and artifact export completed. Pending full backend and final pre-commit verification.
+```
+
+### Next step
+
+Design an experimental local model assessment adapter and config path for loading this artifact, while keeping model-assisted output advisory and disabled unless explicitly configured.
