@@ -23,7 +23,7 @@ export function ModelAssessmentPanel({
     <section className="findings-panel model-assessment-panel" aria-label="Model-assisted assessment">
       <div className="panel-heading">
         <h2>Model-assisted assessment</h2>
-        <p>Advisory only. Does not replace deterministic findings.</p>
+        <p>Experimental and advisory only. Does not replace deterministic findings.</p>
       </div>
 
       <div className="model-assessment-actions">

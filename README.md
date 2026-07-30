@@ -180,6 +180,14 @@ Available variables:
 | Variable | Default | Description |
 |---|---:|---|
 | `PHISHSHIELD_MAX_UPLOAD_BYTES` | `1_000_000` | Maximum accepted `.eml` upload size in bytes. Must be a positive integer. |
+| `PHISHSHIELD_MODEL_ASSESSMENT_ENABLED` | `false` | Enables the experimental local model-assessment adapter when set to `true`. |
+| `PHISHSHIELD_MODEL_ARTIFACT_PATH` | empty | Path to an experimental local `joblib` model artifact. |
+| `PHISHSHIELD_MODEL_METADATA_PATH` | empty | Path to the matching experimental model metadata JSON file. |
+
+Model assessment is disabled by default and remains advisory. It is exposed through
+`POST /analyze-email-model-assessment` and never changes deterministic findings or
+the risk score returned by `POST /analyze-email`. Model artifacts and generated
+datasets are expected to remain outside Git.
 
 POSIX example:
 

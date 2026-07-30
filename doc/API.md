@@ -171,7 +171,7 @@ Current response model fields:
 
 ## `POST /analyze-email-model-assessment`
 
-Assesses an uploaded `.eml` email message through the future model-assisted analysis path.
+Assesses an uploaded `.eml` email message through the experimental model-assisted analysis path.
 
 This endpoint is intentionally separate from `POST /analyze-email` so deterministic findings and model-assisted assessment stay isolated.
 
@@ -202,9 +202,22 @@ Successful responses return a JSON body with:
 - `model_assessment.model_version: str`
 - `model_assessment.error_message: str`
 
-### Current Skeleton Behavior
+### Configuration
 
-The current implementation uses a noop adapter and returns:
+The endpoint uses the noop adapter by default and returns `not_configured`. The
+experimental local sklearn adapter is selected only when all of these environment
+variables are configured:
+
+```text
+PHISHSHIELD_MODEL_ASSESSMENT_ENABLED=true
+PHISHSHIELD_MODEL_ARTIFACT_PATH=path/to/phishshield_baseline_candidate.joblib
+PHISHSHIELD_MODEL_METADATA_PATH=path/to/phishshield_baseline_candidate.metadata.json
+```
+
+The artifact and metadata are loaded from explicit local paths. They are not
+downloaded, trained, or written by the API. Keep them outside Git.
+
+Without that configuration, the endpoint returns:
 
 ```json
 {
@@ -225,3 +238,8 @@ The current implementation uses a noop adapter and returns:
 
 - oversized uploads return `413` with `{"detail": "Uploaded email exceeds maximum allowed size."}`;
 - unexpected model-assessment failures return `422` with `{"detail": "Uploaded email could not be assessed by the model."}`.
+
+The model assessment is experimental and advisory. It does not add deterministic
+finding codes, overwrite `risk_score`, or prevent `POST /analyze-email` from
+running when the model branch is disabled or fails. Expected assessment statuses
+are `completed`, `not_configured`, and `failed`.
