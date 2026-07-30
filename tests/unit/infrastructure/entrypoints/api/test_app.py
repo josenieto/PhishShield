@@ -1,5 +1,12 @@
+import json
+from pathlib import Path
+
+import joblib
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
 import pytest
 
 from infrastructure.entrypoints.api.app import create_app
@@ -90,3 +97,75 @@ def test_should_raise_error_when_api_settings_are_invalid(
 
     with pytest.raises(ValueError):
         create_app()
+
+
+def test_should_wire_configured_model_assessment_through_app_factory(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    model_path, metadata_path = _write_model_and_metadata(tmp_path)
+    monkeypatch.setenv("PHISHSHIELD_MODEL_ASSESSMENT_ENABLED", "true")
+    monkeypatch.setenv("PHISHSHIELD_MODEL_ARTIFACT_PATH", str(model_path))
+    monkeypatch.setenv("PHISHSHIELD_MODEL_METADATA_PATH", str(metadata_path))
+
+    client = TestClient(create_app())
+    email_bytes = b"\r\n".join(
+        [
+            b"From: Security <security@example.com>",
+            b"Subject: Verify your account",
+            b"Content-Type: text/plain; charset=utf-8",
+            b"",
+            b"Confirm your login at https://example.net/login.",
+        ]
+    )
+
+    model_response = client.post(
+        "/analyze-email-model-assessment",
+        files={"file": ("sample.eml", email_bytes, "message/rfc822")},
+    )
+    deterministic_response = client.post(
+        "/analyze-email",
+        files={"file": ("sample.eml", email_bytes, "message/rfc822")},
+    )
+
+    assert model_response.status_code == 200
+    model_assessment = model_response.json()["model_assessment"]
+    assert model_assessment["status"] == "completed"
+    assert model_assessment["model_name"] == "app-factory-test-model"
+    assert model_assessment["model_version"] == "app-factory-test-commit"
+
+    assert deterministic_response.status_code == 200
+    assert "risk_score" in deterministic_response.json()
+
+
+def _write_model_and_metadata(tmp_path: Path) -> tuple[Path, Path]:
+    model = Pipeline(
+        [
+            ("tfidf", TfidfVectorizer()),
+            ("classifier", LogisticRegression(max_iter=1_000)),
+        ]
+    )
+    model.fit(
+        [
+            "Account activity summary is ready.",
+            "Newsletter preferences were updated.",
+            "Verify your account password now.",
+            "Confirm your login to keep access.",
+        ],
+        ["benign", "benign", "suspicious", "suspicious"],
+    )
+    model_path = tmp_path / "model.joblib"
+    metadata_path = tmp_path / "metadata.json"
+    joblib.dump(model, model_path)
+    metadata_path.write_text(
+        json.dumps(
+            {
+                "model_name": "app-factory-test-model",
+                "git_commit": "app-factory-test-commit",
+                "feature_set": "text_with_light_metadata",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    return model_path, metadata_path
