@@ -414,6 +414,71 @@ button:disabled {
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.68));
 }
 
+.risk-summary {
+  position: relative;
+  overflow: hidden;
+}
+
+.risk-summary::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.35rem;
+  background: #64748b;
+}
+
+.risk-summary-critical::before,
+.severity-tone-critical {
+  background-color: rgba(127, 29, 29, 0.26);
+}
+
+.risk-summary-critical::before {
+  background: #ef4444;
+}
+
+.risk-summary-high::before,
+.severity-tone-high {
+  background-color: rgba(124, 45, 18, 0.24);
+}
+
+.risk-summary-high::before {
+  background: #f97316;
+}
+
+.risk-summary-medium::before,
+.severity-tone-medium {
+  background-color: rgba(113, 63, 18, 0.22);
+}
+
+.risk-summary-medium::before {
+  background: #eab308;
+}
+
+.risk-summary-low::before,
+.risk-summary-unknown::before,
+.severity-tone-low,
+.severity-tone-unknown {
+  background-color: rgba(20, 83, 45, 0.2);
+}
+
+.risk-summary-low::before,
+.risk-summary-unknown::before {
+  background: #22c55e;
+}
+
+.critical-indicator-card {
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.critical-indicator-card-active {
+  border-color: rgba(248, 113, 113, 0.72);
+  background: rgba(127, 29, 29, 0.34);
+}
+
+.critical-indicator-card-active .summary-metric-compact {
+  color: #fecaca;
+}
+
 .evidence-grid {
   display: grid;
   gap: 0.9rem;
@@ -516,6 +581,27 @@ button:disabled {
   border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
+.finding-category-card[class*="severity-tone-"] {
+  border-left: 0.35rem solid rgba(148, 163, 184, 0.52);
+}
+
+.finding-category-card.severity-tone-critical {
+  border-left-color: #ef4444;
+}
+
+.finding-category-card.severity-tone-high {
+  border-left-color: #f97316;
+}
+
+.finding-category-card.severity-tone-medium {
+  border-left-color: #eab308;
+}
+
+.finding-category-card.severity-tone-low,
+.finding-category-card.severity-tone-unknown {
+  border-left-color: #22c55e;
+}
+
 .finding-category-header {
   display: flex;
   justify-content: space-between;
@@ -528,6 +614,14 @@ button:disabled {
   margin: 0;
   font-size: 0.98rem;
   letter-spacing: 0.04em;
+}
+
+.finding-category-priority {
+  display: block;
+  margin-top: 0.3rem;
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
 }
 
 .category-count-chip {
