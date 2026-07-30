@@ -193,6 +193,8 @@ describe("App", () => {
     expect(screen.getByText(/review the local triage output for/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Report actions" })).toBeInTheDocument();
     expect(screen.getByText("Risk assessment")).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Risk assessment" })).toHaveClass("risk-summary-high");
+    expect(screen.getByText("Highest severity: HIGH")).toBeInTheDocument();
     expect(
       screen.getByText("No critical indicators were observed, but the returned findings still require analyst review."),
     ).toBeInTheDocument();
