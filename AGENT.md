@@ -228,6 +228,32 @@ For behavior changes, use the smallest useful increment and follow this workflow
 
 The refactor phase is mandatory as a review step, but code changes are optional. If no cleanup is useful, state `Refactor not needed.`
 
+### project knowledge graph refresh policy
+
+project knowledge graph is an architectural snapshot and navigation aid, not a per-change build artifact.
+
+Regenerate project knowledge graph only after:
+
+- adding or removing a major module, layer, port, adapter, or entrypoint;
+- changing dependencies between Domain, Application, Infrastructure, or Entrypoints;
+- significantly reorganizing folders or frontend component composition;
+- changing the main analysis flow;
+- introducing a new infrastructure family;
+- closing a milestone or making another structural architectural change.
+
+Do not regenerate project knowledge graph for:
+
+- routine implementation changes;
+- localized parser fixes or tests;
+- styling, copy, or responsive adjustments;
+- minor documentation changes;
+- fixture-backed scoring calibration;
+- routine CI, guardrail, or local configuration changes.
+
+Use the existing `project knowledge graph-out/` snapshot between structural refreshes. If the answer
+to “would this change the project map for a new contributor?” is no, do not regenerate
+project knowledge graph. When the answer is yes, refresh it at the relevant architectural milestone.
+
 The repository also maintains local `pre-commit` guardrails for hygiene, Domain/Application boundary protection, commit-message validation, and scoring-sensitive change checks. Keep `AGENT.md`, `.pre-commit-config.yaml`, and the guard scripts under `scripts/` aligned when workflow expectations change.
 
 The `pre-commit` configuration is versioned, but hook installation is per clone. Treat `git commit --no-verify` as an intentional bypass of local protections; CI remains the shared enforcement layer.
