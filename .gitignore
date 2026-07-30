@@ -165,6 +165,12 @@ frontend/*.tsbuildinfo
 frontend/vite.config.js
 frontend/vite.config.d.ts
 
+# project knowledge graph generated cache and sidecars; keep the published graph artifacts.
+project knowledge graph-out/*
+!project knowledge graph-out/graph.html
+!project knowledge graph-out/graph.json
+!project knowledge graph-out/GRAPH_REPORT.md
+
 # Spyder project settings
 .spyderproject
 .spyproject
