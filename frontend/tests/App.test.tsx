@@ -259,6 +259,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Assess with model" }));
 
     expect(await screen.findByText("Model assessment is not configured yet.")).toBeInTheDocument();
+    expect(screen.getByText(/no experimental local model is configured/i)).toBeInTheDocument();
     expect(screen.getByText(/does not replace deterministic findings/i)).toBeInTheDocument();
   });
 
@@ -283,7 +284,36 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Assess with model" }));
 
     expect(await screen.findByText("Uploaded email could not be assessed by the model.")).toBeInTheDocument();
+    expect(screen.getByText(/deterministic analysis remains available and authoritative/i)).toBeInTheDocument();
     expect(screen.getByText("Risk assessment")).toBeInTheDocument();
+  });
+
+  it("should render completed model assessment as advisory result", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
+    vi.spyOn(analyzeEmailModelAssessmentApi, "analyzeEmailModelAssessment").mockResolvedValue({
+      model_assessment: {
+        status: "completed",
+        label: "suspicious",
+        confidence: 0.84,
+        summary: "The message resembles an account verification lure.",
+        signals: ["Credential wording"],
+        model_name: "local-baseline",
+        model_version: "test-version",
+        error_message: "",
+      },
+    });
+
+    render(<App />);
+    await user.upload(emailFileInput(), new File(["sample"], "sample.eml", { type: "message/rfc822" }));
+    await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
+    await screen.findByText("Analysis completed");
+    await user.click(screen.getByRole("button", { name: "Assess with model" }));
+
+    expect(await screen.findByText("Advisory model result")).toBeInTheDocument();
+    expect(screen.getByText("suspicious")).toBeInTheDocument();
+    expect(screen.getByText("Confidence: 0.84")).toBeInTheDocument();
+    expect(screen.getByText("local-baseline")).toBeInTheDocument();
   });
 
   it("should trigger HTML report download from the success state", async () => {
