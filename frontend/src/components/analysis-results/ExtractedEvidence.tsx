@@ -51,7 +51,7 @@ export function ExtractedEvidence({ extractedEvidence }: ExtractedEvidenceProps)
             <ul className="evidence-list">
               {extractedEvidence.urls.map((url) => (
                 <li key={url} className="evidence-list-item">
-                  <code>{url}</code>
+                  <code className="evidence-code">{url}</code>
                 </li>
               ))}
             </ul>
@@ -69,7 +69,7 @@ export function ExtractedEvidence({ extractedEvidence }: ExtractedEvidenceProps)
             <ul className="evidence-list">
               {extractedEvidence.attachment_filenames.map((filename) => (
                 <li key={filename} className="evidence-list-item">
-                  <code>{filename}</code>
+                  <code className="evidence-code">{filename}</code>
                 </li>
               ))}
             </ul>
