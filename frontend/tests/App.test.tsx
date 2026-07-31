@@ -194,7 +194,7 @@ describe("App", () => {
     expect(screen.getByRole("heading", { name: "Report actions" })).toBeInTheDocument();
     expect(screen.getByText("Risk assessment")).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Risk assessment" })).toHaveClass("risk-summary-high");
-    expect(screen.getByText("Highest severity: HIGH")).toBeInTheDocument();
+    expect(screen.getAllByText("Highest severity: HIGH")).toHaveLength(2);
     expect(
       screen.getByText("No critical indicators were observed, but the returned findings still require analyst review."),
     ).toBeInTheDocument();
@@ -214,12 +214,15 @@ describe("App", () => {
     expect(screen.getAllByText("fail")).toHaveLength(2);
     expect(screen.getByText("pass")).toBeInTheDocument();
     expect(screen.getByText("Indicator distribution")).toBeInTheDocument();
+    expect(screen.getAllByText("Highest severity: HIGH")).toHaveLength(2);
+    expect(screen.getAllByText("Highest severity: MEDIUM")).toHaveLength(2);
     expect(screen.getByText("Findings by category")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "AUTHENTICATION" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "DOMAIN" })).toBeInTheDocument();
     expect(screen.getByText(/The domain contains Punycode/i)).toBeInTheDocument();
     expect(screen.getAllByText("2")[0]).toBeInTheDocument();
     expect(screen.getAllByText("DOMAIN_CONTAINS_PUNYCODE")).toHaveLength(2);
+    expect(screen.getByLabelText("Unique indicator codes")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download HTML" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Preview Markdown report" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download JSON" })).toBeInTheDocument();
