@@ -366,6 +366,12 @@ button:disabled {
   gap: 1rem;
 }
 
+.analysis-panel > *,
+.analysis-overview-grid > *,
+.analysis-secondary-grid > * {
+  min-width: 0;
+}
+
 .analysis-secondary-grid {
   display: grid;
   gap: 1rem;
@@ -547,6 +553,13 @@ button:disabled {
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.72);
   border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.evidence-code {
+  display: block;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .auth-grid {
@@ -824,6 +837,13 @@ button:disabled {
   color: #bfdbfe;
 }
 
+.indicator-chip-code {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
 @media (max-width: 720px) {
   .app-shell {
     padding: 1rem;
@@ -831,6 +851,11 @@ button:disabled {
 
   .hero-card {
     padding: 1.5rem;
+  }
+
+  .findings-panel,
+  .report-actions-panel {
+    padding: 0.9rem;
   }
 
   .workbench-hero,
@@ -868,5 +893,28 @@ button:disabled {
   .finding-header-row {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .evidence-grid,
+  .category-overview-grid,
+  .auth-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .evidence-card-wide {
+    grid-column: auto;
+  }
+
+  .finding-category-header {
+    align-items: flex-start;
+  }
+
+  .indicator-chip-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .indicator-chip {
+    justify-content: flex-start;
   }
 }
