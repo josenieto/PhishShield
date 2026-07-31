@@ -82,17 +82,17 @@ Keep out of scope for this track:
 
 ### Track 3: Frontend Analyst Polish
 
-The frontend workbench is already usable, but still has room for UI polish.
+This track is complete.
 
 The first frontend analyst polish step already grouped report actions more clearly inside the analysis results view.
 
-Candidate steps:
+Completed scope:
 
-- improve result hierarchy and severity visual language inside the current workbench;
-- improve evidence density and analyst scanning speed on desktop;
-- refine mobile responsiveness without changing the core flow;
-- add more focused `AnalysisResults` tests if the component hierarchy grows;
-- revisit wording only when realistic fixtures reveal confusing presentation.
+- result hierarchy and severity visual language inside the current workbench;
+- evidence density and analyst scanning speed for sender, subject, findings, URLs, attachments, and authentication;
+- responsive behavior without changing the core flow;
+- focused result and export-flow tests;
+- explicit experimental/advisory presentation for model assessment states.
 
 Keep out of scope for this track:
 
@@ -100,6 +100,9 @@ Keep out of scope for this track:
 - persisted history;
 - frontend Docker image;
 - screenshots or browser evidence rendering.
+
+Future frontend changes should be driven by new backend evidence or concrete analyst
+workflow feedback rather than another broad polish block.
 
 ### Track 4: Scoring And Calibration Maintenance
 
@@ -171,11 +174,12 @@ These areas remain deferred until a dedicated roadmap group starts them:
 The current recommended next group is:
 
 ```text
-Frontend Analyst Polish
+Parser And Runtime Polish
 ```
 
 Rationale:
 
-- the initial Report And Export v2 block already delivered Markdown copy, preview, download, JSON export, and HTML export;
-- the report actions grouping step is already complete, so the next user-facing value comes from improved hierarchy, scanability, and analyst ergonomics;
-- parser/runtime polish remains important, but it is better driven by real samples than by opening another broad product-facing block immediately.
+- the initial Report And Export v2 block is complete;
+- the Frontend Analyst Polish block is complete;
+- the next useful confidence work should be driven by realistic parser and runtime gaps;
+- model-assisted inference remains experimental until independent benign-calibration validation supports promotion.
