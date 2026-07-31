@@ -348,6 +348,60 @@ button:disabled {
   margin: 0;
 }
 
+.model-assessment-state-failed {
+  border-color: rgba(248, 113, 113, 0.56);
+  background: rgba(127, 29, 29, 0.28);
+}
+
+.model-assessment-state-not-configured {
+  border-style: dashed;
+}
+
+.model-result-summary {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.model-result-label {
+  color: #93c5fd;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.model-result-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.model-result-heading strong {
+  color: #f8fafc;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  text-transform: capitalize;
+}
+
+.model-confidence {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.model-assessment-detail-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.model-assessment-detail-grid p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .success-banner {
   background: rgba(12, 74, 110, 0.42);
   border-color: rgba(96, 165, 250, 0.4);
@@ -907,6 +961,20 @@ button:disabled {
 
   .finding-category-header {
     align-items: flex-start;
+  }
+
+  .model-result-heading,
+  .model-assessment-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .model-result-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .model-confidence {
+    white-space: normal;
   }
 
   .indicator-chip-grid {

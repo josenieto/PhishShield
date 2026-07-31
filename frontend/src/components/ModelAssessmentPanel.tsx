@@ -18,6 +18,7 @@ export function ModelAssessmentPanel({
   onAssess,
 }: ModelAssessmentPanelProps) {
   const status = modelAssessment?.model_assessment.status ?? "idle";
+  const assessment = modelAssessment?.model_assessment;
 
   return (
     <section className="findings-panel model-assessment-panel" aria-label="Model-assisted assessment">
@@ -32,31 +33,59 @@ export function ModelAssessmentPanel({
         </button>
       </div>
 
-      {errorMessage && <p className="error-banner">{errorMessage}</p>}
+       {errorMessage && (
+         <div className="model-assessment-state model-assessment-state-failed" role="alert">
+           <strong>Model assessment did not complete.</strong>
+           <p>{errorMessage}</p>
+           <p className="muted-copy">Deterministic analysis remains available and authoritative.</p>
+         </div>
+       )}
 
       {!errorMessage && status === "idle" && (
         <p className="muted-copy">Run the separate model assessment endpoint to compare an advisory model view of the current email.</p>
       )}
 
       {!errorMessage && status === "not_configured" && (
-        <div className="model-assessment-state">
-          <strong>Model assessment is not configured yet.</strong>
-          <p className="muted-copy">The endpoint is available, but no real inference backend has been enabled yet.</p>
-        </div>
-      )}
+           <div className="model-assessment-state model-assessment-state-not-configured">
+           <strong>Model assessment is not configured yet.</strong>
+           <p className="muted-copy">The endpoint is available, but no experimental local model is configured for this runtime.</p>
+         </div>
+       )}
 
-      {!errorMessage && status !== "idle" && status !== "not_configured" && modelAssessment && (
-        <div className="model-assessment-state">
-          <p><strong>Status:</strong> {modelAssessment.model_assessment.status}</p>
-          <p><strong>Label:</strong> {modelAssessment.model_assessment.label}</p>
-          <p><strong>Confidence:</strong> {modelAssessment.model_assessment.confidence ?? "Not available"}</p>
-          <p><strong>Summary:</strong> {modelAssessment.model_assessment.summary || "Not available"}</p>
-          <p><strong>Signals:</strong> {modelAssessment.model_assessment.signals.length === 0 ? "No model signals" : modelAssessment.model_assessment.signals.join(", ")}</p>
-          <p><strong>Model:</strong> {modelAssessment.model_assessment.model_name || "Not available"}</p>
-          <p><strong>Version:</strong> {modelAssessment.model_assessment.model_version || "Not available"}</p>
-          <p><strong>Error:</strong> {modelAssessment.model_assessment.error_message || "None"}</p>
-        </div>
-      )}
+       {!errorMessage && status === "failed" && assessment && (
+         <div className="model-assessment-state model-assessment-state-failed" role="alert">
+           <strong>Model assessment did not complete.</strong>
+           <p>{assessment.error_message || "The model did not return an advisory result."}</p>
+           <p className="muted-copy">Deterministic analysis remains available and authoritative.</p>
+         </div>
+       )}
+
+       {!errorMessage && status === "completed" && assessment && (
+         <div className="model-assessment-state model-assessment-state-completed" aria-live="polite">
+           <div className="model-result-summary">
+             <span className="model-result-label">Advisory model result</span>
+             <div className="model-result-heading">
+               <strong>{assessment.label}</strong>
+               <span className="model-confidence">
+                 Confidence: {assessment.confidence === null ? "Not available" : assessment.confidence.toFixed(2)}
+               </span>
+             </div>
+             <p>{assessment.summary || "The model returned no summary."}</p>
+           </div>
+
+           <div className="model-assessment-detail-grid">
+             <div>
+               <span className="summary-label">Signals</span>
+               <p>{assessment.signals.length === 0 ? "No model signals" : assessment.signals.join(", ")}</p>
+             </div>
+             <div>
+               <span className="summary-label">Model traceability</span>
+               <p>{assessment.model_name || "Model name unavailable"}</p>
+               <p className="muted-copy">Version: {assessment.model_version || "Not available"}</p>
+             </div>
+           </div>
+         </div>
+       )}
     </section>
   );
 }
