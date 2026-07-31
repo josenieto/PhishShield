@@ -676,8 +676,38 @@ button:disabled {
   border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
+.category-overview-card[class*="severity-tone-"] {
+  border-top: 2px solid rgba(148, 163, 184, 0.48);
+}
+
+.category-overview-card.severity-tone-critical {
+  border-top-color: #ef4444;
+  background: rgba(127, 29, 29, 0.24);
+}
+
+.category-overview-card.severity-tone-high {
+  border-top-color: #f97316;
+  background: rgba(124, 45, 18, 0.22);
+}
+
+.category-overview-card.severity-tone-medium {
+  border-top-color: #eab308;
+  background: rgba(113, 63, 18, 0.2);
+}
+
+.category-overview-card.severity-tone-low,
+.category-overview-card.severity-tone-unknown {
+  border-top-color: #22c55e;
+}
+
 .category-overview-card strong {
   font-size: 1.15rem;
+}
+
+.category-overview-severity {
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 .finding-category-grid {
