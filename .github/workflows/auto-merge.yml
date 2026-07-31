@@ -63,6 +63,6 @@ jobs:
           gh run watch "$RUN_ID" --exit-status
 
           # 3. Merge the pull request once Backend CI passes.
-          gh pr merge "$PR_URL" --merge --delete-branch=false
+          gh pr merge "$PR_URL" --merge --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
