@@ -204,6 +204,8 @@ describe("App", () => {
     expect(screen.getByRole("article", { name: "Attachment evidence" })).toHaveClass("evidence-card-has-content");
     expect(screen.getByRole("article", { name: "Authentication evidence" })).toBeInTheDocument();
     expect(screen.getAllByText("1 extracted")).toHaveLength(2);
+    expect(screen.getByText("https://example.com/login")).toHaveClass("evidence-code");
+    expect(screen.getAllByText("DOMAIN_CONTAINS_PUNYCODE").at(-1)?.closest("span")).toHaveClass("indicator-chip-code");
     expect(screen.getByText("example.zip")).toBeInTheDocument();
     expect(screen.getByText("Urgent account notice")).toBeInTheDocument();
     expect(screen.getByText("https://example.com/login")).toBeInTheDocument();

@@ -16,7 +16,7 @@ export function IndicatorCodes({ findingCodes }: IndicatorCodesProps) {
           <span className="indicator-chip indicator-chip-safe">No findings</span>
         ) : (
           findingCodes.map((findingCode) => (
-            <span key={findingCode} className="indicator-chip">
+            <span key={findingCode} className="indicator-chip indicator-chip-code">
               {findingCode}
             </span>
           ))
