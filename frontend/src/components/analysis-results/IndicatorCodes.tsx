@@ -11,7 +11,7 @@ export function IndicatorCodes({ findingCodes }: IndicatorCodesProps) {
         <p>Unique finding codes returned by the backend for the selected message.</p>
       </div>
 
-      <div className="indicator-chip-grid">
+      <div className="indicator-chip-grid" aria-label="Unique indicator codes">
         {findingCodes.length === 0 ? (
           <span className="indicator-chip indicator-chip-safe">No findings</span>
         ) : (
