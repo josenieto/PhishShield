@@ -1,6 +1,6 @@
 import type { AnalyzeEmailResponse } from "../../types/api";
 
-import { groupFindingsByCategory, severityClassName } from "./shared";
+import { groupFindingsByCategory, highestSeverity, severityClassName, severityToneClass } from "./shared";
 
 
 type FindingsByCategoryProps = {
@@ -17,11 +17,17 @@ export function FindingsByCategory({ analysis }: FindingsByCategoryProps) {
       </div>
 
       <div className="finding-category-grid">
-        {groupFindingsByCategory(analysis).map(([category, findings]) => (
-          <section key={category} className="finding-category-card">
+        {groupFindingsByCategory(analysis).map(([category, findings]) => {
+          const categorySeverity = highestSeverity(findings);
+
+          return (
+          <section key={category} className={`finding-category-card ${severityToneClass(categorySeverity)}`}>
             <div className="finding-category-header">
-              <h3>{category}</h3>
-              <span className="category-count-chip">{findings.length}</span>
+              <div>
+                <h3>{category}</h3>
+                <span className="finding-category-priority">Highest severity: {categorySeverity}</span>
+              </div>
+              <span className="category-count-chip" aria-label={`${findings.length} findings`}>{findings.length}</span>
             </div>
 
             <ul className="finding-list">
@@ -39,7 +45,8 @@ export function FindingsByCategory({ analysis }: FindingsByCategoryProps) {
               ))}
             </ul>
           </section>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

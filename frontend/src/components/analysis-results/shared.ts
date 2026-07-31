@@ -6,6 +6,28 @@ export function severityClassName(severity: string): string {
 }
 
 
+export function severityRank(severity: string): number {
+  return {
+    CRITICAL: 4,
+    HIGH: 3,
+    MEDIUM: 2,
+    LOW: 1,
+  }[severity.toUpperCase()] ?? 0;
+}
+
+
+export function highestSeverity(findings: Array<{ severity: string }>): string {
+  return findings.reduce((highest, finding) => {
+    return severityRank(finding.severity) > severityRank(highest) ? finding.severity : highest;
+  }, "UNKNOWN");
+}
+
+
+export function severityToneClass(severity: string): string {
+  return `severity-tone-${severity.toLowerCase()}`;
+}
+
+
 export function groupFindingsByCategory(analysis: AnalyzeEmailResponse) {
   const groupedFindings = new Map<string, AnalyzeEmailResponse["finding_summary"]["sorted_findings"]>();
 
