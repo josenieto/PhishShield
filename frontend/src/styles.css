@@ -494,6 +494,33 @@ button:disabled {
   border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
+.evidence-card-identity,
+.evidence-card-subject,
+.evidence-card-authentication {
+  background: rgba(30, 41, 59, 0.76);
+}
+
+.evidence-card-identity {
+  border-top: 2px solid #60a5fa;
+}
+
+.evidence-card-subject {
+  border-top: 2px solid #a78bfa;
+}
+
+.evidence-card-links.evidence-card-has-content,
+.evidence-card-attachments.evidence-card-has-content {
+  border-color: rgba(96, 165, 250, 0.38);
+}
+
+.evidence-count {
+  color: #93c5fd;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .evidence-card strong {
   font-size: 1rem;
   line-height: 1.45;
@@ -536,6 +563,19 @@ button:disabled {
   border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
+.auth-item-pass {
+  border-color: rgba(74, 222, 128, 0.34);
+}
+
+.auth-item-review {
+  border-color: rgba(251, 146, 60, 0.64);
+  background: rgba(124, 45, 18, 0.28);
+}
+
+.auth-item-empty {
+  border-style: dashed;
+}
+
 .auth-item dt {
   margin: 0 0 0.35rem;
   color: #93c5fd;
@@ -548,6 +588,10 @@ button:disabled {
   margin: 0;
   color: #f3f6ff;
   font-weight: 700;
+}
+
+.auth-item-review dd {
+  color: #fed7aa;
 }
 
 .category-overview-grid {
