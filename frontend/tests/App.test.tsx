@@ -195,6 +195,7 @@ describe("App", () => {
     const results = workbench?.querySelector(".workbench-main");
     expect(sidebar).toBeInTheDocument();
     expect(results).toBeInTheDocument();
+    expect(workbench).toHaveClass("workbench-grid-analysis-ready");
     expect(screen.getByText(/review the local triage output for/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Report actions" })).toBeInTheDocument();
     expect(screen.getByText("Risk assessment")).toBeInTheDocument();
