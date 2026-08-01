@@ -928,6 +928,27 @@ button:disabled {
   white-space: normal;
 }
 
+@media (max-width: 960px) {
+  .workbench-grid,
+  .analysis-overview-grid,
+  .analysis-secondary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .workbench-main {
+    order: 1;
+  }
+
+  .workbench-sidebar {
+    order: 2;
+  }
+
+  .summary-card-priority,
+  .evidence-card-wide {
+    grid-column: auto;
+  }
+}
+
 @media (max-width: 720px) {
   .app-shell {
     padding: 1rem;
