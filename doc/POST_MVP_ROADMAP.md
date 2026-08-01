@@ -80,6 +80,29 @@ Keep out of scope for this track:
 - short-link resolution;
 - PDF or Office parsing.
 
+### Track 2.5: Future CLI And CI/CD Automation
+
+This is a future automation block and is not the current implementation focus.
+
+The goal is to make the deterministic analysis flow usable from local scripts and
+CI/CD pipelines without creating a second analysis engine.
+
+Candidate steps:
+
+- add a CLI entrypoint for one `.eml` file;
+- support human-readable text and structured JSON output;
+- define stable exit codes and a configurable `--fail-on` risk threshold;
+- add batch and JSONL output when a real workflow needs it;
+- add Markdown or SARIF output only when a concrete reporting or security-platform integration justifies it;
+- document CI examples and artifact handling.
+
+Keep out of scope for the first CLI step:
+
+- duplicating parser, scoring, or finding logic outside Application use cases;
+- making model assessment a default CI gate;
+- representing deterministic triage as a malware verdict;
+- implementing batch, SARIF, or model automation before the single-email CLI contract is stable.
+
 ### Track 3: Frontend Analyst Polish
 
 This track is complete.
