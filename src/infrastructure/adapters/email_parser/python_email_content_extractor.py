@@ -75,8 +75,21 @@ def _extract_attachment_filenames(message: Message) -> tuple[str, ...]:
     return tuple(
         decoded_filename
         for part in message.walk()
-        if (decoded_filename := _decode_header_value(part.get_filename()))
+        if _is_meaningful_attachment_part(part)
+        and (decoded_filename := _decode_header_value(part.get_filename()))
     )
+
+
+def _is_meaningful_attachment_part(part: Message) -> bool:
+    if part.get_content_disposition() == "attachment":
+        return True
+
+    if part.get_content_disposition() != "inline":
+        return bool(part.get_filename())
+
+    content_id = part.get("Content-ID")
+    content_type = part.get_content_type().lower()
+    return not (content_id and content_type.startswith("image/"))
 
 
 def _extract_plain_text_body(message: Message) -> str:

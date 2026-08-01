@@ -82,3 +82,16 @@ def test_should_preserve_plain_body_html_link_and_attachment_in_nested_multipart
     assert extracted_email.spf_result == "pass"
     assert extracted_email.dkim_result == "pass"
     assert extracted_email.dmarc_result == "pass"
+
+
+def test_should_exclude_inline_logo_but_keep_real_attachment_from_related_fixture() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = (_FIXTURES_DIR / "inline_logo_with_real_attachment.eml").read_bytes()
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == (
+        "Please review your invoice at https://example.com/invoice."
+    )
+    assert extracted_email.urls == ("https://example.com/invoice",)
+    assert extracted_email.attachment_filenames == ("invoice.pdf",)
