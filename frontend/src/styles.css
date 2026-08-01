@@ -86,12 +86,14 @@ h1 {
   gap: 1.5rem;
   grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
   align-items: start;
+  min-width: 0;
 }
 
 .workbench-sidebar,
 .workbench-main {
   display: grid;
   gap: 1rem;
+  min-width: 0;
 }
 
 .sidebar-card {
@@ -935,17 +937,25 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
-  .workbench-main {
-    order: 1;
-  }
-
-  .workbench-sidebar {
-    order: 2;
-  }
-
   .summary-card-priority,
   .evidence-card-wide {
     grid-column: auto;
+  }
+
+  .workbench-sidebar {
+    order: 1;
+  }
+
+  .workbench-main {
+    order: 2;
+  }
+
+  .workbench-grid-analysis-ready .workbench-main {
+    order: 1;
+  }
+
+  .workbench-grid-analysis-ready .workbench-sidebar {
+    order: 2;
   }
 }
 

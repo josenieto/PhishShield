@@ -126,7 +126,7 @@ export default function App() {
           </p>
         </header>
 
-        <div className="workbench-grid">
+        <div className={`workbench-grid${analysis ? " workbench-grid-analysis-ready" : ""}`}>
           <aside className="workbench-sidebar">
             <section className="hero-card sidebar-card">
               <div className="sidebar-card-heading">
