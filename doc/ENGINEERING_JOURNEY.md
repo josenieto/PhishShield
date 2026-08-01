@@ -7204,4 +7204,66 @@ Documentation pre-commit checks passed.
 
 ### Next step
 
-Start tomorrow with automated configured app-factory coverage or local setup documentation for the experimental model endpoint.
+Complete independent validation before considering product-facing inference.
+
+---
+
+## 2026-07-17 - Frontend analyst polish milestone
+
+Type: Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The frontend MVP already supported upload, deterministic result rendering, evidence
+inspection, export actions, and a separate advisory model panel. The next product
+value was analyst scanability rather than a new frontend infrastructure layer.
+
+### Decision
+
+Closed the Frontend Analyst Polish milestone. The work improved risk hierarchy,
+finding severity visibility, evidence density, model assessment state clarity,
+responsive layout, long-value wrapping, category severity context, and accessible
+indicator-code presentation.
+
+The frontend remains contract-driven and intentionally avoids routing, persisted
+history, global state, frontend Docker packaging, and browser-evidence rendering.
+Future frontend work is maintenance-driven and should be triggered by concrete
+backend evidence or analyst workflow feedback.
+
+### Files changed
+
+- `frontend/src/components/analysis-results/`
+- `frontend/src/components/ModelAssessmentPanel.tsx`
+- `frontend/src/styles.css`
+- `frontend/tests/App.test.tsx`
+- `doc/FRONTEND_MVP_PLAN.md`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+
+### Tests
+
+Command:
+
+```bash
+cd frontend
+cmd /c npm run test
+cmd /c npm run build
+python -m pre_commit run --all-files
+```
+
+Result:
+
+```text
+Frontend tests passed.
+Frontend production build passed.
+Repository pre-commit checks passed.
+```
+
+### Next step
+
+Start the next primary group with fixture-driven parser and runtime polish. Keep
+model-assisted inference experimental until independent benign-calibration evidence
+supports product promotion. Regenerate project knowledge graph only if the next work changes the
+project structure or architecture map.

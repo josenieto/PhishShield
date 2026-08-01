@@ -105,17 +105,29 @@ These items are intentionally out of scope for the current frontend MVP:
 
 ---
 
+## Analyst Polish Status
+
+The analyst polish milestone is complete. The current workbench now includes:
+
+- risk and severity hierarchy for `LOW`, `MEDIUM`, `HIGH`, and `CRITICAL` results;
+- critical-indicator emphasis and category-level highest-severity context;
+- prioritized sender, subject, URL, attachment, and authentication evidence;
+- explicit advisory, completed, failed, and not-configured model assessment states;
+- responsive layouts and wrapping for long URLs, filenames, signals, and finding codes;
+- focused frontend coverage for result rendering and export flows.
+
+The frontend remains intentionally small and contract-driven. No routing, persisted
+history, global state manager, frontend Docker image, or screenshot evidence UI was
+introduced by this milestone.
+
 ## Next Steps
 
-The next recommended frontend group after the initial report/export v2 block is analyst polish over the current workbench, evidence hierarchy, and result scanability.
+Frontend work should now be maintenance-driven rather than a new broad roadmap group.
+Revisit the UI when backend fixtures expose confusing analyst-facing wording or when
+the backend contract gains evidence with clear analyst value.
 
-Potential mini-steps:
-
-1. Improve result hierarchy and severity visual language inside the current workbench layout.
-2. Improve evidence density and scanability for sender, subject, findings, and authentication results.
-3. Add dedicated `AnalysisResults` tests if the component grows in complexity.
-4. Revisit wording only when backend fixtures reveal confusing analyst-facing phrasing.
-5. Keep new frontend tests under `frontend/tests/` as a repository rule.
+The next primary project group is fixture-driven parser and runtime polish in the
+backend. Keep new frontend tests under `frontend/tests/` as a repository rule.
 
 ---
 
