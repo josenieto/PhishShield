@@ -1,0 +1,18 @@
+From: Support Team <support@example.com>
+Subject: Visible HTML notice
+Content-Type: text/html; charset=utf-8
+
+<html>
+  <head>
+    <style>
+      .hidden { content: "https://hidden-style.example/credential"; }
+    </style>
+    <script>
+      const lure = "Urgent verify your password at https://hidden-script.example/login";
+    </script>
+  </head>
+  <body>
+    <h1>Account notice</h1>
+    <p>Please review your account at <a href="https://example.com/login">the secure portal</a>.</p>
+  </body>
+</html>

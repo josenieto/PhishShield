@@ -34,6 +34,18 @@ def test_should_extract_urls_from_html_only_anchor_eml_fixture() -> None:
     assert extracted_email.urls == ("https://example.com/login",)
 
 
+def test_should_ignore_script_and_style_content_from_visible_html_fixture() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = (_FIXTURES_DIR / "html_visible_text_with_script_style.eml").read_bytes()
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == (
+        "Account notice Please review your account at the secure portal ."
+    )
+    assert extracted_email.urls == ("https://example.com/login",)
+
+
 def test_should_decode_latin1_plain_text_body_from_eml_fixture() -> None:
     adapter = PythonEmailContentExtractorAdapter()
     email_bytes = (_FIXTURES_DIR / "latin1_body_notice.eml").read_bytes().replace(
