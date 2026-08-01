@@ -11,6 +11,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(59, 130, 246, 0.2), transparent 30%),
     radial-gradient(circle at top right, rgba(168, 85, 247, 0.18), transparent 35%),
@@ -24,6 +25,7 @@ body {
 
 .workbench-shell {
   width: min(1480px, 100%);
+  max-width: 100%;
   margin: 0 auto;
   display: grid;
   gap: 1.5rem;
@@ -753,6 +755,12 @@ button:disabled {
   margin-bottom: 0.9rem;
 }
 
+.finding-category-header > div,
+.finding-content,
+.finding-header-row {
+  min-width: 0;
+}
+
 .finding-category-header h3 {
   margin: 0;
   font-size: 0.98rem;
@@ -863,6 +871,8 @@ button:disabled {
 .finding-item strong {
   display: block;
   margin: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .finding-category-copy {
@@ -961,11 +971,12 @@ button:disabled {
 
 @media (max-width: 720px) {
   .app-shell {
-    padding: 1rem;
+    width: 100%;
+    padding: 0.75rem;
   }
 
   .hero-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
 
   .findings-panel,
