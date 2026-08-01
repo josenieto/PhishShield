@@ -524,7 +524,8 @@ Implemented adapter:
 SklearnModelAssessmentAdapter
 ```
 
-The adapter is intentionally isolated in Infrastructure. It is not wired into API configuration yet.
+The adapter is intentionally isolated in Infrastructure and is wired through explicit
+API runtime configuration while remaining disabled by default.
 
 Observed behavior:
 
@@ -622,11 +623,21 @@ confidence: None
 
 The deterministic endpoint was also checked with model environment variables enabled and continued to return deterministic findings independently of the model branch.
 
+Completed validation and presentation work:
+
+- automated app-factory integration coverage uses a temporary artifact;
+- local developer setup is documented in `doc/API.md` and `README.md`;
+- frontend copy and states explicitly identify the model branch as experimental and advisory.
+
 Remaining validation before product-facing inference:
 
-- add an automated app-factory integration test for configured model assessment using a temporary artifact;
-- document local developer setup in `doc/API.md` or README when the feature is ready for broader use;
-- review frontend copy for explicit experimental/advisory language.
+- expand the holdout with independent non-synthetic notification-style benign and suspicious examples;
+- report performance by notification family, not only aggregate accuracy;
+- document false-positive and false-negative behavior against the independent holdout;
+- define and meet promotion thresholds before treating the artifact as product-ready.
+
+Until those conditions are met, the model branch remains experimental, optional,
+advisory, and separate from deterministic findings and risk scoring.
 
 ---
 
