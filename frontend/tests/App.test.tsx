@@ -190,6 +190,11 @@ describe("App", () => {
     await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
 
     expect(await screen.findByText("Analysis completed")).toBeInTheDocument();
+    const workbench = screen.getByRole("main").querySelector(".workbench-grid");
+    const sidebar = workbench?.querySelector(".workbench-sidebar");
+    const results = workbench?.querySelector(".workbench-main");
+    expect(sidebar).toBeInTheDocument();
+    expect(results).toBeInTheDocument();
     expect(screen.getByText(/review the local triage output for/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Report actions" })).toBeInTheDocument();
     expect(screen.getByText("Risk assessment")).toBeInTheDocument();
