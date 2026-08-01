@@ -46,6 +46,15 @@ The current implemented MVP scope is tracked separately in:
   2. `Frontend`: Vite development flow is implemented. Frontend containerization is still deferred.
   3. `Playwright/Browser`: deferred.
 
+### 2.4 CLI and CI/CD Automation Direction
+
+- **Decision direction:** PhishShield should eventually expose deterministic email analysis through a command-line entrypoint so it can be used from local scripts and CI/CD pipelines in addition to the web application.
+- **Architecture:** the CLI must reuse existing `Application` use cases and contracts. It must not duplicate parsing, scoring, finding, or risk logic outside the application flow.
+- **Initial interface:** accept `.eml` file paths and, when practical, standard input; produce human-readable text and structured JSON output; and expose stable exit codes for configurable risk thresholds.
+- **Future formats:** batch/JSONL, Markdown, and SARIF may be added when a concrete automation or security-platform workflow justifies them.
+- **Deterministic-first rule:** the deterministic result remains authoritative for CLI and CI decisions. Model assessment remains optional, advisory, disabled by default, and must not become a default CI gate.
+- **Safety wording:** CLI and CI output represents deterministic phishing triage signals, not a malware verdict or a replacement for broader security controls.
+
 ---
 
 ## 3. Forensic Analysis Modules
