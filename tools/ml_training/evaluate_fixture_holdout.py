@@ -62,6 +62,8 @@ class HoldoutPrediction:
     expected_label: str
     predicted_label: str
     suspicious_probability: float | None = None
+    family: str = "unclassified"
+    source: str = "unknown"
 
     @property
     def is_correct(self) -> bool:
@@ -102,6 +104,42 @@ class HoldoutEvaluationResult:
             and prediction.predicted_label == NORMALIZED_LABEL_BENIGN
         )
 
+    @property
+    def metrics_by_family(self) -> dict[str, dict[str, float | int]]:
+        metrics: dict[str, dict[str, float | int]] = {}
+        for family in sorted({prediction.family for prediction in self.predictions}):
+            predictions = [prediction for prediction in self.predictions if prediction.family == family]
+            total = len(predictions)
+            correct = sum(1 for prediction in predictions if prediction.is_correct)
+            benign_total = sum(
+                1 for prediction in predictions if prediction.expected_label == NORMALIZED_LABEL_BENIGN
+            )
+            suspicious_total = sum(
+                1 for prediction in predictions if prediction.expected_label == NORMALIZED_LABEL_SUSPICIOUS
+            )
+            false_positive_benign = sum(
+                1
+                for prediction in predictions
+                if prediction.expected_label == NORMALIZED_LABEL_BENIGN
+                and prediction.predicted_label == NORMALIZED_LABEL_SUSPICIOUS
+            )
+            false_negative_suspicious = sum(
+                1
+                for prediction in predictions
+                if prediction.expected_label == NORMALIZED_LABEL_SUSPICIOUS
+                and prediction.predicted_label == NORMALIZED_LABEL_BENIGN
+            )
+            metrics[family] = {
+                "total": total,
+                "accuracy": 0.0 if total == 0 else correct / total,
+                "benign_total": benign_total,
+                "suspicious_total": suspicious_total,
+                "false_positive_benign": false_positive_benign,
+                "false_negative_suspicious": false_negative_suspicious,
+            }
+
+        return metrics
+
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
@@ -109,6 +147,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     parser.add_argument("--input", action="append", required=True, help="Prepared training JSONL file. Can be provided multiple times.")
     parser.add_argument("--fixtures-dir", required=True, help="Directory containing PhishShield .eml fixtures.")
+    parser.add_argument(
+        "--holdout-manifest",
+        default=None,
+        help="Optional JSONL manifest with path, expected_label, family, and source fields.",
+    )
     parser.add_argument(
         "--feature-set",
         default=FEATURE_SET_TEXT,
@@ -126,6 +169,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     result = evaluate_fixture_holdout(
         input_paths=[Path(input_path) for input_path in args.input],
         fixtures_dir=Path(args.fixtures_dir),
+        holdout_manifest=Path(args.holdout_manifest) if args.holdout_manifest else None,
         feature_set=args.feature_set,
         random_seed=args.random_seed,
         suspicious_threshold=args.suspicious_threshold,
@@ -142,6 +186,7 @@ def evaluate_fixture_holdout(
     random_seed: int = 42,
     fixture_labels: dict[str, str] | None = None,
     suspicious_threshold: float | None = None,
+    holdout_manifest: Path | None = None,
 ) -> HoldoutEvaluationResult:
     if feature_set not in {FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA}:
         raise ValueError(f"Unsupported feature set: {feature_set}")
@@ -149,13 +194,25 @@ def evaluate_fixture_holdout(
     if suspicious_threshold is not None and not 0.0 <= suspicious_threshold <= 1.0:
         raise ValueError("suspicious_threshold must be between 0.0 and 1.0")
 
-    labels_by_fixture = DEFAULT_FIXTURE_LABELS if fixture_labels is None else fixture_labels
     training_samples = _balanced_samples(_load_samples(input_paths), random_seed=random_seed)
     model = _train_model(training_samples, feature_set=feature_set)
     predictions: list[HoldoutPrediction] = []
 
-    for fixture_name, expected_label in labels_by_fixture.items():
-        fixture_path = fixtures_dir / fixture_name
+    holdout_rows = (
+        _load_holdout_manifest(holdout_manifest)
+        if holdout_manifest is not None
+        else [
+            {"path": fixture_name, "expected_label": expected_label, "family": "unclassified", "source": "phishshield-fixtures"}
+            for fixture_name, expected_label in (DEFAULT_FIXTURE_LABELS if fixture_labels is None else fixture_labels).items()
+        ]
+    )
+
+    for holdout_row in holdout_rows:
+        fixture_name = str(holdout_row["path"])
+        expected_label = str(holdout_row["expected_label"])
+        fixture_path = Path(fixture_name)
+        if not fixture_path.is_absolute():
+            fixture_path = fixtures_dir / fixture_path
         if not fixture_path.is_file():
             raise ValueError(f"fixture does not exist: {fixture_path}")
 
@@ -176,6 +233,8 @@ def evaluate_fixture_holdout(
                 expected_label=expected_label,
                 predicted_label=predicted_label,
                 suspicious_probability=suspicious_probability,
+                family=str(holdout_row.get("family", "unclassified")),
+                source=str(holdout_row.get("source", "unknown")),
             )
         )
 
@@ -190,6 +249,8 @@ def print_holdout_evaluation_result(result: HoldoutEvaluationResult) -> None:
         if prediction.suspicious_probability is not None:
             print(f"suspicious_probability: {prediction.suspicious_probability:.4f}")
         print(f"correct: {str(prediction.is_correct).lower()}")
+        print(f"family: {prediction.family}")
+        print(f"source: {prediction.source}")
         print()
 
     print("summary:")
@@ -198,6 +259,9 @@ def print_holdout_evaluation_result(result: HoldoutEvaluationResult) -> None:
     print(f"accuracy: {result.accuracy:.4f}")
     print(f"false_positive_benign: {result.false_positive_benign}")
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
+    print("metrics_by_family:")
+    for family, metrics in result.metrics_by_family.items():
+        print(f"  {family}: {json.dumps(metrics, sort_keys=True)}")
 
 
 def _predict_label(
@@ -249,6 +313,28 @@ def _load_samples(input_paths: Sequence[Path]) -> list[dict[str, object]]:
                 samples.append(json.loads(line))
 
     return samples
+
+
+def _load_holdout_manifest(manifest_path: Path) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for line_number, line in enumerate(manifest_path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        required_fields = {"path", "expected_label", "family", "source"}
+        missing_fields = required_fields - row.keys()
+        if missing_fields:
+            raise ValueError(
+                f"holdout manifest line {line_number} is missing: {', '.join(sorted(missing_fields))}"
+            )
+        if row["expected_label"] not in {NORMALIZED_LABEL_BENIGN, NORMALIZED_LABEL_SUSPICIOUS}:
+            raise ValueError(f"unsupported holdout label on line {line_number}: {row['expected_label']}")
+        rows.append(row)
+
+    if not rows:
+        raise ValueError("holdout manifest must contain at least one row")
+
+    return rows
 
 
 def _balanced_samples(samples: list[dict[str, object]], random_seed: int) -> list[dict[str, object]]:
