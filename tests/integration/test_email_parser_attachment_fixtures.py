@@ -61,3 +61,24 @@ def test_should_extract_body_and_attachment_from_nested_multipart_eml_fixture() 
     assert extracted_email.spf_result == "pass"
     assert extracted_email.dkim_result == "pass"
     assert extracted_email.dmarc_result == "pass"
+
+
+def test_should_preserve_plain_body_html_link_and_attachment_in_nested_multipart_fixture() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = (
+        _FIXTURES_DIR / "nested_multipart_with_html_link_and_attachment.eml"
+    ).read_bytes()
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.sender_domain == "example.com"
+    assert extracted_email.subject == "Nested account notice"
+    assert extracted_email.body_text == "Please review your account at https://example.com/plain."
+    assert extracted_email.urls == (
+        "https://example.com/plain",
+        "https://example.com/html",
+    )
+    assert extracted_email.attachment_filenames == ("account-summary.pdf",)
+    assert extracted_email.spf_result == "pass"
+    assert extracted_email.dkim_result == "pass"
+    assert extracted_email.dmarc_result == "pass"
