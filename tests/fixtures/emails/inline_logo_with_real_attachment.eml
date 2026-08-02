@@ -1,0 +1,20 @@
+From: Billing Team <billing@example.com>
+Subject: Invoice with inline logo
+Content-Type: multipart/related; boundary=related
+
+--related
+Content-Type: text/html; charset=utf-8
+
+<html><body><img src="cid:brand-logo@example.com"><p>Please review your invoice at https://example.com/invoice.</p></body></html>
+--related
+Content-Type: image/png
+Content-Disposition: inline; filename="brand-logo.png"
+Content-ID: <brand-logo@example.com>
+
+fake image bytes
+--related
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="invoice.pdf"
+
+fake pdf bytes
+--related--
