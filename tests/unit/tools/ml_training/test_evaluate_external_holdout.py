@@ -1,7 +1,10 @@
 import json
 from pathlib import Path
 
-from tools.ml_training.evaluate_external_holdout import evaluate_external_holdout
+from tools.ml_training.evaluate_external_holdout import (
+    _row_to_text,
+    evaluate_external_holdout,
+)
 from tools.ml_training.train_baseline import FEATURE_SET_TEXT_WITH_LIGHT_METADATA
 
 
@@ -41,6 +44,23 @@ def test_should_evaluate_external_jsonl_holdout_by_metadata_dimensions(tmp_path:
     assert set(result.metrics_by("expected_label")) == {"benign", "suspicious"}
     assert result.metrics_by("target")["Corporate"]["total"] == 2
     assert {prediction.source for prediction in result.predictions} == {"external-holdout"}
+
+
+def test_should_keep_external_metadata_out_of_model_input() -> None:
+    text = _row_to_text(
+        {
+            "subject": "Account update",
+            "body": "Please review your account.",
+            "spoofed_sender": "attacker@example.test",
+            "target": "Banking",
+            "technique": "Credential harvesting",
+        },
+        FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
+    )
+
+    assert text == "Account update\nPlease review your account."
+    assert "Banking" not in text
+    assert "Credential harvesting" not in text
 
 
 def _prepared_row(sample_id: str, label: str, subject: str, body: str) -> dict[str, object]:

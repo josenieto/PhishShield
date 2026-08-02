@@ -1161,6 +1161,11 @@ This representation should remain fixed while comparing model candidates. If a
 future parser change modifies any of these fields, the affected baseline evaluation
 must be repeated before model promotion decisions are made.
 
+The external JSONL diagnostic evaluator uses only `subject + body_text` for its
+model input because that source does not provide parser-normalized URL or attachment
+fields. Its source metadata (`intent`, `technique`, `target`, and `spoofed_sender`)
+is retained only to group errors and must not become an implicit feature.
+
 Selection evidence:
 
 ```text

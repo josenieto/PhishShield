@@ -8,6 +8,35 @@ Its goal is to identify realistic public corpora that could support a project-ow
 
 This document is intentionally about data and evaluation planning. It does not introduce model training or inference implementation yet.
 
+## Dataset Usage Registry
+
+This registry records whether each researched source was used for training,
+calibration, regression holdout, or independent diagnostic evaluation. Raw and
+prepared datasets remain outside Git.
+
+| Dataset | Usage | Status | License | Training use | Holdout use | Decision |
+|---|---|---|---|---|---|---|
+| Apache SpamAssassin Public Corpus | Ham/spam baseline and benign calibration | Used | Source terms require review | Historical yes | No | Reject as a phishing-quality model by itself. |
+| Fraudulent E-mail Corpus | Fraud/social-engineering baseline | Used | `CC BY-SA 4.0` | Historical yes | No | Reject as sufficient modern phishing coverage. |
+| Phishing Email Detection | Main phishing text baseline | Used | `LGPL-3.0` declared by source mirror | Yes | No | Current candidate training source. |
+| SpamAssassin `hard_ham` | Benign calibration | Used | SpamAssassin source terms | Historical yes | No | Did not improve notification-like benign calibration. |
+| Enron Email Dataset | Benign business-email calibration POC | Used | Public source with privacy and integrity concerns | Historical POC only | No | Did not improve current holdout; do not redistribute. |
+| Synthetic benign notifications | Targeted calibration | Generated | Project-authored | Yes | No | Useful only as controlled calibration, not independent evidence. |
+| Synthetic suspicious notifications | Balanced calibration | Generated | Project-authored | Yes | No | Useful only as controlled calibration, not independent evidence. |
+| PhishShield fixtures | Regression and qualitative holdout | Used | Project | No | Yes | Must remain outside training and is not independent promotion evidence. |
+| `darkknight25/phishing_benign_email_dataset` | External diagnostic text holdout | Evaluated | `MIT` declared by source | No | Yes | Small and likely curated; not sufficient for promotion alone. |
+| `cybersectony/PhishingEmailDetectionv2.0` | Future email-only research candidate | Inspected, not downloaded | Not clearly declared | No | No | Requires provenance, license, filtering and overlap review. |
+| `Phishing Email Curated Cleaned` | Future benchmark candidate | Inspected, not downloaded | `CC BY 4.0` declared by source | No | No | Not independent because it aggregates previously used corpora. |
+
+### Registry Rules
+
+- A source used for training or calibration cannot later be called an independent promotion holdout.
+- PhishShield fixtures are regression evidence, not independent product-promotion evidence.
+- Raw corpora, prepared JSONL, holdout manifests, per-sample predictions, and model artifacts remain outside Git.
+- Every new source requires license, provenance, schema, quality, privacy, and overlap review.
+- Evaluation reports must state whether the result is diagnostic, calibration, regression, or promotion evidence.
+- External text holdouts must use the same model input representation as the candidate being evaluated. Source metadata such as intent, technique, target, and spoofed sender is retained only for error analysis unless it is explicitly part of a new training feature contract.
+
 ---
 
 ## Selection Criteria
