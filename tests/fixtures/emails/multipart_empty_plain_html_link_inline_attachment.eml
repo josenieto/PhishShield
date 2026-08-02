@@ -1,0 +1,30 @@
+From: Billing Team <billing@example.com>
+Subject: HTML invoice notice
+Authentication-Results: mx.example.com; spf=pass smtp.mailfrom=example.com; dkim=pass header.d=example.com; dmarc=pass header.from=example.com
+Content-Type: multipart/mixed; boundary=mixed
+
+--mixed
+Content-Type: multipart/alternative; boundary=alternative
+
+--alternative
+Content-Type: text/plain; charset=utf-8
+
+
+--alternative
+Content-Type: text/html; charset=utf-8
+
+<html><head><style>.hidden { display: none; }</style><script>const secret = "https://hidden.example";</script></head><body><p>Please review your invoice.</p><a href="https://example.com/invoice">Open invoice</a><img src="cid:brand-logo@example.com"></body></html>
+--alternative--
+
+--mixed
+Content-Type: image/png
+Content-Disposition: inline; filename="brand-logo.png"
+Content-ID: <brand-logo@example.com>
+
+fake image bytes
+--mixed
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="invoice.pdf"
+
+fake pdf bytes
+--mixed--

@@ -95,3 +95,19 @@ def test_should_exclude_inline_logo_but_keep_real_attachment_from_related_fixtur
     )
     assert extracted_email.urls == ("https://example.com/invoice",)
     assert extracted_email.attachment_filenames == ("invoice.pdf",)
+
+
+def test_should_fallback_to_visible_html_when_nested_plain_body_is_empty() -> None:
+    adapter = PythonEmailContentExtractorAdapter()
+    email_bytes = (
+        _FIXTURES_DIR / "multipart_empty_plain_html_link_inline_attachment.eml"
+    ).read_bytes()
+
+    extracted_email = adapter.extract(email_bytes)
+
+    assert extracted_email.body_text == "Please review your invoice. Open invoice"
+    assert extracted_email.urls == ("https://example.com/invoice",)
+    assert extracted_email.attachment_filenames == ("invoice.pdf",)
+    assert extracted_email.spf_result == "pass"
+    assert extracted_email.dkim_result == "pass"
+    assert extracted_email.dmarc_result == "pass"
