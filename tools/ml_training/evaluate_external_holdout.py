@@ -6,6 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
 
+from infrastructure.adapters.email_parser.python_email_content_extractor import (
+    PythonEmailContentExtractorAdapter,
+)
 from tools.ml_data_preparation.phishshield_fixtures import (
     NORMALIZED_LABEL_BENIGN,
     NORMALIZED_LABEL_SUSPICIOUS,
@@ -112,6 +115,7 @@ def evaluate_external_holdout(
 
     training_samples = _load_training_samples(input_paths)
     model = _train_model(_balanced_samples(training_samples, random_seed), feature_set)
+    parser_adapter = PythonEmailContentExtractorAdapter()
     predictions: list[ExternalPrediction] = []
 
     for line_number, row in enumerate(_load_holdout_rows(holdout_path), start=1):
@@ -119,7 +123,7 @@ def evaluate_external_holdout(
         if expected_label is None:
             raise ValueError(f"unsupported label on holdout line {line_number}: {row.get('label')}")
         sample_id = str(row.get("id") or f"row-{line_number}")
-        text = _row_to_text(row, feature_set)
+        text = _row_to_text(row, feature_set, parser_adapter)
         predicted_label, probability = _predict_label(model, text, suspicious_threshold)
         predictions.append(
             ExternalPrediction(
@@ -197,11 +201,27 @@ def _normalize_label(value: object) -> str | None:
     return None
 
 
-def _row_to_text(row: dict[str, object], feature_set: str) -> str:
-    # The external source has no parser-normalized URL or attachment fields.
-    # Keep its input aligned with the baseline's text component and retain the
-    # extra source metadata only for error analysis.
-    text_parts = [str(row.get("subject") or ""), str(row.get("body") or "")]
+def _row_to_text(
+    row: dict[str, object],
+    feature_set: str,
+    parser_adapter: PythonEmailContentExtractorAdapter | None = None,
+) -> str:
+    # Reuse the runtime parser so external body URLs are represented consistently.
+    parser = parser_adapter or PythonEmailContentExtractorAdapter()
+    raw_email = "\r\n".join(
+        (
+            "From: External Holdout <holdout@example.test>",
+            f"Subject: {str(row.get('subject') or '')}",
+            "Content-Type: text/plain; charset=utf-8",
+            "",
+            str(row.get("body") or ""),
+        )
+    ).encode("utf-8")
+    extracted = parser.extract(raw_email)
+    text_parts = [extracted.subject, extracted.body_text]
+    if feature_set == FEATURE_SET_TEXT_WITH_LIGHT_METADATA:
+        text_parts.extend(extracted.urls)
+        text_parts.extend(extracted.attachment_filenames)
     return "\n".join(text_parts)
 
 

@@ -63,6 +63,26 @@ def test_should_keep_external_metadata_out_of_model_input() -> None:
     assert "Credential harvesting" not in text
 
 
+def test_should_extract_external_body_urls_with_runtime_parser() -> None:
+    text = _row_to_text(
+        {
+            "subject": "Account update",
+            "body": "Review https://example.test/account now.",
+            "target": "Banking",
+            "technique": "Credential harvesting",
+        },
+        FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
+    )
+
+    assert text == (
+        "Account update\n"
+        "Review https://example.test/account now.\n"
+        "https://example.test/account"
+    )
+    assert "Banking" not in text
+    assert "Credential harvesting" not in text
+
+
 def _prepared_row(sample_id: str, label: str, subject: str, body: str) -> dict[str, object]:
     return {
         "sample_id": sample_id,
