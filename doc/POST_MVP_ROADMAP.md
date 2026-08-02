@@ -63,15 +63,20 @@ Keep out of scope for this track:
 
 ### Track 2: Parser And Runtime Polish
 
-The parser now extracts URLs from visible text and HTML anchor `href` values.
+The initial parser/runtime hardening round is complete.
 
-Candidate steps:
+Completed scope:
 
-- improve malformed HTML handling when real samples expose gaps;
-- handle additional HTML link variants if fixtures show missing extraction behavior;
-- add unusual charset edge cases only when realistic emails expose them;
-- review deeply nested multipart behavior if real samples justify it;
-- improve parser/runtime diagnostics without moving business logic into adapters.
+- visible HTML extraction and `href` handling;
+- script/style exclusion;
+- non-standard charset fallback;
+- nested and malformed multipart handling;
+- HTML fallback when plain text is empty;
+- real attachment and inline resource classification;
+- parser fixture and integration coverage for the current extracted representation.
+
+Future parser work is maintenance-driven and requires a realistic sample to demonstrate
+a concrete gap.
 
 Keep out of scope for this track:
 
@@ -197,12 +202,13 @@ These areas remain deferred until a dedicated roadmap group starts them:
 The current recommended next group is:
 
 ```text
-Parser And Runtime Polish
+Product-Ready Advisory Inference Validation
 ```
 
 Rationale:
 
 - the initial Report And Export v2 block is complete;
 - the Frontend Analyst Polish block is complete;
-- the next useful confidence work should be driven by realistic parser and runtime gaps;
+- the initial parser/runtime hardening round is complete;
+- the extracted representation can now be held stable for model evaluation;
 - model-assisted inference remains experimental until independent benign-calibration validation supports promotion.
