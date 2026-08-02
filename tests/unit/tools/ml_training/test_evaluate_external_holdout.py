@@ -1,0 +1,54 @@
+import json
+from pathlib import Path
+
+from tools.ml_training.evaluate_external_holdout import evaluate_external_holdout
+from tools.ml_training.train_baseline import FEATURE_SET_TEXT_WITH_LIGHT_METADATA
+
+
+def test_should_evaluate_external_jsonl_holdout_by_metadata_dimensions(tmp_path: Path) -> None:
+    training_path = tmp_path / "training.jsonl"
+    training_path.write_text(
+        "\n".join(
+            json.dumps(row)
+            for row in [
+                _prepared_row("b1", "benign", "Account summary", "Your account summary is ready."),
+                _prepared_row("b2", "benign", "Newsletter", "Here is your weekly newsletter."),
+                _prepared_row("s1", "suspicious", "Verify account", "Verify your account password immediately."),
+                _prepared_row("s2", "suspicious", "Confirm payment", "Confirm your payment at the login portal."),
+            ]
+        ) + "\n",
+        encoding="utf-8",
+    )
+    holdout_path = tmp_path / "external.jsonl"
+    holdout_path.write_text(
+        "\n".join(
+            json.dumps(row)
+            for row in [
+                {"id": "external-benign", "subject": "Account summary", "body": "Your account summary is ready.", "label": "benign", "intent": "Informational", "technique": "None", "target": "Corporate"},
+                {"id": "external-phishing", "subject": "Verify account", "body": "Verify your account password immediately.", "label": "phishing", "intent": "Credential Harvesting", "technique": "Fake Login", "target": "Corporate"},
+            ]
+        ) + "\n",
+        encoding="utf-8",
+    )
+
+    result = evaluate_external_holdout(
+        input_paths=[training_path],
+        holdout_path=holdout_path,
+        feature_set=FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
+    )
+
+    assert result.total == 2
+    assert set(result.metrics_by("expected_label")) == {"benign", "suspicious"}
+    assert result.metrics_by("target")["Corporate"]["total"] == 2
+    assert {prediction.source for prediction in result.predictions} == {"external-holdout"}
+
+
+def _prepared_row(sample_id: str, label: str, subject: str, body: str) -> dict[str, object]:
+    return {
+        "sample_id": sample_id,
+        "normalized_label": label,
+        "subject": subject,
+        "body_text": body,
+        "urls": [],
+        "attachment_filenames": [],
+    }
