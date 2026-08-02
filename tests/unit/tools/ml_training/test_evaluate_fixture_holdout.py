@@ -64,6 +64,68 @@ def test_should_evaluate_fixture_holdout_with_suspicious_threshold(tmp_path: Pat
     )
 
 
+def test_should_report_metrics_by_family_from_holdout_manifest(tmp_path: Path) -> None:
+    training_path = _write_training_dataset(tmp_path)
+    fixtures_dir = _write_fixture_dataset(tmp_path)
+    manifest_path = tmp_path / "holdout.jsonl"
+    manifest_path.write_text(
+        "\n".join(
+            [
+                json.dumps({
+                    "path": "benign_sample.eml",
+                    "expected_label": NORMALIZED_LABEL_BENIGN,
+                    "family": "account",
+                    "source": "independent-synthetic",
+                }),
+                json.dumps({
+                    "path": "suspicious_sample.eml",
+                    "expected_label": NORMALIZED_LABEL_SUSPICIOUS,
+                    "family": "account",
+                    "source": "independent-synthetic",
+                }),
+            ]
+        ) + "\n",
+        encoding="utf-8",
+    )
+
+    result = evaluate_fixture_holdout(
+        input_paths=[training_path],
+        fixtures_dir=fixtures_dir,
+        feature_set=FEATURE_SET_TEXT,
+        random_seed=7,
+        holdout_manifest=manifest_path,
+    )
+
+    assert result.metrics_by_family["account"] == {
+        "total": 2,
+        "accuracy": 1.0,
+        "benign_total": 1,
+        "suspicious_total": 1,
+        "false_positive_benign": 0,
+        "false_negative_suspicious": 0,
+    }
+    assert all(prediction.source == "independent-synthetic" for prediction in result.predictions)
+
+
+def test_should_reject_holdout_manifest_with_missing_fields(tmp_path: Path) -> None:
+    training_path = _write_training_dataset(tmp_path)
+    fixtures_dir = _write_fixture_dataset(tmp_path)
+    manifest_path = tmp_path / "invalid-holdout.jsonl"
+    manifest_path.write_text(json.dumps({"path": "benign_sample.eml"}) + "\n", encoding="utf-8")
+
+    try:
+        evaluate_fixture_holdout(
+            input_paths=[training_path],
+            fixtures_dir=fixtures_dir,
+            feature_set=FEATURE_SET_TEXT,
+            holdout_manifest=manifest_path,
+        )
+    except ValueError as error:
+        assert "missing" in str(error)
+    else:
+        raise AssertionError("Expected invalid holdout manifest to be rejected")
+
+
 def test_should_return_zero_exit_code_from_cli(tmp_path: Path) -> None:
     training_path = _write_training_dataset(tmp_path)
     fixtures_dir = _write_default_fixture_dataset(tmp_path)
