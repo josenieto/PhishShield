@@ -201,13 +201,33 @@ Covered steps:
 - `Received-SPF` result variants;
 - multiple `Received-SPF` headers.
 
-Remaining candidate steps:
+The initial parser/runtime hardening round also covers:
+
+- visible HTML extraction that ignores `script` and `style` content;
+- HTML fallback when nested plain-text content is empty;
+- nested multipart alternatives with visible links and real attachments;
+- malformed multipart degradation without losing safely recoverable evidence;
+- inline image resources with `Content-ID` excluded from attachment filenames;
+- inline files without `Content-ID` preserved as potentially meaningful evidence.
+
+Remaining candidate steps after the initial hardening round:
 
 - encoded sender display names if they become relevant for future adapters;
 - additional unusual charset edge cases if real samples expose gaps;
 - deeply nested multipart structures;
 - parser failure behavior for malformed but safely handled emails.
 - richer HTML link extraction beyond the current visible-text and anchor-`href` support when future samples expose additional gaps.
+
+The initial hardening round is complete. Further parser work is maintenance-driven:
+add a fixture and change behavior only when a realistic sample demonstrates a concrete
+gap. The current extracted representation is stable for the present ML evaluation:
+
+```text
+subject + body_text + urls + attachment_filenames
+```
+
+Any future parser change affecting those fields must trigger a re-evaluation of the
+model baseline.
 
 ### 5. Integration Tests
 
@@ -272,11 +292,12 @@ The current calibration baseline is documented in:
 
 ## Next Focus
 
-The next recommended backend group is parser/runtime polish driven by realistic sample gaps.
+The initial parser/runtime hardening round is complete. The next recommended backend
+focus is independent validation of the experimental advisory model path.
 
 Short-term goals:
 
-- expand fixtures only when they answer a concrete parser or scoring question;
+- expand parser fixtures only when realistic samples answer a concrete parser or scoring question;
 - review whether current scoring weights still match the richer fixture set;
 - keep `doc/API.md` as the external API contract reference;
 - use `doc/SCORING_CALIBRATION.md` as the baseline before changing weights or critical indicators;

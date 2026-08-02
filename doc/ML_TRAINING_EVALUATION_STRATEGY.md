@@ -1150,6 +1150,17 @@ training data: Phishing Email Detection + synthetic benign notifications 600 + s
 feature_set: text_with_light_metadata
 ```
 
+The parser/runtime hardening checkpoint established the current input contract for
+the next evaluation campaign:
+
+```text
+subject + body_text + urls + attachment_filenames
+```
+
+This representation should remain fixed while comparing model candidates. If a
+future parser change modifies any of these fields, the affected baseline evaluation
+must be repeated before model promotion decisions are made.
+
 Selection evidence:
 
 ```text
