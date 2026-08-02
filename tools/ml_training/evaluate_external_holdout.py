@@ -198,11 +198,10 @@ def _normalize_label(value: object) -> str | None:
 
 
 def _row_to_text(row: dict[str, object], feature_set: str) -> str:
+    # The external source has no parser-normalized URL or attachment fields.
+    # Keep its input aligned with the baseline's text component and retain the
+    # extra source metadata only for error analysis.
     text_parts = [str(row.get("subject") or ""), str(row.get("body") or "")]
-    if feature_set == FEATURE_SET_TEXT_WITH_LIGHT_METADATA:
-        text_parts.extend(str(row.get("spoofed_sender") or ""))
-        text_parts.extend(str(row.get("target") or ""))
-        text_parts.extend(str(row.get("technique") or ""))
     return "\n".join(text_parts)
 
 
