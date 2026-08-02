@@ -7208,6 +7208,67 @@ Complete independent validation before considering product-facing inference.
 
 ---
 
+## 2026-07-17 - Parser and runtime hardening checkpoint
+
+Type: Documentation
+Layer: Infrastructure | Cross-cutting
+Status: Done
+
+### Context
+
+The parser/runtime hardening round covered the current realistic HTML, charset,
+MIME, multipart, authentication, URL, and attachment evidence boundaries. The
+parser feeds deterministic analysis, API responses, ML preparation, and model
+assessment, so its extracted representation needed an explicit checkpoint before
+model evaluation was advanced.
+
+### Decision
+
+Closed the initial parser/runtime hardening round. The current representation is
+stable for the next ML evaluation campaign:
+
+```text
+subject + body_text + urls + attachment_filenames
+```
+
+Future parser changes are maintenance-driven and must start from a realistic sample
+or fixture demonstrating a concrete gap. Any change affecting the frozen fields
+requires re-evaluating the model baseline.
+
+### Covered boundaries
+
+- visible HTML with script/style exclusion;
+- HTML links and anchor `href` extraction;
+- non-standard charset fallback;
+- nested and malformed multipart messages;
+- HTML fallback when plain text is empty;
+- real attachments and inline resources;
+- authentication result extraction and fallback.
+
+### Tests
+
+Command:
+
+```bash
+python -m pytest
+python -m pre_commit run --all-files
+```
+
+Result:
+
+```text
+717 backend tests passed.
+Repository pre-commit checks passed.
+```
+
+### Next step
+
+Start Product-Ready Advisory Inference Validation with independent holdout design
+and family-level metrics. Do not regenerate project knowledge graph for this checkpoint; the
+architecture map did not change.
+
+---
+
 ## 2026-07-17 - Frontend analyst polish milestone
 
 Type: Documentation
