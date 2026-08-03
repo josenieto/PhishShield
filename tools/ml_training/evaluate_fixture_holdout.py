@@ -18,6 +18,7 @@ from tools.ml_training.train_baseline import (
     FEATURE_SET_TEXT,
     FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
 )
+from tools.ml_training.confidence_policy import classify_suspicious_probability
 
 
 DEFAULT_FIXTURE_LABELS = {
@@ -172,6 +173,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         default=None,
         help="Optional probability threshold for predicting suspicious fixtures.",
     )
+    parser.add_argument("--abstain", action="store_true", help="Use conservative confidence bands.")
 
     args = parser.parse_args(argv)
     result = evaluate_fixture_holdout(
@@ -181,6 +183,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         feature_set=args.feature_set,
         random_seed=args.random_seed,
         suspicious_threshold=args.suspicious_threshold,
+        abstain=args.abstain,
     )
     print_holdout_evaluation_result(result)
 
@@ -195,6 +198,7 @@ def evaluate_fixture_holdout(
     fixture_labels: dict[str, str] | None = None,
     suspicious_threshold: float | None = None,
     holdout_manifest: Path | None = None,
+    abstain: bool = False,
 ) -> HoldoutEvaluationResult:
     if feature_set not in {FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA}:
         raise ValueError(f"Unsupported feature set: {feature_set}")
@@ -230,11 +234,17 @@ def evaluate_fixture_holdout(
             normalized_label=expected_label,
         )
         fixture_text = _sample_to_text(_sample_to_dict(sample), feature_set=feature_set)
-        predicted_label, suspicious_probability = _predict_label(
-            model=model,
-            fixture_text=fixture_text,
-            suspicious_threshold=suspicious_threshold,
-        )
+        if abstain:
+            classifier = model.named_steps["classifier"]
+            suspicious_index = list(classifier.classes_).index(NORMALIZED_LABEL_SUSPICIOUS)
+            suspicious_probability = float(model.predict_proba([fixture_text])[0][suspicious_index])
+            predicted_label, _ = classify_suspicious_probability(suspicious_probability)
+        else:
+            predicted_label, suspicious_probability = _predict_label(
+                model=model,
+                fixture_text=fixture_text,
+                suspicious_threshold=suspicious_threshold,
+            )
         predictions.append(
             HoldoutPrediction(
                 fixture_name=fixture_name,

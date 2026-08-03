@@ -120,8 +120,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--feature-set", default=FEATURE_SET_TEXT_WITH_LIGHT_METADATA, choices=[FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA])
     parser.add_argument("--random-seed", type=int, default=42)
     parser.add_argument("--suspicious-threshold", type=float, default=0.5)
+    parser.add_argument("--abstain", action="store_true", help="Use conservative confidence bands.")
     args = parser.parse_args(argv)
-    result = evaluate_prepared_holdout([Path(p) for p in args.input], Path(args.holdout), args.feature_set, args.random_seed, args.suspicious_threshold)
+    result = evaluate_prepared_holdout([Path(p) for p in args.input], Path(args.holdout), args.feature_set, args.random_seed, args.suspicious_threshold, args.abstain)
     print_prepared_holdout_result(result)
     return 0
 
