@@ -1,0 +1,1 @@
+{"sample_id":"account-benign-001","expected_label":"benign","family":"account","source":"REPLACE_WITH_PUBLIC_SOURCE","source_uri":"https://REPLACE_WITH_STABLE_SOURCE_URI","license":"REPLACE_WITH_LICENSE_OR_TERMS","collection_date":"2026-07-28","language":"en","content_hash":"REPLACE_WITH_SHA256_HEX","raw_available":false,"review_status":"pending"}
