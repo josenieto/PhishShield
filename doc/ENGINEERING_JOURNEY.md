@@ -7208,6 +7208,45 @@ Complete independent validation before considering product-facing inference.
 
 ---
 
+## 2026-07-20 - Define advisory inference coverage strategy
+
+Type: Architecture | Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Context
+
+The experimental model performed well on the project-shaped holdout but generalized
+poorly across external datasets. The issue is coverage and distribution mismatch,
+not a missing endpoint or adapter. The model must not be presented as a universal
+phishing classifier while its evidence remains limited.
+
+### Decision
+
+Defined the initial advisory scope as modern operational email notifications in
+English, covering account, MFA/security, cloud/share, billing/invoice, support, HR,
+vendor portal, and newsletter/account-preference families.
+
+The model may return `inconclusive` when confidence is insufficient or the input is
+outside the validated scope. Deterministic analysis remains authoritative. Future
+scope expansion requires family-specific data, independent promotion holdouts,
+family-level metrics, and no regression in existing covered families.
+
+### Files changed
+
+- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `doc/ML_DATASET_RESEARCH.md`
+- `doc/POST_MVP_ROADMAP.md`
+- `doc/ENGINEERING_JOURNEY.md`
+
+### Next step
+
+Measure coverage, abstention, and confident errors across the internal and external
+holdouts before changing training data or promoting any model artifact.
+
+---
+
 ## 2026-07-17 - Parser and runtime hardening checkpoint
 
 Type: Documentation
