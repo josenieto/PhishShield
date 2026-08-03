@@ -14,6 +14,18 @@ This registry records whether each researched source was used for training,
 calibration, regression holdout, or independent diagnostic evaluation. Raw and
 prepared datasets remain outside Git.
 
+Allowed usage classifications are:
+
+```text
+training-only
+calibration-only
+regression-only
+diagnostic-only
+promotion-holdout
+rejected
+future-research
+```
+
 | Dataset | Usage | Status | License | Training use | Holdout use | Decision |
 |---|---|---|---|---|---|---|
 | Apache SpamAssassin Public Corpus | Ham/spam baseline and benign calibration | Used | Source terms require review | Historical yes | No | Reject as a phishing-quality model by itself. |
@@ -36,6 +48,7 @@ prepared datasets remain outside Git.
 - Every new source requires license, provenance, schema, quality, privacy, and overlap review.
 - Evaluation reports must state whether the result is diagnostic, calibration, regression, or promotion evidence.
 - External text holdouts must use the same model input representation as the candidate being evaluated. Source metadata such as intent, technique, target, and spoofed sender is retained only for error analysis unless it is explicitly part of a new training feature contract.
+- Dataset selection should target missing coverage families rather than generic dataset size.
 
 ---
 
