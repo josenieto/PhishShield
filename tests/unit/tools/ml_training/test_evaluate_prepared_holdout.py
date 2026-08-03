@@ -25,6 +25,10 @@ def test_should_evaluate_prepared_holdout_by_label_and_quality_dimensions(tmp_pa
     assert set(result.metrics_by("expected_label")) == {"benign", "suspicious"}
     assert set(result.metrics_by("body_length_bucket")) == {"short_lt_300"}
     assert result.predictions[0].source == "ceas_08"
+    assert 0.0 <= result.abstention_rate <= 1.0
+    assert 0.0 <= result.conditional_accuracy <= 1.0
+    assert 0.0 <= result.confident_false_positive_rate <= 1.0
+    assert 0.0 <= result.confident_false_negative_rate <= 1.0
 
 
 def _row(sample_id: str, label: str, subject: str, body: str) -> dict[str, object]:

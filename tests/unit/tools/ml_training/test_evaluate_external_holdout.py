@@ -107,6 +107,10 @@ def test_should_report_coverage_when_abstention_is_enabled(tmp_path: Path) -> No
 
     assert 0.0 <= result.coverage <= 1.0
     assert result.inconclusive >= 0
+    assert 0.0 <= result.abstention_rate <= 1.0
+    assert 0.0 <= result.conditional_accuracy <= 1.0
+    assert 0.0 <= result.confident_false_positive_rate <= 1.0
+    assert 0.0 <= result.confident_false_negative_rate <= 1.0
 
 
 def _prepared_row(sample_id: str, label: str, subject: str, body: str) -> dict[str, object]:

@@ -75,6 +75,25 @@ class ExternalHoldoutResult:
     def coverage(self) -> float:
         return 0.0 if not self.predictions else (self.total - self.inconclusive) / self.total
 
+    @property
+    def abstention_rate(self) -> float:
+        return 0.0 if not self.predictions else self.inconclusive / self.total
+
+    @property
+    def conditional_accuracy(self) -> float:
+        classified = [p for p in self.predictions if p.predicted_label != "inconclusive"]
+        return 0.0 if not classified else sum(p.is_correct for p in classified) / len(classified)
+
+    @property
+    def confident_false_positive_rate(self) -> float:
+        benign = [p for p in self.predictions if p.expected_label == NORMALIZED_LABEL_BENIGN]
+        return 0.0 if not benign else self.false_positive_benign / len(benign)
+
+    @property
+    def confident_false_negative_rate(self) -> float:
+        suspicious = [p for p in self.predictions if p.expected_label == NORMALIZED_LABEL_SUSPICIOUS]
+        return 0.0 if not suspicious else self.false_negative_suspicious / len(suspicious)
+
     def metrics_by(self, field: str) -> dict[str, dict[str, float | int]]:
         if field not in {"expected_label", "intent", "technique", "target", "source"}:
             raise ValueError(f"Unsupported metric dimension: {field}")
@@ -106,6 +125,7 @@ class ExternalHoldoutResult:
                 "suspicious_total": suspicious_total,
                 "false_positive_benign": false_positive,
                 "false_negative_suspicious": false_negative,
+                **_abstention_metrics(predictions, false_positive, false_negative),
             }
         return result
 
@@ -180,6 +200,10 @@ def print_external_result(result: ExternalHoldoutResult) -> None:
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
     print(f"inconclusive: {result.inconclusive}")
     print(f"coverage: {result.coverage:.4f}")
+    print(f"abstention_rate: {result.abstention_rate:.4f}")
+    print(f"conditional_accuracy: {result.conditional_accuracy:.4f}")
+    print(f"confident_false_positive_rate: {result.confident_false_positive_rate:.4f}")
+    print(f"confident_false_negative_rate: {result.confident_false_negative_rate:.4f}")
     for dimension in ("expected_label", "intent", "technique", "target"):
         print(f"metrics_by_{dimension}:")
         for value, metrics in result.metrics_by(dimension).items():
@@ -227,6 +251,24 @@ def _predict_label_legacy(model, text: str, threshold: float):
     from tools.ml_training.evaluate_fixture_holdout import _predict_label as legacy
 
     return legacy(model, text, threshold)
+
+
+def _abstention_metrics(
+    predictions: list[ExternalPrediction],
+    false_positive: int,
+    false_negative: int,
+) -> dict[str, float]:
+    total = len(predictions)
+    classified = [p for p in predictions if p.predicted_label != "inconclusive"]
+    benign_total = sum(p.expected_label == NORMALIZED_LABEL_BENIGN for p in predictions)
+    suspicious_total = sum(p.expected_label == NORMALIZED_LABEL_SUSPICIOUS for p in predictions)
+    return {
+        "coverage": 0.0 if total == 0 else len(classified) / total,
+        "abstention_rate": 0.0 if total == 0 else (total - len(classified)) / total,
+        "conditional_accuracy": 0.0 if not classified else sum(p.is_correct for p in classified) / len(classified),
+        "confident_false_positive_rate": 0.0 if benign_total == 0 else false_positive / benign_total,
+        "confident_false_negative_rate": 0.0 if suspicious_total == 0 else false_negative / suspicious_total,
+    }
 
 
 def _row_to_text(
