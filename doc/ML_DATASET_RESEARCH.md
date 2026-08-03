@@ -371,6 +371,63 @@ Safe Email: rows=11322, empty_text=0, duplicate_text=344, short_rows_lt_30=210, 
 
 The dataset is usable for a preparation prototype, but it is not a clean modern phishing corpus. The `Phishing Email` class includes many spam-like and marketing/adult/pharma/stock terms, so the first ingestion must include filtering or at least explicit quality counters for empty, duplicate, very short, very long, URL-only, and spam-like rows.
 
+### CEAS-08 Subset From Phishing Email Curated Datasets
+
+Reference:
+
+```text
+Zenodo record: https://doi.org/10.5281/zenodo.8339691
+Source file: CEAS_08.csv
+License declared by record: CC-BY-4.0
+```
+
+The CEAS-08 CSV was downloaded manually outside Git for a controlled preparation
+POC. It contains sender, receiver, date, subject, body, label, and a source URL
+flag. The source file is not approved for training or calibration at this stage.
+
+Preparation result:
+
+```text
+rows_read: 39154
+processed: 39154
+failed: 0
+unsupported_label: 0
+empty_subject: 28
+empty_body: 0
+duplicate_content: 54
+labels: benign=17312, suspicious=21842
+urls_found: 130957
+```
+
+Prepared output remains outside Git:
+
+```text
+C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\ceas-08\prepared\ceas_08.jsonl
+```
+
+Observed label mapping:
+
+```text
+0 -> benign
+1 -> suspicious
+```
+
+Audit metadata preserves sender, receiver, date, original label, and the source
+URL flag, but those fields are not model features. The feature representation
+remains `subject + body_text + urls + attachment_filenames`.
+
+Exact subject/body/URL overlap against current training inputs was previously zero.
+Near-duplicate and source-overlap analysis is still required before this source
+can be called an independent promotion holdout.
+
+Current decision:
+
+```text
+approved for controlled external evaluation preparation;
+not approved for training or calibration;
+not yet approved as final product-promotion evidence.
+```
+
 ### PhishingEmailDetectionv2.0
 
 Reference:
