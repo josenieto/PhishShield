@@ -105,6 +105,14 @@ class HoldoutEvaluationResult:
         )
 
     @property
+    def inconclusive(self) -> int:
+        return sum(prediction.predicted_label == "inconclusive" for prediction in self.predictions)
+
+    @property
+    def coverage(self) -> float:
+        return 0.0 if not self.predictions else (self.total - self.inconclusive) / self.total
+
+    @property
     def metrics_by_family(self) -> dict[str, dict[str, float | int]]:
         metrics: dict[str, dict[str, float | int]] = {}
         for family in sorted({prediction.family for prediction in self.predictions}):
@@ -259,6 +267,8 @@ def print_holdout_evaluation_result(result: HoldoutEvaluationResult) -> None:
     print(f"accuracy: {result.accuracy:.4f}")
     print(f"false_positive_benign: {result.false_positive_benign}")
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
+    print(f"inconclusive: {result.inconclusive}")
+    print(f"coverage: {result.coverage:.4f}")
     print("metrics_by_family:")
     for family, metrics in result.metrics_by_family.items():
         print(f"  {family}: {json.dumps(metrics, sort_keys=True)}")
