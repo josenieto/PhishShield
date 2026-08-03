@@ -12,6 +12,7 @@ from tools.ml_data_preparation.phishshield_fixtures import (
 )
 from tools.ml_training.evaluate_fixture_holdout import _balanced_samples, _predict_label, _train_model
 from tools.ml_training.train_baseline import FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA
+from tools.ml_training.confidence_policy import classify_suspicious_probability
 
 
 @dataclass(frozen=True)
@@ -50,6 +51,14 @@ class PreparedHoldoutResult:
     def false_negative_suspicious(self) -> int:
         return sum(p.expected_label == NORMALIZED_LABEL_SUSPICIOUS and p.predicted_label == NORMALIZED_LABEL_BENIGN for p in self.predictions)
 
+    @property
+    def inconclusive(self) -> int:
+        return sum(p.predicted_label == "inconclusive" for p in self.predictions)
+
+    @property
+    def coverage(self) -> float:
+        return 0.0 if not self.predictions else (self.total - self.inconclusive) / self.total
+
     def metrics_by(self, dimension: str) -> dict[str, dict[str, float | int]]:
         allowed = {"expected_label", "source_url_flag", "body_length_bucket"}
         if dimension not in allowed:
@@ -70,6 +79,7 @@ def evaluate_prepared_holdout(
     feature_set: str = FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
     random_seed: int = 42,
     suspicious_threshold: float = 0.5,
+    abstain: bool = False,
 ) -> PreparedHoldoutResult:
     if feature_set not in {FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA}:
         raise ValueError(f"Unsupported feature set: {feature_set}")
@@ -84,7 +94,11 @@ def evaluate_prepared_holdout(
         if label not in {NORMALIZED_LABEL_BENIGN, NORMALIZED_LABEL_SUSPICIOUS}:
             raise ValueError(f"unsupported normalized_label on line {line_number}: {label}")
         text = _row_to_text(row, feature_set)
-        predicted, probability = _predict_label(model, text, suspicious_threshold)
+        if abstain:
+            probability = float(model.predict_proba([text])[0][list(model.named_steps["classifier"].classes_).index(NORMALIZED_LABEL_SUSPICIOUS)])
+            predicted, _ = classify_suspicious_probability(probability)
+        else:
+            predicted, probability = _predict_label(model, text, suspicious_threshold)
         body_length = len(str(row.get("body_text") or ""))
         predictions.append(PreparedHoldoutPrediction(
             sample_id=str(row.get("sample_id") or f"row-{line_number}"),
@@ -117,6 +131,8 @@ def print_prepared_holdout_result(result: PreparedHoldoutResult) -> None:
     print(f"accuracy: {result.accuracy:.4f}")
     print(f"false_positive_benign: {result.false_positive_benign}")
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
+    print(f"inconclusive: {result.inconclusive}")
+    print(f"coverage: {result.coverage:.4f}")
     for dimension in ("expected_label", "source_url_flag", "body_length_bucket"):
         print(f"metrics_by_{dimension}:")
         for key, metrics in result.metrics_by(dimension).items():
