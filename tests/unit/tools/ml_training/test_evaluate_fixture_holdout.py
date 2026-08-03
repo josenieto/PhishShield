@@ -33,6 +33,8 @@ def test_should_evaluate_fixture_holdout(tmp_path: Path) -> None:
     assert 0.0 <= result.accuracy <= 1.0
     assert result.false_positive_benign >= 0
     assert result.false_negative_suspicious >= 0
+    assert 0.0 <= result.abstention_rate <= 1.0
+    assert 0.0 <= result.conditional_accuracy <= 1.0
     assert {prediction.fixture_name for prediction in result.predictions} == {
         "benign_sample.eml",
         "suspicious_sample.eml",
@@ -103,6 +105,11 @@ def test_should_report_metrics_by_family_from_holdout_manifest(tmp_path: Path) -
         "suspicious_total": 1,
         "false_positive_benign": 0,
         "false_negative_suspicious": 0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "conditional_accuracy": 1.0,
+        "confident_false_positive_rate": 0.0,
+        "confident_false_negative_rate": 0.0,
     }
     assert all(prediction.source == "independent-synthetic" for prediction in result.predictions)
 
