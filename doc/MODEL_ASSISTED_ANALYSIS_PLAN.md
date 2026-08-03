@@ -67,6 +67,53 @@ model-assisted analysis = advisory
 
 The UI and API must preserve that distinction clearly.
 
+## Model Coverage And Abstention
+
+The initial advisory model is not a universal phishing classifier. Its first
+validated scope is intentionally limited to modern operational email notifications
+in English, with emphasis on these families:
+
+- account;
+- MFA and security;
+- cloud and document sharing;
+- billing and invoices;
+- support;
+- HR;
+- vendor portals;
+- newsletter and account preferences.
+
+The initial model scope does not claim reliable coverage for:
+
+- generic spam;
+- 419 fraud;
+- mass marketing;
+- personal email;
+- generic malware delivery;
+- URL-only inputs;
+- non-English messages;
+- previously unseen campaign types.
+
+When the model lacks sufficient confidence or the input falls outside the validated
+scope, it may return `inconclusive`. This is an intentional safety behavior, not a
+deterministic finding. Deterministic evidence, findings, explanations, and risk
+scoring remain authoritative.
+
+Coverage can be expanded in future model versions, but only through an explicit
+family-based validation cycle:
+
+```text
+new family
+    -> license and provenance review
+    -> separate training, validation, and promotion holdout data
+    -> balanced benign and suspicious examples
+    -> family-level evaluation
+    -> no regression in existing covered families
+    -> explicit scope/version update
+```
+
+Synthetic data may support calibration and regression tests, but it cannot be the
+sole evidence for promoting a new family to product-ready advisory inference.
+
 ---
 
 ## Parallel Raw Email Model Branch
