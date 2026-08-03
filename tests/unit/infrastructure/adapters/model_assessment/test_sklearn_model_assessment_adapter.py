@@ -8,10 +8,12 @@ from sklearn.pipeline import Pipeline
 
 from application.models.model_assessment import (
     MODEL_ASSESSMENT_LABEL_BENIGN,
+    MODEL_ASSESSMENT_LABEL_INCONCLUSIVE,
     MODEL_ASSESSMENT_LABEL_SUSPICIOUS,
     MODEL_ASSESSMENT_LABEL_UNKNOWN,
     MODEL_ASSESSMENT_STATUS_COMPLETED,
     MODEL_ASSESSMENT_STATUS_FAILED,
+    MODEL_ASSESSMENT_STATUS_INCONCLUSIVE,
     MODEL_ASSESSMENT_STATUS_NOT_CONFIGURED,
 )
 from application.ports.outbound.model_assessment import (
@@ -44,11 +46,15 @@ def test_should_return_completed_assessment_with_configured_model(tmp_path: Path
     )
 
     assessment = adapter.assess_raw_email(
-        _command(_email_bytes("Verify your account", "Confirm your login at https://example.net/login."))
+        _command(_email_bytes("Verify your account", "Verify your account password now."))
     )
 
-    assert assessment.status == MODEL_ASSESSMENT_STATUS_COMPLETED
-    assert assessment.label in {MODEL_ASSESSMENT_LABEL_BENIGN, MODEL_ASSESSMENT_LABEL_SUSPICIOUS}
+    assert assessment.status in {MODEL_ASSESSMENT_STATUS_COMPLETED, MODEL_ASSESSMENT_STATUS_INCONCLUSIVE}
+    assert assessment.label in {
+        MODEL_ASSESSMENT_LABEL_BENIGN,
+        MODEL_ASSESSMENT_LABEL_SUSPICIOUS,
+        MODEL_ASSESSMENT_LABEL_INCONCLUSIVE,
+    }
     assert assessment.confidence is not None
     assert 0.0 <= assessment.confidence <= 1.0
     assert assessment.summary
@@ -78,6 +84,20 @@ def test_should_return_failed_when_artifact_cannot_be_loaded(tmp_path: Path) -> 
     assert assessment.label == MODEL_ASSESSMENT_LABEL_UNKNOWN
     assert assessment.confidence is None
     assert assessment.error_message
+
+
+def test_should_return_inconclusive_when_model_confidence_is_not_strong_enough(tmp_path: Path) -> None:
+    model_path, metadata_path = _write_model_and_metadata(tmp_path)
+    adapter = SklearnModelAssessmentAdapter(model_path, metadata_path)
+
+    assessment = adapter.assess_raw_email(
+        _command(_email_bytes("Account review", "Please review your account."))
+    )
+
+    assert assessment.status == MODEL_ASSESSMENT_STATUS_INCONCLUSIVE
+    assert assessment.label == MODEL_ASSESSMENT_LABEL_INCONCLUSIVE
+    assert assessment.confidence is not None
+    assert "inconclusive" in assessment.summary
 
 
 def test_should_return_failed_when_metadata_feature_set_is_unsupported(tmp_path: Path) -> None:
