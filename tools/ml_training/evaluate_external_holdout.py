@@ -18,6 +18,7 @@ from tools.ml_training.train_baseline import (
     FEATURE_SET_TEXT,
     FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
 )
+from tools.ml_training.confidence_policy import classify_suspicious_probability
 
 
 @dataclass(frozen=True)
@@ -66,6 +67,14 @@ class ExternalHoldoutResult:
             for prediction in self.predictions
         )
 
+    @property
+    def inconclusive(self) -> int:
+        return sum(p.predicted_label == "inconclusive" for p in self.predictions)
+
+    @property
+    def coverage(self) -> float:
+        return 0.0 if not self.predictions else (self.total - self.inconclusive) / self.total
+
     def metrics_by(self, field: str) -> dict[str, dict[str, float | int]]:
         if field not in {"expected_label", "intent", "technique", "target", "source"}:
             raise ValueError(f"Unsupported metric dimension: {field}")
@@ -107,6 +116,7 @@ def evaluate_external_holdout(
     feature_set: str = FEATURE_SET_TEXT_WITH_LIGHT_METADATA,
     random_seed: int = 42,
     suspicious_threshold: float = 0.5,
+    abstain: bool = False,
 ) -> ExternalHoldoutResult:
     if feature_set not in {FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA}:
         raise ValueError(f"Unsupported feature set: {feature_set}")
@@ -124,7 +134,7 @@ def evaluate_external_holdout(
             raise ValueError(f"unsupported label on holdout line {line_number}: {row.get('label')}")
         sample_id = str(row.get("id") or f"row-{line_number}")
         text = _row_to_text(row, feature_set, parser_adapter)
-        predicted_label, probability = _predict_label(model, text, suspicious_threshold)
+        predicted_label, probability = _predict_label(model, text, suspicious_threshold, abstain)
         predictions.append(
             ExternalPrediction(
                 sample_id=sample_id,
@@ -148,6 +158,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--feature-set", default=FEATURE_SET_TEXT_WITH_LIGHT_METADATA, choices=[FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA])
     parser.add_argument("--random-seed", type=int, default=42)
     parser.add_argument("--suspicious-threshold", type=float, default=0.5)
+    parser.add_argument("--abstain", action="store_true", help="Use conservative confidence bands and allow inconclusive results.")
     args = parser.parse_args(argv)
 
     result = evaluate_external_holdout(
@@ -156,6 +167,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         feature_set=args.feature_set,
         random_seed=args.random_seed,
         suspicious_threshold=args.suspicious_threshold,
+        abstain=args.abstain,
     )
     print_external_result(result)
     return 0
@@ -166,6 +178,8 @@ def print_external_result(result: ExternalHoldoutResult) -> None:
     print(f"accuracy: {result.accuracy:.4f}")
     print(f"false_positive_benign: {result.false_positive_benign}")
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
+    print(f"inconclusive: {result.inconclusive}")
+    print(f"coverage: {result.coverage:.4f}")
     for dimension in ("expected_label", "intent", "technique", "target"):
         print(f"metrics_by_{dimension}:")
         for value, metrics in result.metrics_by(dimension).items():
@@ -199,6 +213,20 @@ def _normalize_label(value: object) -> str | None:
     if normalized in {"phishing", "suspicious"}:
         return NORMALIZED_LABEL_SUSPICIOUS
     return None
+
+
+def _predict_label(model, text: str, threshold: float, abstain: bool):
+    if abstain:
+        probability = float(model.predict_proba([text])[0][list(model.named_steps["classifier"].classes_).index("suspicious")])
+        label, _ = classify_suspicious_probability(probability)
+        return label, probability
+    return _predict_label_legacy(model, text, threshold)
+
+
+def _predict_label_legacy(model, text: str, threshold: float):
+    from tools.ml_training.evaluate_fixture_holdout import _predict_label as legacy
+
+    return legacy(model, text, threshold)
 
 
 def _row_to_text(
