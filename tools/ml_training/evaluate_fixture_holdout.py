@@ -114,6 +114,25 @@ class HoldoutEvaluationResult:
         return 0.0 if not self.predictions else (self.total - self.inconclusive) / self.total
 
     @property
+    def abstention_rate(self) -> float:
+        return 0.0 if not self.predictions else self.inconclusive / self.total
+
+    @property
+    def conditional_accuracy(self) -> float:
+        classified = [p for p in self.predictions if p.predicted_label != "inconclusive"]
+        return 0.0 if not classified else sum(p.is_correct for p in classified) / len(classified)
+
+    @property
+    def confident_false_positive_rate(self) -> float:
+        benign = [p for p in self.predictions if p.expected_label == NORMALIZED_LABEL_BENIGN]
+        return 0.0 if not benign else self.false_positive_benign / len(benign)
+
+    @property
+    def confident_false_negative_rate(self) -> float:
+        suspicious = [p for p in self.predictions if p.expected_label == NORMALIZED_LABEL_SUSPICIOUS]
+        return 0.0 if not suspicious else self.false_negative_suspicious / len(suspicious)
+
+    @property
     def metrics_by_family(self) -> dict[str, dict[str, float | int]]:
         metrics: dict[str, dict[str, float | int]] = {}
         for family in sorted({prediction.family for prediction in self.predictions}):
@@ -145,6 +164,7 @@ class HoldoutEvaluationResult:
                 "suspicious_total": suspicious_total,
                 "false_positive_benign": false_positive_benign,
                 "false_negative_suspicious": false_negative_suspicious,
+                **_abstention_metrics(predictions, false_positive_benign, false_negative_suspicious),
             }
 
         return metrics
@@ -279,6 +299,10 @@ def print_holdout_evaluation_result(result: HoldoutEvaluationResult) -> None:
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
     print(f"inconclusive: {result.inconclusive}")
     print(f"coverage: {result.coverage:.4f}")
+    print(f"abstention_rate: {result.abstention_rate:.4f}")
+    print(f"conditional_accuracy: {result.conditional_accuracy:.4f}")
+    print(f"confident_false_positive_rate: {result.confident_false_positive_rate:.4f}")
+    print(f"confident_false_negative_rate: {result.confident_false_negative_rate:.4f}")
     print("metrics_by_family:")
     for family, metrics in result.metrics_by_family.items():
         print(f"  {family}: {json.dumps(metrics, sort_keys=True)}")
@@ -300,6 +324,24 @@ def _predict_label(
     )
 
     return predicted_label, suspicious_probability
+
+
+def _abstention_metrics(
+    predictions: list[HoldoutPrediction],
+    false_positive: int,
+    false_negative: int,
+) -> dict[str, float]:
+    total = len(predictions)
+    classified = [p for p in predictions if p.predicted_label != "inconclusive"]
+    benign_total = sum(p.expected_label == NORMALIZED_LABEL_BENIGN for p in predictions)
+    suspicious_total = sum(p.expected_label == NORMALIZED_LABEL_SUSPICIOUS for p in predictions)
+    return {
+        "coverage": 0.0 if total == 0 else len(classified) / total,
+        "abstention_rate": 0.0 if total == 0 else (total - len(classified)) / total,
+        "conditional_accuracy": 0.0 if not classified else sum(p.is_correct for p in classified) / len(classified),
+        "confident_false_positive_rate": 0.0 if benign_total == 0 else false_positive / benign_total,
+        "confident_false_negative_rate": 0.0 if suspicious_total == 0 else false_negative / suspicious_total,
+    }
 
 
 def _predict_suspicious_probability(model: Pipeline, fixture_text: str) -> float:

@@ -59,6 +59,25 @@ class PreparedHoldoutResult:
     def coverage(self) -> float:
         return 0.0 if not self.predictions else (self.total - self.inconclusive) / self.total
 
+    @property
+    def abstention_rate(self) -> float:
+        return 0.0 if not self.predictions else self.inconclusive / self.total
+
+    @property
+    def conditional_accuracy(self) -> float:
+        classified = [p for p in self.predictions if p.predicted_label != "inconclusive"]
+        return 0.0 if not classified else sum(p.is_correct for p in classified) / len(classified)
+
+    @property
+    def confident_false_positive_rate(self) -> float:
+        benign = [p for p in self.predictions if p.expected_label == NORMALIZED_LABEL_BENIGN]
+        return 0.0 if not benign else self.false_positive_benign / len(benign)
+
+    @property
+    def confident_false_negative_rate(self) -> float:
+        suspicious = [p for p in self.predictions if p.expected_label == NORMALIZED_LABEL_SUSPICIOUS]
+        return 0.0 if not suspicious else self.false_negative_suspicious / len(suspicious)
+
     def metrics_by(self, dimension: str) -> dict[str, dict[str, float | int]]:
         allowed = {"expected_label", "source_url_flag", "body_length_bucket"}
         if dimension not in allowed:
@@ -165,11 +184,22 @@ def _length_bucket(length: int) -> str:
 
 def _metrics(predictions: list[PreparedHoldoutPrediction]) -> dict[str, float | int]:
     total = len(predictions)
+    inconclusive = sum(p.predicted_label == "inconclusive" for p in predictions)
+    classified = [p for p in predictions if p.predicted_label != "inconclusive"]
+    benign_total = sum(p.expected_label == NORMALIZED_LABEL_BENIGN for p in predictions)
+    suspicious_total = sum(p.expected_label == NORMALIZED_LABEL_SUSPICIOUS for p in predictions)
+    false_positive = sum(p.expected_label == NORMALIZED_LABEL_BENIGN and p.predicted_label == NORMALIZED_LABEL_SUSPICIOUS for p in predictions)
+    false_negative = sum(p.expected_label == NORMALIZED_LABEL_SUSPICIOUS and p.predicted_label == NORMALIZED_LABEL_BENIGN for p in predictions)
     return {
         "total": total,
         "accuracy": sum(p.is_correct for p in predictions) / total if total else 0.0,
-        "false_positive_benign": sum(p.expected_label == NORMALIZED_LABEL_BENIGN and p.predicted_label == NORMALIZED_LABEL_SUSPICIOUS for p in predictions),
-        "false_negative_suspicious": sum(p.expected_label == NORMALIZED_LABEL_SUSPICIOUS and p.predicted_label == NORMALIZED_LABEL_BENIGN for p in predictions),
+        "false_positive_benign": false_positive,
+        "false_negative_suspicious": false_negative,
+        "coverage": 0.0 if total == 0 else len(classified) / total,
+        "abstention_rate": 0.0 if total == 0 else inconclusive / total,
+        "conditional_accuracy": 0.0 if not classified else sum(p.is_correct for p in classified) / len(classified),
+        "confident_false_positive_rate": 0.0 if benign_total == 0 else false_positive / benign_total,
+        "confident_false_negative_rate": 0.0 if suspicious_total == 0 else false_negative / suspicious_total,
     }
 
 
