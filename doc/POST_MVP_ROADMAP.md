@@ -156,7 +156,8 @@ Candidate steps:
 
 ### Track 6: Future Inference And ML Architecture Planning
 
-This track is planning-only at first.
+The architecture and experimental runtime integration are complete. The active work
+is advisory inference validation and family-based coverage strategy.
 
 The first step in this track is to define a separate model-assessment endpoint that analyzes the original raw email in parallel with the deterministic branch.
 
@@ -176,6 +177,15 @@ Keep out of scope for this track:
 - real model integration;
 - forcing users to install an external AI runtime;
 - prompt chains or agent workflows.
+
+The intended expansion path is:
+
+```text
+1. Define validated model scope.
+2. Add independent evidence by email family.
+3. Measure coverage, abstention, and confident errors.
+4. Expand scope only after promotion criteria are met.
+```
 
 ---
 

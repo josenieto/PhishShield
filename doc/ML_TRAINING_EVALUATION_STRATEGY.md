@@ -1161,6 +1161,36 @@ This representation should remain fixed while comparing model candidates. If a
 future parser change modifies any of these fields, the affected baseline evaluation
 must be repeated before model promotion decisions are made.
 
+## Coverage Expansion Strategy
+
+The current baseline is not a universal phishing classifier. New model coverage is
+expanded by validated email family, not by adding the largest available generic
+dataset.
+
+Rules for expansion:
+
+- each new family requires a documented use case and scope decision;
+- datasets require license, provenance, privacy, quality, and overlap review;
+- training, validation, regression, and promotion holdout data remain separate;
+- a dataset used for training or calibration cannot later serve as independent
+  promotion evidence;
+- synthetic data can support calibration but cannot alone establish promotion
+  evidence;
+- promotion requires family-level metrics and no unacceptable regression in already
+  covered families;
+- uncertain predictions should be reported as `inconclusive` rather than forced
+  into a binary label.
+
+Current evidence classification:
+
+```text
+PhishShield fixtures: regression and qualitative holdout evidence
+darkknight external dataset: diagnostic-only text stress test
+CEAS-08: diagnostic-only historical external holdout candidate
+```
+
+These sources do not currently justify universal or product-ready inference.
+
 The external JSONL diagnostic evaluator uses only `subject + body_text` for its
 model input because that source does not provide parser-normalized URL or attachment
 fields. Its source metadata (`intent`, `technique`, `target`, and `spoofed_sender`)
