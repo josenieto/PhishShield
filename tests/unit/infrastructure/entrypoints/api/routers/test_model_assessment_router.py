@@ -60,7 +60,7 @@ def test_should_return_configured_model_assessment_for_uploaded_email(tmp_path: 
             b"Subject: Verify your account",
             b"Content-Type: text/plain; charset=utf-8",
             b"",
-            b"Confirm your login at https://example.net/login.",
+            b"Verify your account password now.",
         ]
     )
 
@@ -71,8 +71,8 @@ def test_should_return_configured_model_assessment_for_uploaded_email(tmp_path: 
 
     assert response.status_code == 200
     payload = response.json()["model_assessment"]
-    assert payload["status"] == "completed"
-    assert payload["label"] in {"benign", "suspicious"}
+    assert payload["status"] in {"completed", "inconclusive"}
+    assert payload["label"] in {"benign", "suspicious", "inconclusive"}
     assert 0.0 <= payload["confidence"] <= 1.0
     assert payload["model_name"] == "unit-test-model"
     assert payload["model_version"] == "test-commit"

@@ -7,10 +7,12 @@ import joblib
 from application.models.extracted_email import ExtractedEmailContent
 from application.models.model_assessment import (
     MODEL_ASSESSMENT_LABEL_BENIGN,
+    MODEL_ASSESSMENT_LABEL_INCONCLUSIVE,
     MODEL_ASSESSMENT_LABEL_SUSPICIOUS,
     MODEL_ASSESSMENT_LABEL_UNKNOWN,
     MODEL_ASSESSMENT_STATUS_COMPLETED,
     MODEL_ASSESSMENT_STATUS_FAILED,
+    MODEL_ASSESSMENT_STATUS_INCONCLUSIVE,
     MODEL_ASSESSMENT_STATUS_NOT_CONFIGURED,
     ModelAssessment,
 )
@@ -25,6 +27,7 @@ _DEFAULT_FEATURE_SET = "text_with_light_metadata"
 _SIGNAL_EXPERIMENTAL = "Experimental sklearn baseline."
 _SIGNAL_FEATURES = "Uses text_with_light_metadata features."
 _SIGNAL_DETERMINISTIC = "Deterministic analysis remains authoritative."
+_HIGH_CONFIDENCE_THRESHOLD = 0.85
 
 
 class SklearnModelAssessmentAdapter:
@@ -57,7 +60,7 @@ class SklearnModelAssessmentAdapter:
             return _failed_assessment(str(exc))
 
         return ModelAssessment(
-            status=MODEL_ASSESSMENT_STATUS_COMPLETED,
+            status=MODEL_ASSESSMENT_STATUS_INCONCLUSIVE if label == MODEL_ASSESSMENT_LABEL_INCONCLUSIVE else MODEL_ASSESSMENT_STATUS_COMPLETED,
             label=label,
             confidence=confidence,
             summary=_summary_for_label(label=label, confidence=confidence),
@@ -127,13 +130,23 @@ def _predict_label_and_confidence(model, feature_text: str) -> tuple[str, float]
     suspicious_index = classes.index(MODEL_ASSESSMENT_LABEL_SUSPICIOUS)
     suspicious_probability = float(probabilities[suspicious_index])
 
-    if suspicious_probability >= 0.5:
+    confidence = max(suspicious_probability, 1.0 - suspicious_probability)
+    if (1.0 - _HIGH_CONFIDENCE_THRESHOLD) < suspicious_probability < _HIGH_CONFIDENCE_THRESHOLD:
+        return MODEL_ASSESSMENT_LABEL_INCONCLUSIVE, confidence
+
+    if suspicious_probability >= _HIGH_CONFIDENCE_THRESHOLD:
         return MODEL_ASSESSMENT_LABEL_SUSPICIOUS, suspicious_probability
 
-    return MODEL_ASSESSMENT_LABEL_BENIGN, 1.0 - suspicious_probability
+    if suspicious_probability <= (1.0 - _HIGH_CONFIDENCE_THRESHOLD):
+        return MODEL_ASSESSMENT_LABEL_BENIGN, 1.0 - suspicious_probability
+
+    return MODEL_ASSESSMENT_LABEL_INCONCLUSIVE, confidence
 
 
 def _summary_for_label(label: str, confidence: float) -> str:
+    if label == MODEL_ASSESSMENT_LABEL_INCONCLUSIVE:
+        return f"The model assessment is inconclusive at confidence {confidence:.2f}; review deterministic findings and evidence."
+
     if label == MODEL_ASSESSMENT_LABEL_SUSPICIOUS:
         return f"Experimental model assessment suggests suspicious email characteristics with confidence {confidence:.2f}."
 
