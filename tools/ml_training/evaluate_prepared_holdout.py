@@ -153,6 +153,10 @@ def print_prepared_holdout_result(result: PreparedHoldoutResult) -> None:
     print(f"false_negative_suspicious: {result.false_negative_suspicious}")
     print(f"inconclusive: {result.inconclusive}")
     print(f"coverage: {result.coverage:.4f}")
+    print(f"abstention_rate: {result.abstention_rate:.4f}")
+    print(f"conditional_accuracy: {result.conditional_accuracy:.4f}")
+    print(f"confident_false_positive_rate: {result.confident_false_positive_rate:.4f}")
+    print(f"confident_false_negative_rate: {result.confident_false_negative_rate:.4f}")
     for dimension in ("expected_label", "source_url_flag", "body_length_bucket"):
         print(f"metrics_by_{dimension}:")
         for key, metrics in result.metrics_by(dimension).items():
