@@ -60,10 +60,12 @@ export function ModelAssessmentPanel({
          </div>
        )}
 
-       {!errorMessage && status === "completed" && assessment && (
+       {!errorMessage && (status === "completed" || status === "inconclusive") && assessment && (
          <div className="model-assessment-state model-assessment-state-completed" aria-live="polite">
            <div className="model-result-summary">
-             <span className="model-result-label">Advisory model result</span>
+             <span className="model-result-label">
+               {status === "inconclusive" ? "Inconclusive advisory result" : "Advisory model result"}
+             </span>
              <div className="model-result-heading">
                <strong>{assessment.label}</strong>
                <span className="model-confidence">
