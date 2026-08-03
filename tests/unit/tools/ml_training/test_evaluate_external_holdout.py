@@ -83,6 +83,32 @@ def test_should_extract_external_body_urls_with_runtime_parser() -> None:
     assert "Credential harvesting" not in text
 
 
+def test_should_report_coverage_when_abstention_is_enabled(tmp_path: Path) -> None:
+    training_path = tmp_path / "training.jsonl"
+    holdout_path = tmp_path / "holdout.jsonl"
+    holdout_rows = [
+        {"id": "b1", "label": "benign", "subject": "Account summary", "body": "Your account summary is ready."},
+        {"id": "b2", "label": "benign", "subject": "Newsletter", "body": "Weekly newsletter update."},
+        {"id": "s1", "label": "phishing", "subject": "Verify account", "body": "Verify your account password now."},
+        {"id": "s2", "label": "phishing", "subject": "Payment required", "body": "Payment required immediately."},
+    ]
+    training_rows = [
+        _prepared_row("tb1", "benign", "Account summary", "Your account summary is ready."),
+        _prepared_row("tb2", "benign", "Newsletter", "Weekly newsletter update."),
+        _prepared_row("ts1", "suspicious", "Verify account", "Verify your account password now."),
+        _prepared_row("ts2", "suspicious", "Payment required", "Payment required immediately."),
+    ]
+    training_path.write_text("\n".join(json.dumps(row) for row in training_rows) + "\n", encoding="utf-8")
+    holdout_path.write_text("\n".join(json.dumps(row) for row in holdout_rows[2:]) + "\n", encoding="utf-8")
+
+    result = evaluate_external_holdout(
+        [training_path], holdout_path, FEATURE_SET_TEXT_WITH_LIGHT_METADATA
+    )
+
+    assert 0.0 <= result.coverage <= 1.0
+    assert result.inconclusive >= 0
+
+
 def _prepared_row(sample_id: str, label: str, subject: str, body: str) -> dict[str, object]:
     return {
         "sample_id": sample_id,
