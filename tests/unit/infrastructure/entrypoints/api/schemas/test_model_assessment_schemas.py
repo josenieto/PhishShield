@@ -20,6 +20,7 @@ def test_should_convert_model_assessment_to_response() -> None:
         signals=(),
         model_name="",
         model_version="",
+        abstention_reason=None,
         error_message="",
     )
 
@@ -31,6 +32,7 @@ def test_should_convert_model_assessment_to_response() -> None:
         signals=[],
         model_name="",
         model_version="",
+        abstention_reason=None,
         error_message="",
     )
 
@@ -44,6 +46,7 @@ def test_should_wrap_model_assessment_result_response() -> None:
         signals=(),
         model_name="",
         model_version="",
+        abstention_reason=None,
         error_message="",
     )
 
@@ -54,8 +57,9 @@ def test_should_wrap_model_assessment_result_response() -> None:
             confidence=None,
             summary="",
             signals=[],
-            model_name="",
-            model_version="",
-            error_message="",
+                model_name="",
+                model_version="",
+                abstention_reason=None,
+                error_message="",
         )
     )

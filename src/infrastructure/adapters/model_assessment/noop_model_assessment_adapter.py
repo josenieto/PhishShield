@@ -19,5 +19,6 @@ class NoopModelAssessmentAdapter:
             signals=(),
             model_name="",
             model_version="",
+            abstention_reason=None,
             error_message="",
         )
