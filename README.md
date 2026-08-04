@@ -189,6 +189,12 @@ Model assessment is disabled by default and remains advisory. It is exposed thro
 the risk score returned by `POST /analyze-email`. Model artifacts and generated
 datasets are expected to remain outside Git.
 
+The experimental advisory branch uses a deterministic scope gate before the
+binary model. `out_of_scope` and `low_binary_confidence` are exposed as
+structured abstention reasons while the public advisory label remains
+`inconclusive`. See `doc/EXPERIMENTAL_ADVISORY_INFERENCE.md` for the closure
+status and future family-specific training path.
+
 POSIX example:
 
 ```bash

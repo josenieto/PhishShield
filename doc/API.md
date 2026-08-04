@@ -200,6 +200,7 @@ Successful responses return a JSON body with:
 - `model_assessment.signals: list[str]`
 - `model_assessment.model_name: str`
 - `model_assessment.model_version: str`
+- `model_assessment.abstention_reason: string | null`
 - `model_assessment.error_message: str`
 
 ### Configuration
@@ -229,6 +230,7 @@ Without that configuration, the endpoint returns:
     "signals": [],
     "model_name": "",
     "model_version": "",
+    "abstention_reason": null,
     "error_message": ""
   }
 }
@@ -242,4 +244,6 @@ Without that configuration, the endpoint returns:
 The model assessment is experimental and advisory. It does not add deterministic
 finding codes, overwrite `risk_score`, or prevent `POST /analyze-email` from
 running when the model branch is disabled or fails. Expected assessment statuses
-are `completed`, `not_configured`, and `failed`.
+are `completed`, `inconclusive`, `not_configured`, and `failed`. For an
+`inconclusive` result, `abstention_reason` is either `out_of_scope` or
+`low_binary_confidence`.

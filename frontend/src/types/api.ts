@@ -51,6 +51,7 @@ export type ModelAssessmentResponse = {
   signals: string[];
   model_name: string;
   model_version: string;
+  abstention_reason: string | null;
   error_message: string;
 };
 

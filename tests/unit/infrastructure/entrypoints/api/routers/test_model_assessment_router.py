@@ -37,9 +37,10 @@ def test_should_return_not_configured_model_assessment_for_uploaded_email() -> N
             "confidence": None,
             "summary": "",
             "signals": [],
-            "model_name": "",
-            "model_version": "",
-            "error_message": "",
+                "model_name": "",
+                "model_version": "",
+                "abstention_reason": None,
+                "error_message": "",
         }
     }
 
