@@ -27,6 +27,7 @@ MODEL_NAME = "phishshield_baseline_candidate"
 MODEL_TYPE = "tfidf_logistic_regression"
 MODEL_STATUS = "experimental"
 HOLDOUT_NAME = "PhishShield 32-fixture notification holdout"
+SCOPE_GATE_NAME = "deterministic_v1"
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -224,6 +225,24 @@ def _build_metadata(
         "created_at": datetime.now(UTC).isoformat(),
         "git_commit": _current_git_commit(),
         "feature_set": feature_set,
+        "scope_gate": SCOPE_GATE_NAME,
+        "covered_families": [
+            "account",
+            "mfa_security",
+            "cloud_document_sharing",
+            "billing_invoices",
+            "support",
+            "hr",
+            "vendor_portals",
+            "newsletter_preferences",
+        ],
+        "abstention_policy": {
+            "high_confidence_threshold": 0.85,
+            "out_of_scope_reason": "out_of_scope",
+            "low_binary_confidence_reason": "low_binary_confidence",
+        },
+        "diagnostic_sources": ["CEAS-08", "MeAJOR", "Darkknight"],
+        "promotion_status": "not_approved",
         "strategy": strategy,
         "validation_ratio": validation_ratio,
         "random_seed": random_seed,
@@ -251,8 +270,11 @@ def _build_metadata(
             "Not production-ready.",
             "Uses synthetic calibration data.",
             "No non-synthetic notification validation yet.",
+            "Scope-aware advisory inference is experimental only.",
+            "External diagnostic sources are not promotion evidence.",
             "Deterministic analysis remains authoritative.",
             "Runtime inference integration remains deferred.",
+            "Runtime inference is experimental, optional, and disabled by default.",
         ],
     }
 

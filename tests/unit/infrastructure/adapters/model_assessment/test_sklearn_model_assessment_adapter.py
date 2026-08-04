@@ -68,6 +68,7 @@ def test_should_return_completed_assessment_with_configured_model(tmp_path: Path
     assert assessment.model_name == "unit-test-model"
     assert assessment.model_version == "test-commit"
     assert assessment.error_message == ""
+    assert assessment.abstention_reason in {None, "low_binary_confidence"}
 
 
 def test_should_return_failed_when_artifact_cannot_be_loaded(tmp_path: Path) -> None:
@@ -99,7 +100,22 @@ def test_should_return_inconclusive_when_model_confidence_is_not_strong_enough(t
     assert assessment.status == MODEL_ASSESSMENT_STATUS_INCONCLUSIVE
     assert assessment.label == MODEL_ASSESSMENT_LABEL_INCONCLUSIVE
     assert assessment.confidence is not None
+    assert assessment.abstention_reason == "low_binary_confidence"
     assert "inconclusive" in assessment.summary
+
+
+def test_should_return_out_of_scope_reason_without_binary_result(tmp_path: Path) -> None:
+    model_path, metadata_path = _write_model_and_metadata(tmp_path)
+    adapter = SklearnModelAssessmentAdapter(model_path, metadata_path)
+
+    assessment = adapter.assess_raw_email(
+        _command(_email_bytes("Team lunch", "Are we still meeting for dinner on Friday?"))
+    )
+
+    assert assessment.status == MODEL_ASSESSMENT_STATUS_INCONCLUSIVE
+    assert assessment.label == MODEL_ASSESSMENT_LABEL_INCONCLUSIVE
+    assert assessment.confidence is None
+    assert assessment.abstention_reason == "out_of_scope"
 
 
 def test_should_return_failed_when_metadata_feature_set_is_unsupported(tmp_path: Path) -> None:

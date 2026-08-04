@@ -14,6 +14,8 @@ from application.models.model_assessment import (
     MODEL_ASSESSMENT_STATUS_FAILED,
     MODEL_ASSESSMENT_STATUS_INCONCLUSIVE,
     MODEL_ASSESSMENT_STATUS_NOT_CONFIGURED,
+    MODEL_ABSTENTION_REASON_LOW_BINARY_CONFIDENCE,
+    MODEL_ABSTENTION_REASON_OUT_OF_SCOPE,
     ModelAssessment,
 )
 from application.models.scope_assessment import (
@@ -81,6 +83,11 @@ class SklearnModelAssessmentAdapter:
             ),
             model_name=str(metadata.get("model_name") or _DEFAULT_MODEL_NAME),
             model_version=_model_version(metadata),
+            abstention_reason=(
+                MODEL_ABSTENTION_REASON_LOW_BINARY_CONFIDENCE
+                if label == MODEL_ASSESSMENT_LABEL_INCONCLUSIVE
+                else None
+            ),
             error_message="",
         )
 
@@ -109,6 +116,7 @@ def _not_configured_assessment() -> ModelAssessment:
         signals=(),
         model_name="",
         model_version="",
+        abstention_reason=None,
         error_message="",
     )
 
@@ -122,6 +130,7 @@ def _failed_assessment(error_message: str) -> ModelAssessment:
         signals=(),
         model_name="",
         model_version="",
+        abstention_reason=None,
         error_message=error_message,
     )
 
@@ -135,6 +144,7 @@ def _out_of_scope_assessment(reason: str) -> ModelAssessment:
         signals=(f"Scope gate reason: {reason}.", _SIGNAL_DETERMINISTIC),
         model_name="",
         model_version="",
+        abstention_reason=MODEL_ABSTENTION_REASON_OUT_OF_SCOPE,
         error_message="",
     )
 
