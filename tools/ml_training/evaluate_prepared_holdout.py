@@ -25,6 +25,7 @@ class PreparedHoldoutPrediction:
     body_length_bucket: str
     url_count: int
     suspicious_probability: float | None
+    family: str = "unclassified"
 
     @property
     def is_correct(self) -> bool:
@@ -79,7 +80,7 @@ class PreparedHoldoutResult:
         return 0.0 if not suspicious else self.false_negative_suspicious / len(suspicious)
 
     def metrics_by(self, dimension: str) -> dict[str, dict[str, float | int]]:
-        allowed = {"expected_label", "source_url_flag", "body_length_bucket"}
+        allowed = {"expected_label", "family", "source_url_flag", "body_length_bucket"}
         if dimension not in allowed:
             raise ValueError(f"Unsupported metric dimension: {dimension}")
         groups: dict[str, list[PreparedHoldoutPrediction]] = {}
@@ -128,6 +129,7 @@ def evaluate_prepared_holdout(
             body_length_bucket=_length_bucket(body_length),
             url_count=len(row.get("urls", [])) if isinstance(row.get("urls"), list) else 0,
             suspicious_probability=probability,
+            family=str(row.get("family") or "unclassified"),
         ))
     return PreparedHoldoutResult(predictions=tuple(predictions))
 
@@ -157,7 +159,7 @@ def print_prepared_holdout_result(result: PreparedHoldoutResult) -> None:
     print(f"conditional_accuracy: {result.conditional_accuracy:.4f}")
     print(f"confident_false_positive_rate: {result.confident_false_positive_rate:.4f}")
     print(f"confident_false_negative_rate: {result.confident_false_negative_rate:.4f}")
-    for dimension in ("expected_label", "source_url_flag", "body_length_bucket"):
+    for dimension in ("expected_label", "family", "source_url_flag", "body_length_bucket"):
         print(f"metrics_by_{dimension}:")
         for key, metrics in result.metrics_by(dimension).items():
             print(f"  {key}: {json.dumps(metrics, sort_keys=True)}")
