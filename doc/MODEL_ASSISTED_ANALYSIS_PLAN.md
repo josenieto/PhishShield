@@ -98,6 +98,22 @@ scope, it may return `inconclusive`. This is an intentional safety behavior, not
 deterministic finding. Deterministic evidence, findings, explanations, and risk
 scoring remain authoritative.
 
+The advisory branch now separates two decisions:
+
+```text
+scope/family gate
+    -> out_of_scope -> inconclusive
+    -> validated family -> binary advisory model
+        -> benign / suspicious / low-confidence inconclusive
+```
+
+The initial scope gate is deterministic and auditable. It is not a universal
+phishing detector and it does not treat an extreme Logistic Regression
+probability as proof that an email belongs to a validated family. The current
+binary model is invoked only after the gate identifies one of the covered
+families. Future versions may replace the gate with a trained family model
+behind the same application boundary without changing the deterministic branch.
+
 Coverage can be expanded in future model versions, but only through an explicit
 family-based validation cycle:
 
@@ -113,6 +129,13 @@ new family
 
 Synthetic data may support calibration and regression tests, but it cannot be the
 sole evidence for promoting a new family to product-ready advisory inference.
+
+External datasets remain useful for diagnostic stress testing and for future
+training research. MeAJOR, CEAS-08, and Darkknight are not promotion evidence
+because they are historical, aggregated, curated, or insufficiently independent
+for the current family-level product claim. This does not prohibit future
+training: a new dataset may be used after explicit role assignment, provenance
+and licensing review, deduplication, and separate promotion evaluation.
 
 ---
 

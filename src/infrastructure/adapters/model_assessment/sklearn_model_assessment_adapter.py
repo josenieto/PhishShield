@@ -16,6 +16,10 @@ from application.models.model_assessment import (
     MODEL_ASSESSMENT_STATUS_NOT_CONFIGURED,
     ModelAssessment,
 )
+from application.models.scope_assessment import (
+    SCOPE_FAMILY_OUT_OF_SCOPE,
+    assess_email_scope,
+)
 from application.ports.outbound.model_assessment import AssessRawEmailWithModelCommand
 from infrastructure.adapters.email_parser.python_email_content_extractor import (
     PythonEmailContentExtractorAdapter,
@@ -28,6 +32,7 @@ _SIGNAL_EXPERIMENTAL = "Experimental sklearn baseline."
 _SIGNAL_FEATURES = "Uses text_with_light_metadata features."
 _SIGNAL_DETERMINISTIC = "Deterministic analysis remains authoritative."
 _HIGH_CONFIDENCE_THRESHOLD = 0.85
+_SIGNAL_SCOPE = "Deterministic scope gate."
 
 
 class SklearnModelAssessmentAdapter:
@@ -54,6 +59,9 @@ class SklearnModelAssessmentAdapter:
             model = self._load_model()
             metadata = self._load_metadata()
             extracted_email = self._email_content_extractor.extract(command.raw_email)
+            scope = assess_email_scope(extracted_email)
+            if scope.family == SCOPE_FAMILY_OUT_OF_SCOPE:
+                return _out_of_scope_assessment(scope.reason)
             feature_text = _extracted_email_to_feature_text(extracted_email)
             label, confidence = _predict_label_and_confidence(model, feature_text)
         except Exception as exc:
@@ -67,6 +75,8 @@ class SklearnModelAssessmentAdapter:
             signals=(
                 _SIGNAL_EXPERIMENTAL,
                 _SIGNAL_FEATURES,
+                f"Scope family: {scope.family}.",
+                _SIGNAL_SCOPE,
                 _SIGNAL_DETERMINISTIC,
             ),
             model_name=str(metadata.get("model_name") or _DEFAULT_MODEL_NAME),
@@ -113,6 +123,19 @@ def _failed_assessment(error_message: str) -> ModelAssessment:
         model_name="",
         model_version="",
         error_message=error_message,
+    )
+
+
+def _out_of_scope_assessment(reason: str) -> ModelAssessment:
+    return ModelAssessment(
+        status=MODEL_ASSESSMENT_STATUS_INCONCLUSIVE,
+        label=MODEL_ASSESSMENT_LABEL_INCONCLUSIVE,
+        confidence=None,
+        summary="The deterministic scope gate could not place this email in a validated advisory family.",
+        signals=(f"Scope gate reason: {reason}.", _SIGNAL_DETERMINISTIC),
+        model_name="",
+        model_version="",
+        error_message="",
     )
 
 

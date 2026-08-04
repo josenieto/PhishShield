@@ -1180,16 +1180,25 @@ Rules for expansion:
   covered families;
 - uncertain predictions should be reported as `inconclusive` rather than forced
   into a binary label.
+- scope gating must be evaluated separately from binary classification;
+- an extreme binary probability must not be interpreted as proof of in-scope
+  family membership;
+- future family-specific training remains allowed when its dataset role,
+  provenance, licensing, deduplication, and promotion holdout are documented.
 
 Current evidence classification:
 
 ```text
 PhishShield fixtures: regression and qualitative holdout evidence
 darkknight external dataset: diagnostic-only text stress test
-CEAS-08: diagnostic-only historical external holdout candidate
+  CEAS-08: diagnostic-only historical external holdout candidate
+MeAJOR: diagnostic-only historical aggregated corpus
 ```
 
 These sources do not currently justify universal or product-ready inference.
+They remain valid diagnostic inputs and may inform future training research,
+but a source used for training or calibration cannot later serve as independent
+promotion evidence.
 
 The external JSONL diagnostic evaluator uses only `subject + body_text` for its
 model input because that source does not provide parser-normalized URL or attachment

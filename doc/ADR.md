@@ -158,6 +158,15 @@ false_negative_suspicious: 1
 - **Architectural constraint:** deterministic findings, evidence, explanations, and risk scoring remain authoritative. Model output must not alter deterministic results in this phase.
 - **Failure policy:** artifact load, metadata parse, preprocessing, and prediction failures must return a model-branch failure without breaking deterministic analysis.
 
+### 4.5 Scope-Aware Advisory Inference
+
+- **Decision:** the advisory branch uses a deterministic, auditable scope/family gate before invoking the experimental binary classifier.
+- **Covered families:** account, MFA/security, cloud/document sharing, billing/invoices, support, HR, vendor portals, and newsletter/account preferences.
+- **Out-of-scope behavior:** generic spam, 419 fraud, mass marketing, personal email, generic malware delivery, URL-only inputs, non-English messages, and unknown campaign types return advisory `inconclusive` without invoking the binary classifier.
+- **Separation:** scope membership and binary benign/suspicious classification are distinct decisions. A high binary probability is not evidence of scope membership.
+- **Future training:** the gate and binary adapter boundaries remain replaceable. Future authorized external or corporate datasets may train a gate or family-specific classifier after explicit role assignment, provenance/licensing review, deduplication, and independent family-level evaluation.
+- **Authority:** the deterministic analysis path remains authoritative and model scope or output cannot alter deterministic findings, evidence, or `risk_score`.
+
 ---
 
 ## 5. Quality Strategy and Repository Lifecycle
