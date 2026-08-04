@@ -11,6 +11,7 @@ class ModelAssessmentResponse(BaseModel):
     signals: list[str]
     model_name: str
     model_version: str
+    abstention_reason: str | None
     error_message: str
 
 
@@ -29,6 +30,7 @@ def model_assessment_to_response(
         signals=list(assessment.signals),
         model_name=assessment.model_name,
         model_version=assessment.model_version,
+        abstention_reason=assessment.abstention_reason,
         error_message=assessment.error_message,
     )
 

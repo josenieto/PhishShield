@@ -12,6 +12,8 @@ MODEL_ASSESSMENT_LABEL_SUSPICIOUS = "suspicious"
 MODEL_ASSESSMENT_LABEL_PHISHING = "phishing"
 MODEL_ASSESSMENT_LABEL_UNKNOWN = "unknown"
 MODEL_ASSESSMENT_LABEL_INCONCLUSIVE = "inconclusive"
+MODEL_ABSTENTION_REASON_OUT_OF_SCOPE = "out_of_scope"
+MODEL_ABSTENTION_REASON_LOW_BINARY_CONFIDENCE = "low_binary_confidence"
 
 
 @dataclass(frozen=True)
@@ -23,6 +25,7 @@ class ModelAssessment:
     signals: tuple[str, ...]
     model_name: str
     model_version: str
+    abstention_reason: str | None = None
     error_message: str = ""
 
     def __post_init__(self) -> None:
