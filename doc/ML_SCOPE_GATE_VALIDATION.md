@@ -68,3 +68,23 @@ Future family-labeled data can add meaningful `family_assignment_accuracy`,
 `out_of_scope_precision`, and `false_in_scope_rate` measurements. Future
 training may replace the deterministic gate behind the same scope boundary,
 but must use separate training, calibration, regression, and promotion data.
+
+## In-Scope Binary Evaluation
+
+The prepared holdout evaluator now applies the same scope gate before binary
+classification. Rows classified as `out_of_scope` are reported separately and
+are not counted as binary false positives or false negatives. Binary metrics
+such as `in_scope_coverage` and `in_scope_conditional_accuracy` apply only to
+rows admitted by the gate.
+
+On the current diagnostic runs:
+
+| Source | In-scope rows | In-scope coverage | In-scope conditional accuracy |
+|---|---:|---:|---:|
+| CEAS-08 | 15,523 (`39.64%`) | `55.78%` | `96.73%` |
+| MeAJOR English subset | 26,645 (`32.90%`) | `48.33%` | `96.79%` |
+
+The gate improves interpretation by separating historical/out-of-scope email
+from binary model behavior. It does not make either source promotion evidence:
+the admitted rows still lack reviewed PhishShield family labels and the
+in-scope coverage remains below the approved promotion threshold.
