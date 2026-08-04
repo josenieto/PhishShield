@@ -93,7 +93,7 @@ def test_should_return_inconclusive_when_model_confidence_is_not_strong_enough(t
     adapter = SklearnModelAssessmentAdapter(model_path, metadata_path)
 
     assessment = adapter.assess_raw_email(
-        _command(_email_bytes("Account review", "Please review your account."))
+        _command(_email_bytes("Account review", "Please review your account activity summary."))
     )
 
     assert assessment.status == MODEL_ASSESSMENT_STATUS_INCONCLUSIVE
