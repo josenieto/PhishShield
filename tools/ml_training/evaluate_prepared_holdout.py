@@ -14,6 +14,8 @@ from tools.ml_training.evaluate_fixture_holdout import _balanced_samples, _predi
 from tools.ml_training.train_baseline import FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA
 from tools.ml_training.confidence_policy import classify_suspicious_probability
 from tools.ml_training.promotion_policy import assess_family_promotion
+from application.models.extracted_email import ExtractedEmailContent
+from application.models.scope_assessment import SCOPE_FAMILY_OUT_OF_SCOPE, assess_email_scope
 
 
 @dataclass(frozen=True)
@@ -27,6 +29,7 @@ class PreparedHoldoutPrediction:
     url_count: int
     suspicious_probability: float | None
     family: str = "unclassified"
+    scope_reason: str = "unknown"
 
     @property
     def is_correct(self) -> bool:
@@ -80,6 +83,42 @@ class PreparedHoldoutResult:
         suspicious = [p for p in self.predictions if p.expected_label == NORMALIZED_LABEL_SUSPICIOUS]
         return 0.0 if not suspicious else self.false_negative_suspicious / len(suspicious)
 
+    @property
+    def out_of_scope(self) -> int:
+        return sum(p.family == SCOPE_FAMILY_OUT_OF_SCOPE for p in self.predictions)
+
+    @property
+    def in_scope_predictions(self) -> list[PreparedHoldoutPrediction]:
+        return [p for p in self.predictions if p.family != SCOPE_FAMILY_OUT_OF_SCOPE]
+
+    @property
+    def in_scope_total(self) -> int:
+        return len(self.in_scope_predictions)
+
+    @property
+    def in_scope_coverage(self) -> float:
+        predictions = self.in_scope_predictions
+        return 0.0 if not predictions else sum(p.predicted_label != "inconclusive" for p in predictions) / len(predictions)
+
+    @property
+    def in_scope_conditional_accuracy(self) -> float:
+        predictions = [p for p in self.in_scope_predictions if p.predicted_label != "inconclusive"]
+        return 0.0 if not predictions else sum(p.is_correct for p in predictions) / len(predictions)
+
+    @property
+    def in_scope_false_positive_benign(self) -> int:
+        return sum(
+            p.expected_label == NORMALIZED_LABEL_BENIGN and p.predicted_label == NORMALIZED_LABEL_SUSPICIOUS
+            for p in self.in_scope_predictions
+        )
+
+    @property
+    def in_scope_false_negative_suspicious(self) -> int:
+        return sum(
+            p.expected_label == NORMALIZED_LABEL_SUSPICIOUS and p.predicted_label == NORMALIZED_LABEL_BENIGN
+            for p in self.in_scope_predictions
+        )
+
     def metrics_by(self, dimension: str) -> dict[str, dict[str, float | int]]:
         allowed = {"expected_label", "family", "source_url_flag", "body_length_bucket"}
         if dimension not in allowed:
@@ -115,7 +154,11 @@ def evaluate_prepared_holdout(
         if label not in {NORMALIZED_LABEL_BENIGN, NORMALIZED_LABEL_SUSPICIOUS}:
             raise ValueError(f"unsupported normalized_label on line {line_number}: {label}")
         text = _row_to_text(row, feature_set)
-        if abstain:
+        scope = _scope_for_row(row)
+        if scope.family == SCOPE_FAMILY_OUT_OF_SCOPE:
+            predicted = "inconclusive"
+            probability = None
+        elif abstain:
             probability = float(model.predict_proba([text])[0][list(model.named_steps["classifier"].classes_).index(NORMALIZED_LABEL_SUSPICIOUS)])
             predicted, _ = classify_suspicious_probability(probability)
         else:
@@ -130,7 +173,8 @@ def evaluate_prepared_holdout(
             body_length_bucket=_length_bucket(body_length),
             url_count=len(row.get("urls", [])) if isinstance(row.get("urls"), list) else 0,
             suspicious_probability=probability,
-            family=str(row.get("family") or "unclassified"),
+            family=scope.family,
+            scope_reason=scope.reason,
         ))
     return PreparedHoldoutResult(predictions=tuple(predictions))
 
@@ -160,6 +204,12 @@ def print_prepared_holdout_result(result: PreparedHoldoutResult) -> None:
     print(f"conditional_accuracy: {result.conditional_accuracy:.4f}")
     print(f"confident_false_positive_rate: {result.confident_false_positive_rate:.4f}")
     print(f"confident_false_negative_rate: {result.confident_false_negative_rate:.4f}")
+    print(f"out_of_scope: {result.out_of_scope}")
+    print(f"in_scope_total: {result.in_scope_total}")
+    print(f"in_scope_coverage: {result.in_scope_coverage:.4f}")
+    print(f"in_scope_conditional_accuracy: {result.in_scope_conditional_accuracy:.4f}")
+    print(f"in_scope_false_positive_benign: {result.in_scope_false_positive_benign}")
+    print(f"in_scope_false_negative_suspicious: {result.in_scope_false_negative_suspicious}")
     for dimension in ("expected_label", "family", "source_url_flag", "body_length_bucket"):
         print(f"metrics_by_{dimension}:")
         for key, metrics in result.metrics_by(dimension).items():
@@ -184,6 +234,22 @@ def _row_to_text(row: dict[str, object], feature_set: str) -> str:
         parts.extend(str(url) for url in row.get("urls", []) if isinstance(url, str))
         parts.extend(str(name) for name in row.get("attachment_filenames", []) if isinstance(name, str))
     return "\n".join(parts)
+
+
+def _scope_for_row(row: dict[str, object]):
+    email = ExtractedEmailContent(
+        sender_domain=str(row.get("sender_domain") or ""),
+        urls=tuple(value for value in row.get("urls", []) if isinstance(value, str)),
+        attachment_filenames=tuple(
+            value for value in row.get("attachment_filenames", []) if isinstance(value, str)
+        ),
+        subject=str(row.get("subject") or ""),
+        body_text=str(row.get("body_text") or ""),
+        spf_result="unknown",
+        dkim_result="unknown",
+        dmarc_result="unknown",
+    )
+    return assess_email_scope(email)
 
 
 def _length_bucket(length: int) -> str:
