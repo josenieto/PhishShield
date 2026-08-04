@@ -92,6 +92,33 @@ C:\Users\nieto006\Documents\PhishShield-data\promotion-holdout\
 The validator requires exactly 20 benign and 20 suspicious samples for every
 family before a manifest can be accepted.
 
+## Approved Promotion Thresholds
+
+The thresholds were approved before collecting holdout samples:
+
+- coverage of at least `70%`, with at least 28 conclusive predictions;
+- conditional accuracy of at least `95%`;
+- no more than `1` confident false positive among 20 benign samples;
+- no more than `1` confident false negative among 20 suspicious samples;
+- no regression in confident errors on the 32 PhishShield fixtures.
+
+These thresholds are implemented in
+`tools/ml_training/promotion_policy.py`. A family that fails one threshold is
+classified as experimental or out of scope; aggregate performance cannot
+override the family result.
+
+## Source Curation
+
+Candidate sources must first be recorded in:
+
+```text
+config/ml/promotion_holdout_sources.template.jsonl
+```
+
+The source record is not admission evidence by itself. Samples can only enter
+the promotion manifest after provenance, terms, privacy, independence, and
+content-quality review are complete.
+
 ## Evaluation
 
 Use the frozen candidate input contract and conservative abstention policy.
