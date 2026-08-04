@@ -13,6 +13,7 @@ from tools.ml_data_preparation.phishshield_fixtures import (
 from tools.ml_training.evaluate_fixture_holdout import _balanced_samples, _predict_label, _train_model
 from tools.ml_training.train_baseline import FEATURE_SET_TEXT, FEATURE_SET_TEXT_WITH_LIGHT_METADATA
 from tools.ml_training.confidence_policy import classify_suspicious_probability
+from tools.ml_training.promotion_policy import assess_family_promotion
 
 
 @dataclass(frozen=True)
@@ -163,6 +164,11 @@ def print_prepared_holdout_result(result: PreparedHoldoutResult) -> None:
         print(f"metrics_by_{dimension}:")
         for key, metrics in result.metrics_by(dimension).items():
             print(f"  {key}: {json.dumps(metrics, sort_keys=True)}")
+    print("promotion_by_family:")
+    for family, metrics in result.metrics_by("family").items():
+        promoted, reasons = assess_family_promotion(metrics)
+        decision = "promotable_advisory" if promoted else "experimental_insufficient_evidence"
+        print(f"  {family}: {decision} ({'; '.join(reasons) or 'all approved thresholds met'})")
 
 
 def _load_rows(paths: Sequence[Path]) -> list[dict[str, object]]:
