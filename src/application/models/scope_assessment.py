@@ -38,6 +38,17 @@ _FAMILY_TERMS: dict[str, tuple[str, ...]] = {
     SCOPE_FAMILY_NEWSLETTER_PREFERENCES: ("newsletter", "unsubscribe", "preferences", "digest", "subscription"),
 }
 
+_STRONG_FAMILY_TERMS: dict[str, tuple[str, ...]] = {
+    SCOPE_FAMILY_ACCOUNT: ("account activity", "account summary", "account usage", "login", "sign in", "password", "verify your account", "account profile"),
+    SCOPE_FAMILY_MFA_SECURITY: ("mfa", "multi-factor", "multifactor", "verification code", "two-factor", "recovery codes", "security alert", "new sign-in", "security alert login"),
+    SCOPE_FAMILY_BILLING_INVOICES: ("invoice", "billing", "payment", "receipt", "renewal"),
+    SCOPE_FAMILY_CLOUD_DOCUMENT_SHARING: ("cloud", "storage", "shared", "share", "workspace"),
+    SCOPE_FAMILY_SUPPORT: ("support", "ticket", "case", "helpdesk", "customer service"),
+    SCOPE_FAMILY_HR: ("human resources", "benefits", "payroll", "employee", "employment"),
+    SCOPE_FAMILY_VENDOR_PORTALS: ("vendor", "supplier", "procurement", "vendor portal", "purchase order", "invoice portal"),
+    SCOPE_FAMILY_NEWSLETTER_PREFERENCES: ("newsletter", "unsubscribe", "preferences", "digest", "subscription", "newsletter includes", "newsletter security"),
+}
+
 
 def assess_email_scope(email: ExtractedEmailContent) -> ScopeAssessment:
     content = " ".join((email.subject, email.body_text)).strip().lower()
@@ -50,15 +61,20 @@ def assess_email_scope(email: ExtractedEmailContent) -> ScopeAssessment:
     if _is_url_only_content(content, email.urls):
         return ScopeAssessment(SCOPE_FAMILY_OUT_OF_SCOPE, 1.0, SCOPE_REASON_URL_ONLY)
 
-    scores = {
+    strong_scores = {
         family: sum(term in content for term in terms)
-        for family, terms in _FAMILY_TERMS.items()
+        for family, terms in _STRONG_FAMILY_TERMS.items()
     }
-    family, score = max(scores.items(), key=lambda item: item[1])
+    strongest_family, strongest_score = max(strong_scores.items(), key=lambda item: item[1])
+    if strongest_score > 0:
+        family = strongest_family
+        score = strongest_score
+        second_score = sorted(strong_scores.values(), reverse=True)[1]
+    else:
+        return ScopeAssessment(SCOPE_FAMILY_OUT_OF_SCOPE, 0.0, SCOPE_REASON_NO_FAMILY_SIGNAL)
     if score < 1:
         return ScopeAssessment(SCOPE_FAMILY_OUT_OF_SCOPE, 0.0, SCOPE_REASON_NO_FAMILY_SIGNAL)
 
-    second_score = sorted(scores.values(), reverse=True)[1]
     confidence = min(1.0, 0.5 + 0.15 * score + 0.1 * max(0, score - second_score))
     return ScopeAssessment(family, confidence, SCOPE_REASON_IN_SCOPE)
 
