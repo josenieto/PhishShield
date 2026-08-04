@@ -29,5 +29,8 @@ ml = [
     "joblib>=1.4,<2.0",
 ]
 
+[project.scripts]
+phishshield = "infrastructure.entrypoints.cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
