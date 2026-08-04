@@ -23,7 +23,7 @@ def test_should_evaluate_prepared_holdout_by_label_and_quality_dimensions(tmp_pa
 
     assert result.total == 2
     assert set(result.metrics_by("expected_label")) == {"benign", "suspicious"}
-    assert set(result.metrics_by("family")) == {"unclassified"}
+    assert set(result.metrics_by("family")) == {"account"}
     assert set(result.metrics_by("body_length_bucket")) == {"short_lt_300"}
     assert result.predictions[0].source == "ceas_08"
     assert 0.0 <= result.abstention_rate <= 1.0
