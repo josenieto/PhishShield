@@ -61,6 +61,8 @@ def test_should_return_completed_assessment_with_configured_model(tmp_path: Path
     assert assessment.signals == (
         "Experimental sklearn baseline.",
         "Uses text_with_light_metadata features.",
+        "Scope family: account.",
+        "Deterministic scope gate.",
         "Deterministic analysis remains authoritative.",
     )
     assert assessment.model_name == "unit-test-model"
