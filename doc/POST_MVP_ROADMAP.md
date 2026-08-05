@@ -176,10 +176,15 @@ Candidate steps:
 
 Local `pre-commit` guardrails are now in place.
 
+CI Phase 1 is now also enabled for hygiene, private-key detection, and
+Domain/Application architecture boundaries. The scoring-sensitive guard remains
+local-only until the CI guardrail set proves stable.
+
 Candidate steps:
 
 - observe local hook ergonomics over normal development;
 - defer CI integration until the local hook set proves stable and useful;
+- keep Phase 1 CI checks limited to hygiene, secrets, and architecture;
 - later introduce CI enforcement incrementally, starting with hygiene and architecture checks before any scoring-specific PR guard;
 - avoid turning local hooks into a full replacement for tests or CI.
 

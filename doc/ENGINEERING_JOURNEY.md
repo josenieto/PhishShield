@@ -7369,6 +7369,25 @@ automation remain deferred until a concrete workflow justifies them. Keep the
 advisory model experimental and optional. Regenerate project knowledge graph only if the next
 work changes the project structure or architecture map.
 
+## 2026-07-31 - Add CI guardrails phase one
+
+Type: Testing | Architecture
+Layer: Cross-cutting
+Status: Done
+
+### Decision
+
+Add a separate CI guardrails job for repository hygiene, private-key detection,
+and Domain/Application architecture boundaries. Keep the scoring-sensitive
+change guard local-only until the shared CI checks demonstrate stable runtime
+and useful failure behavior.
+
+### Result
+
+The guardrails job runs in parallel with backend and frontend validation and is
+required by the Docker smoke job. Local commit latency is unchanged because the
+checks are added to GitHub Actions rather than the local hook stages.
+
 ## 2026-07-31 - Validate deterministic email artifact workflow
 
 Type: Testing | Architecture
