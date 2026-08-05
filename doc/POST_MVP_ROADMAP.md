@@ -99,6 +99,9 @@ it downloads exactly one `.eml`, runs the deterministic CLI, uploads the JSON
 report, and enforces the configured risk threshold. The advisory model remains
 outside this workflow.
 
+A manual same-repository smoke caller is included to validate that adoption
+path without requiring a downstream repository or real email data.
+
 The goal is to make the deterministic analysis flow usable from local scripts and
 CI/CD pipelines without creating a second analysis engine.
 
