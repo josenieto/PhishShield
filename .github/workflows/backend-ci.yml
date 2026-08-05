@@ -25,6 +25,19 @@ jobs:
       - name: Run test suite
         run: python -m pytest
 
+      - name: Smoke test deterministic CLI JSON output
+        run: |
+          python -m infrastructure.entrypoints.cli analyze tests/fixtures/emails/benign_account_summary.eml --format json > cli-result.json
+          python -c "import json; data=json.load(open('cli-result.json', encoding='utf-8')); assert data['risk_score']['risk_level'] == 'LOW'"
+
+      - name: Smoke test deterministic CLI threshold exit code
+        run: |
+          set +e
+          python -m infrastructure.entrypoints.cli analyze tests/fixtures/emails/suspicious_html_notice.eml --fail-on high
+          status=$?
+          set -e
+          test "$status" -eq 1
+
   frontend-test:
     runs-on: ubuntu-latest
 

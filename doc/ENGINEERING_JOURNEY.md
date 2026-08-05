@@ -7363,7 +7363,8 @@ Repository pre-commit checks passed.
 
 ### Next step
 
-Start the next primary group with fixture-driven parser and runtime polish. Keep
-model-assisted inference experimental until independent benign-calibration evidence
-supports product promotion. Regenerate project knowledge graph only if the next work changes the
-project structure or architecture map.
+The next primary group is evidence-driven deterministic workflow expansion. The
+single-email CLI is stable and CI smoke-tested; batch, SARIF, and advisory-model
+automation remain deferred until a concrete workflow justifies them. Keep the
+advisory model experimental and optional. Regenerate project knowledge graph only if the next
+work changes the project structure or architecture map.
