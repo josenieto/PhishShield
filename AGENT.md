@@ -398,27 +398,12 @@ Project-authored skill definitions and evals are organized in:
 
 - `.skills/`
 
-Installed skills available to the agent runtime are organized under `.agents/skills/` when they are installed for this project. A skill definition in `.skills/` is not automatically runtime-available unless it is registered or installed through the active agent configuration.
-
-The official Anthropic `skill-creator` skill is installed in the project through the `skills` CLI and is available at:
-
-- `.agents/skills/skill-creator/`
-
-Command used:
-
-```bash
-npx skills add anthropics/skills --skill skill-creator --yes
-```
-
-It is used to create, improve, and evaluate PhishShield-specific skills.
+The project skills are portable playbooks. They are not required to run
+PhishShield and no specific agent installation is required to contribute.
 
 ### Mandatory rule for creating new skills
 
-Every new project skill must be created using the official skill as the model:
-
-- `.agents/skills/skill-creator/`
-
-The agent must apply that workflow before writing a skill:
+Every new project skill must follow the documented skill-authoring workflow:
 
 1. capture the skill intent,
 2. define when the skill should trigger,
@@ -432,7 +417,8 @@ Do not create skills without following this process.
 
 ### Planned skills
 
-Initial folders are prepared, and skills are defined progressively with `skill-creator`.
+Initial folders are prepared, and skills are defined progressively using the
+documented project workflow.
 
 - `phishshield-architecture`
   Architecture decisions aligned with the ADR.
