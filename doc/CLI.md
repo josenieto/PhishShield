@@ -84,8 +84,10 @@ jobs:
 This repository also contains a manual smoke caller at
 `.github/workflows/deterministic-email-artifact-smoke.yml`. Run it from the
 GitHub Actions tab to validate artifact upload, reusable-workflow invocation,
-JSON report publication, and threshold handling with a benign fixture. The
-smoke workflow uses one-day report retention and contains no production email.
+JSON report publication, and threshold handling. Select `benign` to expect a
+green run, or select `suspicious` with `fail-on: high` to expect the report to
+be published before the job fails intentionally. The smoke workflow uses
+one-day report retention and contains no production email.
 
 The workflow accepts exit code `1` from the CLI as a completed analysis whose
 risk threshold was reached. It uploads the JSON report first and then fails the

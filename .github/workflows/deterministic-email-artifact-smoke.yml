@@ -2,6 +2,26 @@ name: Deterministic Email Artifact Smoke
 
 on:
   workflow_dispatch:
+    inputs:
+      fixture:
+        description: Fixture to analyze.
+        required: true
+        default: benign
+        type: choice
+        options:
+          - benign
+          - suspicious
+      fail-on:
+        description: Risk level that makes the smoke workflow fail.
+        required: true
+        default: high
+        type: choice
+        options:
+          - none
+          - low
+          - medium
+          - high
+          - critical
 
 permissions:
   contents: read
@@ -18,12 +38,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: deterministic-email-smoke-input
-          path: tests/fixtures/emails/benign_account_summary.eml
+          path: tests/fixtures/emails/${{ inputs.fixture == 'suspicious' && 'suspicious_html_notice.eml' || 'benign_account_summary.eml' }}
 
   analyze-fixture:
     needs: upload-fixture
     uses: ./.github/workflows/deterministic-email-artifact.yml
     with:
       email-artifact: deterministic-email-smoke-input
-      fail-on: high
+      fail-on: ${{ inputs.fail-on }}
       report-retention-days: 1
