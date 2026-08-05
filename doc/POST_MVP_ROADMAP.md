@@ -87,7 +87,9 @@ Keep out of scope for this track:
 
 ### Track 2.5: Future CLI And CI/CD Automation
 
-This is a future automation block and is not the current implementation focus.
+The single-email deterministic CLI contract is now implemented. Batch and
+security-platform formats remain deferred until a concrete workflow justifies
+them.
 
 The goal is to make the deterministic analysis flow usable from local scripts and
 CI/CD pipelines without creating a second analysis engine.
@@ -100,6 +102,22 @@ Candidate steps:
 - add batch and JSONL output when a real workflow needs it;
 - add Markdown or SARIF output only when a concrete reporting or security-platform integration justifies it;
 - document CI examples and artifact handling.
+
+Implemented first CLI contract:
+
+```text
+phishshield analyze path/to/email.eml --format text|json --fail-on none|low|medium|high|critical
+```
+
+Exit codes are stable:
+
+```text
+0  analysis completed and threshold not reached
+1  analysis completed and --fail-on threshold reached
+2  usage or argument error
+3  file missing or unreadable
+4  email invalid or analysis failed
+```
 
 Keep out of scope for the first CLI step:
 

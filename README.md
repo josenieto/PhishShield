@@ -236,3 +236,18 @@ curl -X POST http://127.0.0.1:8000/analyze-email -F "file=@sample.eml;type=messa
 ```
 
 See `doc/API.md` for the full request and response contract, error behavior, and current integration-test coverage examples.
+
+### Deterministic CLI
+
+Analyze one email without starting the API:
+
+```bash
+phishshield analyze tests/fixtures/emails/suspicious_html_notice.eml
+phishshield analyze sample.eml --format json
+phishshield analyze sample.eml --fail-on high
+```
+
+The CLI reuses the deterministic application flow. It does not enable or invoke
+the optional advisory model. Exit codes are `0` for a completed analysis below
+the threshold, `1` when `--fail-on` is reached, `2` for usage errors, `3` for
+missing/unreadable files, and `4` for analysis failures.
