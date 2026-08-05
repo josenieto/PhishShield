@@ -86,7 +86,7 @@ prepared JSONL, predictions, and detailed evaluation outputs remain outside Git
 under:
 
 ```text
-C:\Users\nieto006\Documents\PhishShield-data\promotion-holdout\
+<PHISHSHIELD_DATA_ROOT>\promotion-holdout\
 ```
 
 The validator requires exactly 20 benign and 20 suspicious samples for every

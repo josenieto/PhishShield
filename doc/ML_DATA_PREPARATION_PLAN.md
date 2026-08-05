@@ -343,7 +343,7 @@ Do not copy raw email bodies, raw corpus excerpts, or real phishing/fraudulent s
 Approved local storage pattern for generated datasets remains outside Git:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\<dataset-name>\prepared\
+<PHISHSHIELD_DATA_ROOT>\<dataset-name>\prepared\
 ```
 
 The Fraudulent E-mail Corpus used this workflow: raw corpus inspection and JSONL generation were performed in Kaggle Notebook, then the prepared JSONL was downloaded outside Git for local validation, training, and fixture holdout evaluation.
@@ -470,7 +470,7 @@ urls_found: 2161
 The `Phishing Email Detection` CSV candidate was downloaded outside Git for schema and quality inspection:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\raw\Phishing_Email.csv
+<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\raw\Phishing_Email.csv
 ```
 
 Observed schema:
@@ -557,7 +557,7 @@ urls_found: 13291
 The first local dry run used a manually downloaded SpamAssassin subset stored outside the repository:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw
+<PHISHSHIELD_DATA_ROOT>\spamassassin\raw
 ```
 
 The preparation command was executed with `--limit 20` for both `easy_ham` and `spam`.
@@ -572,7 +572,7 @@ Results:
 Generated JSONL outputs were written outside the repository under:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared
 ```
 
 The dry run confirms that the current preparation command can process a small real SpamAssassin sample and produce canonical JSONL rows without adding raw corpora or generated datasets to Git.
@@ -584,14 +584,14 @@ The dry run confirms that the current preparation command can process a small re
 The first prepared JSONL validation used the outputs from the local SpamAssassin dry run:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham.jsonl
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam.jsonl
 ```
 
 Command:
 
 ```text
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam.jsonl"
 ```
 
 Result:
@@ -665,8 +665,8 @@ The larger dry run confirms that the current SpamAssassin preparation and valida
 The SpamAssassin `hard_ham` archives were downloaded and extracted outside Git into separate directories:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20021010\hard_ham
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20030228\hard_ham
+<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\hard_ham_20021010\hard_ham
+<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\hard_ham_20030228\hard_ham
 ```
 
 Preparation results:
@@ -686,7 +686,7 @@ Validation results:
 Generated JSONL outputs were written outside the repository under:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\
 ```
 
 The high URL counts confirm that `hard_ham` is a difficult benign source, but later fixture holdout evaluation showed it does not improve the current benign account/MFA/newsletter false-positive problem.
@@ -712,14 +712,14 @@ https://www.cs.cmu.edu/~enron/enron_mail_20150507.tar.gz
 Expected local storage outside Git:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\
+<PHISHSHIELD_DATA_ROOT>\enron\raw\
+<PHISHSHIELD_DATA_ROOT>\enron\prepared\
 ```
 
 The first preparation prototype uses the extracted `maildir` directory rather than reading the compressed archive directly:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir
+<PHISHSHIELD_DATA_ROOT>\enron\raw\enron_mail_20150507\maildir
 ```
 
 Purpose:
@@ -788,8 +788,8 @@ The Enron workflow must be revisited before model artifact work. A useful calibr
 First capped directory POC result:
 
 ```text
-input_dir: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir
-output: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl
+input_dir: <PHISHSHIELD_DATA_ROOT>\enron\raw\enron_mail_20150507\maildir
+output: <PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_1000.jsonl
 limit: 1000
 discovered_files: 1000
 processed: 1000
@@ -823,8 +823,8 @@ The first capped sample came only from `allen-p`, so it is useful for proving me
 Source-diverse capped POC result:
 
 ```text
-input_dir: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir
-output: C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl
+input_dir: <PHISHSHIELD_DATA_ROOT>\enron\raw\enron_mail_20150507\maildir
+output: <PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_diverse_2000.jsonl
 limit: 2000
 max_per_user: 50
 max_per_folder: 20
@@ -883,7 +883,7 @@ vendor portal notices
 The source is synthetic and versioned as code/templates. Generated JSONL outputs remain outside Git:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\
+<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\
 ```
 
 Preparation command:
@@ -945,7 +945,7 @@ Synthetic suspicious notification-style lures were added to balance the benign n
 The source is synthetic and versioned as code/templates. Generated JSONL outputs remain outside Git:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\
+<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\
 ```
 
 Categories:
