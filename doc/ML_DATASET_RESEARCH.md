@@ -219,7 +219,7 @@ Observed Kaggle metadata during research:
 Local download observation:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\fradulent_emails.txt
+<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\fradulent_emails.txt
 ```
 
 The downloaded file exists outside the repository and matches the expected approximate size. The filename uses the upstream spelling `fradulent_emails.txt`.
@@ -354,7 +354,7 @@ Current decision:
 Local schema and quality inspection used the manually downloaded CSV stored outside the repository:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\raw\Phishing_Email.csv
+<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\raw\Phishing_Email.csv
 ```
 
 Inspection result:
@@ -415,7 +415,7 @@ urls_found: 130957
 Prepared output remains outside Git:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\ceas-08\prepared\ceas_08.jsonl
+<PHISHSHIELD_DATA_ROOT>\ceas-08\prepared\ceas_08.jsonl
 ```
 
 Observed label mapping:
