@@ -49,3 +49,28 @@ def test_should_return_analysis_error_for_oversized_email(tmp_path: Path, capsys
 
     assert result == EXIT_ANALYSIS_ERROR
     assert "maximum allowed size" in capsys.readouterr().err
+
+
+def test_should_render_human_readable_text(capsys) -> None:
+    result = main(["analyze", "tests/fixtures/emails/benign_account_summary.eml"])
+
+    captured = capsys.readouterr()
+    assert result == EXIT_OK
+    assert "Risk level: LOW" in captured.out
+    assert "Subject:" in captured.out
+
+
+def test_should_return_analysis_error_when_analysis_fails(monkeypatch, tmp_path: Path, capsys) -> None:
+    path = tmp_path / "email.eml"
+    path.write_bytes(b"From: sender@example.com\n\nBody")
+
+    class FailingUseCase:
+        def execute(self, command):
+            raise ValueError("analysis failed")
+
+    monkeypatch.setattr("infrastructure.entrypoints.cli._build_use_case", lambda: FailingUseCase())
+
+    result = main(["analyze", str(path)])
+
+    assert result == EXIT_ANALYSIS_ERROR
+    assert "Email could not be analyzed" in capsys.readouterr().err
