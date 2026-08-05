@@ -1,0 +1,29 @@
+name: Deterministic Email Artifact Smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  upload-fixture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Upload benign email fixture
+        uses: actions/upload-artifact@v4
+        with:
+          name: deterministic-email-smoke-input
+          path: tests/fixtures/emails/benign_account_summary.eml
+
+  analyze-fixture:
+    needs: upload-fixture
+    uses: ./.github/workflows/deterministic-email-artifact.yml
+    with:
+      email-artifact: deterministic-email-smoke-input
+      fail-on: high
+      report-retention-days: 1
