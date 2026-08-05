@@ -1,0 +1,85 @@
+name: Deterministic Email Artifact Analysis
+
+on:
+  workflow_call:
+    inputs:
+      email-artifact:
+        description: Artifact name containing exactly one .eml file.
+        required: true
+        type: string
+      fail-on:
+        description: Risk level that makes the workflow fail.
+        required: false
+        default: high
+        type: string
+      report-retention-days:
+        description: Number of days to retain the JSON analysis artifact.
+        required: false
+        default: 7
+        type: number
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download email artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.email-artifact }}
+          path: input-artifact
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deterministic CLI
+        run: python -m pip install .
+
+      - name: Locate single email input
+        id: input
+        shell: bash
+        run: |
+          mapfile -t emails < <(find input-artifact -type f -name '*.eml' -print)
+          if [ "${#emails[@]}" -ne 1 ]; then
+            echo "Expected exactly one .eml file in artifact '${{ inputs.email-artifact }}'; found ${#emails[@]}." >&2
+            exit 4
+          fi
+          printf 'path=%s\n' "${emails[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Analyze email
+        id: analysis
+        shell: bash
+        run: |
+          set +e
+          phishshield analyze "${{ steps.input.outputs.path }}" --format json --fail-on "${{ inputs.fail-on }}" > deterministic-analysis.json
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ] && [ "$status" -ne 1 ]; then
+            echo "Deterministic CLI failed with exit code $status." >&2
+            exit "$status"
+          fi
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+
+      - name: Validate JSON report
+        run: python -c "import json; json.load(open('deterministic-analysis.json', encoding='utf-8'))"
+
+      - name: Upload deterministic analysis report
+        if: always() && steps.analysis.outcome != 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: deterministic-email-analysis
+          path: deterministic-analysis.json
+          retention-days: ${{ inputs.report-retention-days }}
+
+      - name: Enforce risk threshold
+        if: steps.analysis.outputs.exit_code == '1'
+        run: |
+          echo "The configured deterministic risk threshold was reached."
+          exit 1

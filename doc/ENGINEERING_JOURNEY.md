@@ -4875,8 +4875,8 @@ Both subsets processed with zero failures, zero empty subjects, and zero empty b
 Command:
 
 ```bash
-python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\easy_ham" --label easy_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl" --limit 20
-python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\spam" --label spam --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl" --limit 20
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\easy_ham" --label easy_ham --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham.jsonl" --limit 20
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\spam" --label spam --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam.jsonl" --limit 20
 python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -4921,9 +4921,9 @@ The full local subset produced 3002 valid rows, zero invalid rows, and zero dupl
 Command:
 
 ```bash
-python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\easy_ham" --label easy_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl"
-python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\spam" --label spam --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl"
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl"
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\easy_ham" --label easy_ham --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl"
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\spam" --label spam --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl"
 python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -5015,8 +5015,8 @@ The lightweight metadata feature set improved suspicious recall and F1 on the Sp
 Command:
 
 ```bash
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42
 python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -5104,8 +5104,8 @@ The results confirm that the training command can now produce machine-readable e
 Command:
 
 ```bash
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\metrics\baseline_text.json"
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\metrics\baseline_text_metadata.json"
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\spamassassin\metrics\baseline_text.json"
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\spamassassin\metrics\baseline_text_metadata.json"
 python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -5199,7 +5199,7 @@ The next ML data step should prioritize phishing-specific and benign business-em
 Command:
 
 ```bash
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATASET_RESEARCH.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -5288,7 +5288,7 @@ The validation confirmed 40 rows, zero invalid rows, zero duplicate sample IDs, 
 Command:
 
 ```bash
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam.jsonl"
 python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -5755,9 +5755,9 @@ This confirms that the Fraudulent E-mail Corpus helps with fraud/social-engineer
 Command:
 
 ```bash
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl"
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\metrics\baseline_text_metadata.json"
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl"
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\metrics\baseline_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATA_PREPARATION_PLAN.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -5998,8 +5998,8 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py
-python -m tools.ml_data_preparation.prepare_phishing_email_detection --input-file "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\raw\Phishing_Email.csv" --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl"
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl"
+python -m tools.ml_data_preparation.prepare_phishing_email_detection --input-file "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\raw\Phishing_Email.csv" --output "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl"
 python -m pytest
 python -m pre_commit run --files tools/ml_data_preparation/phishing_email_detection.py tools/ml_data_preparation/prepare_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -6074,8 +6074,8 @@ This is the first ML baseline that improves fixture holdout accuracy and fully c
 Command:
 
 ```bash
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\metrics\baseline_text_metadata.json"
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\metrics\baseline_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
 
@@ -6151,7 +6151,7 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
 python -m pre_commit run --files tests/fixtures/emails/benign_account_usage_digest.eml tests/fixtures/emails/benign_mfa_enabled_notice.eml tests/fixtures/emails/benign_html_product_newsletter_account_preferences.eml tests/fixtures/emails/suspicious_mfa_push_approval_lure.eml tests/fixtures/emails/suspicious_shared_invoice_qr_lure.eml tests/fixtures/emails/suspicious_cloud_storage_quota_lure.eml tools/ml_training/evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -6211,7 +6211,7 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42 --suspicious-threshold 0.50
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42 --suspicious-threshold 0.50
 python -m pytest
 python -m pre_commit run --files tools/ml_training/evaluate_fixture_holdout.py tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -6324,10 +6324,10 @@ both hard_ham subsets: accuracy=0.6250, false_positive_benign=6, false_negative_
 Command:
 
 ```bash
-python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20021010\hard_ham" --label hard_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20021010.jsonl"
-python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\raw\hard_ham_20030228\hard_ham" --label hard_ham --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20030228.jsonl"
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20021010.jsonl"
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\hard_ham_20030228.jsonl"
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\hard_ham_20021010\hard_ham" --label hard_ham --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\hard_ham_20021010.jsonl"
+python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\hard_ham_20030228\hard_ham" --label hard_ham --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\hard_ham_20030228.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\hard_ham_20021010.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\hard_ham_20030228.jsonl"
 python -m tools.ml_training.train_baseline ...
 python -m tools.ml_training.evaluate_fixture_holdout ...
 python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
@@ -6457,10 +6457,10 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py
-python -m tools.ml_data_preparation.prepare_enron --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir" --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl" --limit 1000
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl"
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\metrics\phishing_plus_enron_1000_text_metadata.json"
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_1000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_data_preparation.prepare_enron --input-dir "<PHISHSHIELD_DATA_ROOT>\enron\raw\enron_mail_20150507\maildir" --output "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_1000.jsonl" --limit 1000
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_1000.jsonl"
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_1000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\enron\metrics\phishing_plus_enron_1000_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_1000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
 python -m pre_commit run --files tools/ml_data_preparation/enron.py tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -6553,10 +6553,10 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py
-python -m tools.ml_data_preparation.prepare_enron --input-dir "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\raw\enron_mail_20150507\maildir" --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl" --limit 2000 --max-per-user 50 --max-per-folder 20
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl"
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\metrics\phishing_plus_enron_diverse_2000_text_metadata.json"
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\enron\prepared\enron_diverse_2000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_data_preparation.prepare_enron --input-dir "<PHISHSHIELD_DATA_ROOT>\enron\raw\enron_mail_20150507\maildir" --output "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_diverse_2000.jsonl" --limit 2000 --max-per-user 50 --max-per-folder 20
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_diverse_2000.jsonl"
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_diverse_2000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\enron\metrics\phishing_plus_enron_diverse_2000_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_diverse_2000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
 python -m pre_commit run --files tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -6636,10 +6636,10 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py
-python -m tools.ml_data_preparation.prepare_synthetic_benign_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --samples-per-category 10
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl"
-python -m tools.ml_training.train_baseline --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\metrics\phishing_plus_synthetic_benign_notifications_text_metadata.json"
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_data_preparation.prepare_synthetic_benign_notifications --output "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --samples-per-category 10
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl"
+python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\metrics\phishing_plus_synthetic_benign_notifications_text_metadata.json"
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
 python -m pre_commit run --files tools/ml_data_preparation/synthetic_benign_notifications.py tools/ml_data_preparation/prepare_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -6709,12 +6709,12 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_data_preparation/test_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_suspicious_notifications.py
-python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications.jsonl" --samples-per-category 10
-python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_240.jsonl" --samples-per-category 20
-python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --samples-per-category 50
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications.jsonl"
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_240.jsonl"
-python -m tools.ml_data_preparation.validate_prepared_dataset --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl"
+python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications.jsonl" --samples-per-category 10
+python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_240.jsonl" --samples-per-category 20
+python -m tools.ml_data_preparation.prepare_synthetic_suspicious_notifications --output "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --samples-per-category 50
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_240.jsonl"
+python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl"
 python -m tools.ml_training.train_baseline ...
 python -m tools.ml_training.evaluate_fixture_holdout ...
 python -m pytest
@@ -6797,8 +6797,8 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
-python -m tools.ml_training.evaluate_fixture_holdout --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
+python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
 python -m pre_commit run --files tests/fixtures/emails/benign_account_billing_summary.eml tests/fixtures/emails/benign_device_login_history.eml tests/fixtures/emails/benign_mfa_recovery_codes_notice.eml tests/fixtures/emails/benign_newsletter_security_tips.eml tests/fixtures/emails/benign_cloud_storage_usage_digest.eml tests/fixtures/emails/benign_vendor_invoice_status_update.eml tests/fixtures/emails/benign_hr_benefits_reminder.eml tests/fixtures/emails/benign_support_case_waiting_customer.eml tests/fixtures/emails/suspicious_device_login_verification_lure.eml tests/fixtures/emails/suspicious_mfa_recovery_codes_lure.eml tests/fixtures/emails/suspicious_billing_profile_reauth_lure.eml tests/fixtures/emails/suspicious_cloud_storage_expiry_lure.eml tests/fixtures/emails/suspicious_vendor_invoice_portal_lure.eml tests/fixtures/emails/suspicious_hr_benefits_login_lure.eml tests/fixtures/emails/suspicious_support_case_auth_lure.eml tests/fixtures/emails/suspicious_newsletter_preferences_credential_lure.eml tools/ml_training/evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -6890,8 +6890,8 @@ The command trains the same `TF-IDF + Logistic Regression` pipeline used by the 
 Generated files outside Git:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib
+<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json
 ```
 
 Exported metrics:
@@ -6923,7 +6923,7 @@ Command:
 
 ```bash
 python -m pytest tests/unit/tools/ml_training/test_export_baseline_artifact.py
-python -m tools.ml_training.export_baseline_artifact --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --model-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib" --metadata-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json" --holdout-accuracy 0.875 --holdout-false-positive-benign 3 --holdout-false-negative-suspicious 1
+python -m tools.ml_training.export_baseline_artifact --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --model-output "<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib" --metadata-output "<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json" --holdout-accuracy 0.875 --holdout-false-positive-benign 3 --holdout-false-negative-suspicious 1
 python -m pytest
 python -m pre_commit run --files tools/ml_training/export_baseline_artifact.py tests/unit/tools/ml_training/test_export_baseline_artifact.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
 ```
@@ -7160,8 +7160,8 @@ Configuration used:
 
 ```text
 PHISHSHIELD_MODEL_ASSESSMENT_ENABLED=true
-PHISHSHIELD_MODEL_ARTIFACT_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
-PHISHSHIELD_MODEL_METADATA_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+PHISHSHIELD_MODEL_ARTIFACT_PATH=<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib
+PHISHSHIELD_MODEL_METADATA_PATH=<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json
 ```
 
 Configured endpoint results:

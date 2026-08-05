@@ -275,8 +275,8 @@ PHISHSHIELD_MODEL_METADATA_PATH=path/to/phishshield_baseline_candidate.metadata.
 The current experimental artifact is stored outside Git:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib
+<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json
 ```
 
 Adapter behavior:
@@ -670,8 +670,8 @@ Runtime validation used:
 
 ```text
 PHISHSHIELD_MODEL_ASSESSMENT_ENABLED=true
-PHISHSHIELD_MODEL_ARTIFACT_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
-PHISHSHIELD_MODEL_METADATA_PATH=C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+PHISHSHIELD_MODEL_ARTIFACT_PATH=<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib
+PHISHSHIELD_MODEL_METADATA_PATH=<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json
 ```
 
 Configured endpoint checks with `TestClient` returned `completed` model assessments:
