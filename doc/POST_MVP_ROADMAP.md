@@ -85,11 +85,14 @@ Keep out of scope for this track:
 - short-link resolution;
 - PDF or Office parsing.
 
-### Track 2.5: Future CLI And CI/CD Automation
+### Track 2.5: CLI And CI/CD Automation
 
 The single-email deterministic CLI contract is now implemented. Batch and
 security-platform formats remain deferred until a concrete workflow justifies
 them.
+
+The initial CLI contract is also covered by CI smoke tests for JSON output and
+threshold exit behavior. This closes the single-email CLI stabilization step.
 
 The goal is to make the deterministic analysis flow usable from local scripts and
 CI/CD pipelines without creating a second analysis engine.
@@ -230,7 +233,7 @@ These areas remain deferred until a dedicated roadmap group starts them:
 The current recommended next group is:
 
 ```text
-Product-Ready Advisory Inference Validation
+Evidence-Driven Deterministic Workflow Expansion
 ```
 
 Rationale:
@@ -239,4 +242,6 @@ Rationale:
 - the Frontend Analyst Polish block is complete;
 - the initial parser/runtime hardening round is complete;
 - the extracted representation can now be held stable for model evaluation;
-- model-assisted inference remains experimental until independent benign-calibration validation supports promotion.
+- the deterministic CLI contract and CI smoke checks are complete;
+- model-assisted inference is closed as experimental and remains optional;
+- future work should be driven by an actual analyst or CI workflow rather than another generic model-validation campaign.
