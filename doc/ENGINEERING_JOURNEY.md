@@ -7368,3 +7368,36 @@ single-email CLI is stable and CI smoke-tested; batch, SARIF, and advisory-model
 automation remain deferred until a concrete workflow justifies them. Keep the
 advisory model experimental and optional. Regenerate project knowledge graph only if the next
 work changes the project structure or architecture map.
+
+## 2026-07-31 - Validate deterministic email artifact workflow
+
+Type: Testing | Architecture
+Layer: Entrypoint | Cross-cutting
+Status: Done
+
+### Context
+
+The single-email deterministic CLI needed validation in its intended CI artifact
+workflow, including both a successful benign analysis and threshold enforcement
+for a suspicious message.
+
+### Decision
+
+Keep the reusable GitHub Actions workflow deterministic-only. It accepts an
+artifact containing exactly one `.eml`, publishes the JSON analysis report, and
+then enforces the configured `--fail-on` threshold. The advisory model remains
+outside CI gates.
+
+### Validation
+
+- benign fixture completed successfully and published `deterministic-analysis.json`;
+- suspicious fixture produced `CRITICAL` risk with score `100/100` and six findings;
+- suspicious run published the JSON report before failing intentionally at the
+  configured `high` threshold;
+- no production email data was used.
+
+### Result
+
+The deterministic artifact workflow is validated end to end. Batch processing,
+SARIF output, and advisory-model CI automation remain deferred until a concrete
+workflow requires them.
