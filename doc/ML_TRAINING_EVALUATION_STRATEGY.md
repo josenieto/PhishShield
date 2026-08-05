@@ -386,8 +386,8 @@ The first fraud/social-engineering baseline used SpamAssassin `easy_ham_full.jso
 Input files were stored outside the repository:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl
+<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl
 ```
 
 Prepared Fraudulent E-mail Corpus validation result:
@@ -561,7 +561,7 @@ The first `Phishing Email Detection` baseline used only the prepared JSONL from 
 Input file stored outside the repository:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl
+<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl
 ```
 
 Training settings:
@@ -1254,14 +1254,14 @@ The selected experimental baseline candidate was exported outside Git as a sciki
 Export command:
 
 ```text
-python -m tools.ml_training.export_baseline_artifact --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --model-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib" --metadata-output "C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json" --holdout-accuracy 0.875 --holdout-false-positive-benign 3 --holdout-false-negative-suspicious 1
+python -m tools.ml_training.export_baseline_artifact --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --model-output "<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib" --metadata-output "<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json" --holdout-accuracy 0.875 --holdout-false-positive-benign 3 --holdout-false-negative-suspicious 1
 ```
 
 Output files:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.joblib
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\models\phishshield_baseline_candidate.metadata.json
+<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib
+<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json
 ```
 
 Exported training metrics:
@@ -1307,8 +1307,8 @@ Secondary candidates:
 The first baseline training run used the prepared SpamAssassin JSONL outputs stored outside the repository:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl
 ```
 
 Common settings:
@@ -1376,14 +1376,14 @@ No model artifacts were written to the repository.
 The first metrics JSON dry run used the same prepared SpamAssassin JSONL files as the first baseline training run:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\easy_ham_full.jsonl
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\prepared\spam_full.jsonl
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl
+<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl
 ```
 
 Metrics were written outside the repository under:
 
 ```text
-C:\Users\nieto006\AppData\Local\Temp\opencode\phishshield-datasets\spamassassin\metrics
+<PHISHSHIELD_DATA_ROOT>\spamassassin\metrics
 ```
 
 Generated files:

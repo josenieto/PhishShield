@@ -94,6 +94,11 @@ them.
 The initial CLI contract is also covered by CI smoke tests for JSON output and
 threshold exit behavior. This closes the single-email CLI stabilization step.
 
+A reusable GitHub Actions workflow now supports the concrete artifact workflow:
+it downloads exactly one `.eml`, runs the deterministic CLI, uploads the JSON
+report, and enforces the configured risk threshold. The advisory model remains
+outside this workflow.
+
 The goal is to make the deterministic analysis flow usable from local scripts and
 CI/CD pipelines without creating a second analysis engine.
 

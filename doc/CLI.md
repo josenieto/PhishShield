@@ -51,3 +51,38 @@ CI:
 The deterministic result is triage evidence, not a malware verdict. The
 advisory model remains optional, disabled by default, and is not a default CI
 gate.
+
+## GitHub Actions Artifact Workflow
+
+The reusable workflow at
+`.github/workflows/deterministic-email-artifact.yml` analyzes an artifact
+containing exactly one `.eml` file and uploads the JSON report as
+`deterministic-email-analysis`.
+
+The calling workflow must upload the email artifact first, then invoke the
+reusable workflow:
+
+```yaml
+jobs:
+  upload-email:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/upload-artifact@v4
+        with:
+          name: email-under-analysis
+          path: artifacts/sample.eml
+
+  analyze-email:
+    needs: upload-email
+    uses: OWNER/REPOSITORY/.github/workflows/deterministic-email-artifact.yml@integration/master
+    with:
+      email-artifact: email-under-analysis
+      fail-on: high
+      report-retention-days: 7
+```
+
+The workflow accepts exit code `1` from the CLI as a completed analysis whose
+risk threshold was reached. It uploads the JSON report first and then fails the
+job intentionally. Input email contents and generated reports remain workflow
+artifacts and are not committed to Git. Set a short retention period and apply
+your organization's access controls when emails contain sensitive information.
