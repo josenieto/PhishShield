@@ -164,9 +164,9 @@ Preserve original input when it has forensic value. Normalize derived fields for
 - Use `phishshield-testing` for Red-Green-Refactor-Verify implementation workflow.
 - Use `phishshield-architecture` for layer checkpoints, port/adapter decisions, or ADR conflicts.
 - Use `phishshield-backend` when implementing use cases, ports, adapters, FastAPI, parsers, or backend integration details.
-- Use `skill-creator` to create, evaluate, or modify project skills.
+- Use a compatible skill-authoring workflow to create, evaluate, or modify project skills.
 
-If a recurring specialist area appears and no suitable skill exists, pause feature development and create or improve the skill with `skill-creator` instead of repeatedly relying on ad hoc guidance.
+If a recurring specialist area appears and no suitable skill exists, pause feature development and create or improve the skill using the documented project skill workflow instead of repeatedly relying on ad hoc guidance.
 
 ## Rejection criteria
 

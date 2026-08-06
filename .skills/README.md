@@ -4,26 +4,18 @@ This folder contains project-specific skills for **PhishShield**.
 
 Project skills are portable Markdown playbooks for humans and AI tools. Tool-specific integrations may load or wrap them, but the files in this repository remain the source of truth.
 
-The official Anthropic `skill-creator` skill is installed in this project through the `skills` CLI and is available at:
+The project skills are portable playbooks. A compatible skill-authoring tool may
+be used to create or improve them, but no external agent installation is
+required to run PhishShield or contribute to its product code.
 
-```text
-.agents/skills/skill-creator/
-```
-
-Official command used:
-
-```bash
-npx skills add anthropics/skills --skill skill-creator --yes
-```
-
-`skill-creator` is the responsible specialist for creating, improving, evaluating, and maintaining repository-specific skills.
+No specific vendor tool is required by this repository.
 
 ## Mandatory rule for creating skills
 
 Every new PhishShield skill must be created using the official skill as the model:
 
 ```text
-.agents/skills/skill-creator/
+an external skill-authoring tool or an equivalent documented workflow
 ```
 
 Minimum required workflow:
@@ -42,9 +34,11 @@ Do not create skills without following this process.
 
 When a recurring or specialized area of work appears, first check whether a suitable project skill already exists.
 
-If no suitable skill exists and the area is clear, recurring, and important enough to benefit from specialist guidance, pause feature development and create or improve the skill using `skill-creator`.
+If no suitable skill exists and the area is clear, recurring, and important enough to benefit from specialist guidance, pause feature development and create or improve the skill using the documented skill-authoring workflow.
 
-Use `skill-creator` when available. If a future tool does not support it directly, follow the same workflow manually and keep the resulting project skill in `.skills/`.
+Use a skill-authoring tool when available. If a tool does not support it
+directly, follow the same workflow manually and keep the resulting project
+skill in `.skills/`.
 
 Create a project skill only when the area is:
 
@@ -100,7 +94,8 @@ Each `SKILL.md` must include:
 
 ## Planned skills
 
-Initial folders are prepared, and skills are defined progressively with `skill-creator`.
+Initial folders are prepared, and skills are defined progressively with the
+documented project workflow.
 
 - `phishshield-architecture`
   Guides architectural changes, layer separation, port/adapter decisions, and alignment with `doc/ADR.md`.
