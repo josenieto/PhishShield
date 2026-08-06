@@ -118,3 +118,50 @@ jobs:
       - name: Stop backend container
         if: always()
         run: docker stop phishshield-backend-ci || true
+
+  compose-smoke:
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - frontend-test
+      - guardrails
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Start complete Compose stack
+        run: docker compose up --build -d
+
+      - name: Wait for frontend and backend proxy
+        run: |
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8080/api/health > health.json; then
+              cat health.json
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+
+      - name: Validate frontend response
+        run: curl --fail --silent http://127.0.0.1:8080 | grep -q '<div id="root">'
+
+      - name: Analyze benign fixture through Compose proxy
+        run: |
+          curl --fail --silent \
+            -F 'file=@tests/fixtures/emails/benign_account_summary.eml;type=message/rfc822' \
+            http://127.0.0.1:8080/api/analyze-email > benign-analysis.json
+          python -c "import json; data=json.load(open('benign-analysis.json', encoding='utf-8')); assert data['risk_score']['risk_level'] == 'LOW'"
+
+      - name: Analyze suspicious fixture through Compose proxy
+        run: |
+          curl --fail --silent \
+            -F 'file=@tests/fixtures/emails/suspicious_html_notice.eml;type=message/rfc822' \
+            http://127.0.0.1:8080/api/analyze-email > suspicious-analysis.json
+          python -c "import json; data=json.load(open('suspicious-analysis.json', encoding='utf-8')); assert data['risk_score']['risk_level'] == 'CRITICAL'"
+
+      - name: Stop complete Compose stack
+        if: always()
+        run: docker compose down --volumes
