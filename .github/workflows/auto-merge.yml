@@ -18,6 +18,11 @@ jobs:
       # Updated execution environment automatically resolves Node 24 warnings
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch integration branch reference
+        run: git fetch origin integration/master:refs/remotes/origin/integration/master
 
       # Native method that forces the PR creation even without local runner changes
       - name: Create and Merge Pull Request
