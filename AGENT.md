@@ -7,7 +7,7 @@ Its role is to provide a concise operational guide: what this software project i
 
 This document does **not** replace the official architectural design. The main source of truth is:
 
-- `doc/ADR.md`
+- `docs/ADR.md`
 
 If this file conflicts with the ADR, **the ADR takes precedence**.
 
@@ -56,8 +56,8 @@ The full target product analyzes, among other aspects:
 
 The current implemented scope is tracked in:
 
-- `doc/BACKEND_EVOLUTION_PLAN.md`
-- `doc/FRONTEND_MVP_PLAN.md`
+- `docs/BACKEND_EVOLUTION_PLAN.md`
+- `docs/FRONTEND_MVP_PLAN.md`
 
 ---
 
@@ -65,7 +65,7 @@ The current implemented scope is tracked in:
 
 Before modifying code, read:
 
-- `doc/ADR.md`
+- `docs/ADR.md`
 
 The project follows a **Hexagonal Architecture** inside a **modular monolith**.
 Design decisions and boundaries between layers must respect that architecture.
@@ -147,7 +147,7 @@ These groups are architectural targets, not a statement that every module is imp
 
 ### 1. Review the ADR before relevant changes
 
-If a change affects architecture, contracts, modules, or deployment, consult `doc/ADR.md` first.
+If a change affects architecture, contracts, modules, or deployment, consult `docs/ADR.md` first.
 
 ### 2. Respect layer separation
 
@@ -308,7 +308,7 @@ feat(frontend): Add Markdown analysis report export.
 
 The project maintains an engineering journey document at:
 
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 Agents should update this document for meaningful milestones, architectural decisions, strategy shifts, or phase closures.
 
@@ -368,9 +368,9 @@ Result:
 ...
 ```
 
-Do not use Markdown hard-break trailing spaces on the `Type`, `Layer`, or `Status` lines in `doc/ENGINEERING_JOURNEY.md`. The trailing-whitespace hook strips them and will abort the commit so the fixed file can be staged again.
+Do not use Markdown hard-break trailing spaces on the `Type`, `Layer`, or `Status` lines in `docs/ENGINEERING_JOURNEY.md`. The trailing-whitespace hook strips them and will abort the commit so the fixed file can be staged again.
 
-When a step changes architecture flow or layer progression, update the Mermaid diagrams in `doc/ENGINEERING_JOURNEY.md` if those diagrams exist and the change is still meaningful.
+When a step changes architecture flow or layer progression, update the Mermaid diagrams in `docs/ENGINEERING_JOURNEY.md` if those diagrams exist and the change is still meaningful.
 
 Do not over-document every small code edit. Prefer milestone-oriented entries over per-helper noise.
 
@@ -382,7 +382,7 @@ For small helpers inside the same function group, prefer concise grouped entries
 
 Minimum checklist:
 
-- read `doc/ADR.md`,
+- read `docs/ADR.md`,
 - read the current roadmap document for the active group when relevant,
 - identify the affected layer,
 - locate the impacted contract or module,
@@ -410,7 +410,7 @@ Every new project skill must follow the documented skill-authoring workflow:
 3. write `SKILL.md` with `name` and `description` frontmatter,
 4. keep the skill actionable, specific, and aligned with PhishShield,
 5. create initial evals when the skill is objectively testable,
-6. verify alignment with `AGENT.md` and `doc/ADR.md`,
+6. verify alignment with `AGENT.md` and `docs/ADR.md`,
 7. update `.skills/README.md`.
 
 Do not create skills without following this process.
@@ -435,7 +435,7 @@ documented project workflow.
 - `phishshield-testing`
   Unit and integration testing with Pytest and mocks.
 
-> Until a skill exists, use this file, `.skills/README.md`, and `doc/ADR.md` as the main references.
+> Until a skill exists, use this file, `.skills/README.md`, and `docs/ADR.md` as the main references.
 
 ---
 
@@ -443,6 +443,6 @@ documented project workflow.
 
 If a decision is unclear:
 
-1. follow `doc/ADR.md` first,
+1. follow `docs/ADR.md` first,
 2. preserve hexagonal architecture,
 3. prioritize security, privacy, and maintainability.

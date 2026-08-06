@@ -476,8 +476,8 @@ Completed scope:
 
 This phase is now documented in:
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
 
 ### Phase 2: Application Contract
 
@@ -568,7 +568,7 @@ Scope:
 
 This phase is documented in:
 
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
 
 ### Phase 8: Experimental Embedded Local Adapter
 
@@ -696,7 +696,7 @@ The deterministic endpoint was also checked with model environment variables ena
 Completed validation and presentation work:
 
 - automated app-factory integration coverage uses a temporary artifact;
-- local developer setup is documented in `doc/API.md` and `README.md`;
+- local developer setup is documented in `docs/API.md` and `README.md`;
 - frontend copy and states explicitly identify the model branch as experimental and advisory.
 
 Remaining validation before product-facing inference:

@@ -1,6 +1,6 @@
 ---
 name: phishshield-architecture
-description: Specialized guidance for architectural decisions in PhishShield. Use this skill whenever the user asks to define, modify, or review repository structure, hexagonal architecture, Clean Architecture, Domain/Application/Infrastructure layers, ports, adapters, entrypoints, module boundaries, dependencies, external technology integration, Docker Compose from an architectural perspective, ADRs, domain group checkpoints, or any decision that may affect maintainability. Also use it after completing a pure Domain function group and before moving upward to Application, Infrastructure, or entrypoints. Use it for backend, frontend, security, AI, or DevOps tasks when the main question is where code belongs, how to avoid coupling, whether a port/adapter is required, or whether a proposal contradicts doc/ADR.md.
+description: Specialized guidance for architectural decisions in PhishShield. Use this skill whenever the user asks to define, modify, or review repository structure, hexagonal architecture, Clean Architecture, Domain/Application/Infrastructure layers, ports, adapters, entrypoints, module boundaries, dependencies, external technology integration, Docker Compose from an architectural perspective, ADRs, domain group checkpoints, or any decision that may affect maintainability. Also use it after completing a pure Domain function group and before moving upward to Application, Infrastructure, or entrypoints. Use it for backend, frontend, security, AI, or DevOps tasks when the main question is where code belongs, how to avoid coupling, whether a port/adapter is required, or whether a proposal contradicts docs/ADR.md.
 ---
 
 # phishshield-architecture
@@ -18,17 +18,17 @@ This skill operates above a concrete backend, frontend, or DevOps task. Its role
 Before making or reviewing architectural decisions, read:
 
 - `AGENT.md`
-- `doc/ADR.md`
+- `docs/ADR.md`
 - `.skills/README.md`
 
-If this skill conflicts with `doc/ADR.md`, the ADR takes precedence.
+If this skill conflicts with `docs/ADR.md`, the ADR takes precedence.
 
 ## Working process
 
 When this skill triggers:
 
 1. Identify the real architectural decision behind the request.
-2. Consult `doc/ADR.md` if the task affects layers, modules, deployment, or integrations.
+2. Consult `docs/ADR.md` if the task affects layers, modules, deployment, or integrations.
 3. Classify the affected elements as `Domain`, `Application`, `Infrastructure`, or `Entrypoints`.
 4. Detect dangerous dependencies or coupling to frameworks/libraries.
 5. Propose the correct boundary using ports and adapters when IO, external tools, or future replacement are involved.
@@ -410,11 +410,11 @@ Reject or redesign a proposal if it:
 - mixes forensic analysis, HTTP transport, and presentation in the same component;
 - turns Docker Compose or scripts into the place for business rules;
 - introduces real network access in tests for pure rules;
-- explicitly contradicts `doc/ADR.md`.
+- explicitly contradicts `docs/ADR.md`.
 
 ## Checklist before approving an architectural decision
 
-- [ ] The decision respects `doc/ADR.md`.
+- [ ] The decision respects `docs/ADR.md`.
 - [ ] Dependencies point toward the domain, not away from it.
 - [ ] Domain does not depend on frameworks or SDKs.
 - [ ] Application defines ports when crossing technical boundaries.

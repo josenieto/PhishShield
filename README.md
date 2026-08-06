@@ -33,6 +33,26 @@ The current release candidate includes:
 The optional advisory model is experimental, disabled by default, and never
 changes deterministic findings or `risk_score`.
 
+## Analyst Workbench
+
+The primary workflow is visual and evidence-driven:
+
+![PhishShield overview](docs/images/overview.png)
+
+Inspect suspicious messages before acting on them. Review sender identity,
+authentication, URLs, attachments, findings, and deterministic risk in one
+workspace.
+
+### Explainable Suspicious Analysis
+
+![Critical findings and risk](docs/images/suspicious-analysis_1.png)
+
+![Extracted evidence and findings](docs/images/suspicious-analysis_2.png)
+
+### Export Evidence
+
+![Report export actions](docs/images/export-actions.png)
+
 ## Quick Start
 
 The target MVP deployment is a single command:
@@ -47,9 +67,9 @@ Then open:
 http://localhost:8080
 ```
 
-The complete frontend-plus-backend Compose deployment is part of the RC.2
-release work. For the current development setup and native commands, see
-[`doc/index.md`](doc/index.md).
+The complete frontend-plus-backend Compose deployment is validated in CI and is
+the RC.2 product path. For the current development setup and native commands, see
+[`docs/index.md`](docs/index.md).
 
 ## CLI
 
@@ -108,23 +128,23 @@ and optional model tooling.
 Start with the documentation map:
 
 ```text
-doc/index.md
+docs/index.md
 ```
 
 Useful entry points:
 
-- [Documentation index](doc/index.md)
-- [CLI guide](doc/CLI.md)
-- [API contract](doc/API.md)
-- [Deployment guide](doc/DEPLOYMENT.md)
-- [Release plan](doc/RC2_RELEASE_PLAN.md)
-- [Public roadmap](doc/ROADMAP.md)
-- [Post-MVP roadmap](doc/POST_MVP_ROADMAP.md)
+- [Documentation index](docs/index.md)
+- [CLI guide](docs/CLI.md)
+- [API contract](docs/API.md)
+- [Deployment guide](docs/DEPLOYMENT.md)
+- [Release plan](docs/RC2_RELEASE_PLAN.md)
+- [Public roadmap](docs/ROADMAP.md)
+- [Post-MVP roadmap](docs/POST_MVP_ROADMAP.md)
 
 Release hygiene documents, including the MIT license, contribution guide,
 security policy, and deployment guide, are part of the RC.2 completion work.
 
-Technical and research documentation remains under [`doc/`](doc/), including
+Technical and research documentation remains under [`docs/`](docs/), including
 the ADR, scoring calibration, parser plans, and experimental advisory inference
 records.
 

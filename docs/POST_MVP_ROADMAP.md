@@ -170,7 +170,7 @@ Candidate steps:
 - add new fixtures only when tied to a concrete calibration question;
 - keep subtle suspicious cases visible without making them automatically critical;
 - review whether support-, billing-, or QR-themed wording needs narrower or broader terms only when fixtures justify it;
-- keep `doc/SCORING_CALIBRATION.md` as the source of truth before changing weights.
+- keep `docs/SCORING_CALIBRATION.md` as the source of truth before changing weights.
 
 ### Track 5: Dev And CI Guardrail Maturation
 

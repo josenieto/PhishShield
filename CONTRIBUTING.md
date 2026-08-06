@@ -6,10 +6,10 @@ deterministic core.
 
 ## Before Starting
 
-- Read [`doc/index.md`](doc/index.md) for project navigation.
-- Read [`doc/ADR.md`](doc/ADR.md) before architecture or contract changes.
-- Check [`doc/POST_MVP_ROADMAP.md`](doc/POST_MVP_ROADMAP.md) and
-  [`doc/ROADMAP.md`](doc/ROADMAP.md) for current direction.
+- Read [`docs/index.md`](docs/index.md) for project navigation.
+- Read [`docs/ADR.md`](docs/ADR.md) before architecture or contract changes.
+- Check [`docs/POST_MVP_ROADMAP.md`](docs/POST_MVP_ROADMAP.md) and
+  [`docs/ROADMAP.md`](docs/ROADMAP.md) for current direction.
 - Open a GitHub Discussion for broad ideas and use cases before proposing a
   large implementation.
 
@@ -73,7 +73,7 @@ Domain <- Application <- Infrastructure / Entrypoints
 ## Fixtures And Scoring
 
 - Add a realistic fixture for behavior changes.
-- Update `doc/SCORING_CALIBRATION.md` for scoring-sensitive changes.
+- Update `docs/SCORING_CALIBRATION.md` for scoring-sensitive changes.
 - Do not change weights or critical indicators without evidence.
 - Keep tests and fixture content in English unless multilingual behavior is under test.
 

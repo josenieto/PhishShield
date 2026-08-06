@@ -6,9 +6,9 @@ This document defines the first training and evaluation strategy for a future Ph
 
 It builds on:
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
 
 This document also records the first baseline training command once it is introduced. It still does not introduce model artifacts, runtime dependencies, or inference adapters.
 
