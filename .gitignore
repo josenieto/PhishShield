@@ -171,6 +171,9 @@ project knowledge graph-out/*
 !project knowledge graph-out/graph.json
 !project knowledge graph-out/GRAPH_REPORT.md
 
+# Optional local AI tooling.
+.agents/
+
 # Spyder project settings
 .spyderproject
 .spyproject
