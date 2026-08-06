@@ -131,7 +131,6 @@ The optional advisory model branch remains available as experimental tooling:
 - user accounts and multi-user operation;
 - cloud dependency in the main analysis path;
 - hosted production platform;
-- frontend Docker packaging before the full Compose phase begins.
 
 Deferred items remain possible future work. They are not promises or RC.2
 acceptance criteria.
