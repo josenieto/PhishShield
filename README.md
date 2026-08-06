@@ -1,253 +1,138 @@
 # PhishShield
 
-Local, self-hosted phishing email analysis toolkit.
+**Local, explainable phishing-email triage for `.eml` files.**
 
-## Current MVP
-
-The current MVP provides a local `.eml` analysis flow with:
-
-- FastAPI backend analysis for uploaded email messages;
-- React + TypeScript + Vite frontend upload and result inspection flow;
-- extracted evidence rendering for sender, subject, URLs, attachment names, and authentication results;
-- grouped findings with backend-provided severity and explanation text;
-- frontend-side Markdown report download for the current analysis result;
-- backend Docker runtime and Compose wiring;
-- Docker Compose runtime validated with health, benign/suspicious analysis, and upload-limit smoke checks in a Docker-enabled environment;
-- CI coverage for backend tests, frontend tests/build, and backend Docker smoke;
-- coverage reporting in observability mode for backend and frontend.
-
-This state now serves as the MVP v0.1 release-candidate baseline for local email triage.
-
-Current non-blocking follow-up areas after the MVP v0.1 baseline are:
-
-- parser and runtime polish;
-- richer HTML extraction behavior;
-- report/export improvements beyond the current Markdown download;
-- future v0.2 roadmap planning.
-
-## Development
-
-### Install
-
-```bash
-python -m pip install -e ".[test]"
-```
-
-To install local development guardrails as well:
-
-```bash
-python -m pip install -e ".[test,dev]"
-python -m pre_commit install
-python -m pre_commit install --hook-type commit-msg
-```
-
-To install optional ML training dependencies for local experiments:
-
-```bash
-python -m pip install -e ".[test,dev,ml]"
-```
-
-The hook configuration is versioned in the repository, but each clone must install the hooks locally.
-Skipping them with `git commit --no-verify` is still possible, so CI remains the shared enforcement layer for the repository.
-
-Current local hooks cover:
-
-- basic repository hygiene checks;
-- `Domain` and `Application` import boundary checks;
-- commit-message format validation;
-- scoring-sensitive change checks that inspect staged files and require both test evidence and `doc/SCORING_CALIBRATION.md` updates.
-
-Run all configured hooks manually with:
-
-```bash
-python -m pre_commit run --all-files
-```
-
-### Run Tests
-
-```bash
-python -m pytest
-```
-
-### Run Backend Coverage
-
-Coverage is currently observational only. No CI gate or minimum threshold is enforced yet.
-
-```bash
-python -m pytest --cov=src --cov-report=term-missing
-```
-
-### Run Frontend Tests
-
-```bash
-cd frontend
-npm run test
-npm run build
-```
-
-### Run Frontend Coverage
-
-Coverage is currently observational only. No CI gate or minimum threshold is enforced yet.
-
-```bash
-cd frontend
-npm run test:coverage
-```
-
-### Run API
-
-```bash
-python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
-```
-
-### Run Frontend
-
-The frontend lives in `frontend/` and uses Vite's development proxy to call the backend through `/api`.
-
-Start the backend first:
-
-```bash
-python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
-```
-
-Then start the frontend:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The frontend development server proxies:
+PhishShield helps IT and security analysts inspect a suspicious email before
+deciding whether to escalate it, report it, or investigate further. It extracts
+email evidence locally and presents deterministic findings, severity, and risk
+in an analyst-focused workspace.
 
 ```text
-/api -> http://127.0.0.1:8000
+Upload .eml
+    -> inspect sender, URLs, attachments, and authentication
+    -> review explainable findings and deterministic risk
+    -> export evidence or automate the same analysis
 ```
 
-Open the URL printed by Vite, usually:
+## MVP Status
 
-```text
-http://127.0.0.1:5173
-```
+The current release candidate includes:
 
-On Windows PowerShell environments that block `npm.ps1`, use:
+- local deterministic `.eml` analysis;
+- MIME, plain-text, and HTML email extraction;
+- sender, domain, URL, attachment, authentication, and social-engineering analysis;
+- explainable findings with category, severity, and evidence;
+- deterministic risk scoring;
+- analyst Web UI;
+- FastAPI API;
+- Markdown, JSON, and HTML report exports;
+- single-email deterministic CLI;
+- GitHub Actions artifact analysis workflow;
+- local Docker Compose deployment under preparation for `v0.1.0-rc.2`.
 
-```powershell
-cmd /c npm install
-cmd /c npm run dev
-```
+The optional advisory model is experimental, disabled by default, and never
+changes deterministic findings or `risk_score`.
 
-### Run With Docker
+## Quick Start
 
-Build and run the backend with Docker Compose:
+The target MVP deployment is a single command:
 
 ```bash
 docker compose up --build
 ```
 
-The Compose file forwards:
+Then open:
 
-- `8000:8000`
-- `PHISHSHIELD_MAX_UPLOAD_BYTES` from the shell or Compose environment
-
-Validated Docker runtime smoke checks currently include:
-
-- `GET /health` returning `{"status":"ok"}`;
-- `POST /analyze-email` with a suspicious fixture returning a `CRITICAL` posture;
-- `POST /analyze-email` with a benign fixture returning a `LOW` posture;
-- upload-limit validation returning `413` with `{"detail":"Uploaded email exceeds maximum allowed size."}` when `PHISHSHIELD_MAX_UPLOAD_BYTES` is set below the fixture size.
-
-Health check example:
-
-```bash
-curl http://127.0.0.1:8000/health
+```text
+http://localhost:8080
 ```
 
-Analyze email example:
+The complete frontend-plus-backend Compose deployment is part of the RC.2
+release work. For the current development setup and native commands, see
+[`doc/index.md`](doc/index.md).
+
+## CLI
+
+Analyze one email without starting the Web UI:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/analyze-email -F "file=@tests/fixtures/emails/suspicious_html_notice.eml;type=message/rfc822"
-```
-
-### Runtime Configuration
-
-The API reads runtime settings from environment variables when the app is created.
-
-`.env.example` documents the currently supported runtime variables. Export them in your shell or provide them through your runtime environment.
-
-Available variables:
-
-| Variable | Default | Description |
-|---|---:|---|
-| `PHISHSHIELD_MAX_UPLOAD_BYTES` | `1_000_000` | Maximum accepted `.eml` upload size in bytes. Must be a positive integer. |
-| `PHISHSHIELD_MODEL_ASSESSMENT_ENABLED` | `false` | Enables the experimental local model-assessment adapter when set to `true`. |
-| `PHISHSHIELD_MODEL_ARTIFACT_PATH` | empty | Path to an experimental local `joblib` model artifact. |
-| `PHISHSHIELD_MODEL_METADATA_PATH` | empty | Path to the matching experimental model metadata JSON file. |
-
-Model assessment is disabled by default and remains advisory. It is exposed through
-`POST /analyze-email-model-assessment` and never changes deterministic findings or
-the risk score returned by `POST /analyze-email`. Model artifacts and generated
-datasets are expected to remain outside Git.
-
-The experimental advisory branch uses a deterministic scope gate before the
-binary model. `out_of_scope` and `low_binary_confidence` are exposed as
-structured abstention reasons while the public advisory label remains
-`inconclusive`. See `doc/EXPERIMENTAL_ADVISORY_INFERENCE.md` for the closure
-status and future family-specific training path.
-
-POSIX example:
-
-```bash
-PHISHSHIELD_MAX_UPLOAD_BYTES=2000000 python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
-```
-
-PowerShell example:
-
-```powershell
-$env:PHISHSHIELD_MAX_UPLOAD_BYTES = "2000000"
-python -m uvicorn infrastructure.entrypoints.api.app:create_app --factory --reload
-```
-
-### Documentation
-
-- API contract: `doc/API.md`
-- Backend roadmap: `doc/BACKEND_EVOLUTION_PLAN.md`
-- Frontend MVP plan: `doc/FRONTEND_MVP_PLAN.md`
-- Scoring calibration baseline: `doc/SCORING_CALIBRATION.md`
-- Post-MVP roadmap: `doc/POST_MVP_ROADMAP.md`
-- Model-assisted analysis plan: `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- ML dataset research: `doc/ML_DATASET_RESEARCH.md`
-- ML data preparation plan: `doc/ML_DATA_PREPARATION_PLAN.md`
-- ML training and evaluation strategy: `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- Changelog: `CHANGELOG.md`
-
-The current recommended next group after completing the initial `Report And Export v2` block is `Frontend Analyst Polish`, with parser/runtime polish as a parallel follow-up area documented in `doc/POST_MVP_ROADMAP.md`.
-
-### Health Check
-
-```bash
-curl http://127.0.0.1:8000/health
-```
-
-### Analyze Email
-
-```bash
-curl -X POST http://127.0.0.1:8000/analyze-email -F "file=@sample.eml;type=message/rfc822"
-```
-
-See `doc/API.md` for the full request and response contract, error behavior, and current integration-test coverage examples.
-
-### Deterministic CLI
-
-Analyze one email without starting the API:
-
-```bash
-phishshield analyze tests/fixtures/emails/suspicious_html_notice.eml
+phishshield analyze sample.eml
 phishshield analyze sample.eml --format json
 phishshield analyze sample.eml --fail-on high
 ```
 
-The CLI reuses the deterministic application flow. It does not enable or invoke
-the optional advisory model. Exit codes are `0` for a completed analysis below
-the threshold, `1` when `--fail-on` is reached, `2` for usage errors, `3` for
-missing/unreadable files, and `4` for analysis failures.
+The CLI reuses the deterministic application flow and does not invoke the
+optional advisory model. Exit codes are stable:
+
+```text
+0  analysis completed and threshold not reached
+1  analysis completed and --fail-on threshold reached
+2  usage or argument error
+3  file missing or unreadable
+4  email invalid, oversized, or analysis failed
+```
+
+## Architecture
+
+```mermaid
+flowchart LR
+    UI[Web UI] --> API[FastAPI API]
+    CLI[Deterministic CLI] --> APP[Application use case]
+    API --> APP
+    APP --> DOMAIN[Pure deterministic analysis]
+    APP --> ADAPTERS[Infrastructure adapters]
+    ADAPTERS --> EMAIL[.eml parser]
+    DOMAIN --> RESULT[Findings, evidence, and risk score]
+```
+
+PhishShield follows a hexagonal architecture:
+
+```text
+Domain <- Application <- Infrastructure / Entrypoints
+```
+
+The analysis rules remain independent from FastAPI, Docker, the email parser,
+and optional model tooling.
+
+## Privacy And Limits
+
+- The main analysis flow is local-first.
+- The application does not resolve links, execute attachments, or render pages.
+- Do not upload confidential, personal, or production email to an untrusted deployment.
+- Deterministic triage is evidence, not a malware verdict.
+- The advisory model is not a universal phishing classifier and is not a CI gate.
+- PhishShield does not replace organizational email security controls or incident response.
+
+## Documentation
+
+Start with the documentation map:
+
+```text
+doc/index.md
+```
+
+Useful entry points:
+
+- [Documentation index](doc/index.md)
+- [CLI guide](doc/CLI.md)
+- [API contract](doc/API.md)
+- [Release plan](doc/RC2_RELEASE_PLAN.md)
+- [Post-MVP roadmap](doc/POST_MVP_ROADMAP.md)
+
+Release hygiene documents, including the MIT license, contribution guide,
+security policy, and deployment guide, are part of the RC.2 completion work.
+
+Technical and research documentation remains under [`doc/`](doc/), including
+the ADR, scoring calibration, parser plans, and experimental advisory inference
+records.
+
+## Community
+
+Community suggestions and use cases are welcome through GitHub Discussions.
+Maintainers retain final ownership of prioritization, scope, and delivery.
+Roadmap items are directions, not delivery commitments.
+
+## License
+
+PhishShield is intended to be released under the MIT License as part of the
+`v0.1.0-rc.2` release preparation.
