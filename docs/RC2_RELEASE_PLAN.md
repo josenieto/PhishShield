@@ -164,7 +164,7 @@ The repository can be cloned and used without local AI tooling.
 Create the parent documentation page:
 
 ```text
-doc/index.md
+docs/index.md
 ```
 
 The index should guide a new visitor by purpose rather than by implementation
@@ -212,7 +212,7 @@ Update `README.md` into a visual product landing page:
 - CLI, API and CI as complementary integrations;
 - deterministic findings and exports;
 - privacy and safety limits;
-- prominent link to `doc/index.md`.
+- prominent link to `docs/index.md`.
 
 Do not include TFM-specific language in public product documentation.
 
@@ -224,7 +224,7 @@ Add:
 LICENSE
 CONTRIBUTING.md
 SECURITY.md
-doc/ROADMAP.md
+docs/ROADMAP.md
 ```
 
 `LICENSE`:
@@ -251,7 +251,7 @@ Copyright (c) 2026 PhishShield contributors
   confidential data publicly;
 - product scope and security limitations.
 
-`doc/ROADMAP.md` should be short and public-facing:
+`docs/ROADMAP.md` should be short and public-facing:
 
 ```text
 Available now
@@ -320,9 +320,9 @@ Requirements:
 - runtime configuration documented through `.env.example`;
 - upload size limit remains configurable;
 - privacy warning is visible in documentation and UI;
-- create `doc/DEPLOYMENT.md`.
+- create `docs/DEPLOYMENT.md`.
 
-`doc/DEPLOYMENT.md` should document:
+`docs/DEPLOYMENT.md` should document:
 
 - prerequisites: Docker and Compose;
 - one-command startup;
@@ -436,10 +436,10 @@ Update:
 ```text
 CHANGELOG.md
 README.md
-doc/DEPLOYMENT.md
-doc/ROADMAP.md
-doc/POST_MVP_ROADMAP.md
-doc/ENGINEERING_JOURNEY.md
+docs/DEPLOYMENT.md
+docs/ROADMAP.md
+docs/POST_MVP_ROADMAP.md
+docs/ENGINEERING_JOURNEY.md
 ```
 
 RC.2 should describe:

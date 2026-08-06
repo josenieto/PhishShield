@@ -53,7 +53,7 @@ def main() -> int:
         return 0
 
     has_test_change = any(file_path.startswith("tests/") for file_path in changed_paths)
-    has_calibration_doc_change = "doc/SCORING_CALIBRATION.md" in changed_paths
+    has_calibration_doc_change = "docs/SCORING_CALIBRATION.md" in changed_paths
 
     if has_test_change and has_calibration_doc_change:
         return 0
@@ -67,7 +67,7 @@ def main() -> int:
         print("Missing required evidence update under tests/.")
 
     if not has_calibration_doc_change:
-        print("Missing required update to doc/SCORING_CALIBRATION.md.")
+        print("Missing required update to docs/SCORING_CALIBRATION.md.")
 
     return 1
 

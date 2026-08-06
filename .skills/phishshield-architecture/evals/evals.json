@@ -7,7 +7,7 @@
       "expected_output": "The answer should propose a hexagonal modular monolith structure with Domain, Application, Infrastructure, and Entrypoints; it should justify dependency direction and avoid a flat app.py/services.py organization.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
@@ -24,7 +24,7 @@
       "expected_output": "The answer should place stable concepts in Domain, an OCR port in Application, and a Tesseract adapter in Infrastructure; it should mention tests with mocks/fixtures and keep Tesseract out of the domain.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
@@ -41,7 +41,7 @@
       "expected_output": "The answer should identify improper coupling, explain that FastAPI should be a thin entrypoint, propose UseCase -> SandboxBrowserPort -> PlaywrightSandboxAdapter, and mention isolation/timeouts.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
@@ -58,7 +58,7 @@
       "expected_output": "The answer should define AI as a port in Application, Ollama as an adapter in Infrastructure, respect USE_AI_ANALYSIS, allow AI to be skipped cleanly, and state that Domain does not know models or prompts.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
@@ -75,7 +75,7 @@
       "expected_output": "The answer should distinguish pure logic from technical dependencies: deterministic rules and models in Domain, possible external libraries or IO in Infrastructure behind ports, and orchestration in Application if part of a use case.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
@@ -92,7 +92,7 @@
       "expected_output": "The answer should reject or redesign the proposal because it scatters business rules outside the backend/domain; it should keep risk logic in backend Domain/Application and leave the frontend as presentation.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
@@ -109,8 +109,8 @@
       "expected_output": "The answer should run an architectural checkpoint, confirm that the helpers form a cohesive URL indicator group, recommend an Application use case only if it composes meaningful behavior, and avoid Infrastructure or ports unless IO or external boundaries are crossed.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [
@@ -127,7 +127,7 @@
       "expected_output": "The answer should reject putting email-body URL extraction in Domain. It should explain that extracting URLs from external email content is adapter/extraction responsibility, while Domain URL services analyze already extracted URLs. It should recommend keeping URL extraction in Infrastructure or behind an Application extraction port, and preserve Domain purity.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
       "assertions": [

@@ -16,10 +16,10 @@ PhishShield is a defensive local/self-hosted tool for forensic analysis of `.eml
 Before making relevant backend changes, read:
 
 - `AGENT.md`
-- `doc/ADR.md`
+- `docs/ADR.md`
 - `.skills/README.md`
 
-If this skill conflicts with `doc/ADR.md`, the ADR takes precedence.
+If this skill conflicts with `docs/ADR.md`, the ADR takes precedence.
 
 ## Working process
 
@@ -274,7 +274,7 @@ Reject or redesign a backend solution if it:
 
 ## Checklist before finishing a backend task
 
-- [ ] I read `doc/ADR.md` if the task affects architecture or main modules.
+- [ ] I read `docs/ADR.md` if the task affects architecture or main modules.
 - [ ] Domain does not import infrastructure.
 - [ ] Use cases depend on ports, not concrete adapters.
 - [ ] FastAPI acts only as an entrypoint.

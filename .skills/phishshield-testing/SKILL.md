@@ -47,8 +47,8 @@ Use classic TDD patterns when appropriate:
 Before designing relevant tests, read:
 
 - `AGENT.md`
-- `doc/ADR.md`
-- `doc/DOMAIN_PURE_FUNCTIONS_PLAN.md`
+- `docs/ADR.md`
+- `docs/DOMAIN_PURE_FUNCTIONS_PLAN.md`
 - `.skills/README.md`
 
 If the task affects architecture or layer boundaries, use `phishshield-architecture` first.
@@ -458,7 +458,7 @@ tests/unit/domain/services/url_analysis/test_shortener_domains.py
 
 ## Documentation scope
 
-Do not document every small test edit. Update `doc/ENGINEERING_JOURNEY.md` when the test work represents a meaningful engineering step, such as a new function group, a completed group checkpoint, a new use case, a testing strategy change, or an important rejection decision.
+Do not document every small test edit. Update `docs/ENGINEERING_JOURNEY.md` when the test work represents a meaningful engineering step, such as a new function group, a completed group checkpoint, a new use case, a testing strategy change, or an important rejection decision.
 
 For multiple small helpers inside the same function group, prefer concise grouped documentation unless a helper introduces a notable architectural or testing decision.
 
