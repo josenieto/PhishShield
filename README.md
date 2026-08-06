@@ -116,6 +116,7 @@ Useful entry points:
 - [Documentation index](doc/index.md)
 - [CLI guide](doc/CLI.md)
 - [API contract](doc/API.md)
+- [Deployment guide](doc/DEPLOYMENT.md)
 - [Release plan](doc/RC2_RELEASE_PLAN.md)
 - [Public roadmap](doc/ROADMAP.md)
 - [Post-MVP roadmap](doc/POST_MVP_ROADMAP.md)
