@@ -352,8 +352,8 @@ docker compose up --build
   -> advisory model remains disabled
 ```
 
-The full Compose smoke test may be added to CI only if runtime and stability are
-reasonable. The existing backend Docker smoke remains part of CI regardless.
+The complete Compose smoke test is now part of CI alongside the existing backend
+Docker smoke.
 
 ### Phase 6: Community Readiness
 

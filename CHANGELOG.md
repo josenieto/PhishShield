@@ -10,6 +10,7 @@ All notable changes to PhishShield are recorded here.
 
 - MIT license, contribution guidance, security policy, and public roadmap.
 - Documentation index for users, operators, integrators, contributors, and researchers.
+- Complete Docker Compose smoke validation through the production frontend proxy.
 - Local `pre-commit` guardrails for hygiene, commit-message validation, Domain/Application boundary checks, and scoring-sensitive change protection.
 - HTML anchor `href` extraction and additional HTML `href` variant coverage in the Python email parser adapter.
 - Markdown report copy action, Markdown report preview, JSON export, and HTML export in the frontend analyst workbench.
