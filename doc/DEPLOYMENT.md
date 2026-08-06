@@ -95,6 +95,13 @@ limiting, or multi-user access control.
   before any shared deployment.
 - The application processes uploaded messages without a persistence database.
 
+## CI Validation
+
+Repository CI validates the complete Compose path as well as the backend image
+alone. The Compose smoke test checks frontend availability, backend health via
+`/api/health`, and benign and suspicious analysis through the Nginx proxy. It
+does not enable the advisory model or use production email data.
+
 ## Native Development
 
 The Compose deployment is the simplest product path. Native development remains
