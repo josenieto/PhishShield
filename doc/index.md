@@ -31,7 +31,7 @@ The complete one-command Docker Compose deployment is being prepared for
 
 ### Operator
 
-- Deployment guide: local Compose deployment and runtime operations will be added during RC.2 packaging.
+- [Deployment guide](DEPLOYMENT.md): local Compose deployment and runtime operations.
 - [Runtime configuration](API.md#configuration): upload limits and optional advisory settings.
 - [Security policy](../SECURITY.md): responsible disclosure and safe use.
 
