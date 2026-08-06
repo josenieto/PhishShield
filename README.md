@@ -117,6 +117,7 @@ Useful entry points:
 - [CLI guide](doc/CLI.md)
 - [API contract](doc/API.md)
 - [Release plan](doc/RC2_RELEASE_PLAN.md)
+- [Public roadmap](doc/ROADMAP.md)
 - [Post-MVP roadmap](doc/POST_MVP_ROADMAP.md)
 
 Release hygiene documents, including the MIT license, contribution guide,
