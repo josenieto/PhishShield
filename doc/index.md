@@ -33,7 +33,7 @@ The complete one-command Docker Compose deployment is being prepared for
 
 - Deployment guide: local Compose deployment and runtime operations will be added during RC.2 packaging.
 - [Runtime configuration](API.md#configuration): upload limits and optional advisory settings.
-- Security policy: responsible disclosure and safe use will be added during RC.2 release hygiene.
+- [Security policy](../SECURITY.md): responsible disclosure and safe use.
 
 ### Integrator
 
@@ -43,7 +43,7 @@ The complete one-command Docker Compose deployment is being prepared for
 
 ### Contributor
 
-- Contributing guide: development setup, tests, and contribution rules will be added during RC.2 release hygiene.
+- [Contributing guide](../CONTRIBUTING.md): development setup, tests, and contribution rules.
 - [Architectural Decision Record](ADR.md): architectural source of truth.
 - [Backend evolution plan](BACKEND_EVOLUTION_PLAN.md): backend boundaries and current direction.
 - [Frontend MVP plan](FRONTEND_MVP_PLAN.md): analyst workbench scope.
@@ -51,7 +51,7 @@ The complete one-command Docker Compose deployment is being prepared for
 
 ## Understand The Product
 
-- Public roadmap: current capabilities and planned directions will be added during RC.2 release hygiene.
+- [Public roadmap](ROADMAP.md): current capabilities and planned directions.
 - [Post-MVP roadmap](POST_MVP_ROADMAP.md): detailed implementation tracks.
 - [Scoring calibration](SCORING_CALIBRATION.md): deterministic risk-scoring evidence and change rules.
 - [API contract](API.md): request, response, and error behavior.
