@@ -257,7 +257,7 @@ No Application use case was created yet because there is no higher-level workflo
 
 - `tests/unit/domain/services/text_normalization/test_unicode_normalization.py`
 - `src/domain/services/text_normalization/unicode_text.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -328,7 +328,7 @@ No Application use case was created yet because the suspicious Unicode domain gr
 
 - `tests/unit/domain/services/homoglyphs/test_script_detection.py`
 - `src/domain/services/homoglyphs/scripts.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -405,7 +405,7 @@ No Application use case was created yet because the suspicious Unicode domain gr
 
 - `tests/unit/domain/services/homoglyphs/test_script_detection.py`
 - `src/domain/services/homoglyphs/scripts.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -482,7 +482,7 @@ No Application use case was created yet because the suspicious Unicode domain gr
 
 - `tests/unit/domain/services/homoglyphs/test_confusable_characters.py`
 - `src/domain/services/homoglyphs/confusables.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -561,7 +561,7 @@ No Application use case was created yet; the next step is an architectural check
 
 - `tests/unit/domain/services/homoglyphs/test_confusable_characters.py`
 - `src/domain/services/homoglyphs/confusables.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -632,7 +632,7 @@ No Application use case was created yet because the `Domain analysis` group is j
 
 - `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
 - `src/domain/services/domain_analysis/domains.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -709,7 +709,7 @@ No Application use case was created yet because the `Domain analysis` group is s
 
 - `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
 - `src/domain/services/domain_analysis/domains.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -786,7 +786,7 @@ No Application use case was created yet because the `Domain analysis` group is s
 
 - `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
 - `src/domain/services/domain_analysis/domains.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -863,7 +863,7 @@ No Application use case was created yet because the `Domain analysis` group stil
 
 - `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
 - `src/domain/services/domain_analysis/domains.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -940,7 +940,7 @@ No Application use case was created yet because the `Domain analysis` group stil
 
 - `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
 - `src/domain/services/domain_analysis/domains.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1017,7 +1017,7 @@ No Application use case was created yet; the next step is an architectural check
 
 - `tests/unit/domain/services/domain_analysis/test_domain_labels.py`
 - `src/domain/services/domain_analysis/domains.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1098,7 +1098,7 @@ No ports or adapters were created because this use case does not cross an infras
 
 - `tests/unit/application/test_analyze_domain_indicators.py`
 - `src/application/use_cases/analyze_domain_indicators.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1175,7 +1175,7 @@ No ports, adapters, or Application use cases were created because this step does
 
 - `tests/unit/domain/services/url_analysis/test_url_schemes.py`
 - `src/domain/services/url_analysis/schemes.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1245,7 +1245,7 @@ No ports, adapters, or Application use cases were created because this step rema
 
 - `tests/unit/domain/services/url_analysis/test_embedded_credentials.py`
 - `src/domain/services/url_analysis/credentials.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1315,7 +1315,7 @@ No ports, adapters, or Application use cases were created because this step perf
 
 - `tests/unit/domain/services/url_analysis/test_query_density.py`
 - `src/domain/services/url_analysis/query.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1385,7 +1385,7 @@ No ports, adapters, or Application use cases were created because this step rema
 
 - `tests/unit/domain/services/url_analysis/test_shortener_domains.py`
 - `src/domain/services/url_analysis/shorteners.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1465,7 +1465,7 @@ No ports or adapters were created because this use case does not cross an infras
 
 - `tests/unit/application/test_analyze_url_indicators.py`
 - `src/application/use_cases/analyze_url_indicators.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1548,7 +1548,7 @@ No ports, adapters, or Application use cases were created because this step rema
 
 - `tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py`
 - `src/domain/services/attachment_analysis/attachments.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1621,7 +1621,7 @@ No ports, adapters, or Application use cases were created because this step rema
 
 - `tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py`
 - `src/domain/services/attachment_analysis/attachments.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1706,7 +1706,7 @@ No ports, adapters, or Application use cases were created yet. The next step is 
 - `tests/unit/domain/services/attachment_analysis/test_attachment_extensions.py`
 - `tests/unit/domain/services/attachment_analysis/test_attachment_filenames.py`
 - `src/domain/services/attachment_analysis/attachments.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1788,7 +1788,7 @@ No ports or adapters were created because this use case does not cross an infras
 
 - `tests/unit/application/test_analyze_attachment_indicators.py`
 - `src/application/use_cases/analyze_attachment_indicators.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1892,7 +1892,7 @@ No ports or adapters were created because no IO boundary is crossed yet. Header 
 - `src/domain/services/authentication_analysis/authentication_results.py`
 - `tests/unit/application/test_analyze_authentication_indicators.py`
 - `src/application/use_cases/analyze_authentication_indicators.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -1976,7 +1976,7 @@ No Application use case was introduced in this step. The cutoff is intentionally
 
 - `tests/unit/domain/services/risk_scoring/test_risk_scores.py`
 - `src/domain/services/risk_scoring/risk_scores.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2053,7 +2053,7 @@ No default weights, global configuration, ports, adapters, or infrastructure wer
 
 - `tests/unit/application/test_calculate_risk_score.py`
 - `src/application/use_cases/calculate_risk_score.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2135,7 +2135,7 @@ No Application use case was introduced yet. The cutoff remains at completed Doma
 
 - `tests/unit/domain/services/social_engineering/test_text_signals.py`
 - `src/domain/services/social_engineering/text_signals.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2222,7 +2222,7 @@ No default term dictionaries, ports, adapters, AI, external NLP, configuration f
 
 - `tests/unit/application/test_analyze_social_engineering_indicators.py`
 - `src/application/use_cases/analyze_social_engineering_indicators.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2316,7 +2316,7 @@ No Application report composition, API schema, finding registry, database access
 - `src/domain/value_objects/finding.py`
 - `tests/unit/domain/services/finding_analysis/test_findings.py`
 - `src/domain/services/finding_analysis/findings.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2397,7 +2397,7 @@ The contract remains strict on `str` inputs. The helpers do not accept `None`, d
 
 - `tests/unit/domain/services/hash_analysis/test_hashes.py`
 - `src/domain/services/hash_analysis/hashes.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2472,7 +2472,7 @@ No finding code registry, default severity mapping, report rendering, API schema
 
 - `tests/unit/application/test_summarize_analysis_findings.py`
 - `src/application/use_cases/summarize_analysis_findings.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2543,7 +2543,7 @@ No full finding registry expansion, API schema, report rendering, ports, adapter
 
 - `tests/unit/application/test_summarize_finding_codes.py`
 - `src/application/use_cases/summarize_finding_codes.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2621,7 +2621,7 @@ Social engineering text analysis, risk scoring, finding summaries, ports, infras
 
 - `tests/unit/application/test_analyze_extracted_email_technical_indicators.py`
 - `src/application/use_cases/analyze_extracted_email_technical_indicators.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2690,7 +2690,7 @@ No risk scoring, finding summaries, full email analysis composition, ports, adap
 
 - `tests/unit/application/test_analyze_extracted_email_text_indicators.py`
 - `src/application/use_cases/analyze_extracted_email_text_indicators.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2761,7 +2761,7 @@ No IO boundary, ports, adapters, `.eml` parser, FastAPI endpoint, report rendere
 
 - `tests/unit/application/test_analyze_extracted_email.py`
 - `src/application/use_cases/analyze_extracted_email.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2828,7 +2828,7 @@ The adapter uses Python's standard library email parser to extract sender domain
 
 - `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor.py`
 - `src/infrastructure/adapters/email_parser/python_email_content_extractor.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2899,7 +2899,7 @@ No FastAPI endpoint, filesystem access, upload handling, API schema, or infrastr
 
 - `tests/unit/application/test_analyze_raw_email.py`
 - `src/application/use_cases/analyze_raw_email.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -2972,7 +2972,7 @@ Missing headers or missing individual mechanisms remain `unknown`. Result keys a
 
 - `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor.py`
 - `src/infrastructure/adapters/email_parser/python_email_content_extractor.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### TDD flow
 
@@ -3038,7 +3038,7 @@ Also documented a repository design rule in `AGENT.md`: frontend production code
 - `frontend/tests/setup.ts`
 - `frontend/vite.config.ts`
 - `AGENT.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3100,9 +3100,9 @@ This rationale is now reflected in repository guidance, the ADR, and the PhishSh
 ### Files changed
 
 - `AGENT.md`
-- `doc/ADR.md`
+- `docs/ADR.md`
 - `.skills/phishshield-testing/SKILL.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3161,8 +3161,8 @@ Added coverage tooling in observability mode only.
 - `frontend/package.json`
 - `frontend/vite.config.ts`
 - `README.md`
-- `doc/BACKEND_EVOLUTION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/BACKEND_EVOLUTION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3225,7 +3225,7 @@ This policy now lives in `AGENT.md` and the PhishShield testing skill.
 
 - `AGENT.md`
 - `.skills/phishshield-testing/SKILL.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3275,7 +3275,7 @@ Added API integration expectations for each fixture to establish baseline curren
 - `tests/fixtures/emails/suspicious_password_reset_portal.eml`
 - `tests/fixtures/emails/suspicious_invoice_payment_followup.eml`
 - `tests/integration/test_analyze_email_api_with_fixture.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3332,7 +3332,7 @@ Observed outcome after verification:
 - `tests/fixtures/emails/suspicious_shortener_login_notice.eml`
 - `tests/fixtures/emails/suspicious_lookalike_domain_notice.eml`
 - `tests/integration/test_analyze_email_api_with_fixture.py`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3366,7 +3366,7 @@ After two rounds of realistic fixture expansion and one targeted credential-requ
 
 ### Decision
 
-Added `doc/SCORING_CALIBRATION.md` as the current MVP calibration reference.
+Added `docs/SCORING_CALIBRATION.md` as the current MVP calibration reference.
 
 The document records:
 
@@ -3375,14 +3375,14 @@ The document records:
 - the current rule that weight changes should follow fixture evidence;
 - the next calibration questions for future scoring work.
 
-Also linked the document from `README.md` and `doc/BACKEND_EVOLUTION_PLAN.md`.
+Also linked the document from `README.md` and `docs/BACKEND_EVOLUTION_PLAN.md`.
 
 ### Files changed
 
-- `doc/SCORING_CALIBRATION.md`
+- `docs/SCORING_CALIBRATION.md`
 - `README.md`
-- `doc/BACKEND_EVOLUTION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/BACKEND_EVOLUTION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3423,7 +3423,7 @@ The Docker runtime smoke step could not be executed in this environment because 
 ### Files changed
 
 - `README.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3476,8 +3476,8 @@ This keeps the feature small, local, and aligned with the current MVP architectu
 - `frontend/tests/App.test.tsx`
 - `frontend/tests/report/createMarkdownReport.test.ts`
 - `README.md`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3525,8 +3525,8 @@ The current scoring and social-engineering configuration already handled these s
 - `tests/fixtures/emails/suspicious_cloud_document_share_lure.eml`
 - `tests/fixtures/emails/suspicious_mfa_reverification_notice.eml`
 - `tests/integration/test_analyze_email_api_with_fixture.py`
-- `doc/SCORING_CALIBRATION.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/SCORING_CALIBRATION.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3573,8 +3573,8 @@ The current rules and weights already produced acceptable outcomes for these sce
 - `tests/fixtures/emails/suspicious_qr_login_lure.eml`
 - `tests/fixtures/emails/suspicious_invoice_link_payment_lure.eml`
 - `tests/integration/test_analyze_email_api_with_fixture.py`
-- `doc/SCORING_CALIBRATION.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/SCORING_CALIBRATION.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3619,8 +3619,8 @@ The result sections were also rearranged to use the available horizontal space m
 - `frontend/src/App.tsx`
 - `frontend/src/components/AnalysisResults.tsx`
 - `frontend/src/styles.css`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3668,8 +3668,8 @@ The current scoring logic still handled the benign cases cleanly and escalated t
 - `tests/fixtures/emails/suspicious_account_support_lure.eml`
 - `tests/fixtures/emails/suspicious_cloud_share_auth_failure.eml`
 - `tests/integration/test_analyze_email_api_with_fixture.py`
-- `doc/SCORING_CALIBRATION.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/SCORING_CALIBRATION.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3715,8 +3715,8 @@ The first draft of these fixtures exposed a practical limitation in the current 
 - `tests/fixtures/emails/benign_html_only_support_update.eml`
 - `tests/fixtures/emails/suspicious_html_only_credential_lure.eml`
 - `tests/integration/test_analyze_email_api_with_fixture.py`
-- `doc/SCORING_CALIBRATION.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/SCORING_CALIBRATION.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3759,7 +3759,7 @@ The runtime behavior matched the expected API contract and scoring baseline, so 
 ### Files changed
 
 - `README.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3814,8 +3814,8 @@ The implementation preserves duplicate URLs already present in extracted plain t
 - `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_urls.py`
 - `tests/integration/test_email_parser_body_fixtures.py`
 - `tests/fixtures/emails/html_only_anchor_notice.eml`
-- `doc/BACKEND_EVOLUTION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/BACKEND_EVOLUTION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3858,8 +3858,8 @@ The existing implementation already handled the tested variants correctly, inclu
 ### Files changed
 
 - `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_urls.py`
-- `doc/BACKEND_EVOLUTION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/BACKEND_EVOLUTION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -3901,16 +3901,16 @@ The roadmap explicitly keeps larger forensic or AI-oriented modules deferred unt
 
 ### Files changed
 
-- `doc/POST_MVP_ROADMAP.md`
+- `docs/POST_MVP_ROADMAP.md`
 - `README.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files README.md doc/POST_MVP_ROADMAP.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files README.md docs/POST_MVP_ROADMAP.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -3948,9 +3948,9 @@ The UI now surfaces a small success or failure status after the copy attempt whi
 - `frontend/src/styles.css`
 - `frontend/tests/App.test.tsx`
 - `frontend/tests/report/copyMarkdownReport.test.ts`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4000,9 +4000,9 @@ The JSON download sits beside the Markdown actions and reuses the same report-or
 - `frontend/src/styles.css`
 - `frontend/tests/App.test.tsx`
 - `frontend/tests/report/downloadJsonReport.test.ts`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4048,9 +4048,9 @@ The preview reuses the same Markdown generator as the copy and download actions 
 - `frontend/src/components/AnalysisResults.tsx`
 - `frontend/src/styles.css`
 - `frontend/tests/App.test.tsx`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4100,9 +4100,9 @@ The HTML export escapes dynamic values before rendering them into the generated 
 - `frontend/tests/App.test.tsx`
 - `frontend/tests/report/createHtmlReport.test.ts`
 - `frontend/tests/report/downloadHtmlReport.test.ts`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4144,17 +4144,17 @@ Updated the roadmap and plan documents so they now treat the initial report/expo
 ### Files changed
 
 - `README.md`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/BACKEND_EVOLUTION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/BACKEND_EVOLUTION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files README.md doc/POST_MVP_ROADMAP.md doc/FRONTEND_MVP_PLAN.md doc/BACKEND_EVOLUTION_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files README.md docs/POST_MVP_ROADMAP.md docs/FRONTEND_MVP_PLAN.md docs/BACKEND_EVOLUTION_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4191,7 +4191,7 @@ The change keeps the existing backend/API contract intact and focuses only on fr
 - `frontend/src/components/analysis-results/ExtractedEvidence.tsx`
 - `frontend/src/components/analysis-results/FindingsByCategory.tsx`
 - `frontend/src/styles.css`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4235,7 +4235,7 @@ Long filenames now wrap inside the selected-file card instead of colliding with 
 ### Files changed
 
 - `frontend/src/styles.css`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4280,7 +4280,7 @@ The frontend now resets back to `No file selected yet` whenever no real `File` o
 
 - `frontend/src/App.tsx`
 - `frontend/tests/App.test.tsx`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4325,14 +4325,14 @@ This keeps the roadmap focused on future planning while giving the project a sim
 
 - `CHANGELOG.md`
 - `README.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files README.md CHANGELOG.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files README.md CHANGELOG.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4365,17 +4365,17 @@ The plan keeps deterministic findings, evidence, and risk scoring authoritative 
 
 ### Files changed
 
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/ADR.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/ADR.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/POST_MVP_ROADMAP.md doc/ADR.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/POST_MVP_ROADMAP.md docs/ADR.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4416,8 +4416,8 @@ This step intentionally stops before any real model, endpoint, adapter, or front
 - `src/application/ports/outbound/model_assessment.py`
 - `tests/unit/application/models/test_model_assessment.py`
 - `tests/unit/application/ports/test_model_assessment_port.py`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4461,8 +4461,8 @@ This step keeps endpoint wiring, infrastructure adapters, and real inference run
 
 - `src/application/use_cases/assess_raw_email_with_model.py`
 - `tests/unit/application/test_assess_raw_email_with_model.py`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4506,8 +4506,8 @@ This lets future endpoint work depend on a stable adapter boundary before choosi
 
 - `src/infrastructure/adapters/model_assessment/noop_model_assessment_adapter.py`
 - `tests/unit/infrastructure/adapters/model_assessment/test_noop_model_assessment_adapter.py`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4555,9 +4555,9 @@ The endpoint uses the application use case plus the noop adapter and returns a s
 - `tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py`
 - `tests/unit/infrastructure/entrypoints/api/schemas/test_model_assessment_schemas.py`
 - `tests/unit/infrastructure/entrypoints/api/test_app.py`
-- `doc/API.md`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/API.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4599,17 +4599,17 @@ The next ML-facing step is now dataset and training research rather than selecti
 
 ### Files changed
 
-- `doc/ADR.md`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ADR.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ADR.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/POST_MVP_ROADMAP.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ADR.md docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/POST_MVP_ROADMAP.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4642,16 +4642,16 @@ The documented recommendation is to start with simple text classification baseli
 
 ### Files changed
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATASET_RESEARCH.md docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4684,18 +4684,18 @@ This keeps dataset preparation separate from model training and preserves PhishS
 
 ### Files changed
 
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
 - `README.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files README.md doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files README.md docs/ML_DATASET_RESEARCH.md docs/ML_DATA_PREPARATION_PLAN.md docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4728,17 +4728,17 @@ The strategy keeps PhishShield fixtures as holdout evidence, defines source-awar
 
 ### Files changed
 
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
 - `README.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files README.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files README.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4776,9 +4776,9 @@ The prototype normalizes SpamAssassin ham/spam labels into the initial PhishShie
 - `tools/ml_data_preparation/prepared_email_sample.py`
 - `tools/ml_data_preparation/spamassassin.py`
 - `tests/unit/tools/ml_data_preparation/test_spamassassin.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4822,9 +4822,9 @@ The command reuses the existing SpamAssassin preparation functions and reports b
 
 - `tools/ml_data_preparation/prepare_spamassassin.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_spamassassin.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4866,9 +4866,9 @@ Both subsets processed with zero failures, zero empty subjects, and zero empty b
 
 ### Files changed
 
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4877,7 +4877,7 @@ Command:
 ```bash
 python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\easy_ham" --label easy_ham --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham.jsonl" --limit 20
 python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\spam" --label spam --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam.jsonl" --limit 20
-python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4912,9 +4912,9 @@ The full local subset produced 3002 valid rows, zero invalid rows, and zero dupl
 
 ### Files changed
 
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -4924,7 +4924,7 @@ Command:
 python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\easy_ham" --label easy_ham --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl"
 python -m tools.ml_data_preparation.prepare_spamassassin --input-dir "<PHISHSHIELD_DATA_ROOT>\spamassassin\raw\spam" --label spam --output "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl"
 python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl"
-python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -4965,8 +4965,8 @@ The command supports text-only and lightweight-metadata feature sets, reports va
 - `tools/ml_training/train_baseline.py`
 - `tests/unit/tools/ml_training/test_train_baseline.py`
 - `README.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5007,8 +5007,8 @@ The lightweight metadata feature set improved suspicious recall and F1 on the Sp
 
 ### Files changed
 
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5017,7 +5017,7 @@ Command:
 ```bash
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42
-python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5054,8 +5054,8 @@ The output records model configuration, sample counts, label distribution, valid
 
 - `tools/ml_training/train_baseline.py`
 - `tests/unit/tools/ml_training/test_train_baseline.py`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5096,8 +5096,8 @@ The results confirm that the training command can now produce machine-readable e
 
 ### Files changed
 
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5106,7 +5106,7 @@ Command:
 ```bash
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text --validation-ratio 0.2 --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\spamassassin\metrics\baseline_text.json"
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --strategy balanced --feature-set text_with_light_metadata --validation-ratio 0.2 --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\spamassassin\metrics\baseline_text_metadata.json"
-python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5145,9 +5145,9 @@ The command reports per-fixture predictions and aggregate holdout accuracy while
 - `tools/ml_training/evaluate_fixture_holdout.py`
 - `tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py`
 - `tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5190,9 +5190,9 @@ The next ML data step should prioritize phishing-specific and benign business-em
 
 ### Files changed
 
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5200,7 +5200,7 @@ Command:
 
 ```bash
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam_full.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
-python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATASET_RESEARCH.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ML_DATASET_RESEARCH.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5236,9 +5236,9 @@ The command checks required fields, labels, duplicate sample IDs, JSON parse err
 
 - `tools/ml_data_preparation/validate_prepared_dataset.py`
 - `tests/unit/tools/ml_data_preparation/test_validate_prepared_dataset.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5279,9 +5279,9 @@ The validation confirmed 40 rows, zero invalid rows, zero duplicate sample IDs, 
 
 ### Files changed
 
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5289,7 +5289,7 @@ Command:
 
 ```bash
 python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\spam.jsonl"
-python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5321,15 +5321,15 @@ Updated the phased implementation plan so completed model-assisted milestones ar
 
 ### Files changed
 
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5369,8 +5369,8 @@ The panel clearly marks model assessment as advisory, supports loading and failu
 - `frontend/src/styles.css`
 - `frontend/tests/api/analyzeEmailModelAssessment.test.ts`
 - `frontend/tests/App.test.tsx`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5416,9 +5416,9 @@ The change preserves all existing report behavior while making the workbench hea
 - `frontend/src/components/AnalysisResults.tsx`
 - `frontend/src/styles.css`
 - `frontend/tests/App.test.tsx`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5462,7 +5462,7 @@ The remaining work was explicitly framed as non-blocking follow-up areas rather 
 ### Files changed
 
 - `README.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5513,7 +5513,7 @@ The setup was also documented explicitly as a per-clone installation step so con
 - `pyproject.toml`
 - `README.md`
 - `AGENT.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5521,7 +5521,7 @@ Command:
 
 ```bash
 python scripts/check_architecture_boundaries.py src/domain/services/social_engineering/text_signals.py src/application/use_cases/calculate_risk_score.py
-python scripts/check_scoring_changes.py tests/integration/test_analyze_email_api_with_fixture.py doc/SCORING_CALIBRATION.md src/infrastructure/config/analysis_defaults.py
+python scripts/check_scoring_changes.py tests/integration/test_analyze_email_api_with_fixture.py docs/SCORING_CALIBRATION.md src/infrastructure/config/analysis_defaults.py
 python scripts/check_commit_message.py <temporary valid commit message file>
 python scripts/check_commit_message.py <temporary invalid commit message file>
 ```
@@ -5560,16 +5560,16 @@ Nazario remains blocked until a trustworthy access path and license are confirme
 
 ### Files changed
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATASET_RESEARCH.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5610,10 +5610,10 @@ Real corpus execution should happen outside the repository, preferably in Kaggle
 - `tools/ml_data_preparation/prepare_fraudulent_email_corpus.py`
 - `tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py`
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5623,7 +5623,7 @@ Command:
 python -m pytest tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py
 python -m pytest tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_validate_prepared_dataset.py
 python -m pytest
-python -m pre_commit run --files tools/ml_data_preparation/fraudulent_email_corpus.py tools/ml_data_preparation/prepare_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATA_PREPARATION_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_data_preparation/fraudulent_email_corpus.py tools/ml_data_preparation/prepare_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py docs/ML_DATASET_RESEARCH.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ML_DATA_PREPARATION_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5675,10 +5675,10 @@ output_bytes: 12984691
 - `tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_body.py`
 - `tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py`
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5687,7 +5687,7 @@ Command:
 ```bash
 python -m pytest tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_body.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py
 python -m pytest
-python -m pre_commit run --files src/infrastructure/adapters/email_parser/python_email_content_extractor.py tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_body.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files src/infrastructure/adapters/email_parser/python_email_content_extractor.py tests/unit/infrastructure/adapters/email_parser/test_python_email_content_extractor_body.py tests/unit/tools/ml_data_preparation/test_fraudulent_email_corpus.py tests/unit/tools/ml_data_preparation/test_prepare_fraudulent_email_corpus.py docs/ML_DATASET_RESEARCH.md docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5746,9 +5746,9 @@ This confirms that the Fraudulent E-mail Corpus helps with fraud/social-engineer
 
 ### Files changed
 
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -5758,7 +5758,7 @@ Command:
 python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl"
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\metrics\baseline_text_metadata.json"
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\easy_ham_full.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\fraudulent-email-corpus\prepared\fraudulent_email_corpus_charset_fallback.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
-python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ML_DATA_PREPARATION_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ML_DATA_PREPARATION_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5805,16 +5805,16 @@ Secondary candidates were recorded but deferred:
 
 ### Files changed
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATASET_RESEARCH.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5849,16 +5849,16 @@ The documentation explicitly avoids relying on disabling local security protecti
 
 ### Files changed
 
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_DATASET_RESEARCH.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATA_PREPARATION_PLAN.md docs/ML_DATASET_RESEARCH.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5912,17 +5912,17 @@ The `Phishing Email` class contains enough phishing-like language to justify a P
 
 ### Files changed
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATASET_RESEARCH.md docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -5988,9 +5988,9 @@ urls_found: 13291
 - `tools/ml_data_preparation/prepare_phishing_email_detection.py`
 - `tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6001,7 +6001,7 @@ python -m pytest tests/unit/tools/ml_data_preparation/test_phishing_email_detect
 python -m tools.ml_data_preparation.prepare_phishing_email_detection --input-file "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\raw\Phishing_Email.csv" --output "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl"
 python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl"
 python -m pytest
-python -m pre_commit run --files tools/ml_data_preparation/phishing_email_detection.py tools/ml_data_preparation/prepare_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_data_preparation/phishing_email_detection.py tools/ml_data_preparation/prepare_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_phishing_email_detection.py tests/unit/tools/ml_data_preparation/test_prepare_phishing_email_detection.py docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6066,8 +6066,8 @@ This is the first ML baseline that improves fixture holdout accuracy and fully c
 
 ### Files changed
 
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6076,7 +6076,7 @@ Command:
 ```bash
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\metrics\baseline_text_metadata.json"
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
-python -m pre_commit run --files doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6142,8 +6142,8 @@ Suspicious recall remained strong, but benign account, MFA/security, and newslet
 - `tests/fixtures/emails/suspicious_shared_invoice_qr_lure.eml`
 - `tests/fixtures/emails/suspicious_cloud_storage_quota_lure.eml`
 - `tools/ml_training/evaluate_fixture_holdout.py`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6153,7 +6153,7 @@ Command:
 python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py tests/unit/tools/ml_data_preparation/test_phishshield_fixtures.py
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
-python -m pre_commit run --files tests/fixtures/emails/benign_account_usage_digest.eml tests/fixtures/emails/benign_mfa_enabled_notice.eml tests/fixtures/emails/benign_html_product_newsletter_account_preferences.eml tests/fixtures/emails/suspicious_mfa_push_approval_lure.eml tests/fixtures/emails/suspicious_shared_invoice_qr_lure.eml tests/fixtures/emails/suspicious_cloud_storage_quota_lure.eml tools/ml_training/evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tests/fixtures/emails/benign_account_usage_digest.eml tests/fixtures/emails/benign_mfa_enabled_notice.eml tests/fixtures/emails/benign_html_product_newsletter_account_preferences.eml tests/fixtures/emails/suspicious_mfa_push_approval_lure.eml tests/fixtures/emails/suspicious_shared_invoice_qr_lure.eml tests/fixtures/emails/suspicious_cloud_storage_quota_lure.eml tools/ml_training/evaluate_fixture_holdout.py docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6202,8 +6202,8 @@ No tested threshold improved the expanded holdout. Several benign account/securi
 
 - `tools/ml_training/evaluate_fixture_holdout.py`
 - `tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6213,7 +6213,7 @@ Command:
 python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42 --suspicious-threshold 0.50
 python -m pytest
-python -m pre_commit run --files tools/ml_training/evaluate_fixture_holdout.py tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_training/evaluate_fixture_holdout.py tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6250,16 +6250,16 @@ The next experiment should combine `Phishing Email Detection` with SpamAssassin 
 
 ### Files changed
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATASET_RESEARCH.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6315,9 +6315,9 @@ both hard_ham subsets: accuracy=0.6250, false_positive_benign=6, false_negative_
 
 ### Files changed
 
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6330,7 +6330,7 @@ python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHI
 python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHIELD_DATA_ROOT>\spamassassin\prepared\hard_ham_20030228.jsonl"
 python -m tools.ml_training.train_baseline ...
 python -m tools.ml_training.evaluate_fixture_holdout ...
-python -m pre_commit run --files doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6373,17 +6373,17 @@ The workflow requires:
 
 ### Files changed
 
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ML_DATASET_RESEARCH.md doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ML_DATASET_RESEARCH.md docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6447,9 +6447,9 @@ Because the capped sample came from one user, this validates mechanics but does 
 - `tools/ml_data_preparation/prepare_enron.py`
 - `tests/unit/tools/ml_data_preparation/test_enron.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_enron.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6462,7 +6462,7 @@ python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHI
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_1000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\enron\metrics\phishing_plus_enron_1000_text_metadata.json"
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_1000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
-python -m pre_commit run --files tools/ml_data_preparation/enron.py tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_data_preparation/enron.py tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6543,9 +6543,9 @@ Source-diverse Enron sampling did not reduce benign false positives. This sugges
 
 - `tools/ml_data_preparation/prepare_enron.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_enron.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6558,7 +6558,7 @@ python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHI
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_diverse_2000.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\enron\metrics\phishing_plus_enron_diverse_2000_text_metadata.json"
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\enron\prepared\enron_diverse_2000.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
-python -m pre_commit run --files tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_data_preparation/prepare_enron.py tests/unit/tools/ml_data_preparation/test_prepare_enron.py docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6626,9 +6626,9 @@ The experiment confirms that targeted benign notification data affects the desir
 - `tools/ml_data_preparation/prepare_synthetic_benign_notifications.py`
 - `tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6641,7 +6641,7 @@ python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHI
 python -m tools.ml_training.train_baseline --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --metrics-output "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\metrics\phishing_plus_synthetic_benign_notifications_text_metadata.json"
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
-python -m pre_commit run --files tools/ml_data_preparation/synthetic_benign_notifications.py tools/ml_data_preparation/prepare_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_data_preparation/synthetic_benign_notifications.py tools/ml_data_preparation/prepare_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_synthetic_benign_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_benign_notifications.py docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6699,9 +6699,9 @@ Variant B is the first calibration experiment to improve expanded holdout accura
 - `tools/ml_data_preparation/prepare_synthetic_suspicious_notifications.py`
 - `tests/unit/tools/ml_data_preparation/test_synthetic_suspicious_notifications.py`
 - `tests/unit/tools/ml_data_preparation/test_prepare_synthetic_suspicious_notifications.py`
-- `doc/ML_DATA_PREPARATION_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6718,7 +6718,7 @@ python -m tools.ml_data_preparation.validate_prepared_dataset --input "<PHISHSHI
 python -m tools.ml_training.train_baseline ...
 python -m tools.ml_training.evaluate_fixture_holdout ...
 python -m pytest
-python -m pre_commit run --files tools/ml_data_preparation/synthetic_suspicious_notifications.py tools/ml_data_preparation/prepare_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_suspicious_notifications.py doc/ML_DATA_PREPARATION_PLAN.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_data_preparation/synthetic_suspicious_notifications.py tools/ml_data_preparation/prepare_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_synthetic_suspicious_notifications.py tests/unit/tools/ml_data_preparation/test_prepare_synthetic_suspicious_notifications.py docs/ML_DATA_PREPARATION_PLAN.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6788,8 +6788,8 @@ The improvement persisted on the larger holdout. Variant B reduced benign false 
 - `tests/fixtures/emails/suspicious_support_case_auth_lure.eml`
 - `tests/fixtures/emails/suspicious_newsletter_preferences_credential_lure.eml`
 - `tools/ml_training/evaluate_fixture_holdout.py`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6800,7 +6800,7 @@ python -m pytest tests/unit/tools/ml_training/test_evaluate_fixture_holdout.py t
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m tools.ml_training.evaluate_fixture_holdout --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --fixtures-dir tests\fixtures\emails --feature-set text_with_light_metadata --random-seed 42
 python -m pytest
-python -m pre_commit run --files tests/fixtures/emails/benign_account_billing_summary.eml tests/fixtures/emails/benign_device_login_history.eml tests/fixtures/emails/benign_mfa_recovery_codes_notice.eml tests/fixtures/emails/benign_newsletter_security_tips.eml tests/fixtures/emails/benign_cloud_storage_usage_digest.eml tests/fixtures/emails/benign_vendor_invoice_status_update.eml tests/fixtures/emails/benign_hr_benefits_reminder.eml tests/fixtures/emails/benign_support_case_waiting_customer.eml tests/fixtures/emails/suspicious_device_login_verification_lure.eml tests/fixtures/emails/suspicious_mfa_recovery_codes_lure.eml tests/fixtures/emails/suspicious_billing_profile_reauth_lure.eml tests/fixtures/emails/suspicious_cloud_storage_expiry_lure.eml tests/fixtures/emails/suspicious_vendor_invoice_portal_lure.eml tests/fixtures/emails/suspicious_hr_benefits_login_lure.eml tests/fixtures/emails/suspicious_support_case_auth_lure.eml tests/fixtures/emails/suspicious_newsletter_preferences_credential_lure.eml tools/ml_training/evaluate_fixture_holdout.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tests/fixtures/emails/benign_account_billing_summary.eml tests/fixtures/emails/benign_device_login_history.eml tests/fixtures/emails/benign_mfa_recovery_codes_notice.eml tests/fixtures/emails/benign_newsletter_security_tips.eml tests/fixtures/emails/benign_cloud_storage_usage_digest.eml tests/fixtures/emails/benign_vendor_invoice_status_update.eml tests/fixtures/emails/benign_hr_benefits_reminder.eml tests/fixtures/emails/benign_support_case_waiting_customer.eml tests/fixtures/emails/suspicious_device_login_verification_lure.eml tests/fixtures/emails/suspicious_mfa_recovery_codes_lure.eml tests/fixtures/emails/suspicious_billing_profile_reauth_lure.eml tests/fixtures/emails/suspicious_cloud_storage_expiry_lure.eml tests/fixtures/emails/suspicious_vendor_invoice_portal_lure.eml tests/fixtures/emails/suspicious_hr_benefits_login_lure.eml tests/fixtures/emails/suspicious_support_case_auth_lure.eml tests/fixtures/emails/suspicious_newsletter_preferences_credential_lure.eml tools/ml_training/evaluate_fixture_holdout.py docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6847,16 +6847,16 @@ The ADR now records the candidate, the rejected/deferred alternatives, and the a
 
 ### Files changed
 
-- `doc/ADR.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ADR.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/ADR.md doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/ADR.md docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6914,8 +6914,8 @@ This export does not enable product inference. The artifact is experimental, rem
 
 - `tools/ml_training/export_baseline_artifact.py`
 - `tests/unit/tools/ml_training/test_export_baseline_artifact.py`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -6925,7 +6925,7 @@ Command:
 python -m pytest tests/unit/tools/ml_training/test_export_baseline_artifact.py
 python -m tools.ml_training.export_baseline_artifact --input "<PHISHSHIELD_DATA_ROOT>\phishing-email-detection\prepared\phishing_email_detection.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-benign-notifications\prepared\synthetic_benign_notifications_600.jsonl" --input "<PHISHSHIELD_DATA_ROOT>\synthetic-suspicious-notifications\prepared\synthetic_suspicious_notifications_600.jsonl" --feature-set text_with_light_metadata --strategy balanced --random-seed 42 --model-output "<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.joblib" --metadata-output "<PHISHSHIELD_DATA_ROOT>\models\phishshield_baseline_candidate.metadata.json" --holdout-accuracy 0.875 --holdout-false-positive-benign 3 --holdout-false-negative-suspicious 1
 python -m pytest
-python -m pre_commit run --files tools/ml_training/export_baseline_artifact.py tests/unit/tools/ml_training/test_export_baseline_artifact.py doc/ML_TRAINING_EVALUATION_STRATEGY.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files tools/ml_training/export_baseline_artifact.py tests/unit/tools/ml_training/test_export_baseline_artifact.py docs/ML_TRAINING_EVALUATION_STRATEGY.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -6960,16 +6960,16 @@ The model branch remains advisory. Deterministic analysis remains authoritative.
 
 ### Files changed
 
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ADR.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ADR.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ADR.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ADR.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -7015,8 +7015,8 @@ unsupported metadata feature_set -> failed
 
 - `src/infrastructure/adapters/model_assessment/sklearn_model_assessment_adapter.py`
 - `tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -7025,7 +7025,7 @@ Command:
 ```bash
 python -m pytest tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py
 python -m pytest
-python -m pre_commit run --files src/infrastructure/adapters/model_assessment/sklearn_model_assessment_adapter.py tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files src/infrastructure/adapters/model_assessment/sklearn_model_assessment_adapter.py tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -7072,8 +7072,8 @@ The endpoint remains separate from deterministic analysis, and the model output 
 - `src/infrastructure/entrypoints/api/routers/model_assessment.py`
 - `tests/unit/infrastructure/config/test_api_defaults.py`
 - `tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -7082,7 +7082,7 @@ Command:
 ```bash
 python -m pytest tests/unit/infrastructure/config/test_api_defaults.py tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py
 python -m pytest
-python -m pre_commit run --files src/infrastructure/config/api_defaults.py src/infrastructure/entrypoints/api/routers/model_assessment.py tests/unit/infrastructure/config/test_api_defaults.py tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files src/infrastructure/config/api_defaults.py src/infrastructure/entrypoints/api/routers/model_assessment.py tests/unit/infrastructure/config/test_api_defaults.py tests/unit/infrastructure/entrypoints/api/routers/test_model_assessment_router.py docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -7118,7 +7118,7 @@ This keeps the CI install path `.[test,ml]` aligned with the model artifact expo
 ### Files changed
 
 - `pyproject.toml`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
@@ -7127,7 +7127,7 @@ Command:
 ```bash
 python -m pytest tests/unit/infrastructure/adapters/model_assessment/test_sklearn_model_assessment_adapter.py tests/unit/tools/ml_training/test_export_baseline_artifact.py
 python -m pytest
-python -m pre_commit run --files pyproject.toml doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files pyproject.toml docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -7185,15 +7185,15 @@ The deterministic `/analyze-email` endpoint was checked with model environment v
 
 ### Files changed
 
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Tests
 
 Command:
 
 ```bash
-python -m pre_commit run --files doc/MODEL_ASSISTED_ANALYSIS_PLAN.md doc/ENGINEERING_JOURNEY.md
+python -m pre_commit run --files docs/MODEL_ASSISTED_ANALYSIS_PLAN.md docs/ENGINEERING_JOURNEY.md
 ```
 
 Result:
@@ -7234,11 +7234,11 @@ family-level metrics, and no regression in existing covered families.
 
 ### Files changed
 
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`
-- `doc/ML_DATASET_RESEARCH.md`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/ENGINEERING_JOURNEY.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`
+- `docs/ML_DATASET_RESEARCH.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/ENGINEERING_JOURNEY.md`
 
 ### Next step
 
@@ -7338,9 +7338,9 @@ backend evidence or analyst workflow feedback.
 - `frontend/src/components/ModelAssessmentPanel.tsx`
 - `frontend/src/styles.css`
 - `frontend/tests/App.test.tsx`
-- `doc/FRONTEND_MVP_PLAN.md`
-- `doc/POST_MVP_ROADMAP.md`
-- `doc/MODEL_ASSISTED_ANALYSIS_PLAN.md`
+- `docs/FRONTEND_MVP_PLAN.md`
+- `docs/POST_MVP_ROADMAP.md`
+- `docs/MODEL_ASSISTED_ANALYSIS_PLAN.md`
 
 ### Tests
 

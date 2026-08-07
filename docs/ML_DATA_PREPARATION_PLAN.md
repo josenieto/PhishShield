@@ -4,7 +4,7 @@
 
 This document defines how public email corpora should be converted into clean, auditable, and reproducible datasets for future PhishShield model training and evaluation.
 
-It builds on `doc/ML_DATASET_RESEARCH.md` and focuses on preparation rules, not training implementation.
+It builds on `docs/ML_DATASET_RESEARCH.md` and focuses on preparation rules, not training implementation.
 
 This document does not introduce scripts, dependencies, model artifacts, or inference runtime changes.
 

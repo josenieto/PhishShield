@@ -7,8 +7,8 @@
       "expected_output": "The answer should keep the helper in Domain, accept a caller-provided shortener set, compare normalized domains without network access, and recommend TDD tests for known, unknown, empty, uppercase, trailing-dot, and subdomain cases.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-security-analysis/SKILL.md"
       ],
       "assertions": [
@@ -25,7 +25,7 @@
       "expected_output": "The answer should reject redirect resolution in Domain because it requires network access, recommend an Application port and Infrastructure adapter if needed, and keep pure shortener-domain matching separate.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-security-analysis/SKILL.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
@@ -43,8 +43,8 @@
       "expected_output": "The answer should treat filename-based double-extension detection as pure Domain logic, avoid opening files or parsing bytes, define edge cases, and suggest tests for dangerous, non-dangerous, single-extension, and extensionless filenames.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-security-analysis/SKILL.md"
       ],
       "assertions": [
@@ -61,8 +61,8 @@
       "expected_output": "The answer should allow pure Domain interpretation of already computed authentication results while keeping DNS queries, DKIM cryptographic validation, and raw header parsing outside Domain.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-security-analysis/SKILL.md"
       ],
       "assertions": [
@@ -79,8 +79,8 @@
       "expected_output": "The answer should recommend an Application use case that composes pure URL analysis helpers, returns an explicit analysis result with findings and evidence, and avoids ports/adapters because no IO boundary is crossed yet.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-security-analysis/SKILL.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],

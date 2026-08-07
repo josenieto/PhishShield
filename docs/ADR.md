@@ -10,8 +10,8 @@ This ADR describes the target architecture and long-term capability set.
 
 The current implemented MVP scope is tracked separately in:
 
-- `doc/BACKEND_EVOLUTION_PLAN.md`
-- `doc/FRONTEND_MVP_PLAN.md`
+- `docs/BACKEND_EVOLUTION_PLAN.md`
+- `docs/FRONTEND_MVP_PLAN.md`
 
 ---
 

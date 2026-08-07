@@ -7,7 +7,7 @@
       "expected_output": "The answer should propose a thin FastAPI router that validates input, delegates to an Application use case, and keeps parsing, sandboxing, AI, and forensic analysis behind ports/adapters. It should mention Pytest tests.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
@@ -24,7 +24,7 @@
       "expected_output": "The answer should place the contract in Application, the HTTP adapter in Infrastructure, avoid network access from Domain, apply timeouts/limits, and propose tests with mocks without real network.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
@@ -41,7 +41,7 @@
       "expected_output": "The answer should treat detection as testable pure logic, propose Unicode and IDN cases, avoid unnecessary external dependencies, and keep the module in Domain or Application as appropriate.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
@@ -58,7 +58,7 @@
       "expected_output": "The answer should define an AI port in Application, an Ollama adapter in Infrastructure, avoid coupling Domain to Ollama, allow AI to be skipped cleanly when disabled, and propose tests with mocks.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [
@@ -75,7 +75,7 @@
       "expected_output": "The answer should detect that the use case must not instantiate concrete adapters, propose injecting a SandboxBrowserPort, and keep PlaywrightSandboxAdapter in Infrastructure.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
       "assertions": [

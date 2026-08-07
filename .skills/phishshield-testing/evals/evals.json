@@ -7,8 +7,8 @@
       "expected_output": "The answer should define the behavior, propose small Pytest tests before implementation, cover at least zero-width space, clean text, and empty string, and keep the test in the unit/domain layer without infrastructure.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
@@ -25,8 +25,8 @@
       "expected_output": "The answer should describe the Red-Green-Refactor cycle, propose tests for removing invisible characters without changing visible text, and place tests under tests/unit/domain/services/text_normalization.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
@@ -43,7 +43,7 @@
       "expected_output": "The answer should state that this is an Infrastructure test or an Application test with a mocked port, avoid real network access, use mocks/fakes/fixtures, and cover timeouts or errors.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-testing/SKILL.md",
         ".skills/phishshield-backend/SKILL.md"
       ],
@@ -61,7 +61,7 @@
       "expected_output": "The answer should reject the approach, explain that Domain must not depend on Playwright, propose moving Playwright to Infrastructure, and keep Domain tests pure.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-testing/SKILL.md",
         ".skills/phishshield-architecture/SKILL.md"
       ],
@@ -79,8 +79,8 @@
       "expected_output": "The answer should start with behavior cases, propose tests for risk thresholds and classification, and avoid implementation before defining tests.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
@@ -97,8 +97,8 @@
       "expected_output": "The answer should define behavior, add a failing Pytest test first, confirm Red, implement the minimum Green code, explicitly review Refactor, run affected and full tests when cheap, and stop with commit text instead of committing.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/DOMAIN_PURE_FUNCTIONS_PLAN.md",
+        "docs/ADR.md",
+        "docs/DOMAIN_PURE_FUNCTIONS_PLAN.md",
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
@@ -117,7 +117,7 @@
       "expected_output": "The answer should classify tests by level, identify slow-test thresholds, recommend pytest durations reporting, explain when to use real Domain helpers versus fakes or mocks for ports, and flag infrastructure usage in Domain tests.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
@@ -135,7 +135,7 @@
       "expected_output": "The answer should say not to mock pure Domain helpers by default. Application is allowed to depend on Domain, and tests should use real Domain behavior unless it crosses a port or external boundary. It should recommend fakes or mocks for ports, adapters, IO, network, filesystem, browser, AI, OCR, YARA, external parsers, or expensive/non-deterministic collaborators.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
+        "docs/ADR.md",
         ".skills/phishshield-testing/SKILL.md"
       ],
       "assertions": [
