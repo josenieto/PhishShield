@@ -7420,3 +7420,21 @@ outside CI gates.
 The deterministic artifact workflow is validated end to end. Batch processing,
 SARIF output, and advisory-model CI automation remain deferred until a concrete
 workflow requires them.
+
+## 2026-08-07 - Prepare v0.1.0-rc.2 baseline
+
+Type: Release | Documentation
+Layer: Cross-cutting
+Status: Done
+
+### Result
+
+The RC.2 baseline is prepared for final publication audit. It includes the
+analyst-focused Web UI, deterministic API and CLI, complete local Compose
+deployment, CI artifact workflow, phase-one guardrails, public documentation,
+and open-source release guidance. The optional advisory model remains
+experimental and disabled by default.
+
+Public repository export, historical metadata normalization, GHCR publication,
+and any public demo remain separate release operations and have not been
+performed by this milestone.
