@@ -6,6 +6,42 @@ All notable changes to PhishShield are recorded here.
 
 ## Unreleased
 
+Future changes will be recorded here after the `v0.1.0-rc.2` release candidate.
+
+---
+
+## v0.1.0-rc.2 - Release Candidate
+
+### Added
+
+- Analyst-focused Web UI with real MVP screenshots and documentation navigation.
+- Deterministic single-email CLI with text/JSON output and stable exit codes.
+- Reusable GitHub Actions workflow for `.eml` artifact analysis.
+- Complete local Docker Compose deployment with frontend Nginx proxy and internal backend.
+- Phase-one CI guardrails for hygiene, private-key detection, and architecture boundaries.
+- MIT license, contribution guidance, security policy, and public roadmap.
+- Documentation index for users, operators, integrators, contributors, and researchers.
+
+### Validated
+
+- Backend test suite and frontend test/build workflow.
+- Backend Docker smoke and complete Compose smoke through the frontend proxy.
+- Benign and suspicious deterministic analysis through the Web UI and artifact workflow.
+- Markdown, JSON, and HTML report exports.
+- Optional advisory model remains disabled by default and separate from deterministic results.
+
+### Experimental
+
+- Scope-aware local advisory inference with structured abstention reasons.
+- Advisory inference is disabled by default, not a CI gate, and not product-ready.
+
+### Deferred
+
+- Production-grade ML promotion and family-specific training with authorized data.
+- Batch CLI, JSONL batch output, and SARIF integration.
+- OCR, YARA, PDF/Office and macro analysis, browser evidence capture, and link resolution.
+- Persistence, accounts, multi-user operation, and hosted cloud deployment.
+
 ### Added
 
 - MIT license, contribution guidance, security policy, and public roadmap.
