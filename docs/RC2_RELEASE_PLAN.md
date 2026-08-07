@@ -481,6 +481,7 @@ without understanding the repository internals:
 ```bash
 git clone <repository>
 cd PhishShield
+docker compose up --build
 ```
 
 Then:
