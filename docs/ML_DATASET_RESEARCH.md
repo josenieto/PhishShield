@@ -652,7 +652,7 @@ The deterministic engine should remain the main evidence source regardless of mo
 
 Detailed preparation rules are defined in:
 
-- `doc/ML_DATA_PREPARATION_PLAN.md`
+- `docs/ML_DATA_PREPARATION_PLAN.md`
 
 ---
 

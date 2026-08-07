@@ -18,11 +18,11 @@ This skill does not implement concrete FastAPI endpoints, HTTP clients, OCR, YAR
 Before designing or reviewing forensic analysis logic, read:
 
 - `AGENT.md`
-- `doc/ADR.md`
-- `doc/DOMAIN_PURE_FUNCTIONS_PLAN.md`
+- `docs/ADR.md`
+- `docs/DOMAIN_PURE_FUNCTIONS_PLAN.md`
 - `.skills/README.md`
 
-If this skill conflicts with `doc/ADR.md`, the ADR takes precedence.
+If this skill conflicts with `docs/ADR.md`, the ADR takes precedence.
 
 ## When to use this skill
 

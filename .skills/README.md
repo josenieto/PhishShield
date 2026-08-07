@@ -25,7 +25,7 @@ Minimum required workflow:
 3. write `SKILL.md` with `name` and `description` frontmatter,
 4. keep the skill actionable, specific, and aligned with PhishShield,
 5. create initial evals when the skill is objectively testable,
-6. verify alignment with `AGENT.md` and `doc/ADR.md`,
+6. verify alignment with `AGENT.md` and `docs/ADR.md`,
 7. update this index.
 
 Do not create skills without following this process.
@@ -69,7 +69,7 @@ Do not add Spanish text to skills or repository files. The only acceptable excep
 Every PhishShield skill must respect:
 
 - `AGENT.md`
-- `doc/ADR.md`
+- `docs/ADR.md`
 
 If a skill conflicts with the ADR, the ADR takes precedence.
 
@@ -98,7 +98,7 @@ Initial folders are prepared, and skills are defined progressively with the
 documented project workflow.
 
 - `phishshield-architecture`
-  Guides architectural changes, layer separation, port/adapter decisions, and alignment with `doc/ADR.md`.
+  Guides architectural changes, layer separation, port/adapter decisions, and alignment with `docs/ADR.md`.
   Status: defined in `.skills/phishshield-architecture/SKILL.md` with initial evals in `.skills/phishshield-architecture/evals/evals.json`.
 
 - `phishshield-backend`

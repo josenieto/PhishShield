@@ -46,9 +46,9 @@ binary uncertainty. The public label remains `inconclusive` for both cases.
 
 The internal fixture and external diagnostic results are recorded in:
 
-- `doc/ML_SCOPE_GATE_VALIDATION.md`;
-- `doc/ML_TRAINING_EVALUATION_STRATEGY.md`;
-- `doc/ML_PROMOTION_HOLDOUT_CURATION_ASSESSMENT.md`.
+- `docs/ML_SCOPE_GATE_VALIDATION.md`;
+- `docs/ML_TRAINING_EVALUATION_STRATEGY.md`;
+- `docs/ML_PROMOTION_HOLDOUT_CURATION_ASSESSMENT.md`.
 
 The scope gate passes the current fixture matrix with full in-scope recall and
 full out-of-scope precision, while family assignment remains imperfect. CEAS-08

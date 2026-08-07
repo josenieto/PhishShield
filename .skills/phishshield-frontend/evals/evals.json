@@ -7,9 +7,9 @@
       "expected_output": "The answer should keep the work inside frontend/, preserve the existing file input for accessibility, validate .eml files, reuse the current React/Vite stack, and mention frontend tests for the interaction.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/API.md",
-        "doc/FRONTEND_MVP_PLAN.md",
+        "docs/ADR.md",
+        "docs/API.md",
+        "docs/FRONTEND_MVP_PLAN.md",
         ".skills/phishshield-frontend/SKILL.md"
       ],
       "expectations": [
@@ -26,8 +26,8 @@
       "expected_output": "The answer should prefer the Vite proxy for local development, explain that backend CORS is not needed for the current dev setup, and only suggest CORS if deployment later requires cross-origin browser requests.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/FRONTEND_MVP_PLAN.md",
+        "docs/ADR.md",
+        "docs/FRONTEND_MVP_PLAN.md",
         ".skills/phishshield-frontend/SKILL.md"
       ],
       "expectations": [
@@ -43,8 +43,8 @@
       "expected_output": "The answer should focus on clearer frontend UX using the existing backend response, prioritize risk and findings readability, preserve raw indicator visibility, and avoid a broad design-system rewrite.",
       "files": [
         "AGENT.md",
-        "doc/API.md",
-        "doc/FRONTEND_MVP_PLAN.md",
+        "docs/API.md",
+        "docs/FRONTEND_MVP_PLAN.md",
         ".skills/phishshield-frontend/SKILL.md"
       ],
       "expectations": [
@@ -61,9 +61,9 @@
       "expected_output": "The answer should recognize that browser evidence depends on backend support, defer frontend-only screenshot UI until the backend exposes the required data, and suggest API or architecture work first if needed.",
       "files": [
         "AGENT.md",
-        "doc/ADR.md",
-        "doc/API.md",
-        "doc/FRONTEND_MVP_PLAN.md",
+        "docs/ADR.md",
+        "docs/API.md",
+        "docs/FRONTEND_MVP_PLAN.md",
         ".skills/phishshield-frontend/SKILL.md"
       ],
       "expectations": [

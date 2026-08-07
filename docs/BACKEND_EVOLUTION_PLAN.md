@@ -4,7 +4,7 @@
 
 This document tracks PhishShield backend evolution from the first pure Domain iteration through the current API, runtime, Docker, and CI MVP.
 
-Its goal is to keep near-term backend work useful and maintainable while preserving the hexagonal architecture defined in `doc/ADR.md`.
+Its goal is to keep near-term backend work useful and maintainable while preserving the hexagonal architecture defined in `docs/ADR.md`.
 
 ---
 
@@ -286,7 +286,7 @@ The current backend MVP is functionally complete for the local email analysis fl
 
 The current calibration baseline is documented in:
 
-- `doc/SCORING_CALIBRATION.md`
+- `docs/SCORING_CALIBRATION.md`
 
 ---
 
@@ -299,8 +299,8 @@ Short-term goals:
 
 - expand parser fixtures only when realistic samples answer a concrete parser or scoring question;
 - review whether current scoring weights still match the richer fixture set;
-- keep `doc/API.md` as the external API contract reference;
-- use `doc/SCORING_CALIBRATION.md` as the baseline before changing weights or critical indicators;
+- keep `docs/API.md` as the external API contract reference;
+- use `docs/SCORING_CALIBRATION.md` as the baseline before changing weights or critical indicators;
 - preserve the current backend API, Docker runtime, CI baseline, and explanation/evidence contract as the foundation for further product polish.
 
 ---

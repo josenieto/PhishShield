@@ -106,4 +106,4 @@ does not enable the advisory model or use production email data.
 
 The Compose deployment is the simplest product path. Native development remains
 available when iterating on the backend and frontend separately. See
-`README.md`, `doc/CLI.md`, and `doc/API.md` for those workflows.
+`README.md`, `docs/CLI.md`, and `docs/API.md` for those workflows.

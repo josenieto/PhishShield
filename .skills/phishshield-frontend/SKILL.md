@@ -16,12 +16,12 @@ The frontend exists to make backend findings understandable and actionable for a
 Before making relevant frontend changes, read:
 
 - `AGENT.md`
-- `doc/ADR.md`
-- `doc/API.md`
-- `doc/FRONTEND_MVP_PLAN.md`
+- `docs/ADR.md`
+- `docs/API.md`
+- `docs/FRONTEND_MVP_PLAN.md`
 - `.skills/README.md`
 
-If this skill conflicts with `doc/ADR.md`, the ADR takes precedence.
+If this skill conflicts with `docs/ADR.md`, the ADR takes precedence.
 
 ## Working process
 
