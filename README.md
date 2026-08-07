@@ -28,7 +28,7 @@ The current release candidate includes:
 - Markdown, JSON, and HTML report exports;
 - single-email deterministic CLI;
 - GitHub Actions artifact analysis workflow;
-- local Docker Compose deployment under preparation for `v0.1.0-rc.2`.
+- one-command local Docker Compose deployment, validated in CI and manual testing.
 
 The optional advisory model is experimental, disabled by default, and never
 changes deterministic findings or `risk_score`.
@@ -67,8 +67,9 @@ Then open:
 http://localhost:8080
 ```
 
-The complete frontend-plus-backend Compose deployment is validated in CI and is
-the RC.2 product path. For the current development setup and native commands, see
+The complete frontend-plus-backend Compose deployment is the RC.2 product path
+and is validated in CI and manual local testing. For the current development
+setup and native commands, see
 [`docs/index.md`](docs/index.md).
 
 ## CLI
@@ -141,8 +142,8 @@ Useful entry points:
 - [Public roadmap](docs/ROADMAP.md)
 - [Post-MVP roadmap](docs/POST_MVP_ROADMAP.md)
 
-Release hygiene documents, including the MIT license, contribution guide,
-security policy, and deployment guide, are part of the RC.2 completion work.
+Release hygiene documents include the MIT license, contribution guide, security
+policy, deployment guide, and public roadmap.
 
 Technical and research documentation remains under [`docs/`](docs/), including
 the ADR, scoring calibration, parser plans, and experimental advisory inference
@@ -156,5 +157,4 @@ Roadmap items are directions, not delivery commitments.
 
 ## License
 
-PhishShield is intended to be released under the MIT License as part of the
-`v0.1.0-rc.2` release preparation.
+PhishShield is released under the MIT License.
