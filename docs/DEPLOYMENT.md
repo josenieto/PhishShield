@@ -13,6 +13,35 @@ From the repository root:
 docker compose up --build
 ```
 
+## Published GHCR Images
+
+The release workflow publishes versioned frontend and backend images to GitHub
+Container Registry. Release candidates use explicit tags and do not publish a
+`latest` tag.
+
+Copy the image configuration example:
+
+```bash
+cp .env.images.example .env
+```
+
+Then pull and start the published images:
+
+```bash
+docker compose -f compose.images.yaml pull
+docker compose -f compose.images.yaml up
+```
+
+PowerShell users can copy the example with:
+
+```powershell
+Copy-Item .env.images.example .env
+```
+
+The default image tag is `v0.1.0-rc.2`. Set `PHISHSHIELD_IMAGE_TAG` in `.env`
+to another published version when needed. The image workflow accepts only
+version tags beginning with `v`.
+
 Open the Web UI at:
 
 ```text
