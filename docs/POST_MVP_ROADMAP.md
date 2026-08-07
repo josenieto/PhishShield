@@ -99,6 +99,15 @@ it downloads exactly one `.eml`, runs the deterministic CLI, uploads the JSON
 report, and enforces the configured risk threshold. The advisory model remains
 outside this workflow.
 
+Completed for the RC.2 baseline:
+
+- single-email deterministic CLI;
+- stable text/JSON output and exit codes;
+- CLI smoke coverage in CI;
+- reusable `.eml` artifact workflow;
+- manual benign and threshold-enforcement smoke coverage;
+- complete Compose smoke validation through the production frontend proxy.
+
 A manual same-repository smoke caller is included to validate that adoption
 path without requiring a downstream repository or real email data.
 
@@ -180,6 +189,8 @@ CI Phase 1 is now also enabled for hygiene, private-key detection, and
 Domain/Application architecture boundaries. The scoring-sensitive guard remains
 local-only until the CI guardrail set proves stable.
 
+This phase-one guardrail scope is complete for the RC.2 baseline.
+
 Candidate steps:
 
 - observe local hook ergonomics over normal development;
@@ -258,3 +269,7 @@ Rationale:
 - the deterministic CLI contract and CI smoke checks are complete;
 - model-assisted inference is closed as experimental and remains optional;
 - future work should be driven by an actual analyst or CI workflow rather than another generic model-validation campaign.
+
+The RC.2 implementation baseline is complete. The next group is intentionally
+not opened by this release-candidate preparation work; future expansion starts
+only after public evaluation identifies a concrete workflow need.
