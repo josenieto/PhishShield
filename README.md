@@ -2,10 +2,15 @@
 
 **Local, explainable phishing-email triage for `.eml` files.**
 
-PhishShield helps IT and security analysts inspect a suspicious email before
-deciding whether to escalate it, report it, or investigate further. It extracts
-email evidence locally and presents deterministic findings, severity, and risk
-in an analyst-focused workspace.
+PhishShield helps security analysts and help-desk teams inspect a suspicious
+email before deciding whether to escalate it, report it, or investigate
+further. It processes the message locally, explains the evidence behind each
+finding, and produces deterministic risk and exportable reports.
+
+**Use it when:** a user reports an email as suspicious and you need a safe,
+repeatable first look at the `.eml` without opening it in a normal mail client.
+It is local-first, account-free, and does not resolve links or execute
+attachments.
 
 ```text
 Upload .eml
@@ -55,6 +60,27 @@ workspace.
 
 ## Quick Start
 
+### Try It In Two Minutes
+
+The fastest safe evaluation uses the published release images and the synthetic
+sample included in this repository. The sample contains no real credentials,
+malware, or active payload.
+
+```bash
+cp .env.images.example .env
+docker compose -f compose.images.yaml pull
+docker compose -f compose.images.yaml up
+```
+
+On PowerShell, use `Copy-Item .env.images.example .env` instead of `cp`. Open
+`http://localhost:8080`, upload
+[`samples/suspicious-lookalike-domain.eml`](samples/suspicious-lookalike-domain.eml),
+and review the findings and report exports.
+
+The sample is designed to show a lookalike domain, a suspicious URL, and the
+evidence used by the deterministic analysis. PhishShield reports indicators for
+triage; it is not a malware verdict.
+
 The target MVP deployment is a single command:
 
 ```bash
@@ -71,6 +97,27 @@ The complete frontend-plus-backend Compose deployment is the RC.2 product path
 and is validated in CI and manual local testing. For the current development
 setup and native commands, see
 [`docs/index.md`](docs/index.md).
+
+### Run Published Images
+
+To run the release candidate without building images locally:
+
+```bash
+cp .env.images.example .env
+docker compose -f compose.images.yaml pull
+docker compose -f compose.images.yaml up
+```
+
+The published images use the explicit release tag `v0.1.0-rc.2`:
+
+- [Backend image on GHCR](https://github.com/josenieto/PhishShield/pkgs/container/phishshield-backend)
+- [Frontend image on GHCR](https://github.com/josenieto/PhishShield/pkgs/container/phishshield-frontend)
+
+See the [deployment guide](docs/DEPLOYMENT.md) for image configuration and
+runtime limits. Release candidates do not use a floating `latest` tag.
+
+For a source build instead of the published images, use `docker compose up
+--build` as described below.
 
 ## CLI
 
@@ -140,7 +187,12 @@ Useful entry points:
 - [Deployment guide](docs/DEPLOYMENT.md)
 - [Release plan](docs/RC2_RELEASE_PLAN.md)
 - [Public roadmap](docs/ROADMAP.md)
+- [Community feedback prompt](docs/COMMUNITY_FEEDBACK.md)
+- [Distribution message drafts](docs/DISTRIBUTION_MESSAGES.md)
 - [Post-MVP roadmap](docs/POST_MVP_ROADMAP.md)
+
+The repository also includes a safe synthetic message for the two-minute demo:
+[`samples/suspicious-lookalike-domain.eml`](samples/suspicious-lookalike-domain.eml).
 
 Release hygiene documents include the MIT license, contribution guide, security
 policy, deployment guide, and public roadmap.

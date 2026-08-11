@@ -52,6 +52,8 @@ The complete one-command Docker Compose deployment is being prepared for
 ## Understand The Product
 
 - [Public roadmap](ROADMAP.md): current capabilities and planned directions.
+- [Community feedback prompt](COMMUNITY_FEEDBACK.md): questions for validating real triage workflows.
+- [Distribution message drafts](DISTRIBUTION_MESSAGES.md): adapted launch posts for external communities.
 - [Post-MVP roadmap](POST_MVP_ROADMAP.md): detailed implementation tracks.
 - [Scoring calibration](SCORING_CALIBRATION.md): deterministic risk-scoring evidence and change rules.
 - [API contract](API.md): request, response, and error behavior.
