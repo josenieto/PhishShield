@@ -9,6 +9,18 @@ type ModelAssessmentPanelProps = {
   onAssess: () => void;
 };
 
+function abstentionReasonLabel(reason: string | null): string {
+  if (reason === "out_of_scope") {
+    return "The email is outside the model's supported scope.";
+  }
+
+  if (reason === "low_binary_confidence") {
+    return "Model confidence was below the binary-confidence threshold.";
+  }
+
+  return "The model abstained because it could not provide a sufficiently reliable advisory result.";
+}
+
 
 export function ModelAssessmentPanel({
   modelAssessment,
@@ -72,7 +84,10 @@ export function ModelAssessmentPanel({
                  Confidence: {assessment.confidence === null ? "Not available" : assessment.confidence.toFixed(2)}
                </span>
              </div>
-             <p>{assessment.summary || "The model returned no summary."}</p>
+              <p>{assessment.summary || "The model returned no summary."}</p>
+              {status === "inconclusive" && (
+                <p className="muted-copy">Reason: {abstentionReasonLabel(assessment.abstention_reason)}</p>
+              )}
            </div>
 
            <div className="model-assessment-detail-grid">

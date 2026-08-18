@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -135,6 +135,7 @@ describe("App", () => {
     render(<App />);
 
     expect(screen.getByRole("heading", { name: "Local email triage workbench" })).toBeInTheDocument();
+    expect(screen.getByText(/use a trusted local or internal deployment for confidential email/i)).toBeInTheDocument();
   });
 
   it("should keep the analyze button disabled until a file is selected", () => {
@@ -175,6 +176,50 @@ describe("App", () => {
     expect(buttons[0]).toBeEnabled();
   });
 
+  it("should select a supported .eml file when it is dropped on the upload form", () => {
+    render(<App />);
+
+    const uploadForm = screen.getByRole("form", { name: "Email upload" });
+    const emailFile = new File(["sample"], "dropped-message.eml", {
+      type: "message/rfc822",
+    });
+
+    fireEvent.drop(uploadForm, { dataTransfer: { files: [emailFile] } });
+
+    expect(screen.getByText("Selected: dropped-message.eml")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Analyze email" })).toBeEnabled();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("should replace the visible filename when a new email is dropped", () => {
+    render(<App />);
+
+    const uploadForm = screen.getByRole("form", { name: "Email upload" });
+    const firstFile = new File(["first"], "first-message.eml", { type: "message/rfc822" });
+    const secondFile = new File(["second"], "second-message.eml", { type: "message/rfc822" });
+
+    fireEvent.drop(uploadForm, { dataTransfer: { files: [firstFile] } });
+    fireEvent.drop(uploadForm, { dataTransfer: { files: [secondFile] } });
+
+    expect(screen.getByText("Selected: second-message.eml")).toBeInTheDocument();
+    expect(screen.queryByText("Selected: first-message.eml")).not.toBeInTheDocument();
+  });
+
+  it("should reject a dropped file that is not an .eml message", () => {
+    render(<App />);
+
+    const uploadForm = screen.getByRole("form", { name: "Email upload" });
+    const invalidFile = new File(["sample"], "dropped-message.pdf", {
+      type: "application/pdf",
+    });
+
+    fireEvent.drop(uploadForm, { dataTransfer: { files: [invalidFile] } });
+
+    expect(screen.getByRole("alert")).toHaveTextContent(/only \.eml files are supported/i);
+    expect(screen.getByText("No file selected")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Analyze email" })).toBeDisabled();
+  });
+
   it("should render a success state after analysis completes", async () => {
     const user = userEvent.setup();
     vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
@@ -190,6 +235,7 @@ describe("App", () => {
     await user.click(screen.getAllByRole("button", { name: "Analyze email" })[0]);
 
     expect(await screen.findByText("Analysis completed")).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: /analysis completed/i })).toBeInTheDocument();
     const workbench = screen.getByRole("main").querySelector(".workbench-grid");
     const sidebar = workbench?.querySelector(".workbench-sidebar");
     const results = workbench?.querySelector(".workbench-main");
@@ -323,6 +369,58 @@ describe("App", () => {
     expect(screen.getByText("suspicious")).toBeInTheDocument();
     expect(screen.getByText("Confidence: 0.84")).toBeInTheDocument();
     expect(screen.getByText("local-baseline")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Analyze email" }));
+
+    expect(screen.queryByText("Advisory model result")).not.toBeInTheDocument();
+  });
+
+  it("should explain why an inconclusive model assessment abstained", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(SAMPLE_ANALYSIS);
+    vi.spyOn(analyzeEmailModelAssessmentApi, "analyzeEmailModelAssessment").mockResolvedValue({
+      model_assessment: {
+        status: "inconclusive",
+        label: "unknown",
+        confidence: 0.42,
+        summary: "The message requires analyst review.",
+        signals: [],
+        model_name: "local-baseline",
+        model_version: "test-version",
+        abstention_reason: "out_of_scope",
+        error_message: "",
+      },
+    });
+
+    render(<App />);
+    await user.upload(emailFileInput(), new File(["sample"], "sample.eml", { type: "message/rfc822" }));
+    await user.click(screen.getByRole("button", { name: "Analyze email" }));
+    await screen.findByText("Analysis completed");
+    await user.click(screen.getByRole("button", { name: "Assess with model" }));
+
+    expect(await screen.findByText(/the email is outside the model's supported scope/i)).toBeInTheDocument();
+  });
+
+  it("should use API category counts instead of counting visible findings", async () => {
+    const user = userEvent.setup();
+    const analysisWithAuthoritativeCounts = {
+      ...SAMPLE_ANALYSIS,
+      finding_summary: {
+        ...SAMPLE_ANALYSIS.finding_summary,
+        finding_counts_by_category: {
+          AUTHENTICATION: 4,
+          DOMAIN: 1,
+        },
+      },
+    };
+    vi.spyOn(analyzeEmailApi, "analyzeEmail").mockResolvedValue(analysisWithAuthoritativeCounts);
+
+    render(<App />);
+    await user.upload(emailFileInput(), new File(["sample"], "sample.eml", { type: "message/rfc822" }));
+    await user.click(screen.getByRole("button", { name: "Analyze email" }));
+    await screen.findByText("Analysis completed");
+
+    expect(screen.getByText("4", { selector: "strong" })).toBeInTheDocument();
   });
 
   it("should trigger HTML report download from the success state", async () => {
@@ -510,6 +608,7 @@ describe("App", () => {
 
     expect(await screen.findByText("Analysis in progress")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Analyzing local email..." })).toBeDisabled();
+    expect(emailFileInput()).toBeDisabled();
 
     resolveAnalysis?.(SAMPLE_ANALYSIS);
 
@@ -550,7 +649,7 @@ describe("App", () => {
     await user.upload(input, emailFile);
 
     await waitFor(() => {
-      expect(screen.getByText("security-review.eml")).toBeInTheDocument();
+       expect(screen.getByText("Selected: security-review.eml")).toBeInTheDocument();
     });
   });
 
@@ -564,7 +663,7 @@ describe("App", () => {
     await user.upload(input, invalidFile);
 
     expect(input.files).toHaveLength(0);
-    expect(screen.getByText("No file selected yet")).toBeInTheDocument();
+    expect(screen.getByText("No file selected")).toBeInTheDocument();
   });
 
   it("should render empty evidence states when extracted evidence is missing", async () => {

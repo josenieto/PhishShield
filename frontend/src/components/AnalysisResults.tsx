@@ -35,7 +35,7 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
 
   return (
     <section className="analysis-panel" aria-label="Analysis results">
-      <div className="success-banner">
+      <div className="success-banner" role="status" aria-live="polite" aria-label="Analysis completed">
         <strong>Analysis completed</strong>
         <span>
           Review the local triage output for <code>{selectedFileName}</code>.
@@ -99,7 +99,7 @@ export function AnalysisResults({ analysis, selectedFileName }: AnalysisResultsP
             </button>
           </div>
 
-          {copyStatusMessage && <span className="copy-report-status">{copyStatusMessage}</span>}
+          {copyStatusMessage && <span className="copy-report-status" role="status" aria-live="polite">{copyStatusMessage}</span>}
         </section>
       </div>
 

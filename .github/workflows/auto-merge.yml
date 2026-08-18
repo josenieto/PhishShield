@@ -1,4 +1,4 @@
-name: Auto PR and Merge
+name: Auto PR and CI Gate
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - 'integration/master' # Prevents the workflow from triggering when a merge happens here
 
 jobs:
-  auto-pr-merge:
+  auto-pr-ci-gate:
     runs-on: ubuntu-latest
     permissions:
       actions: read
       checks: read
-      contents: write
+      contents: read
       pull-requests: write
 
     steps:
@@ -24,8 +24,8 @@ jobs:
       - name: Fetch integration branch reference
         run: git fetch origin integration/master:refs/remotes/origin/integration/master
 
-      # Native method that forces the PR creation even without local runner changes
-      - name: Create and Merge Pull Request
+      # Create the PR and wait for CI; merging remains a deliberate human action.
+      - name: Create Pull Request and Wait for CI
         run: |
           # 1. Reuse an existing PR when present, otherwise create a new one.
           PR_URL=$(gh pr list \
@@ -67,7 +67,6 @@ jobs:
 
           gh run watch "$RUN_ID" --exit-status
 
-          # 3. Merge the pull request once Backend CI passes.
-          gh pr merge "$PR_URL" --merge --delete-branch
+          echo "Backend CI passed. Manual review and merge are required for $PR_URL."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

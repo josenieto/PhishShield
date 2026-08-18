@@ -41,9 +41,12 @@ def test_should_return_file_error_for_missing_email(capsys) -> None:
     assert "Unable to read email file" in capsys.readouterr().err
 
 
-def test_should_return_analysis_error_for_oversized_email(tmp_path: Path, capsys) -> None:
+def test_should_return_analysis_error_for_oversized_email(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    monkeypatch.setenv("PHISHSHIELD_MAX_UPLOAD_BYTES", "5")
     path = tmp_path / "oversized.eml"
-    path.write_bytes(b"x" * 1_000_001)
+    path.write_bytes(b"x" * 6)
 
     result = main(["analyze", str(path)])
 

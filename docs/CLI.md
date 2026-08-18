@@ -74,7 +74,7 @@ jobs:
 
   analyze-email:
     needs: upload-email
-    uses: OWNER/REPOSITORY/.github/workflows/deterministic-email-artifact.yml@integration/master
+     uses: josenieto/PhishShield/.github/workflows/deterministic-email-artifact.yml@integration/master
     with:
       email-artifact: email-under-analysis
       fail-on: high

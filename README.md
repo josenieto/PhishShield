@@ -38,6 +38,57 @@ The current release candidate includes:
 The optional advisory model is experimental, disabled by default, and never
 changes deterministic findings or `risk_score`.
 
+## Technology Stack
+
+| Area | Technology | Purpose |
+| --- | --- | --- |
+| Backend | Python, FastAPI, Pydantic | Deterministic analysis API and application flow. |
+| Frontend | React, TypeScript, Vite | Analyst-oriented web interface. |
+| AI advisory | scikit-learn, TF-IDF, Logistic Regression | Optional local experimental assessment. |
+| Deployment | Docker, Docker Compose, GHCR | Reproducible local-first distribution. |
+| Quality | pytest, Vitest, GitHub Actions, pre-commit | Automated validation and delivery safeguards. |
+
+## Project Structure
+
+```text
+src/
+  domain/          Pure analysis rules, models, and deterministic scoring.
+  application/     Use cases and port contracts.
+  infrastructure/  FastAPI, CLI, parsers, and technical adapters.
+frontend/          React analyst workbench.
+tests/             Unit, integration, frontend, and smoke tests.
+docs/              Product, architecture, API, deployment, and ML documentation.
+samples/           Safe synthetic .eml files for reproducible demos.
+```
+
+## Experimental AI-Assisted Assessment
+
+PhishShield includes an optional local advisory model based on TF-IDF features
+and Logistic Regression. It is experimental, disabled by default, and kept
+separate from deterministic findings and `risk_score`.
+
+The advisory flow applies a deterministic scope gate before model assessment. It
+can return `benign`, `suspicious`, or `inconclusive` when a message falls
+outside a supported notification family or model confidence is insufficient.
+The deterministic analysis remains authoritative for findings, evidence, risk,
+and CI decisions.
+
+The model is not a universal phishing classifier, malware verdict, CI gate, or
+replacement for analyst judgment. It does not resolve links, execute
+attachments, or send email content to a cloud service.
+
+The advisory model remains experimental because the project does not yet have
+an authorized, representative, family-labeled, and independently validated
+corpus suitable for product promotion. Real email data can contain confidential
+and personal information, while public corpora may be historically limited,
+non-representative, or insufficiently independent for deployment decisions.
+
+The implementation, evaluation boundary, abstention behavior, and future
+training requirements are documented in the
+[experimental advisory inference closure](docs/EXPERIMENTAL_ADVISORY_INFERENCE.md),
+[ML training and evaluation strategy](docs/ML_TRAINING_EVALUATION_STRATEGY.md),
+and [ML dataset research](docs/ML_DATASET_RESEARCH.md).
+
 ## Analyst Workbench
 
 The primary workflow is visual and evidence-driven:
@@ -190,6 +241,9 @@ Useful entry points:
 - [Community feedback prompt](docs/COMMUNITY_FEEDBACK.md)
 - [Distribution message drafts](docs/DISTRIBUTION_MESSAGES.md)
 - [Post-MVP roadmap](docs/POST_MVP_ROADMAP.md)
+- [Presentation content](docs/PRESENTATION_CONTENT.md): English slide source for the public deck.
+- [Presentation backup (PDF)](docs/presentation/PhishShield%20Presentation.pdf): universal offline copy of the public slides.
+- [Presentation deck (PPTX)](docs/presentation/PhishShield-Presentation.pptx): editable offline copy of the public slides.
 
 The repository also includes a safe synthetic message for the two-minute demo:
 [`samples/suspicious-lookalike-domain.eml`](samples/suspicious-lookalike-domain.eml).
@@ -200,6 +254,15 @@ policy, deployment guide, and public roadmap.
 Technical and research documentation remains under [`docs/`](docs/), including
 the ADR, scoring calibration, parser plans, and experimental advisory inference
 records.
+
+## Project Delivery
+
+- Public repository: <https://github.com/josenieto/PhishShield>
+- Published container images: [frontend on GHCR](https://github.com/josenieto/PhishShield/pkgs/container/phishshield-frontend) and [backend on GHCR](https://github.com/josenieto/PhishShield/pkgs/container/phishshield-backend).
+- Presentation slides: [PhishShield Presentation on Google Slides](https://docs.google.com/presentation/d/1Uaeqi8ZDhjRx-cwRhd_XX2M-JMCT7ExWDmkYDBb4dx4/edit?usp=sharing).
+- Presentation backup: [PDF](docs/presentation/PhishShield%20Presentation.pdf) and [PPTX](docs/presentation/PhishShield-Presentation.pptx).
+- Project video: To be added before submission.
+- Test credentials: Not applicable. PhishShield does not require authentication.
 
 ## Community
 

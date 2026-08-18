@@ -10,10 +10,13 @@ from infrastructure.adapters.model_assessment.noop_model_assessment_adapter impo
     NoopModelAssessmentAdapter,
 )
 from infrastructure.config.api_defaults import DEFAULT_API_SETTINGS, ApiSettings
-from infrastructure.entrypoints.api.routers.analyze_email import _read_upload_file_with_limit
 from infrastructure.entrypoints.api.schemas.model_assessment import (
     AnalyzeEmailModelAssessmentResponse,
     model_assessment_result_to_response,
+)
+from infrastructure.entrypoints.upload_limits import (
+    UploadSizeLimitExceeded,
+    read_upload_file_with_limit,
 )
 
 
@@ -29,10 +32,13 @@ async def analyze_email_model_assessment(
     file: UploadFile = File(...),
 ) -> AnalyzeEmailModelAssessmentResponse:
     api_settings = getattr(request.app.state, "api_settings", DEFAULT_API_SETTINGS)
-    email_bytes = await _read_upload_file_with_limit(
-        file,
-        max_bytes=api_settings.max_upload_bytes,
-    )
+    try:
+        email_bytes = await read_upload_file_with_limit(file, api_settings.max_upload_bytes)
+    except UploadSizeLimitExceeded:
+        raise HTTPException(
+            status_code=413,
+            detail="Uploaded email exceeds maximum allowed size.",
+        ) from None
 
     try:
         assessment = _build_assess_raw_email_with_model_use_case(api_settings).execute(

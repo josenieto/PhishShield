@@ -14,6 +14,7 @@ Future changes will be recorded here after the `v0.1.0-rc.2` release candidate.
 
 ### Added
 
+- Versioned frontend and backend images published to GitHub Container Registry.
 - Analyst-focused Web UI with real MVP screenshots and documentation navigation.
 - Deterministic single-email CLI with text/JSON output and stable exit codes.
 - Reusable GitHub Actions workflow for `.eml` artifact analysis.

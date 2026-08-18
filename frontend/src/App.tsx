@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type DragEvent, type FormEvent } from "react";
 
 import { analyzeEmail } from "./api/analyzeEmail";
 import { analyzeEmailModelAssessment } from "./api/analyzeEmailModelAssessment";
 import { AnalysisResults } from "./components/AnalysisResults";
 import { ModelAssessmentPanel } from "./components/ModelAssessmentPanel";
+import { getDroppedFile } from "./fileSelection";
 import type { AnalyzeEmailModelAssessmentResponse, AnalyzeEmailResponse } from "./types/api";
 
 
@@ -18,6 +19,8 @@ function isSupportedEmailFile(file: File): boolean {
 
 export default function App() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const dragDepthRef = useRef(0);
+  const requestSequenceRef = useRef(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [analysis, setAnalysis] = useState<AnalyzeEmailResponse | null>(null);
   const [modelAssessment, setModelAssessment] = useState<AnalyzeEmailModelAssessmentResponse | null>(null);
@@ -40,6 +43,12 @@ export default function App() {
   }
 
   function handleSelectedFile(file: File | null): void {
+    if (isAnalyzing || isAssessingModel) {
+      return;
+    }
+
+    requestSequenceRef.current += 1;
+
     if (file === null) {
       setSelectedFile(null);
       setErrorMessage("");
@@ -65,6 +74,43 @@ export default function App() {
     setModelAssessmentErrorMessage("");
   }
 
+  function handleDragEnter(event: DragEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    if (isAnalyzing || isAssessingModel) {
+      return;
+    }
+
+    dragDepthRef.current += 1;
+    setIsDragOver(true);
+    event.dataTransfer.dropEffect = "copy";
+  }
+
+  function handleDragOver(event: DragEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    if (!isAnalyzing && !isAssessingModel) {
+      event.dataTransfer.dropEffect = "copy";
+    }
+  }
+
+  function handleDragLeave(event: DragEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    dragDepthRef.current = Math.max(0, dragDepthRef.current - 1);
+    if (dragDepthRef.current === 0) {
+      setIsDragOver(false);
+    }
+  }
+
+  function handleDrop(event: DragEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    dragDepthRef.current = 0;
+    setIsDragOver(false);
+    if (isAnalyzing || isAssessingModel) {
+      return;
+    }
+
+    handleSelectedFile(getDroppedFile(event.dataTransfer));
+  }
+
   async function handleAnalyzeSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -73,20 +119,30 @@ export default function App() {
       return;
     }
 
+    const fileToAnalyze = selectedFile;
+    const requestSequence = ++requestSequenceRef.current;
     setIsAnalyzing(true);
     setErrorMessage("");
     setAnalysis(null);
+    setModelAssessment(null);
+    setModelAssessmentErrorMessage("");
 
     try {
-      const result = await analyzeEmail(selectedFile);
-      setAnalysis(result);
+      const result = await analyzeEmail(fileToAnalyze);
+      if (requestSequence === requestSequenceRef.current) {
+        setAnalysis(result);
+      }
     } catch (error) {
-      setAnalysis(null);
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unexpected analysis error.",
-      );
+      if (requestSequence === requestSequenceRef.current) {
+        setAnalysis(null);
+        setErrorMessage(
+          error instanceof Error ? error.message : "Unexpected analysis error.",
+        );
+      }
     } finally {
-      setIsAnalyzing(false);
+      if (requestSequence === requestSequenceRef.current) {
+        setIsAnalyzing(false);
+      }
     }
   }
 
@@ -96,19 +152,27 @@ export default function App() {
       return;
     }
 
+    const fileToAssess = selectedFile;
+    const requestSequence = ++requestSequenceRef.current;
     setIsAssessingModel(true);
     setModelAssessmentErrorMessage("");
 
     try {
-      const result = await analyzeEmailModelAssessment(selectedFile);
-      setModelAssessment(result);
+      const result = await analyzeEmailModelAssessment(fileToAssess);
+      if (requestSequence === requestSequenceRef.current) {
+        setModelAssessment(result);
+      }
     } catch (error) {
-      setModelAssessment(null);
-      setModelAssessmentErrorMessage(
-        error instanceof Error ? error.message : "Unexpected model assessment error.",
-      );
+      if (requestSequence === requestSequenceRef.current) {
+        setModelAssessment(null);
+        setModelAssessmentErrorMessage(
+          error instanceof Error ? error.message : "Unexpected model assessment error.",
+        );
+      }
     } finally {
-      setIsAssessingModel(false);
+      if (requestSequence === requestSequenceRef.current) {
+        setIsAssessingModel(false);
+      }
     }
   }
 
@@ -134,52 +198,54 @@ export default function App() {
                 <p>Load a local email and send it to the current backend triage flow.</p>
               </div>
 
-              <form className="upload-panel" onSubmit={handleAnalyzeSubmit}>
-                <label
-                  className={`file-input-card ${isDragOver ? "file-input-card-dragover" : ""}`}
-                  htmlFor="email-file"
-                  onDragOver={(event) => {
-                    event.preventDefault();
-                    setIsDragOver(true);
-                  }}
-                  onDragLeave={(event) => {
-                    event.preventDefault();
-                    setIsDragOver(false);
-                  }}
-                  onDrop={(event) => {
-                    event.preventDefault();
-                    setIsDragOver(false);
-                    handleSelectedFile(event.dataTransfer.files?.[0] ?? null);
-                  }}
+                <form
+                  className={`upload-panel ${isDragOver ? "upload-panel-dragover" : ""}`}
+                  aria-label="Email upload"
+                  onSubmit={handleAnalyzeSubmit}
+                  onDragEnter={handleDragEnter}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
                 >
+                  <label
+                    className={`file-input-card ${isDragOver ? "file-input-card-dragover" : ""}`}
+                    htmlFor="email-file"
+                  >
                   <span className="file-input-title">Email file</span>
                   <span className="file-input-help">
                     Choose or drag a <code>.eml</code> message to send to <code>/api/analyze-email</code>.
                   </span>
-                  <input
-                    ref={fileInputRef}
-                    id="email-file"
-                    type="file"
-                    accept={FILE_INPUT_ACCEPT}
-                    onChange={(event) => {
-                      handleSelectedFile(event.target.files?.[0] ?? null);
-                    }}
-                  />
+                  <span className="file-input-status" aria-live="polite">
+                    {selectedFile ? `Selected: ${selectedFile.name}` : "No file selected"}
+                  </span>
+                  <span id="privacy-notice" className="file-input-help">
+                    Privacy: This deployment processes email through the configured backend.
+                    Use a trusted local or internal deployment for confidential email. Do not
+                    upload confidential or production email to a public or untrusted host.
+                  </span>
+                    <span className="file-input-button">Choose .eml file</span>
+                    <input
+                      ref={fileInputRef}
+                      id="email-file"
+                      className="visually-hidden-file-input"
+                      type="file"
+                      accept={FILE_INPUT_ACCEPT}
+                      aria-describedby="privacy-notice"
+                      disabled={isAnalyzing || isAssessingModel}
+                     onChange={(event) => {
+                       handleSelectedFile(event.target.files?.[0] ?? null);
+                     }}
+                   />
                 </label>
 
-                <div className="upload-actions">
-                  <div className="selected-file-card">
-                    <span className="selected-file-label">Selected file</span>
-                    <strong>{selectedFile?.name ?? "No file selected yet"}</strong>
-                  </div>
-
-                  <button type="submit" disabled={isAnalyzing || selectedFile === null}>
+                 <div className="upload-actions">
+                  <button type="submit" disabled={isAnalyzing || isAssessingModel || selectedFile === null}>
                     {isAnalyzing ? "Analyzing local email..." : "Analyze email"}
                   </button>
                 </div>
               </form>
 
-              {errorMessage && <p className="error-banner">{errorMessage}</p>}
+              {errorMessage && <p className="error-banner" role="alert">{errorMessage}</p>}
             </section>
 
             <div className="status-grid sidebar-status-grid">
@@ -187,7 +253,7 @@ export default function App() {
                 <h2>Execution path</h2>
                 <p>
                   Browser upload to <code>/api/analyze-email</code>, proxied to the local
-                  FastAPI service at <code>http://127.0.0.1:8000</code>.
+                   FastAPI service through the frontend proxy.
                 </p>
               </article>
               <article>
@@ -200,9 +266,9 @@ export default function App() {
             </div>
           </aside>
 
-          <section className="workbench-main">
+          <section className="workbench-main" aria-busy={isAnalyzing || isAssessingModel}>
             {isAnalyzing && (
-              <section className="empty-state-panel empty-state-panel-main">
+              <section className="empty-state-panel empty-state-panel-main" role="status" aria-live="polite">
                 <h2>Analysis in progress</h2>
                 <p>
                   The selected email is being submitted to the local backend for risk scoring
@@ -231,7 +297,7 @@ export default function App() {
                   modelAssessment={modelAssessment}
                   isAssessingModel={isAssessingModel}
                   errorMessage={modelAssessmentErrorMessage}
-                  canAssess={selectedFile !== null}
+                   canAssess={selectedFile !== null && !isAnalyzing && !isAssessingModel}
                   onAssess={() => {
                     void handleModelAssessment();
                   }}

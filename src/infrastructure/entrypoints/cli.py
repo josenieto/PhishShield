@@ -18,8 +18,9 @@ from infrastructure.config.analysis_defaults import (
     DEFAULT_SUSPICIOUS_TLDS,
     DEFAULT_URGENCY_TERMS,
 )
-from infrastructure.config.api_defaults import DEFAULT_API_SETTINGS
+from infrastructure.config.api_defaults import load_api_settings
 from infrastructure.entrypoints.api.schemas.analyze_email import extracted_email_analysis_to_response
+from infrastructure.entrypoints.upload_limits import UploadSizeLimitExceeded, enforce_upload_size
 
 
 EXIT_OK = 0
@@ -42,7 +43,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"Unable to read email file: {exc}", file=sys.stderr)
         return EXIT_FILE_ERROR
 
-    if len(email_bytes) > DEFAULT_API_SETTINGS.max_upload_bytes:
+    try:
+        enforce_upload_size(email_bytes, load_api_settings().max_upload_bytes)
+    except UploadSizeLimitExceeded:
         print("Email file exceeds the maximum allowed size.", file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
 

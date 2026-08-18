@@ -26,8 +26,8 @@ The Web UI is designed to help an analyst inspect sender identity, URLs,
 attachments, authentication results, and social-engineering indicators without
 opening the suspicious message in a normal mail client.
 
-The complete one-command Docker Compose deployment is being prepared for
-`v0.1.0-rc.2`.
+The complete one-command Docker Compose deployment is available for local and
+trusted-network evaluation in `v0.1.0-rc.2`.
 
 ### Operator
 
@@ -48,6 +48,13 @@ The complete one-command Docker Compose deployment is being prepared for
 - [Backend evolution plan](BACKEND_EVOLUTION_PLAN.md): backend boundaries and current direction.
 - [Frontend MVP plan](FRONTEND_MVP_PLAN.md): analyst workbench scope.
 - [Engineering journey](ENGINEERING_JOURNEY.md): curated engineering milestones.
+
+## Presentation
+
+- [Google Slides](https://docs.google.com/presentation/d/1Uaeqi8ZDhjRx-cwRhd_XX2M-JMCT7ExWDmkYDBb4dx4/edit?usp=sharing): primary public presentation.
+- [PDF backup](presentation/PhishShield%20Presentation.pdf): universal offline copy.
+- [PPTX backup](presentation/PhishShield-Presentation.pptx): editable offline copy.
+- [Presentation content](PRESENTATION_CONTENT.md): English source for the slide narrative.
 
 ## Understand The Product
 

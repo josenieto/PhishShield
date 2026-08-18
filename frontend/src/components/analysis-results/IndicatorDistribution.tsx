@@ -1,6 +1,6 @@
 import type { AnalyzeEmailResponse } from "../../types/api";
 
-import { groupFindingsByCategory, highestSeverity, severityToneClass } from "./shared";
+import { groupFindingsByCategory, highestSeverity, severityToneClass, sortedCategoryCounts } from "./shared";
 
 
 type IndicatorDistributionProps = {
@@ -10,6 +10,8 @@ type IndicatorDistributionProps = {
 
 export function IndicatorDistribution({ analysis }: IndicatorDistributionProps) {
   const categoryFindings = groupFindingsByCategory(analysis);
+  const findingsByCategory = new Map(categoryFindings);
+  const categoryCounts = sortedCategoryCounts(analysis);
 
   return (
     <section className="findings-panel">
@@ -18,13 +20,13 @@ export function IndicatorDistribution({ analysis }: IndicatorDistributionProps) 
         <p>Category counts show where the strongest clusters of evidence are concentrated.</p>
       </div>
 
-      {categoryFindings.length === 0 ? (
+      {categoryCounts.length === 0 ? (
         <p className="muted-copy">No category evidence was returned by the backend.</p>
       ) : (
         <div className="category-overview-grid">
-          {categoryFindings.map(([category, findings]) => {
-            const count = findings.length;
-            const severity = highestSeverity(findings);
+          {categoryCounts.map(([category, count]) => {
+            const findings = findingsByCategory.get(category) ?? [];
+            const severity = findings.length === 0 ? "UNKNOWN" : highestSeverity(findings);
 
             return (
             <article key={category} className={`category-overview-card ${severityToneClass(severity)}`}>

@@ -22,6 +22,10 @@ from infrastructure.entrypoints.api.schemas.analyze_email import (
     AnalyzeEmailResponse,
     extracted_email_analysis_to_response,
 )
+from infrastructure.entrypoints.upload_limits import (
+    UploadSizeLimitExceeded,
+    read_upload_file_with_limit,
+)
 
 
 router = APIRouter()
@@ -33,10 +37,13 @@ async def analyze_email(
     file: UploadFile = File(...),
 ) -> AnalyzeEmailResponse:
     api_settings = getattr(request.app.state, "api_settings", DEFAULT_API_SETTINGS)
-    email_bytes = await _read_upload_file_with_limit(
-        file,
-        max_bytes=api_settings.max_upload_bytes,
-    )
+    try:
+        email_bytes = await read_upload_file_with_limit(file, api_settings.max_upload_bytes)
+    except UploadSizeLimitExceeded:
+        raise HTTPException(
+            status_code=413,
+            detail="Uploaded email exceeds maximum allowed size.",
+        ) from None
     try:
         analysis = _build_analyze_raw_email_use_case().execute(
             AnalyzeRawEmailCommand(
@@ -64,18 +71,3 @@ def _build_analyze_raw_email_use_case() -> AnalyzeRawEmailUseCase:
     return AnalyzeRawEmailUseCase(
         email_content_extractor=PythonEmailContentExtractorAdapter()
     )
-
-
-async def _read_upload_file_with_limit(
-    file: UploadFile,
-    max_bytes: int = DEFAULT_API_SETTINGS.max_upload_bytes,
-) -> bytes:
-    email_bytes = await file.read(max_bytes + 1)
-
-    if len(email_bytes) > max_bytes:
-        raise HTTPException(
-            status_code=413,
-            detail="Uploaded email exceeds maximum allowed size.",
-        )
-
-    return email_bytes
