@@ -97,6 +97,7 @@ describe("createMarkdownReport", () => {
     expect(report).toContain("# PhishShield Analysis Report");
     expect(report).toContain("- File: security\\-review.eml");
     expect(report).toContain("- Risk level: HIGH");
+    expect(report).toContain("- Score: 65/100");
     expect(report).toContain("- Raw score: 65");
     expect(report).toContain("- Critical indicators: Not observed");
     expect(report).toContain("## Extracted Evidence");

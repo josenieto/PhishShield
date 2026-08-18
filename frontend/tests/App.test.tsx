@@ -245,6 +245,7 @@ describe("App", () => {
     expect(screen.getByText(/review the local triage output for/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Report actions" })).toBeInTheDocument();
     expect(screen.getByText("Risk assessment")).toBeInTheDocument();
+    expect(screen.getByText("Score: 65/100")).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Risk assessment" })).toHaveClass("risk-summary-high");
     expect(screen.getAllByText("Highest severity: HIGH")).toHaveLength(2);
     expect(

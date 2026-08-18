@@ -61,6 +61,8 @@ describe("createHtmlReport", () => {
     expect(report).toContain("<h1>PhishShield Analysis Report</h1>");
     expect(report).toContain("<li>File: security-review.eml</li>");
     expect(report).toContain("<li>Risk level: MEDIUM</li>");
+    expect(report).toContain("<li>Score: 30/100</li>");
+    expect(report).toContain("<li>Raw score: 30</li>");
     expect(report).toContain("<h2>Extracted Evidence</h2>");
     expect(report).toContain("<li>SPF: fail</li>");
     expect(report).toContain("<h2>Findings By Category</h2>");

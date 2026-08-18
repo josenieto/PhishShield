@@ -1,6 +1,7 @@
 import type { AnalyzeEmailResponse, FindingResponse } from "../types/api";
 
 import { displayValue, groupFindingsByCategory, riskPostureHint } from "../components/analysis-results/shared";
+import { formatRiskScore, formatRiskScoreDetails } from "../formatRiskScore";
 
 
 type CreateHtmlReportParams = {
@@ -82,8 +83,8 @@ export function createHtmlReport({ analysis, selectedFileName }: CreateHtmlRepor
     "      <ul>",
     `        <li>File: ${escapeHtml(selectedFileName)}</li>`,
     `        <li>Risk level: ${escapeHtml(analysis.risk_score.risk_level)}</li>`,
-    `        <li>Raw score: ${analysis.risk_score.raw_score}</li>`,
-    `        <li>Capped score: ${analysis.risk_score.capped_score}</li>`,
+    `        <li>${formatRiskScore(analysis.risk_score)}</li>`,
+    `        <li>${formatRiskScoreDetails(analysis.risk_score)}</li>`,
     `        <li>Critical indicators: ${analysis.risk_score.has_critical_indicators ? "Present" : "Not observed"}</li>`,
     `        <li>Highest severity: ${escapeHtml(analysis.finding_summary.highest_severity)}</li>`,
     `        <li>Total findings: ${analysis.finding_summary.total_findings}</li>`,

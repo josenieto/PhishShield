@@ -1,5 +1,6 @@
 import type { AnalyzeEmailResponse } from "../../types/api";
 
+import { formatRiskScore, formatRiskScoreDetails } from "../../formatRiskScore";
 import { riskPostureHint } from "./shared";
 
 
@@ -32,7 +33,10 @@ export function RiskSummary({ analysis }: RiskSummaryProps) {
           <span className="summary-label">Risk posture</span>
           <strong className="summary-metric">{analysis.risk_score.risk_level}</strong>
           <span className="summary-subtext">
-            Raw score {analysis.risk_score.raw_score}, capped at {analysis.risk_score.capped_score}.
+            {formatRiskScore(analysis.risk_score)}
+          </span>
+          <span className="summary-subtext">
+            {formatRiskScoreDetails(analysis.risk_score)}
           </span>
         </article>
 

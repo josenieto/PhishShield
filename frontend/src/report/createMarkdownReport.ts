@@ -1,6 +1,7 @@
 import type { AnalyzeEmailResponse, FindingResponse } from "../types/api";
 
 import { displayValue, groupFindingsByCategory } from "../components/analysis-results/shared";
+import { formatRiskScore, formatRiskScoreDetails } from "../formatRiskScore";
 
 
 type CreateMarkdownReportParams = {
@@ -53,8 +54,8 @@ export function createMarkdownReport({ analysis, selectedFileName }: CreateMarkd
     "## Overview",
     `- File: ${sanitizeMarkdownValue(selectedFileName)}`,
     `- Risk level: ${analysis.risk_score.risk_level}`,
-    `- Raw score: ${analysis.risk_score.raw_score}`,
-    `- Capped score: ${analysis.risk_score.capped_score}`,
+    `- ${formatRiskScore(analysis.risk_score)}`,
+    `- ${formatRiskScoreDetails(analysis.risk_score)}`,
     `- Critical indicators: ${analysis.risk_score.has_critical_indicators ? "Present" : "Not observed"}`,
     `- Highest severity: ${analysis.finding_summary.highest_severity}`,
     `- Total findings: ${analysis.finding_summary.total_findings}`,
