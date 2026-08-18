@@ -261,7 +261,7 @@ records.
 - Published container images: [frontend on GHCR](https://github.com/josenieto/PhishShield/pkgs/container/phishshield-frontend) and [backend on GHCR](https://github.com/josenieto/PhishShield/pkgs/container/phishshield-backend).
 - Presentation slides: [PhishShield Presentation on Google Slides](https://docs.google.com/presentation/d/1Uaeqi8ZDhjRx-cwRhd_XX2M-JMCT7ExWDmkYDBb4dx4/edit?usp=sharing).
 - Presentation backup: [PDF](docs/presentation/PhishShield%20Presentation.pdf) and [PPTX](docs/presentation/PhishShield-Presentation.pptx).
-- Project video: To be added before submission.
+- Project video: [Watch the TFM project video on YouTube](https://youtu.be/yPSsuH5y2OY).
 - Test credentials: Not applicable. PhishShield does not require authentication.
 
 ## Community

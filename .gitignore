@@ -71,6 +71,10 @@ instance/
 # Sphinx documentation
 docs/_build/
 
+# Local TFM recording and archive exports
+docs/presentation/*.mp4
+docs/presentation/*.zip
+
 # PyBuilder
 .pybuilder/
 target/
